@@ -1,0 +1,9 @@
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+<resources>
+    <string name="ets_rss">http://www.etsmtl.ca/fils-rss?rss=NouvellesRSS</string>
+    <string name="ets_fb">http://www.facebook.com/feeds/page.php?id=8632204375</string>
+    <string name="ets_signets">https://signets-ens.etsmtl.ca/Secure/WebServices/SignetsMobile.asmx</string>
+    <string name="url_biblio">http://bibliotheque.etsmtl.ca</string>
+    <string name="url_email_ets">https://etscourriel.etsmtl.ca/OWA/auth/logon.aspx</string>
+    <string name="map_key">***REMOVED***</string>
+</resources>

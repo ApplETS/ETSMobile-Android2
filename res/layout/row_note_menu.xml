@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    android:paddingBottom="20dp">
     
     <TextView 
         android:id="@+id/row_note_menu_session_text"   
@@ -10,16 +11,19 @@
         android:layout_height="wrap_content"
         android:text="Hiver 2014"
         android:textColor="#000"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:textSize="25sp"/>
     
-   <GridView  
+   <ca.etsmtl.applets.etsmobile.views.CostomGridView
        android:id="@+id/row_note_menu_gridview"
-       android:layout_width="wrap_content" 
+       android:layout_width="match_parent" 
        android:layout_height="wrap_content" 
-       android:columnWidth="60dp"
+       android:layout_marginTop="10dp"
+       android:columnWidth="80dp"
+       android:verticalSpacing="10dp"
+       android:horizontalSpacing="5dp"
        android:numColumns="auto_fit"
-       android:layout_margin="2dp"/>  
+       android:gravity="center"/>  
 
 </LinearLayout>
