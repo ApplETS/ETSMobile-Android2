@@ -1,6 +1,7 @@
 package ca.etsmtl.applets.etsmobile;
 
 import android.app.Application;
+import android.content.Intent;
 
 import java.util.LinkedHashMap;
 
@@ -11,6 +12,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.CommentairesFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.ProfilFragment;
@@ -66,6 +68,9 @@ public class ApplicationManager extends Application {
 
         title = getString(R.string.menu_section_2_biblio);
         mMenu.put(title, new MyMenuItem(title, BiblioFragment.class));
+        
+        title = getString(R.string.menu_section_2_moodle);
+        mMenu.put(title, new MyMenuItem(title, MoodleFragment.class));
 
         title = getString(R.string.menu_section_2_radio);
         mMenu.put(title, new MyMenuItem(title, RadioFragment.class));

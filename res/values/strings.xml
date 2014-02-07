@@ -21,6 +21,7 @@
     <string name="menu_section_2_news">Nouvelles</string>
     <string name="menu_section_2_bottin">Bottin</string>
     <string name="menu_section_2_biblio">Bibliothèque</string>
+    <string name="menu_section_2_moodle">Moodle</string>
     <string name="menu_section_2_radio">Radio</string>
     <string name="menu_section_2_securite">Sécurité</string>
     <!-- Section 3 ApplETS-->
@@ -29,5 +30,14 @@
     <string name="menu_section_3_about">À Propos d\'ÉTSMobile</string>
     <string name="menu_section_3_sponsors">Nos Partenaire</string>
     
+    
+    <!-- Moodle Page -->
+    <string name="activity_moodle_titre">Instruction Moodle</string>
+    <string name="activity_moodle_url_text">Url du site à inscrire:</string>
+    <string name="activity_moodle_nom">Nom d\'utilisateur</string>
+    <string name="activity_moodle_code_universelle">Votre code Universelle</string>
+    <string name="activity_moodle_pwd" >Mot de passe</string>
+    <string name="activity_moodle_pwd_instruc">Votre mot de passe universitaire</string>
+    <string name="activity_moodle_app">Moodle App</string>
  
 </resources>
