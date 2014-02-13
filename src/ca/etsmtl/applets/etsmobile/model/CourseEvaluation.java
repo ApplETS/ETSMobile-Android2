@@ -101,8 +101,7 @@ public class CourseEvaluation implements Serializable {
 		this.ecartTypeClasse = ecartTypeClasse;
 	}
 
-	public void setEvaluationElements(
-			final ArrayList<EvaluationElement> evaluationElements) {
+	public void setEvaluationElements(final ArrayList<EvaluationElement> evaluationElements) {
 		this.evaluationElements = evaluationElements;
 	}
 
@@ -118,13 +117,11 @@ public class CourseEvaluation implements Serializable {
 		this.noteACeJour = noteACeJour;
 	}
 
-	public void setNoteACeJourElementsIndividuels(
-			final String noteACeJourElementsIndividuels) {
+	public void setNoteACeJourElementsIndividuels(final String noteACeJourElementsIndividuels) {
 		this.noteACeJourElementsIndividuels = noteACeJourElementsIndividuels;
 	}
 
-	public void setNoteSur100PourElementsIndividuels(
-			final String noteSur100PourElementsIndividuels) {
+	public void setNoteSur100PourElementsIndividuels(final String noteSur100PourElementsIndividuels) {
 		this.noteSur100PourElementsIndividuels = noteSur100PourElementsIndividuels;
 	}
 
