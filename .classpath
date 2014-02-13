@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
@@ -11,5 +9,16 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="libs/commons-io-1.3.2.jar"/>
+	<classpathentry kind="lib" path="libs/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="libs/gson-2.2.2.jar"/>
+	<classpathentry kind="lib" path="libs/robospice-1.4.9.jar"/>
+	<classpathentry kind="lib" path="libs/robospice-cache-1.4.9.jar"/>
+	<classpathentry kind="lib" path="libs/robospice-spring-android-1.4.9.jar"/>
+	<classpathentry kind="lib" path="libs/simple-xml-2.7.1.jar"/>
+	<classpathentry kind="lib" path="libs/spring-android-core-1.0.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="libs/spring-android-rest-template-1.0.1.RELEASE.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

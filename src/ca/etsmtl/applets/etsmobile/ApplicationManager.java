@@ -54,7 +54,7 @@ public class ApplicationManager extends Application {
         title = getString(R.string.menu_section_1_bandwith);
         mMenu.put(title, new MyMenuItem(title, BandwithFragment.class));
 
-        // Section 2 - ??TS
+        // Section 2 - ÉTS
         title = getString(R.string.menu_section_2_ets);
         mMenu.put(title, new MyMenuItem(title, null));
 

@@ -9,7 +9,7 @@
         android:targetSdkVersion="18" />
 
     <application
-       android:name="ca.etsmtl.applets.etsmobile.ApplicationManager"
+        android:name="ca.etsmtl.applets.etsmobile.ApplicationManager"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -28,7 +28,10 @@
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
-    
+
+        <service
+            android:name="com.octo.android.robospice.JacksonSpringAndroidSpiceService"
+            android:exported="false" />
     </application>
 
 </manifest>
