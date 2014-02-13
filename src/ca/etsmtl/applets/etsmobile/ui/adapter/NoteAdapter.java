@@ -1,20 +1,21 @@
 package ca.etsmtl.applets.etsmobile.ui.adapter;
 
-import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment.NotesSession;
 import ca.etsmtl.applets.etsmobile2.R;
-import ca.etsmtl.applets.etsmobile2.R.id;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class NoteAdapter extends ArrayAdapter<NotesSession>{
+public class NoteAdapter extends ArrayAdapter<NotesSessionItem>{
 
 	private Context context;
-	public NoteAdapter(Context context, int resource, NotesSession[] notesSession) {
+	public NoteAdapter(Context context, int resource, NotesSessionItem[] notesSession) {
 		super(context, resource, notesSession);
 		this.context = context;
 	}
@@ -24,9 +25,15 @@ public class NoteAdapter extends ArrayAdapter<NotesSession>{
 		LayoutInflater inflater = (LayoutInflater) context
 		        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		    View v = inflater.inflate(R.layout.row_note_menu, parent, false);
-		    NotesSession  notesSession = getItem(position);
+		    NotesSessionItem  notesSession = getItem(position);
 		    ((TextView) v.findViewById(R.id.row_note_menu_session_text)).setText(notesSession.sessionName);
-		    ((GridView) v.findViewById(R.id.row_note_menu_gridview)).setAdapter(notesSession.arrayAdapter);
+		    GridView gridview = (GridView) v.findViewById(R.id.row_note_menu_gridview);
+		    gridview.setAdapter(notesSession.arrayAdapter);
+		    gridview.setOnItemClickListener(new OnItemClickListener() {
+		        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+		            Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
+		        }
+		    });
 		return v;
 	}
 
