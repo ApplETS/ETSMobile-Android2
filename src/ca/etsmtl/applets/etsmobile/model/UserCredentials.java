@@ -8,9 +8,9 @@ import com.google.gson.annotations.SerializedName;
  * Created by Phil on 17/11/13.
  */
 public class UserCredentials {
-	public static final String CODE_U = "codeU";
+	public static final String CODE_U = "codeAccesUniversel";
 
-	public static final String CODE_P = "codeP";
+	public static final String CODE_P = "motPasse";
 
 	public static final String APPT = "appt";
 

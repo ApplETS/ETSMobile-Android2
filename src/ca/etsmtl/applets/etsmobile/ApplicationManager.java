@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 
 import android.app.Application;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
+import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
@@ -28,6 +29,7 @@ public class ApplicationManager extends Application {
 
 	public static LinkedHashMap<String, MyMenuItem> mMenu = new LinkedHashMap<String, MyMenuItem>(
 			17);
+	public static UserCredentials userCredentials;
 
 	@Override
 	public void onCreate() {

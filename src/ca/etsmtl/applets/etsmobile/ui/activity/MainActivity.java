@@ -5,6 +5,7 @@ import java.util.Collection;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
+import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -85,6 +87,29 @@ public class MainActivity extends Activity {
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		mDrawerToggle.syncState();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (ApplicationManager.userCredentials == null) {
+
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivityForResult(intent, 0);
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == 0) {
+			if (resultCode > 0) {
+				Bundle extras = data.getExtras();
+				String codeU = extras.getString(UserCredentials.CODE_U);
+				String codeP = extras.getString(UserCredentials.CODE_P);
+				ApplicationManager.userCredentials = new UserCredentials(codeU, codeP);
+			}
+		}
 	}
 
 	@Override

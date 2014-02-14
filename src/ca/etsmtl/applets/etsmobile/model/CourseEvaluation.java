@@ -15,44 +15,114 @@
  ******************************************************************************/
 package ca.etsmtl.applets.etsmobile.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
-import com.google.gson.annotations.SerializedName;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.PropertyInfo;
 
-public class CourseEvaluation implements Serializable {
+
+public class CourseEvaluation implements KvmSerializable {
 
 	private static final long serialVersionUID = 7314596338980655733L;
 
-	@SerializedName("noteACeJour")
+//	@SerializedName("noteACeJour")
 	private String noteACeJour;
 
-	@SerializedName("scoreFinalSur100")
+//	@SerializedName("scoreFinalSur100")
 	private String scoreFinalSur100;
 
-	@SerializedName("moyenneClasse")
+//	@SerializedName("moyenneClasse")
 	private String moyenneClasse;
 
-	@SerializedName("ecartTypeClasse")
+//	@SerializedName("ecartTypeClasse")
 	private String ecartTypeClasse;
 
-	@SerializedName("medianeClasse")
+//	@SerializedName("medianeClasse")
 	private String medianeClasse;
 
-	@SerializedName("rangCentileClasse")
+//	@SerializedName("rangCentileClasse")
 	private String rangCentileClasse;
 
-	@SerializedName("noteACeJourElementsIndividuels")
+//	@SerializedName("noteACeJourElementsIndividuels")
 	private String noteACeJourElementsIndividuels;
 
-	@SerializedName("noteSur100PourElementsIndividuels")
+//	@SerializedName("noteSur100PourElementsIndividuels")
 	private String noteSur100PourElementsIndividuels;
 
 	private String cote;
 
-	@SerializedName("liste")
+//	@SerializedName("liste")
 	private ArrayList<EvaluationElement> evaluationElements;
 
+	@Override
+	public Object getProperty(int index) {
+		switch (index) {
+		case 0:
+			
+			
+			break;
+
+		default:
+			break;
+		}
+		return null;
+	}
+
+	@Override
+	public int getPropertyCount() {
+		return 9;
+	}
+
+	@Override
+	public void getPropertyInfo(int index, Hashtable arg1, PropertyInfo arg2) {
+		switch (index) {
+		case 0:
+			
+			
+			break;
+
+		default:
+			break;
+		}		
+	}
+
+	@Override
+	public void setProperty(int index, Object obj) {
+		switch (index) {
+		case 0:
+			setNoteACeJour(obj.toString());
+			break;
+		case 1:
+			setNoteACeJour(obj.toString());
+			break;
+		case 2:
+			setNoteACeJour(obj.toString());
+			break;
+		case 3:
+			setNoteACeJour(obj.toString());
+			break;
+		case 4:
+			setNoteACeJour(obj.toString());
+			break;
+		case 5:
+			setNoteACeJour(obj.toString());
+			break;
+		case 6:
+			setNoteACeJour(obj.toString());
+			break;
+		case 7:
+			setNoteACeJour(obj.toString());
+			break;
+		case 8:
+			setNoteACeJour(obj.toString());
+			break;
+
+		default:
+			break;
+		}
+	}
+	
 	public String getCote() {
 		return cote;
 	}
