@@ -15,15 +15,11 @@
  ******************************************************************************/
 package ca.etsmtl.applets.etsmobile.model;
 
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Vector;
 
-import org.ksoap2.serialization.KvmSerializable;
-import org.ksoap2.serialization.PropertyInfo;
+import org.simpleframework.xml.core.Commit;
 
-public class StudentProfile extends Vector<String> implements KvmSerializable{
-	private static final long serialVersionUID = 3340376930647772523L;
+public class StudentProfile {
 
 	private String nom, prenom, codePerm, soldeTotal;
 
@@ -32,38 +28,14 @@ public class StudentProfile extends Vector<String> implements KvmSerializable{
 	public StudentProfile() {
 	}
 
-	public StudentProfile(final String nom, final String prenom,
-			final String codePerm, final String solde) {
+	public StudentProfile(final String nom, final String prenom, final String codePerm,
+			final String solde) {
 		this.nom = nom;
 		this.prenom = prenom;
 		this.codePerm = codePerm;
 		soldeTotal = solde;
 	}
 
-	@Override
-	public Object getProperty(int arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getPropertyCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void getPropertyInfo(int arg0, Hashtable arg1, PropertyInfo arg2) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setProperty(int arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public String getCodePerm() {
 		return codePerm != null ? codePerm.trim() : "";
 	}
@@ -80,7 +52,6 @@ public class StudentProfile extends Vector<String> implements KvmSerializable{
 		return soldeTotal != null ? soldeTotal.trim() : "";
 	}
 
-	
 	@Override
 	public String toString() {
 		return "" + nom + "" + prenom + "" + codePerm + "" + soldeTotal;

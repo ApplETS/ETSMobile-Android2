@@ -188,24 +188,35 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 	}
 
 	@Override
-	public void onRequestFailure(SpiceException arg0) {
+	public void onRequestFailure(SpiceException e) {
 		showProgress(false);
 		mPasswordView.setError(getString(R.string.error_invalid_email));
 		mPasswordView.requestFocus();
 	}
 
 	@Override
-	public void onRequestSuccess(Object arg0) {
-		// mAuthTask = null;
+	public void onRequestSuccess(Object o) {
 		showProgress(false);
 
-		if (arg0 != null) {
+		if (o != null) {
 			ApplicationManager.userCredentials = userCredentials;
-			finish();
+			finishActivity(1);
 			startActivity(new Intent(this, MainActivity.class));
 		} else {
 			mPasswordView.setError(getString(R.string.error_invalid_email));
 			mPasswordView.requestFocus();
 		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		dataManager.start();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		dataManager.stop();
 	}
 }

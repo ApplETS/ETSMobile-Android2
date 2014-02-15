@@ -1,119 +1,214 @@
 package ca.etsmtl.applets.etsmobile.http;
 
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-import ca.etsmtl.applets.etsmobile.model.StudentProfile;
+import ca.etsmtl.applets.etsmobile.http.soap.SignetsMobileSoap;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
-import ca.etsmtl.applets.etsmobile2.R;
 
-import com.google.android.gms.internal.cr;
-import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
+import com.octo.android.robospice.GsonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
-import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+/**
+ * Singleton to get data from HTTP/SOAP request
+ * 
+ * @author Phil
+ * 
+ */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class DataManager {
 
-	private static String BASE_URL = "";
-	private static final String NAMESPACE = "http://etsmtl.ca/";
 	private static DataManager instance;
 	private SpiceManager spiceManager;
+	private static Context c;
 
 	private DataManager() {
-		spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
+		spiceManager = new SpiceManager(GsonSpringAndroidSpiceService.class);
 	}
 
 	public static DataManager getInstance(Context c) {
+		DataManager.c = c;
 		if (instance == null) {
-			BASE_URL = c.getString(R.string.ets_signets);
 			instance = new DataManager();
 		}
 		return instance;
 	}
 
+	/**
+	 * Robospice request manager for everything not related to Signet-Mobile the
+	 * class (result) must be mapped with Gson
+	 * 
+	 * @param request
+	 * @param listener
+	 * @return true if request is sent
+	 */
 	public boolean sendRequest(TypedRequest request, RequestListener<Object> listener) {
 
 		final Object key = request.createCacheKey();
-		spiceManager.execute(request, key, DurationInMillis.ONE_MINUTE, listener);
+		spiceManager.execute(request, key, DurationInMillis.ONE_SECOND, listener);
 		return true;
 	}
 
-	public SoapPrimitive getDataFromSignet(String method, String soap_action,
-			UserCredentials creds, RequestListener<Object> listener) {
+	/**
+	 * Send a request to Signet-Mobile Web Service
+	 * 
+	 * @param method
+	 *            Int, methods are stored in {@link SignetMethod}
+	 * @param creds
+	 *            User Credentials, some methods require more than u/p
+	 * @param listener
+	 *            The callback
+	 * @return An Object
+	 */
+	public void getDataFromSignet(int method, final UserCredentials creds,
+			final RequestListener<Object> listener, String... params) {
 
+		// inline asynctask
 		new AsyncTask<Object, Void, Object>() {
 			@Override
-			protected Object doInBackground(Object... objs) {
-				String method = (String) objs[0], soap_action = (String) objs[1];
-				UserCredentials creds = (UserCredentials) objs[2];
-				RequestListener<Object> listener = (RequestListener<Object>) objs[3];
+			protected Object doInBackground(Object... params) {
 				try {
 
-					SoapObject request = new SoapObject(NAMESPACE, method);
+					final int methodID = (Integer) params[0];
+					String[] reqParams = (String[]) params[1];
+					Object result;
 
-					request.addProperty(UserCredentials.CODE_U, creds.getUsername());
-					request.addProperty(UserCredentials.CODE_P, creds.getPassword());
+					final SignetsMobileSoap signetsMobileSoap = new SignetsMobileSoap();
+					String username = creds.getUsername();
+					String password = creds.getPassword();
+					switch (methodID) {
+					case SignetMethods.INFO_ETUDIANT:
 
-					SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-							SoapEnvelope.VER11);
-					envelope.dotNet = true;
-					envelope.setOutputSoapObject(request);
+						result = signetsMobileSoap.infoEtudiant(username, password);
 
-					HttpTransportSE androidHttpTransport = new HttpTransportSE(BASE_URL);
-					androidHttpTransport.debug = true;
-					androidHttpTransport.call(soap_action, envelope);
-					if (envelope.bodyIn instanceof SoapFault) {
-						String str = ((SoapFault) envelope.bodyIn).faultstring;
-						Log.i("SoapFault", str);
+						listener.onRequestSuccess(result);
+						break;
+					case SignetMethods.LIST_COURS:
 
-						// Another way to travers through the SoapFault object
-						/*
-						 * Node detailsString =str= ((SoapFault)
-						 * envelope.bodyIn).detail; Element detailElem =
-						 * (Element) details.getElement(0) .getChild(0); Element
-						 * e = (Element) detailElem.getChild(2);faultstring;
-						 * Log.i("", e.getName() + " " + e.getText(0)str);
-						 */
-					} else {
-						SoapObject resultsRequestSOAP = (SoapObject) envelope.bodyIn;
-						Log.d("WS", String.valueOf(resultsRequestSOAP));
-						listener.onRequestSuccess(resultsRequestSOAP);
+						result = signetsMobileSoap.listeCours(username, password);
+
+						listener.onRequestSuccess(result);
+						break;
+					case SignetMethods.LIST_INT_SESSION:
+
+						String SesFin = reqParams[0];
+						String SesDebut = reqParams[1];
+
+						result = signetsMobileSoap.listeCoursIntervalleSessions(username, password,
+								SesDebut, SesFin);
+
+						listener.onRequestSuccess(result);
+						break;
+					case SignetMethods.LIST_SESSION:
+
+						result = signetsMobileSoap.listeSessions(username, password);
+
+						listener.onRequestSuccess(result);
+						break;
+					case SignetMethods.LIST_PROGRAM:
+
+						result = signetsMobileSoap.listeProgrammes(username, password);
+
+						listener.onRequestSuccess(result);
+						break;
+					case SignetMethods.LIST_COEQ:
+
+						String pNomElementEval = reqParams[0];
+						String pSession = reqParams[1];
+						String pGroupe = reqParams[2];
+						String pSigle = reqParams[3];
+						result = signetsMobileSoap.listeCoequipiers(username, password, pSigle,
+								pGroupe, pSession, pNomElementEval);
+
+						listener.onRequestSuccess(result);
+						break;
+					case SignetMethods.LIST_EVAL:
+
+						String pSession1 = reqParams[0];
+						String pGroupe1 = reqParams[1];
+						String pSigle1 = reqParams[2];
+						result = signetsMobileSoap.listeElementsEvaluation(username, password,
+								pSigle1, pGroupe1, pSession1);
+
+						listener.onRequestSuccess(result);
+						break;
+					case SignetMethods.LIST_HORAIRE_PROF:
+
+						String pSession2 = reqParams[0];
+
+						result = signetsMobileSoap
+								.listeHoraireEtProf(username, password, pSession2);
+
+						listener.onRequestSuccess(result);
+						break;
+					case SignetMethods.LIRE_HORAIRE:
+
+						String pSession3 = reqParams[0];
+						String prefixeSigleCours = reqParams[1];
+
+						result = signetsMobileSoap.lireHoraire(pSession3, prefixeSigleCours);
+
+						listener.onRequestSuccess(result);
+						break;
+					case SignetMethods.LIRE_JOUR_REMPLACE:
+
+						String pSession4 = reqParams[0];
+
+						result = signetsMobileSoap.lireJoursRemplaces(pSession4);
+
+						listener.onRequestSuccess(result);
+						break;
+
+					default:
+						break;
 					}
 
-					return null;
 				} catch (Exception e) {
 					e.printStackTrace();
-					listener.onRequestFailure(new SpiceException(e.getMessage()));
 				}
-
 				return null;
 			}
-		}.execute(method, soap_action, creds, listener);
-		return null;
+		}.execute(method, params);
 	}
 
-	public static class SignetActions {
-		public static final String ListEvaluation = "http://etsmtl.ca/listeElementsEvaluation";
-		public static final String LoginAction = "http://etsmtl.ca/infoEtudiant";
-	}
-
+	/**
+	 * Method mapping for Signets-Mobile
+	 * 
+	 * @author Phil
+	 * 
+	 */
 	public static class SignetMethods {
-		public static final String ListEvaluation = "listeElementsEvaluation";
-		public static final String Login = "infoEtudiant";
+		public static final int INFO_ETUDIANT = 0;
+		public static final int LIST_COURS = 3;
+		public static final int LIST_INT_SESSION = 4;
+		public static final int LIST_SESSION = 2;
+		public static final int LIST_PROGRAM = 6;
+		public static final int LIST_COEQ = 5;
+		public static final int LIST_EVAL = 1;
+		public static final int LIST_HORAIRE_PROF = 7;
+		public static final int LIRE_HORAIRE = 8;
+		public static final int LIRE_JOUR_REMPLACE = 9;
 	}
 
+	/**
+	 * Convinience method to login a user
+	 * 
+	 * @param userCredentials
+	 * @param listener
+	 */
 	public void login(UserCredentials userCredentials, RequestListener<Object> listener) {
-		getDataFromSignet(SignetMethods.Login, SignetActions.LoginAction, userCredentials, listener);
+		getDataFromSignet(SignetMethods.INFO_ETUDIANT, userCredentials, listener);
+	}
+
+	public void start() {
+		if (!spiceManager.isStarted())
+			spiceManager.start(c);
+	}
+
+	public void stop() {
+		if (!spiceManager.isStarted())
+			spiceManager.shouldStop();
 	}
 
 }

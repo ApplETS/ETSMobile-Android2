@@ -1,16 +1,11 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import org.ksoap2.serialization.SoapPrimitive;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.http.TypedRequest;
 import ca.etsmtl.applets.etsmobile.model.CourseEvaluation;
-import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotesSessionItem;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteAdapter;
@@ -63,9 +58,9 @@ public class NotesFragment extends HttpFragment {
 
 	@Override
 	void updateUI() {
-		SoapPrimitive result = dataManager.getDataFromSignet(
-				DataManager.SignetMethods.ListEvaluation, DataManager.SignetActions.ListEvaluation,
-				getUserCredentials(), this);
+//		SoapPrimitive result = dataManager.getDataFromSignet(
+//				DataManager.SignetMethods.ListEvaluation, DataManager.SignetActions.ListEvaluation,
+//				getUserCredentials(), this);
 	}
 
 	@Override

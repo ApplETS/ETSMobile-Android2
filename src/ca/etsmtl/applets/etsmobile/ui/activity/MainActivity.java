@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
@@ -87,6 +88,18 @@ public class MainActivity extends Activity {
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		mDrawerToggle.syncState();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		DataManager.getInstance(this).start();
+	}
+
+	@Override
+	protected void onStop() {
+		DataManager.getInstance(this).stop();
+		super.onStop();
 	}
 
 	@Override
