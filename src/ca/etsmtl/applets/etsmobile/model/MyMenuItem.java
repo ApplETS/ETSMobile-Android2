@@ -7,19 +7,18 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class MyMenuItem {
 
-    public String title = "";
-    public int resId = R.drawable.ic_launcher;
-    public Class mClass = null;
+	public String title = "";
+	public int resId = R.drawable.ic_launcher;
+	public Class mClass = null;
 
-    public MyMenuItem(String title, Class mClass) {
-        this.title = title;
-        this.mClass = mClass;
-    }
+	public MyMenuItem(String title, Class mClass) {
+		this.title = title;
+		this.mClass = mClass;
+	}
 
-
-    public MyMenuItem(String title, Class mClass, int resId) {
-        this.title = title;
-        this.mClass = mClass;
-        this.resId = resId;
-    }
+	public MyMenuItem(String title, Class mClass, int resId) {
+		this.title = title;
+		this.mClass = mClass;
+		this.resId = resId;
+	}
 }

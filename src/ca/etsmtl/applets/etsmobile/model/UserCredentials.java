@@ -2,85 +2,86 @@ package ca.etsmtl.applets.etsmobile.model;
 
 import android.content.SharedPreferences;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Phil on 17/11/13.
  */
 public class UserCredentials {
-    public static final String CODE_U = "codeU";
+	public static final String CODE_U = "codeAccesUniversel";
 
-    public static final String CODE_P = "codeP";
+	public static final String CODE_P = "motPasse";
 
-    public static final String APPT = "appt";
+	public static final String APPT = "appt";
 
-    public static final String REZ = "rez";
+	public static final String REZ = "rez";
 
-    //    @SerializedName("motPasse")
-    private String password = "";
+	@SerializedName("motPasse")
+	private String password = "";
 
-    //    @SerializedName("codeAccesUniversel")
-    private String username = "";
+	@SerializedName("codeAccesUniversel")
+	private String username = "";
 
-    private String phase = "";
+	private String phase = "";
 
-    private String appt = "";
+	private String appt = "";
 
-    public UserCredentials(final SharedPreferences prefs) {
-        if (prefs != null) {
-            username = prefs.getString(UserCredentials.CODE_P, "");
-            password = prefs.getString(UserCredentials.CODE_U, "");
-            phase = prefs.getString(UserCredentials.REZ, "");
-            appt = prefs.getString(UserCredentials.APPT, "");
-        }
-    }
+	public UserCredentials(final SharedPreferences prefs) {
+		if (prefs != null) {
+			username = prefs.getString(UserCredentials.CODE_P, "");
+			password = prefs.getString(UserCredentials.CODE_U, "");
+			phase = prefs.getString(UserCredentials.REZ, "");
+			appt = prefs.getString(UserCredentials.APPT, "");
+		}
+	}
 
-    public UserCredentials(final String codeP, final String codeU) {
-        username = codeP;
-        password = codeU;
-    }
+	public UserCredentials(final String codeP, final String codeU) {
+		username = codeP;
+		password = codeU;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public String getPhase() {
-        return phase;
-    }
+	public String getPhase() {
+		return phase;
+	}
 
-    public String getAppt() {
-        return appt;
-    }
+	public String getAppt() {
+		return appt;
+	}
 
-    public void setPassword(final String password) {
-        this.password = password;
-    }
+	public void setPassword(final String password) {
+		this.password = password;
+	}
 
-    public void setUsername(final String username) {
-        this.username = username;
-    }
+	public void setUsername(final String username) {
+		this.username = username;
+	}
 
-    public void setPhase(String p) {
-        phase = p;
-    }
+	public void setPhase(String p) {
+		phase = p;
+	}
 
-    public void setAppt(String appt) {
-        this.appt = appt;
-    }
+	public void setAppt(String appt) {
+		this.appt = appt;
+	}
 
-    public boolean isEmployee() {
-        return username.equals("empl") && password.equals("empl");
-    }
+	public boolean isEmployee() {
+		return username.equals("empl") && password.equals("empl");
+	}
 
-    public boolean hasBandwithInfo() {
-        return appt != null && phase != null;
-    }
+	public boolean hasBandwithInfo() {
+		return appt != null && phase != null;
+	}
 
-    public boolean isLoggedIn() {
-        return !"".equals(password) && !"".equals(username);
-    }
+	public boolean isLoggedIn() {
+		return !"".equals(password) && !"".equals(username);
+	}
 
 }
-

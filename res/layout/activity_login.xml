@@ -1,17 +1,17 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity" >
 
     <!-- Login progress -->
+
     <LinearLayout
         android:id="@+id/login_status"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center_horizontal"
-
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone" >
 
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"
@@ -21,64 +21,65 @@
 
         <TextView
             android:id="@+id/login_status_message"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:fontFamily="sans-serif-light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="@string/login_progress_signing_in" />
+            android:fontFamily="sans-serif-light"
+            android:text="@string/login_progress_signing_in"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
     <!-- Login form -->
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/background_ets">
+
+<!--     <ScrollView -->
+<!--         android:id="@+id/login_form" -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="match_parent" > -->
 
         <LinearLayout
+            android:id="@+id/login_form"
             style="@style/LoginFormContainer"
-            android:orientation="vertical"
-            android:layout_gravity="top|center">
+            android:layout_gravity="top|center"
+            android:background="@drawable/background_ets"
+            android:orientation="vertical" >
 
             <EditText
                 android:id="@+id/email"
-                android:singleLine="true"
-                android:maxLines="1"
                 android:layout_width="match_parent"
-                android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white"
                 android:layout_height="wrap_content"
+                android:hint="@string/prompt_email"
                 android:inputType="text"
-                android:hint="@string/prompt_email" />
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white" />
 
             <EditText
                 android:id="@+id/password"
-                android:singleLine="true"
-                android:maxLines="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"
-                android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white"
-                android:inputType="textPassword"
-                android:imeActionLabel="@string/action_sign_in_short"
                 android:imeActionId="@+id/login"
-                android:imeOptions="actionUnspecified" />
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white" />
 
             <Button
                 android:id="@+id/sign_in_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in_register"
+                android:background="@android:color/transparent"
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
-                android:layout_gravity="right"
-                android:textColor="@android:color/white"
-                android:background="@android:color/transparent"/>
-
+                android:text="@string/action_sign_in_register"
+                android:textColor="@android:color/white" />
         </LinearLayout>
+<!--     </ScrollView> -->
 
-    </ScrollView>
 </merge>
