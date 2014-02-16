@@ -5,8 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -199,7 +201,16 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 		showProgress(false);
 
 		if (o != null) {
+
 			ApplicationManager.userCredentials = userCredentials;
+
+			Editor edit = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+					.edit();
+
+			edit.putString(UserCredentials.CODE_U, userCredentials.getUsername());
+			edit.putString(UserCredentials.CODE_P, userCredentials.getPassword());
+			edit.commit();
+
 			finishActivity(1);
 			startActivity(new Intent(this, MainActivity.class));
 		} else {

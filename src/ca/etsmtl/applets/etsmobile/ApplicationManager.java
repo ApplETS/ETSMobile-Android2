@@ -3,6 +3,8 @@ package ca.etsmtl.applets.etsmobile;
 import java.util.LinkedHashMap;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
@@ -93,5 +95,14 @@ public class ApplicationManager extends Application {
 
 		title = getString(R.string.menu_section_3_sponsors);
 		mMenu.put(title, new MyMenuItem(title, SponsorsFragment.class, R.drawable.ic_ico_partners));
+
+		SharedPreferences defaultSharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String u = defaultSharedPreferences.getString(UserCredentials.CODE_U, "");
+		String p = defaultSharedPreferences.getString(UserCredentials.CODE_P, "");
+
+		if (u.length() > 0 && p.length() > 0) {
+			userCredentials = new UserCredentials(p, u);
+		}
 	}
 }
