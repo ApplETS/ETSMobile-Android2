@@ -12,6 +12,8 @@ package ca.etsmtl.applets.etsmobile.model;
 import java.util.Hashtable;
 import org.ksoap2.serialization.*;
 
+import android.util.Log;
+
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
 public class ListeDeCours extends DonneesRetournees implements KvmSerializable {

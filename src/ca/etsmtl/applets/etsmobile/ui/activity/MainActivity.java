@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
 	private CharSequence mTitle;
 	private ActionBarDrawerToggle mDrawerToggle;
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -166,14 +167,13 @@ public class MainActivity extends Activity {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		// Bundle args = new Bundle();
-		// args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-		// fragment.setArguments(args);
-
+	     
 		// Insert the fragment by replacing any existing fragment
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
-				.addToBackStack(null).commit();
+	
+			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
+					.addToBackStack(null).commit();
+
 
 		// Highlight the selected item, update the title, and close the drawer
 		mDrawerList.setItemChecked(position, true);
