@@ -3,7 +3,6 @@ package ca.etsmtl.applets.etsmobile.ui.fragment;
 import java.util.Vector;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.ListView;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
-import ca.etsmtl.applets.etsmobile.model.Cours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NoteAdapter;
@@ -94,7 +92,6 @@ public class NotesFragment extends HttpFragment {
 						sessionString = listeDeCours.liste.get(i).session;
 					}
 					//Permet le regroupement par session, on ajoute le vecteur des cours dans la session
-					Log.v("NotesFragment","NotesFragment: sessionString="+sessionString+" session="+listeDeCours.liste.get(i).session);
 					if(!sessionString.equals(listeDeCours.liste.get(i).session) ||i==listeDeCours.liste.size()-1){
 						if(i==listeDeCours.liste.size()-1 && sessionString.equals(listeDeCours.liste.get(i).session)){
 							vector.add(new SessionCoteItem(listeDeCours.liste.get(i).sigle, listeDeCours.liste.get(i).cote, listeDeCours.liste.get(i).groupe));	

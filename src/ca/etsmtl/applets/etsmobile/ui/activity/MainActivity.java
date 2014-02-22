@@ -28,6 +28,8 @@ public class MainActivity extends Activity {
 	private ListView mDrawerList;
 	private CharSequence mTitle;
 	private ActionBarDrawerToggle mDrawerToggle;
+	private Fragment fragment;
+	private String TAG ="FRAGMENTTAG";
 
 
 	@Override
@@ -71,10 +73,6 @@ public class MainActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-		MyMenuItem ajdItem = ApplicationManager.mMenu.get(getString(R.string.menu_section_1_ajd));
-
-		// Select Aujourd'Hui
-		selectItem(ajdItem.title, 1);
 	}
 
 	@Override
@@ -111,6 +109,34 @@ public class MainActivity extends Activity {
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivityForResult(intent, 0);
 		}
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		FragmentManager manager = getFragmentManager();
+		manager.putFragment(outState, fragment.getTag(), fragment);
+		outState.putString(TAG, fragment.getTag());
+		super.onSaveInstanceState(outState);
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		instantiateFragments(savedInstanceState);
+	}
+
+	private void instantiateFragments(Bundle savedInstanceState) {
+		MyMenuItem ajdItem = ApplicationManager.mMenu.get(getString(R.string.menu_section_1_ajd));
+
+		// Select Aujourd'Hui
+		if(savedInstanceState !=null){
+			FragmentManager fragmentManager = getFragmentManager();
+			String tag= savedInstanceState.getString(TAG);
+			fragment = fragmentManager.getFragment(savedInstanceState,tag);
+			
+		}else{
+			selectItem(ajdItem.title, 1);
+		}
+		
 	}
 
 	@Override
@@ -158,7 +184,7 @@ public class MainActivity extends Activity {
 	private void selectItem(String key, int position) {
 		// Create a new fragment and specify the planet to show based on
 		// position
-		Fragment fragment = null;
+		fragment = null;
 		Class aClass = ApplicationManager.mMenu.get(key).mClass;
 		try {
 			fragment = (Fragment) aClass.newInstance();
@@ -172,7 +198,7 @@ public class MainActivity extends Activity {
 		FragmentManager fragmentManager = getFragmentManager();
 	
 			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
-					.addToBackStack(null).commit();
+					.addToBackStack(aClass.getName()).commit();
 
 
 		// Highlight the selected item, update the title, and close the drawer
