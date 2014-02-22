@@ -9,6 +9,6 @@
         android:layout_height="wrap_content" 
         android:padding="10dp"
         android:dividerHeight="2dp"
-        android:divider="#C0C0C0"/>   
+        android:divider="@color/gray"/>   
 
 </RelativeLayout>

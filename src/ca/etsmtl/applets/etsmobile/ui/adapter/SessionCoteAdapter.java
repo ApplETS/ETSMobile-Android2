@@ -33,8 +33,7 @@ public class SessionCoteAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
-		return 0;
+		return position;
 	}
 
 	@Override
@@ -49,12 +48,14 @@ public class SessionCoteAdapter extends BaseAdapter {
 		}
 
 		SessionCoteItem notesSession = sessionCote[position];
-		((TextView) v.findViewById(R.id.square_note_course_name))
-				.setText(notesSession.course);
-		((TextView) v.findViewById(R.id.square_note_course_cote))
-				.setText(notesSession.cote);
+		((TextView) v.findViewById(R.id.square_note_course_name)).setText(notesSession.sigle);
+		((TextView) v.findViewById(R.id.square_note_course_cote)).setText(notesSession.cote);
 
 		return v;
+	}
+	
+	public SessionCoteItem[] getArray(){
+		return sessionCote;
 	}
 
 }

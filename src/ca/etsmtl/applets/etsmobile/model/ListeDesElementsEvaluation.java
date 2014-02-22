@@ -40,6 +40,9 @@ public class ListeDesElementsEvaluation extends DonneesRetournees implements
 
 	public ArrayOfElementEvaluation liste = new ArrayOfElementEvaluation();
 
+	//add by Laurence
+	//public String cote;
+	//
 	public ListeDesElementsEvaluation() {
 	}
 

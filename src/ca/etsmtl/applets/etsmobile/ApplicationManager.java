@@ -65,7 +65,7 @@ public class ApplicationManager extends Application {
 		mMenu.put(title, new MyMenuItem(title, BandwithFragment.class,
 				R.drawable.ic_ico_internet));
 
-		// Section 2 - ÉTS
+		// Section 2 - ï¿½TS
 		title = getString(R.string.menu_section_2_ets);
 		mMenu.put(title, new MyMenuItem(title, null));
 
@@ -122,7 +122,7 @@ public class ApplicationManager extends Application {
 				"");
 
 		if (u.length() > 0 && p.length() > 0) {
-			userCredentials = new UserCredentials(p, u);
+			userCredentials = new UserCredentials(u, p);
 		}
 	}
 }
