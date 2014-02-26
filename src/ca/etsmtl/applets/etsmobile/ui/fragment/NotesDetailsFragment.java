@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
@@ -62,7 +63,8 @@ public class NotesDetailsFragment extends HttpFragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.drawer_list_item, container, false);
+		View v = inflater.inflate(R.layout.notes_details_fragment, container, false);
+		((TextView)v.findViewById(R.id.notes_fragment_sigle)).setText(sigle);
 		mlistView = (ListView) v.findViewById(android.R.id.list);
 		return v;
 	}
