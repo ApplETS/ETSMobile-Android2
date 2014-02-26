@@ -10,16 +10,19 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class MainActivity extends Activity {
@@ -39,6 +42,7 @@ public class MainActivity extends Activity {
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+		
 
 		// Set the adapter for the list view
 		int stringSet = ApplicationManager.mMenu.keySet().size();
@@ -48,31 +52,32 @@ public class MainActivity extends Activity {
 		mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems.toArray(menuItems)));
 
 		// Set the list's click listener
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-		mDrawerLayout, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
-		R.string.drawer_open, /* "open drawer" description */
-		R.string.drawer_close /* "close drawer" description */
-		) {
-
-			/** Called when a drawer has settled in a completely closed state. */
-			public void onDrawerClosed(View view) {
-				getActionBar().setTitle(mTitle);
-			}
-
-			/** Called when a drawer has settled in a completely open state. */
-			public void onDrawerOpened(View drawerView) {
-				getActionBar().setTitle(getString(R.string.drawer_title));
-			}
-		};
-
-		// Set the drawer toggle as the DrawerListener
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
-
+			mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+			mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+			mDrawerLayout, /* DrawerLayout object */
+			R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+			R.string.drawer_open, /* "open drawer" description */
+			R.string.drawer_close /* "close drawer" description */
+			) {
+	
+				/** Called when a drawer has settled in a completely closed state. */
+				public void onDrawerClosed(View view) {
+					getActionBar().setTitle(mTitle);
+				}
+	
+				/** Called when a drawer has settled in a completely open state. */
+				public void onDrawerOpened(View drawerView) {
+					getActionBar().setTitle(getString(R.string.drawer_title));
+				}
+			};
+	
+			// Set the drawer toggle as the DrawerListener
+			mDrawerLayout.setDrawerListener(mDrawerToggle);
+	
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+			getActionBar().setHomeButtonEnabled(true);
+	
+		
 	}
 
 	@Override
@@ -86,7 +91,8 @@ public class MainActivity extends Activity {
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
-		mDrawerToggle.syncState();
+	  mDrawerToggle.syncState();	
+
 	}
 
 	@Override
@@ -114,9 +120,11 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		FragmentManager manager = getFragmentManager();
-		manager.putFragment(outState, fragment.getTag(), fragment);
-		outState.putString(TAG, fragment.getTag());
-		super.onSaveInstanceState(outState);
+		if(fragment!=null){
+			manager.putFragment(outState, fragment.getTag(), fragment);
+			outState.putString(TAG, fragment.getTag());
+			super.onSaveInstanceState(outState);
+		}
 	}
 	
 	@Override

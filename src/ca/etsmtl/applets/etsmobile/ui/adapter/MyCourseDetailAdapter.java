@@ -62,6 +62,9 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 					final String pond = evaluationElement.ponderation;
 					final double value = nf_frCA.parse(pond).doubleValue();
 					total += value;
+					if(total>100){
+						total = 100;
+					}
 				} catch (final ParseException e) {
 				}
 			}
@@ -135,7 +138,7 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 				holder.txtView.setText(R.string.noteACejour);
 				if(courseEvaluation.noteSur100PourElementsIndividuels!=null){
 					final String note = courseEvaluation.scoreFinalSur100;
-					holder.txtViewValue.setText(note + "/" + total + " (" + courseEvaluation.noteACeJour + "%)");
+					holder.txtViewValue.setText(note + "/" + nf_enUS.format(total) + " (" + courseEvaluation.noteACeJour + "%)");
 				}
 				break;
 			case 3:// MOYENNE CLASSE
@@ -143,7 +146,7 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 				if(courseEvaluation.moyenneClasse!=null){
 					final String m = courseEvaluation.moyenneClasse;
 					try {
-						holder.txtViewValue.setText(m + "/" + total + " ("
+						holder.txtViewValue.setText(m + "/" + nf_enUS.format(total) + " ("
 								+ nf_enUS.format(+(nf_frCA.parse(m).doubleValue() / total) * 100) + "%)");
 					} catch (final ParseException e1) {
 						e1.printStackTrace();
