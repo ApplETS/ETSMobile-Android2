@@ -67,7 +67,7 @@ public class NotesFragment extends HttpFragment {
 	public void onRequestFailure(SpiceException e) {
 		// TODO Auto-generated method stub
 
-	} 
+	}  
 
 	@Override
 	public void onRequestSuccess(Object o) {
