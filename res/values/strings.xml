@@ -39,5 +39,20 @@
     <string name="activity_moodle_pwd" >Mot de passe</string>
     <string name="activity_moodle_pwd_instruc">Votre mot de passe universitaire</string>
     <string name="activity_moodle_app">Moodle App</string>
+    
+    <!-- Note detail Page -->
+    <string name="mesCours">Mes cours</string>
+    <string name="sommaire">Sommaire</string>
+    <string name="mesNotes">Mes notes</string>
+    <string name="cote">Cote</string>
+    <string name="noteACejour">Note à ce jour</string>
+    <string name="moyenne">Moyenne</string>
+    <string name="ecartType">Écart-type</string>
+    <string name="mediane">Médiane</string>
+    <string name="rangCentille">Rang centile</string>
+    <string name="ponderation">Pondération</string>
+
+    
+    
  
 </resources>

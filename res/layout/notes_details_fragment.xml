@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <RelativeLayout 
+        android:id="@+id/notes_framgent_sigle_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black_gray">
+	    <TextView android:id="@+id/notes_fragment_sigle"
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:layout_centerHorizontal="true"
+	      android:textSize="28sp"
+	      android:text="GTI619"
+	      android:textColor="@color/gray"/>
+    </RelativeLayout>
+
+     <ListView 
+        android:id="@android:id/list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_below="@id/notes_framgent_sigle_layout"
+        android:padding="10dp"
+        android:dividerHeight="1dp"
+        android:divider="@color/black_gray"/>   
+</RelativeLayout>

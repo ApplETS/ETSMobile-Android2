@@ -34,6 +34,9 @@ public class ListeDesElementsEvaluation extends DonneesRetournees implements Kvm
 
 	public ArrayOfElementEvaluation liste = new ArrayOfElementEvaluation();
 
+	//add by Laurence
+	//public String cote;
+	//
 	public ListeDesElementsEvaluation() {
 	}
 

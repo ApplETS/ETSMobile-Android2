@@ -165,7 +165,7 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Information de base sur l'étudiant: nom, prénom, code permanent, solde
+	 * Information de base sur l'��tudiant: nom, pr��nom, code permanent, solde
 	 */
 	public Etudiant infoEtudiant(final String codeAccesUniversel, final String motPasse)
 			throws java.lang.Exception {
@@ -202,7 +202,7 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Information de base sur l'étudiant: nom, prénom, code permanent, solde
+	 * Information de base sur l'��tudiant: nom, pr��nom, code permanent, solde
 	 */
 	public void infoEtudiantAsync(final String codeAccesUniversel, final String motPasse) {
 		executeAsync(new Functions.IFunc<Etudiant>() {
@@ -213,8 +213,8 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste de tous les cours de l'étudiant: sigle, groupe, session,
-	 * programme, cote finale, nombre de crédits et titre du cours, triée par
+	 * Liste de tous les cours de l'��tudiant: sigle, groupe, session,
+	 * programme, cote finale, nombre de cr��dits et titre du cours, tri��e par
 	 * session et sigle.
 	 */
 	public ListeDeCours listeCours(final String codeAccesUniversel, final String motPasse)
@@ -252,8 +252,8 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste de tous les cours de l'étudiant: sigle, groupe, session,
-	 * programme, cote finale, nombre de crédits et titre du cours, triée par
+	 * Liste de tous les cours de l'��tudiant: sigle, groupe, session,
+	 * programme, cote finale, nombre de cr��dits et titre du cours, tri��e par
 	 * session et sigle.
 	 */
 	public void listeCoursAsync(final String codeAccesUniversel, final String motPasse) {
@@ -265,8 +265,8 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Retourne 'true' si le code d'accès universel et le mot de passe sont
-	 * valides dans AD des étudiants
+	 * Retourne 'true' si le code d'acc��s universel et le mot de passe sont
+	 * valides dans AD des ��tudiants
 	 */
 	public Boolean donneesAuthentificationValides(final String codeAccesUniversel,
 			final String motPasse) throws java.lang.Exception {
@@ -308,8 +308,8 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Retourne 'true' si le code d'accès universel et le mot de passe sont
-	 * valides dans AD des étudiants
+	 * Retourne 'true' si le code d'acc��s universel et le mot de passe sont
+	 * valides dans AD des ��tudiants
 	 */
 	public void donneesAuthentificationValidesAsync(final String codeAccesUniversel,
 			final String motPasse) {
@@ -321,9 +321,9 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste des cours de l'étudiant entre deux sessions : sigle, groupe,
-	 * session, programme, cote finale, nombre de crédits et titre du cours,
-	 * triée par session et sigle.
+	 * Liste des cours de l'��tudiant entre deux sessions : sigle, groupe,
+	 * session, programme, cote finale, nombre de cr��dits et titre du cours,
+	 * tri��e par session et sigle.
 	 */
 	public ListeDeCours listeCoursIntervalleSessions(final String codeAccesUniversel,
 			final String motPasse, final String SesDebut, final String SesFin)
@@ -374,9 +374,9 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste des cours de l'étudiant entre deux sessions : sigle, groupe,
-	 * session, programme, cote finale, nombre de crédits et titre du cours,
-	 * triée par session et sigle.
+	 * Liste des cours de l'��tudiant entre deux sessions : sigle, groupe,
+	 * session, programme, cote finale, nombre de cr��dits et titre du cours,
+	 * tri��e par session et sigle.
 	 */
 	public void listeCoursIntervalleSessionsAsync(final String codeAccesUniversel,
 			final String motPasse, final String SesDebut, final String SesFin) {
@@ -388,7 +388,7 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste de toutes les sessions où l'étudiant a été actif à l'ÉTS, en
+	 * Liste de toutes les sessions o�� l'��tudiant a ��t�� actif �� l'��TS, en
 	 * version courte (A2011) et longue (Automne 2011)
 	 */
 	public ListeDeSessions listeSessions(final String codeAccesUniversel, final String motPasse)
@@ -426,7 +426,7 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste de toutes les sessions où l'étudiant a été actif à l'ÉTS, en
+	 * Liste de toutes les sessions o�� l'��tudiant a ��t�� actif �� l'��TS, en
 	 * version courte (A2011) et longue (Automne 2011)
 	 */
 	public void listeSessionsAsync(final String codeAccesUniversel, final String motPasse) {
@@ -438,8 +438,8 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste des programmes d'études de l'étudiant: code, libellé, moyenne,
-	 * crédits réussis, etc.)
+	 * Liste des programmes d'��tudes de l'��tudiant: code, libell��, moyenne,
+	 * cr��dits r��ussis, etc.)
 	 */
 	public listeDesProgrammes listeProgrammes(final String codeAccesUniversel, final String motPasse)
 			throws java.lang.Exception {
@@ -476,8 +476,8 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste des programmes d'études de l'étudiant: code, libellé, moyenne,
-	 * crédits réussis, etc.)
+	 * Liste des programmes d'��tudes de l'��tudiant: code, libell��, moyenne,
+	 * cr��dits r��ussis, etc.)
 	 */
 	public void listeProgrammesAsync(final String codeAccesUniversel, final String motPasse) {
 		executeAsync(new Functions.IFunc<listeDesProgrammes>() {
@@ -488,8 +488,8 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste de coéquipiers de l'étudiant pour le cours-groupe et l'élément
-	 * d'évaluation passés en paramêtre: nom, prénom et courriel
+	 * Liste de co��quipiers de l'��tudiant pour le cours-groupe et l'��l��ment
+	 * d'��valuation pass��s en param��tre: nom, pr��nom et courriel
 	 */
 	public listeDesCoequipiers listeCoequipiers(final String codeAccesUniversel,
 			final String motPasse, final String pSigle, final String pGroupe,
@@ -551,8 +551,8 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste de coéquipiers de l'étudiant pour le cours-groupe et l'élément
-	 * d'évaluation passés en paramêtre: nom, prénom et courriel
+	 * Liste de co��quipiers de l'��tudiant pour le cours-groupe et l'��l��ment
+	 * d'��valuation pass��s en param��tre: nom, pr��nom et courriel
 	 */
 	public void listeCoequipiersAsync(final String codeAccesUniversel, final String motPasse,
 			final String pSigle, final String pGroupe, final String pSession,
@@ -566,7 +566,7 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste des éléments d'évaluation (devoirs, labos, examens, etc.) avec
+	 * Liste des ��l��ments d'��valuation (devoirs, labos, examens, etc.) avec
 	 * la note obtenue et les statisques, comme dans SIGNETS
 	 */
 	public ListeDesElementsEvaluation listeElementsEvaluation(final String codeAccesUniversel,
@@ -624,7 +624,7 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste des éléments d'évaluation (devoirs, labos, examens, etc.) avec
+	 * Liste des ��l��ments d'��valuation (devoirs, labos, examens, etc.) avec
 	 * la note obtenue et les statisques, comme dans SIGNETS
 	 */
 	public void listeElementsEvaluationAsync(final String codeAccesUniversel,
@@ -638,7 +638,7 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste de activités (cours, TP, Lab, etc) avec leur horaire et leur
+	 * Liste de activit��s (cours, TP, Lab, etc) avec leur horaire et leur
 	 * local, ainsi que les enseignants
 	 */
 	public listeDesActivitesEtProf listeHoraireEtProf(final String codeAccesUniversel,
@@ -682,7 +682,7 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste de activités (cours, TP, Lab, etc) avec leur horaire et leur
+	 * Liste de activit��s (cours, TP, Lab, etc) avec leur horaire et leur
 	 * local, ainsi que les enseignants
 	 */
 	public void listeHoraireEtProfAsync(final String codeAccesUniversel, final String motPasse,
@@ -695,8 +695,8 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste des cours pour le trimestre et le sigle de cours partiel passés en
-	 * paramètres. Tous les CTN1 à l'hiver 2012, par exemple
+	 * Liste des cours pour le trimestre et le sigle de cours partiel pass��s en
+	 * param��tres. Tous les CTN1 �� l'hiver 2012, par exemple
 	 */
 	public listeCoursHoraire lireHoraire(final String pSession, final String prefixeSigleCours)
 			throws java.lang.Exception {
@@ -733,8 +733,8 @@ public class SignetsMobileSoap {
 	}
 
 	/**
-	 * Liste des cours pour le trimestre et le sigle de cours partiel passés en
-	 * paramètres. Tous les CTN1 à l'hiver 2012, par exemple
+	 * Liste des cours pour le trimestre et le sigle de cours partiel pass��s en
+	 * param��tres. Tous les CTN1 �� l'hiver 2012, par exemple
 	 */
 	public void lireHoraireAsync(final String pSession, final String prefixeSigleCours) {
 		executeAsync(new Functions.IFunc<listeCoursHoraire>() {
@@ -746,7 +746,7 @@ public class SignetsMobileSoap {
 
 	/**
 	 * Liste des jours qui en remplacent d'autres, par exemple, les cours du
-	 * lundi 8 octobre sont donnés le mercredi 21 novembre.
+	 * lundi 8 octobre sont donn��s le mercredi 21 novembre.
 	 */
 	public listeJoursRemplaces lireJoursRemplaces(final String pSession) throws java.lang.Exception {
 		return (listeJoursRemplaces) execute(new IWcfMethod() {
@@ -777,7 +777,7 @@ public class SignetsMobileSoap {
 
 	/**
 	 * Liste des jours qui en remplacent d'autres, par exemple, les cours du
-	 * lundi 8 octobre sont donnés le mercredi 21 novembre.
+	 * lundi 8 octobre sont donn��s le mercredi 21 novembre.
 	 */
 	public void lireJoursRemplacesAsync(final String pSession) {
 		executeAsync(new Functions.IFunc<listeJoursRemplaces>() {

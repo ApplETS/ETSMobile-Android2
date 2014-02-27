@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/auth_bkg"
+    android:src="@drawable/ets_background"
     android:tileMode="disabled" android:gravity="top" >
 </bitmap>
