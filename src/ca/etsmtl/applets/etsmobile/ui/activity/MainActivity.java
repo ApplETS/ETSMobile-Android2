@@ -94,6 +94,8 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -122,6 +124,7 @@ public class MainActivity extends Activity {
 
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivityForResult(intent, 0);
+			finish();
 		}
 	}
 	
@@ -177,9 +180,13 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if(id == R.id.action_logout){
+			Utility.deconnexion(this);
+		}
 		// Pass the event to ActionBarDrawerToggle, if it returns
 		// true, then it has handled the app icon touch event
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
+		else if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
 
