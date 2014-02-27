@@ -213,6 +213,7 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 
 			finishActivity(1);
 			startActivity(new Intent(this, MainActivity.class));
+			finish();
 		} else {
 			mPasswordView.setError(getString(R.string.error_invalid_email));
 			mPasswordView.requestFocus();

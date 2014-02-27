@@ -3,6 +3,7 @@
 
     <string name="app_name">ÉTSMobile</string>
     <string name="action_settings">Settings</string>
+    <string name="action_logout">Déconnexion</string>
     <string name="drawer_title">Menu</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
@@ -51,6 +52,17 @@
     <string name="mediane">Médiane</string>
     <string name="rangCentille">Rang centile</string>
     <string name="ponderation">Pondération</string>
+    
+    <!-- Profil Page -->
+    <string name="profil_nom_prenom">Nom, Prénom</string>
+    <string name="profil_code_permanent">Code permanent</string>
+    <string name="profil_solde">Solde</string>
+    <string name="profil_programme">Programme</string> 
+    <string name="profil_credit_reussis">Crédits réussis</string>
+    <string name="profil_cours_echoue">Cours échoué(s)</string>
+    <string name="profil_credit_inscrit">Crédit inscrit</string>
+    <string name="profil_moyenne">Moyenne</string>
+    <string name="profil_logout">Déconnexion</string>
 
     
     
