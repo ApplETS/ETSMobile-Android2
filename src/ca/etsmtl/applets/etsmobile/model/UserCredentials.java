@@ -35,9 +35,9 @@ public class UserCredentials {
 		}
 	}
 
-	public UserCredentials(final String codeP, final String codeU) {
-		username = codeP;
-		password = codeU;
+	public UserCredentials(final String codeU, final String codeP) {
+		username = codeU;
+		password = codeP;
 	}
 
 	public String getPassword() {

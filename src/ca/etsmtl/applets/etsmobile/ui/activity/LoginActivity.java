@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
+import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -201,18 +203,25 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 		showProgress(false);
 
 		if (o != null) {
-
-			ApplicationManager.userCredentials = userCredentials;
-
-			Editor edit = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-					.edit();
-
-			edit.putString(UserCredentials.CODE_U, userCredentials.getUsername());
-			edit.putString(UserCredentials.CODE_P, userCredentials.getPassword());
-			edit.commit();
-
-			finishActivity(1);
-			startActivity(new Intent(this, MainActivity.class));
+			Etudiant etudiant = (Etudiant)o;
+			if(etudiant.erreur!=null){
+				mPasswordView.setError(getString(R.string.error_invalid_pwd));
+				mPasswordView.requestFocus();
+			}else{
+				Log.v("LoginActivity","LoginActivity: o="+o);
+				ApplicationManager.userCredentials = userCredentials;
+	
+				Editor edit = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+						.edit();
+	
+				edit.putString(UserCredentials.CODE_U, userCredentials.getUsername());
+				edit.putString(UserCredentials.CODE_P, userCredentials.getPassword());
+				edit.commit();
+				finishActivity(1);
+				startActivity(new Intent(this, MainActivity.class));
+				finish();
+			}
+			
 		} else {
 			mPasswordView.setError(getString(R.string.error_invalid_email));
 			mPasswordView.requestFocus();
