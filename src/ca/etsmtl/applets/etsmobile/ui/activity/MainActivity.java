@@ -124,7 +124,6 @@ public class MainActivity extends Activity {
 
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivityForResult(intent, 0);
-			finish();
 		}
 	}
 	
