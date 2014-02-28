@@ -59,10 +59,13 @@
     <string name="profil_solde">Solde</string>
     <string name="profil_programme">Programme</string> 
     <string name="profil_credit_reussis">Crédits réussis</string>
+    <string name="profil_cours_reussis">Cours réussis</string>
     <string name="profil_cours_echoue">Cours échoué(s)</string>
     <string name="profil_credit_inscrit">Crédit inscrit</string>
     <string name="profil_moyenne">Moyenne</string>
     <string name="profil_logout">Déconnexion</string>
+    <string name="profil_credit_potentiel">Crédits potentiel</string>
+    <string name="profil_cours_equivalent">Cours équivalents</string>
 
     
     
