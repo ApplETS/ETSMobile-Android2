@@ -42,7 +42,8 @@ public class MainActivity extends Activity {
 		Collection<MyMenuItem> myMenuItems = ApplicationManager.mMenu.values();
 
 		MyMenuItem[] menuItems = new MyMenuItem[stringSet];
-		mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems.toArray(menuItems)));
+		mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems
+				.toArray(menuItems)));
 
 		// Set the list's click listener
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
@@ -70,7 +71,8 @@ public class MainActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-		MyMenuItem ajdItem = ApplicationManager.mMenu.get(getString(R.string.menu_section_1_ajd));
+		MyMenuItem ajdItem = ApplicationManager.mMenu
+				.get(getString(R.string.menu_section_1_ajd));
 
 		// Select Aujourd'Hui
 		selectItem(ajdItem.title, 1);
@@ -120,7 +122,8 @@ public class MainActivity extends Activity {
 				Bundle extras = data.getExtras();
 				String codeU = extras.getString(UserCredentials.CODE_U);
 				String codeP = extras.getString(UserCredentials.CODE_P);
-				ApplicationManager.userCredentials = new UserCredentials(codeU, codeP);
+				ApplicationManager.userCredentials = new UserCredentials(codeU,
+						codeP);
 			}
 		}
 	}
@@ -143,9 +146,11 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+	private class DrawerItemClickListener implements
+			ListView.OnItemClickListener {
 		@Override
-		public void onItemClick(AdapterView parent, View view, int position, long id) {
+		public void onItemClick(AdapterView parent, View view, int position,
+				long id) {
 			final Object itemAtPosition = parent.getItemAtPosition(position);
 			selectItem(((MyMenuItem) itemAtPosition).title, position);
 		}
@@ -172,7 +177,8 @@ public class MainActivity extends Activity {
 
 		// Insert the fragment by replacing any existing fragment
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
+		fragmentManager.beginTransaction()
+				.replace(R.id.content_frame, fragment, aClass.getName())
 				.addToBackStack(null).commit();
 
 		// Highlight the selected item, update the title, and close the drawer

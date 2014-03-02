@@ -10,30 +10,47 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 import java.util.Hashtable;
-import org.ksoap2.serialization.*;
+
+import org.ksoap2.serialization.AttributeContainer;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "cours")
 public class Cours extends AttributeContainer implements KvmSerializable {
 
+	@DatabaseField
 	public String sigle;
 
+	@DatabaseField
 	public String groupe;
 
+	@DatabaseField
 	public String session;
 
+	@DatabaseField
 	public String programmeEtudes;
 
+	@DatabaseField
 	public String cote;
 
+	@DatabaseField
 	public Integer nbCredits = 0;
 
+	@DatabaseField
 	public String titreCours;
 
 	public Cours() {
 	}
 
-	public Cours(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
+	public Cours(AttributeContainer inObj,
+			ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -152,8 +169,8 @@ public class Cours extends AttributeContainer implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1,
-			PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex,
+			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.STRING_CLASS;
 			info.name = "sigle";

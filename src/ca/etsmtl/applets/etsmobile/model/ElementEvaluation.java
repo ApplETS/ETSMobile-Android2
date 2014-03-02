@@ -10,44 +10,69 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 import java.util.Hashtable;
-import org.ksoap2.serialization.*;
+
+import org.ksoap2.serialization.AttributeContainer;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class ElementEvaluation extends AttributeContainer implements KvmSerializable {
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
+@DatabaseTable(tableName = "element_evaluation")
+public class ElementEvaluation extends AttributeContainer implements
+		KvmSerializable {
+
+	@DatabaseField
 	public String coursGroupe;
 
+	@DatabaseField
 	public String nom;
 
+	@DatabaseField
 	public String equipe;
 
+	@DatabaseField
 	public String dateCible;
 
+	@DatabaseField
 	public String note;
 
+	@DatabaseField
 	public String corrigeSur;
 
+	@DatabaseField
 	public String ponderation;
 
+	@DatabaseField
 	public String moyenne;
 
+	@DatabaseField
 	public String ecartType;
 
+	@DatabaseField
 	public String mediane;
 
+	@DatabaseField
 	public String rangCentile;
 
+	@DatabaseField
 	public String publie;
 
+	@DatabaseField
 	public String messageDuProf;
 
+	@DatabaseField
 	public String ignoreDuCalcul;
 
 	public ElementEvaluation() {
 	}
 
-	public ElementEvaluation(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
+	public ElementEvaluation(AttributeContainer inObj,
+			ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -264,8 +289,8 @@ public class ElementEvaluation extends AttributeContainer implements KvmSerializ
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1,
-			PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex,
+			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.STRING_CLASS;
 			info.name = "coursGroupe";

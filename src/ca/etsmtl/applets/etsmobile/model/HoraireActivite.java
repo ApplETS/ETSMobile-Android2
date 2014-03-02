@@ -10,38 +10,52 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 import java.util.Hashtable;
-import org.ksoap2.serialization.*;
+
+import org.ksoap2.serialization.AttributeContainer;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class HoraireActivite extends AttributeContainer implements KvmSerializable {
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
+@DatabaseTable(tableName = "horaire_activite")
+public class HoraireActivite extends AttributeContainer implements
+		KvmSerializable {
+
+	@DatabaseField
 	public String sigle;
 
+	@DatabaseField
 	public String groupe;
 
+	@DatabaseField
 	public String jour;
-
+	@DatabaseField
 	public String journee;
-
+	@DatabaseField
 	public String codeActivite;
-
+	@DatabaseField
 	public String nomActivite;
-
+	@DatabaseField
 	public String activitePrincipale;
-
+	@DatabaseField
 	public String heureDebut;
-
+	@DatabaseField
 	public String heureFin;
-
+	@DatabaseField
 	public String local;
-
+	@DatabaseField
 	public String titreCours;
 
 	public HoraireActivite() {
 	}
 
-	public HoraireActivite(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
+	public HoraireActivite(AttributeContainer inObj,
+			ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -216,8 +230,8 @@ public class HoraireActivite extends AttributeContainer implements KvmSerializab
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1,
-			PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex,
+			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.STRING_CLASS;
 			info.name = "sigle";

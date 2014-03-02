@@ -20,8 +20,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 public class MarshalDateTime implements Marshal {
-	public Object readInstance(XmlPullParser parser, String namespace, String name,
-			PropertyInfo expected) throws IOException, XmlPullParserException {
+	public Object readInstance(XmlPullParser parser, String namespace,
+			String name, PropertyInfo expected) throws IOException,
+			XmlPullParserException {
 		return DateTime.parse(parser.nextText());
 	}
 
@@ -29,7 +30,8 @@ public class MarshalDateTime implements Marshal {
 		cm.addMapping(cm.xsd, "datetime", DateTime.class, this);
 	}
 
-	public void writeInstance(XmlSerializer writer, Object obj) throws IOException {
+	public void writeInstance(XmlSerializer writer, Object obj)
+			throws IOException {
 		writer.text(obj.toString());
 	}
 }

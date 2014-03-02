@@ -22,6 +22,6 @@ public class ProfilFragment extends HttpFragment {
 	@Override
 	void updateUI() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

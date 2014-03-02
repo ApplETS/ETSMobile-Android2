@@ -23,7 +23,8 @@ public class HoraireFragment extends HttpFragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 
 		View v = inflater.inflate(R.layout.activity_calendar, container, false);
 
@@ -54,7 +55,7 @@ public class HoraireFragment extends HttpFragment {
 	@Override
 	void updateUI() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
