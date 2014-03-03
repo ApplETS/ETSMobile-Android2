@@ -254,4 +254,39 @@ public class ExtendedSoapSerializationEnvelope extends
 			return null;
 		}
 	}
+
+	public java.lang.Object get(java.lang.Object soap, java.lang.Class cl) {
+		if (soap == null) {
+			return null;
+		}
+		try {
+			if (soap instanceof Vector) {
+				Constructor ctor = cl.getConstructor(Vector.class,
+						ExtendedSoapSerializationEnvelope.class);
+				return ctor.newInstance(soap, this);
+			}
+			java.lang.Object refAttr = Helper.getAttribute(
+					(AttributeContainer) soap, "Ref",
+					"http://schemas.microsoft.com/2003/10/Serialization/");
+			if (refAttr != null) {
+				java.lang.String ref = (java.lang.String) refAttr;
+				return referencesTable.get(ref);
+			} else {
+				if (soap instanceof SoapObject) {
+					java.lang.String key = String.format("%s^^%s",
+							((SoapObject) soap).getNamespace(),
+							((SoapObject) soap).getName());
+					if (classNames.containsKey(key)) {
+						cl = classNames.get(key);
+					}
+				}
+				Constructor ctor = cl.getConstructor(AttributeContainer.class,
+						ExtendedSoapSerializationEnvelope.class);
+				return ctor.newInstance(soap, this);
+			}
+		} catch (java.lang.Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
 }

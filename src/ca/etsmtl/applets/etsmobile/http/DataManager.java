@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.soap.SignetsMobileSoap;
+import ca.etsmtl.applets.etsmobile.http.soap.WebServiceSoap;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 
@@ -179,6 +180,26 @@ public class DataManager {
 
 						listener.onRequestSuccess(result);
 						break;
+					case SignetMethods.BOTTIN_LIST_DEPT:
+						result = new WebServiceSoap().GetListeDepartement();
+
+						listener.onRequestSuccess(result);
+						break;
+					case SignetMethods.BOTTIN_GET_FICHE:
+						String numero = reqParams[0];
+						String PathFiche = reqParams[1];
+						result = new WebServiceSoap().GetFiche(numero,
+								PathFiche);
+
+						listener.onRequestSuccess(result);
+						break;
+
+					case SignetMethods.BOTTIN_GET_FICHE_DATA:
+						String Id = reqParams[0];
+						result = new WebServiceSoap().GetFicheData(Id);
+
+						listener.onRequestSuccess(result);
+						break;
 
 					default:
 						break;
@@ -209,6 +230,9 @@ public class DataManager {
 		public static final int LIST_HORAIRE_PROF = 7;
 		public static final int LIRE_HORAIRE = 8;
 		public static final int LIRE_JOUR_REMPLACE = 9;
+		public static final int BOTTIN_LIST_DEPT = 10;
+		public static final int BOTTIN_GET_FICHE = 11;
+		public static final int BOTTIN_GET_FICHE_DATA = 12;
 	}
 
 	/**
