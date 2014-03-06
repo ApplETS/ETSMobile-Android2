@@ -22,6 +22,12 @@ import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
+/**
+ * Main Activity for ÉTSMobile, handles the login and the menu
+ * 
+ * @author Philippe David
+ * 
+ */
 public class MainActivity extends Activity {
 
 	private DrawerLayout mDrawerLayout;
@@ -39,7 +45,8 @@ public class MainActivity extends Activity {
 
 		// Set the adapter for the list view
 		int stringSet = ApplicationManager.mMenu.keySet().size();
-		Collection<MyMenuItem> myMenuItems = ApplicationManager.mMenu.values();
+		final Collection<MyMenuItem> myMenuItems = ApplicationManager.mMenu
+				.values();
 
 		MyMenuItem[] menuItems = new MyMenuItem[stringSet];
 		mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems
@@ -47,6 +54,7 @@ public class MainActivity extends Activity {
 
 		// Set the list's click listener
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
 		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
 		mDrawerLayout, /* DrawerLayout object */
 		R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
@@ -141,7 +149,6 @@ public class MainActivity extends Activity {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-		// Handle your other action bar items...
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -153,7 +160,22 @@ public class MainActivity extends Activity {
 		public void onItemClick(AdapterView parent, View view, int position,
 				long id) {
 			final Object itemAtPosition = parent.getItemAtPosition(position);
-			selectItem(((MyMenuItem) itemAtPosition).title, position);
+			MyMenuItem myMenuItem = (MyMenuItem) itemAtPosition;
+
+			if (myMenuItem.resId == R.drawable.ic_ico_comment) {
+				// contact; Ask to open email app; prefill email info
+				Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+				intent.setType("plain/text");
+				intent.putExtra(
+						android.content.Intent.EXTRA_EMAIL,
+						new String[] { getString(R.string.applets_ens_etsmtl_ca) });
+				intent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+						getString(R.string.etsmobile_android_commentaire));
+				intent.putExtra(android.content.Intent.EXTRA_TEXT,
+						getString(R.string.default_comment));
+			} else {
+				selectItem(myMenuItem.title, position);
+			}
 		}
 	}
 
