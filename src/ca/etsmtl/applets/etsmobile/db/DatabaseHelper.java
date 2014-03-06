@@ -35,6 +35,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 
 	// the DAO object we use to access the Etudiant table
+	@SuppressWarnings("unused")
 	private RuntimeExceptionDao<Etudiant, Integer> etudiantDao = null;
 
 	public DatabaseHelper(Context context) {

@@ -148,6 +148,7 @@ public class MainActivity extends Activity {
 
 	private class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
+		@SuppressWarnings("rawtypes")
 		@Override
 		public void onItemClick(AdapterView parent, View view, int position,
 				long id) {
@@ -159,6 +160,7 @@ public class MainActivity extends Activity {
 	/**
 	 * Swaps fragments in the main content view
 	 */
+	@SuppressWarnings("rawtypes")
 	private void selectItem(String key, int position) {
 		// Create a new fragment and specify the planet to show based on
 		// position
