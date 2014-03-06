@@ -60,9 +60,11 @@ public class MenuAdapter extends ArrayAdapter<MyMenuItem> {
 			holder = (ViewHolder) convertView.getTag();
 		} else {
 			if (itemViewType == ITEM) {
-				convertView = layoutInflater.inflate(R.layout.menu_item, parent, false);
+				convertView = layoutInflater.inflate(R.layout.menu_item,
+						parent, false);
 			} else {
-				convertView = layoutInflater.inflate(R.layout.menu_item_separator, parent, false);
+				convertView = layoutInflater.inflate(
+						R.layout.menu_item_separator, parent, false);
 			}
 
 			holder = new ViewHolder(convertView);

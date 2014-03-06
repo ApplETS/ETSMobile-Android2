@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import ca.etsmtl.applets.etsmobile.model.CourseEvaluation;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotesSessionItem;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteAdapter;
@@ -28,7 +27,8 @@ public class NotesFragment extends HttpFragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 
 		View v = inflater.inflate(R.layout.activity_note, container, false);
 		NotesSessionItem[] notesSession = new NotesSessionItem[2];
@@ -45,11 +45,14 @@ public class NotesFragment extends HttpFragment {
 		sessionCoteItem2[4] = new SessionCoteItem("GTI785", "B+");
 		sessionCoteItem2[5] = new SessionCoteItem("GTI785", "B+");
 
-		SessionCoteAdapter sessionAdapter = new SessionCoteAdapter(getActivity(), sessionCoteItem);
-		SessionCoteAdapter sessionAdapter2 = new SessionCoteAdapter(getActivity(), sessionCoteItem2);
+		SessionCoteAdapter sessionAdapter = new SessionCoteAdapter(
+				getActivity(), sessionCoteItem);
+		SessionCoteAdapter sessionAdapter2 = new SessionCoteAdapter(
+				getActivity(), sessionCoteItem2);
 		notesSession[0] = new NotesSessionItem("Hiver 2011", sessionAdapter);
 		notesSession[1] = new NotesSessionItem("Automne 2013", sessionAdapter2);
-		adapter = new NoteAdapter(getActivity(), R.layout.row_note_menu, notesSession);
+		adapter = new NoteAdapter(getActivity(), R.layout.row_note_menu,
+				notesSession);
 		mListView = (ListView) v.findViewById(R.id.activity_note_listview);
 
 		mListView.setAdapter(adapter);
@@ -58,9 +61,10 @@ public class NotesFragment extends HttpFragment {
 
 	@Override
 	void updateUI() {
-//		SoapPrimitive result = dataManager.getDataFromSignet(
-//				DataManager.SignetMethods.ListEvaluation, DataManager.SignetActions.ListEvaluation,
-//				getUserCredentials(), this);
+		// SoapPrimitive result = dataManager.getDataFromSignet(
+		// DataManager.SignetMethods.ListEvaluation,
+		// DataManager.SignetActions.ListEvaluation,
+		// getUserCredentials(), this);
 	}
 
 	@Override
@@ -71,10 +75,6 @@ public class NotesFragment extends HttpFragment {
 
 	@Override
 	public void onRequestSuccess(Object o) {
-		if (o != null)
-			if (o instanceof CourseEvaluation) {
-
-			}
 
 	}
 

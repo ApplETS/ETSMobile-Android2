@@ -9,19 +9,24 @@ package ca.etsmtl.applets.etsmobile.model;
 //
 //---------------------------------------------------
 
-import org.ksoap2.serialization.*;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.ksoap2.serialization.AttributeContainer;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-import java.util.Vector;
-import java.util.Hashtable;
-
-public class ArrayOfProgramme extends Vector<Programme> implements KvmSerializable {
+public class ArrayOfProgramme extends Vector<Programme> implements
+		KvmSerializable {
 
 	public ArrayOfProgramme() {
 	}
 
-	public ArrayOfProgramme(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
+	public ArrayOfProgramme(AttributeContainer inObj,
+			ExtendedSoapSerializationEnvelope envelope) {
 		if (inObj == null)
 			return;
 		SoapObject soapObject = (SoapObject) inObj;
@@ -29,7 +34,8 @@ public class ArrayOfProgramme extends Vector<Programme> implements KvmSerializab
 		for (int i0 = 0; i0 < size; i0++) {
 			Object obj = soapObject.getProperty(i0);
 			if (obj != null && obj instanceof AttributeContainer) {
-				AttributeContainer j = (AttributeContainer) soapObject.getProperty(i0);
+				AttributeContainer j = (AttributeContainer) soapObject
+						.getProperty(i0);
 				Programme j1 = (Programme) envelope.get(j, Programme.class);
 				add(j1);
 			}
@@ -47,8 +53,8 @@ public class ArrayOfProgramme extends Vector<Programme> implements KvmSerializab
 	}
 
 	@Override
-	public void getPropertyInfo(int index, @SuppressWarnings("rawtypes") Hashtable arg1,
-			PropertyInfo info) {
+	public void getPropertyInfo(int index,
+			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		info.name = "Programme";
 		info.type = Programme.class;
 		info.namespace = "http://etsmtl.ca/";

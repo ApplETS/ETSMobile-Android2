@@ -9,19 +9,23 @@ package ca.etsmtl.applets.etsmobile.model;
 //
 //---------------------------------------------------
 
-import org.ksoap2.serialization.*;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.ksoap2.serialization.AttributeContainer;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
-
-import java.util.Vector;
-import java.util.Hashtable;
 
 public class ArrayOfCours extends Vector<Cours> implements KvmSerializable {
 
 	public ArrayOfCours() {
 	}
 
-	public ArrayOfCours(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
+	public ArrayOfCours(AttributeContainer inObj,
+			ExtendedSoapSerializationEnvelope envelope) {
 		if (inObj == null)
 			return;
 		SoapObject soapObject = (SoapObject) inObj;
@@ -29,7 +33,8 @@ public class ArrayOfCours extends Vector<Cours> implements KvmSerializable {
 		for (int i0 = 0; i0 < size; i0++) {
 			Object obj = soapObject.getProperty(i0);
 			if (obj != null && obj instanceof AttributeContainer) {
-				AttributeContainer j = (AttributeContainer) soapObject.getProperty(i0);
+				AttributeContainer j = (AttributeContainer) soapObject
+						.getProperty(i0);
 				Cours j1 = (Cours) envelope.get(j, Cours.class);
 				add(j1);
 			}
@@ -47,8 +52,8 @@ public class ArrayOfCours extends Vector<Cours> implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int index, @SuppressWarnings("rawtypes") Hashtable arg1,
-			PropertyInfo info) {
+	public void getPropertyInfo(int index,
+			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		info.name = "Cours";
 		info.type = Cours.class;
 		info.namespace = "http://etsmtl.ca/";

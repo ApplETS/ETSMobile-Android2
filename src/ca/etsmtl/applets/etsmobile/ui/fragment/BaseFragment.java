@@ -1,8 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.app.Fragment;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.http.TypedRequest;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 
 /**

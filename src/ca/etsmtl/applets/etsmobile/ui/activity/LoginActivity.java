@@ -68,27 +68,30 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 		mEmailView.setText(mEmail);
 
 		mPasswordView = (EditText) findViewById(R.id.password);
-		mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-			@Override
-			public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-				if (id == R.id.login || id == EditorInfo.IME_NULL) {
-					attemptLogin();
-					return true;
-				}
-				return false;
-			}
-		});
+		mPasswordView
+				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+					@Override
+					public boolean onEditorAction(TextView textView, int id,
+							KeyEvent keyEvent) {
+						if (id == R.id.login || id == EditorInfo.IME_NULL) {
+							attemptLogin();
+							return true;
+						}
+						return false;
+					}
+				});
 
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
-		findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				attemptLogin();
-			}
-		});
+		findViewById(R.id.sign_in_button).setOnClickListener(
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						attemptLogin();
+					}
+				});
 	}
 
 	/**
@@ -161,28 +164,36 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 							android.R.integer.config_shortAnimTime);
 
 					mLoginStatusView.setVisibility(View.VISIBLE);
-					mLoginStatusView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
+					mLoginStatusView.animate().setDuration(shortAnimTime)
+							.alpha(show ? 1 : 0)
 							.setListener(new AnimatorListenerAdapter() {
 								@Override
 								public void onAnimationEnd(Animator animation) {
-									mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+									mLoginStatusView
+											.setVisibility(show ? View.VISIBLE
+													: View.GONE);
 								}
 							});
 
 					mLoginFormView.setVisibility(View.VISIBLE);
-					mLoginFormView.animate().setDuration(shortAnimTime).alpha(show ? 0 : 1)
+					mLoginFormView.animate().setDuration(shortAnimTime)
+							.alpha(show ? 0 : 1)
 							.setListener(new AnimatorListenerAdapter() {
 								@Override
 								public void onAnimationEnd(Animator animation) {
-									mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+									mLoginFormView
+											.setVisibility(show ? View.GONE
+													: View.VISIBLE);
 								}
 							});
 				} else {
 					// The ViewPropertyAnimator APIs are not available, so
 					// simply show
 					// and hide the relevant UI components.
-					mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-					mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+					mLoginStatusView.setVisibility(show ? View.VISIBLE
+							: View.GONE);
+					mLoginFormView.setVisibility(show ? View.GONE
+							: View.VISIBLE);
 				}
 
 			}
@@ -204,11 +215,13 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 
 			ApplicationManager.userCredentials = userCredentials;
 
-			Editor edit = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-					.edit();
+			Editor edit = PreferenceManager.getDefaultSharedPreferences(
+					getApplicationContext()).edit();
 
-			edit.putString(UserCredentials.CODE_U, userCredentials.getUsername());
-			edit.putString(UserCredentials.CODE_P, userCredentials.getPassword());
+			edit.putString(UserCredentials.CODE_U,
+					userCredentials.getUsername());
+			edit.putString(UserCredentials.CODE_P,
+					userCredentials.getPassword());
 			edit.commit();
 
 			finishActivity(1);

@@ -22,6 +22,6 @@ public class TodaysFragment extends HttpFragment {
 	@Override
 	void updateUI() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

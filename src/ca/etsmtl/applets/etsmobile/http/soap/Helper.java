@@ -39,7 +39,8 @@ public class Helper {
 		return null;
 	}
 
-	public static Object getAttribute(AttributeContainer obj, String name, String namespace) {
+	public static Object getAttribute(AttributeContainer obj, String name,
+			String namespace) {
 		for (int i = 0; i < obj.getAttributeCount(); i++) {
 			AttributeInfo info = new AttributeInfo();
 			obj.getAttributeInfo(i, info);
@@ -50,8 +51,10 @@ public class Helper {
 		return null;
 	}
 
-	public static Element convertToHeader(Object obj, String namespace, String name) {
-		Element parentElement = new org.kxml2.kdom.Element().createElement(namespace, name);
+	public static Element convertToHeader(Object obj, String namespace,
+			String name) {
+		Element parentElement = new org.kxml2.kdom.Element().createElement(
+				namespace, name);
 		if (obj == null) {
 			return parentElement;
 		}
@@ -61,7 +64,8 @@ public class Helper {
 				PropertyInfo info = new PropertyInfo();
 				soapObject.getPropertyInfo(i, new Hashtable(), info);
 				info.setValue(soapObject.getProperty(i));
-				Element el1 = convertToHeader(info.getValue(), info.getNamespace(), info.getName());
+				Element el1 = convertToHeader(info.getValue(),
+						info.getNamespace(), info.getName());
 				parentElement.addChild(Node.ELEMENT, el1);
 			}
 		} else {
@@ -71,7 +75,8 @@ public class Helper {
 		return parentElement;
 	}
 
-	public static Element findOutHeader(String name, SoapSerializationEnvelope envelope) {
+	public static Element findOutHeader(String name,
+			SoapSerializationEnvelope envelope) {
 		if (envelope.headerIn == null) {
 			return null;
 		}
@@ -86,11 +91,13 @@ public class Helper {
 	public static Object convertToSoapObject(Element element) {
 		if (element.getChildCount() == 0
 				|| (element.getChildCount() == 1 && !(element.getChild(0) instanceof Element))) {
-			SoapPrimitive primitive = new SoapPrimitive(element.getNamespace(), element.getName(),
+			SoapPrimitive primitive = new SoapPrimitive(element.getNamespace(),
+					element.getName(),
 					element.getChildCount() == 1 ? element.getText(0) : null);
 			return primitive;
 		} else {
-			SoapObject obj = new SoapObject(element.getNamespace(), element.getName());
+			SoapObject obj = new SoapObject(element.getNamespace(),
+					element.getName());
 			for (int i = 0; i < element.getChildCount(); i++) {
 				Element childElement = element.getElement(i);
 				Object childObject = convertToSoapObject(childElement);
@@ -107,18 +114,21 @@ public class Helper {
 	}
 
 	private static DateTimeParser offsetElement() {
-		return new DateTimeFormatterBuilder().appendTimeZoneOffset("Z", true, 2, 4).toParser();
+		return new DateTimeFormatterBuilder().appendTimeZoneOffset("Z", true,
+				2, 4).toParser();
 	}
 
 	private static DateTimeParser fractionElement() {
-		return new DateTimeFormatterBuilder().appendLiteral('.').appendFractionOfSecond(3, 9)
-				.toParser();
+		return new DateTimeFormatterBuilder().appendLiteral('.')
+				.appendFractionOfSecond(3, 9).toParser();
 	}
 
 	public static DateTime ConvertFromWebService(String strDate) {
-		DateTimeFormatter parser1 = new DateTimeFormatterBuilder().append(ISODateTimeFormat.date())
-				.appendLiteral('T').append(ISODateTimeFormat.hourMinuteSecond())
-				.appendOptional(fractionElement()).appendOptional(offsetElement()).toFormatter()
+		DateTimeFormatter parser1 = new DateTimeFormatterBuilder()
+				.append(ISODateTimeFormat.date()).appendLiteral('T')
+				.append(ISODateTimeFormat.hourMinuteSecond())
+				.appendOptional(fractionElement())
+				.appendOptional(offsetElement()).toFormatter()
 				.withZone(DateTimeZone.UTC);
 		parser1.withChronology(ISOChronology.getInstanceUTC());
 		return parser1.parseDateTime(strDate);

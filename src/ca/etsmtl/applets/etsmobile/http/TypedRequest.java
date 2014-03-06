@@ -1,20 +1,10 @@
 package ca.etsmtl.applets.etsmobile.http;
 
-import java.util.Collections;
 import java.util.Random;
 
-import org.springframework.http.HttpAuthentication;
-import org.springframework.http.HttpBasicAuthentication;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import android.os.SystemClock;
-
-import ca.etsmtl.applets.etsmobile.model.StudentProfile;
 
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
@@ -47,7 +37,7 @@ public class TypedRequest<X> extends SpringAndroidSpiceRequest<X> {
 		// HttpMethod.POST,
 		// new HttpEntity<Object>(requestHeaders), StudentProfile.class);
 
-//		"{'codeAccessUniversel':'aj39950','motPasse':'Kiss1234'}"
+		// "{'codeAccessUniversel':'aj39950','motPasse':'Kiss1234'}"
 		return restTemplate.postForObject(url, null, klass);
 	}
 
@@ -59,7 +49,8 @@ public class TypedRequest<X> extends SpringAndroidSpiceRequest<X> {
 	 */
 	public String createCacheKey() {
 		return "etsmobile_v2_cache_key."
-				+ RANDOM.nextInt((int) SystemClock.currentThreadTimeMillis()) * 10;
+				+ RANDOM.nextInt((int) SystemClock.currentThreadTimeMillis())
+				* 10;
 	}
 
 }
