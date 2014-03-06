@@ -17,7 +17,7 @@ public class BottinFragment extends HttpFragment {
 	public void onRequestSuccess(Object arg0) {
 		// TODO Auto-generated method stub
 
-	}
+	} 
 
 	@Override
 	void updateUI() {
