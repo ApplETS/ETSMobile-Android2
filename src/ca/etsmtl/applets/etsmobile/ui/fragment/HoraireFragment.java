@@ -26,7 +26,7 @@ public class HoraireFragment extends HttpFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View v = inflater.inflate(R.layout.activity_calendar, container, false);
+		View v = inflater.inflate(R.layout.fragment_calendar, container, false);
 
 		long startMillis = java.lang.System.currentTimeMillis();
 		Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
