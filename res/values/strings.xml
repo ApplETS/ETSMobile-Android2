@@ -39,5 +39,8 @@
     <string name="activity_moodle_pwd" >Mot de passe</string>
     <string name="activity_moodle_pwd_instruc">Votre mot de passe universitaire</string>
     <string name="activity_moodle_app">Moodle App</string>
+    <string name="applets_about">ApplETS se veut avant tout un regroupement d’étudiants qui partagent un intérêt commun pour le domaine des télécommunications et des applications mobiles. Ce club étudiant à pour objectif principal de former, au sein de l’ÉTS, une main d’œuvre spécialisée en ingénierie d’applications mobiles et de promouvoir le développement de ces applications au sein de la communauté étudiante.&#xA;
+De plus, ApplETS propose des idées innovatrices afin de stimuler les étudiants et de les intéresser à ce domaine en pleine expansion comme par exemple le développement de l’application mobile officielle de l’ÉTS qui sera distribuée gratuitement et qui sera très utiles pour la communauté universitaire en intégrant des fonctions tel que la consultation des horaires de cours et d’examens, un plan des locaux de l’ÉTS etc.&#xA;
+ApplETS prévoit également distribuer des classes logicielles libres et gratuites facilitant ainsi l’apprentissage des étudiants en ce qui concerne le développement d’applications mobiles. Comme tout club étudiant, ApplETS participera aussi à des compétitions internationales annuelles dans le but de faire rayonner l’ÉTS à l’étranger. Finalement, ApplETS désire mettre sur pied et organiser une compétition internationale annuelle ici même à l’ÉTS.</string>
  
 </resources>
