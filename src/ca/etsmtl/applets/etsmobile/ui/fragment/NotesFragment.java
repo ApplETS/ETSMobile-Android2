@@ -61,15 +61,10 @@ public class NotesFragment extends HttpFragment {
 
 	@Override
 	void updateUI() {
-		// SoapPrimitive result = dataManager.getDataFromSignet(
-		// DataManager.SignetMethods.ListEvaluation,
-		// DataManager.SignetActions.ListEvaluation,
-		// getUserCredentials(), this);
 	}
 
 	@Override
 	public void onRequestFailure(SpiceException e) {
-		// TODO Auto-generated method stub
 
 	}
 
