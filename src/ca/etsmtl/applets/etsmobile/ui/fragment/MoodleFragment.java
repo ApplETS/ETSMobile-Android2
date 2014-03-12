@@ -27,7 +27,7 @@ public class MoodleFragment extends WebFragment implements OnClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		openMoodle();
-		View v = inflater.inflate(R.layout.activity_moodle, container, false);
+		View v = inflater.inflate(R.layout.fragment_moodle, container, false);
 		((Button) v.findViewById(R.id.activity_moodle_button))
 				.setOnClickListener(this);
 

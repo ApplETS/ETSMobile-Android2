@@ -30,7 +30,7 @@ public class NotesFragment extends HttpFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View v = inflater.inflate(R.layout.activity_note, container, false);
+		View v = inflater.inflate(R.layout.fragment_note, container, false);
 		NotesSessionItem[] notesSession = new NotesSessionItem[2];
 		SessionCoteItem[] sessionCoteItem = new SessionCoteItem[3];
 		sessionCoteItem[0] = new SessionCoteItem("GIA400", "A-");
@@ -61,15 +61,10 @@ public class NotesFragment extends HttpFragment {
 
 	@Override
 	void updateUI() {
-		// SoapPrimitive result = dataManager.getDataFromSignet(
-		// DataManager.SignetMethods.ListEvaluation,
-		// DataManager.SignetActions.ListEvaluation,
-		// getUserCredentials(), this);
 	}
 
 	@Override
 	public void onRequestFailure(SpiceException e) {
-		// TODO Auto-generated method stub
 
 	}  
 
