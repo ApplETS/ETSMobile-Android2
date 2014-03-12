@@ -206,7 +206,7 @@ public class DataManager {
 
 						listener.onRequestSuccess(result);
 						break;
-
+						
 					default:
 						break;
 					}
