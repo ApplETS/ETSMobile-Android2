@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/textview_bottin_nom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Harrison"
+        android:textSize="15dp"
+        android:layout_marginLeft="5dp" />
+
+    <TextView
+        android:id="@+id/textview_bottin_prenom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        android:layout_toRightOf="@id/textview_bottin_nom"
+        android:layout_alignBottom="@id/textview_bottin_nom"
+        android:layout_marginLeft="10dp"
+        android:text="Jean" />
+
+</RelativeLayout>
