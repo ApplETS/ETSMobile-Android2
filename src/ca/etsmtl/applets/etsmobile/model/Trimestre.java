@@ -50,7 +50,8 @@ public class Trimestre extends AttributeContainer implements KvmSerializable {
 	public String dateFinAnnulationSansRemboursementNouveauxEtudiants;
 	@DatabaseField
 	public String dateLimitePourAnnulerASEQ;
-
+	@DatabaseField(id = true)
+	public int id;
 	public Trimestre() {
 	}
 

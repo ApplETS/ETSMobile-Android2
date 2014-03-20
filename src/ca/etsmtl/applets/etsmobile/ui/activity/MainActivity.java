@@ -173,6 +173,7 @@ public class MainActivity extends Activity {
 						getString(R.string.etsmobile_android_commentaire));
 				intent.putExtra(android.content.Intent.EXTRA_TEXT,
 						getString(R.string.default_comment));
+				startActivity(intent);
 			} else {
 				selectItem(myMenuItem.title, position);
 			}

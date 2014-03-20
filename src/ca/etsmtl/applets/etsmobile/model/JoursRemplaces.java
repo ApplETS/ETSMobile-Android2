@@ -26,7 +26,7 @@ import com.j256.ormlite.table.DatabaseTable;
 public class JoursRemplaces extends AttributeContainer implements
 		KvmSerializable {
 
-	@DatabaseField
+	@DatabaseField(id = true)
 	public String dateOrigine;
 
 	@DatabaseField

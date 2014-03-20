@@ -50,6 +50,9 @@ public class HoraireActivite extends AttributeContainer implements
 	public String local;
 	@DatabaseField
 	public String titreCours;
+	
+	@DatabaseField(id=true)
+	public int id;
 
 	public HoraireActivite() {
 	}

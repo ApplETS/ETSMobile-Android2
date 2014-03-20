@@ -24,14 +24,14 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "etudiant")
 public class Etudiant extends DonneesRetournees implements KvmSerializable {
-
+	
 	@DatabaseField
 	public String nom;
 
 	@DatabaseField
 	public String prenom;
 
-	@DatabaseField
+	@DatabaseField(id = true)
 	public String codePerm;
 
 	@DatabaseField

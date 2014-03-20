@@ -45,6 +45,9 @@ public class Cours extends AttributeContainer implements KvmSerializable {
 
 	@DatabaseField
 	public String titreCours;
+	
+	@DatabaseField(id = true)
+	public int id;
 
 	public Cours() {
 	}

@@ -24,4 +24,5 @@ public class BandwithFragment extends HttpFragment {
 		// TODO Auto-generated method stub
 
 	}
+	
 }

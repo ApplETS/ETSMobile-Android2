@@ -17,12 +17,18 @@ import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
+@DatabaseTable(tableName="service")
 public class Service extends AttributeContainer implements KvmSerializable {
 
+	@DatabaseField(id=true)
 	public Integer ServiceCode = 0;
 
+	@DatabaseField
 	public String Nom;
 
 	public Service() {

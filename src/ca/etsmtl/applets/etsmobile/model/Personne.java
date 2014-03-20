@@ -31,7 +31,7 @@ public class Personne extends AttributeContainer implements KvmSerializable {
 	@DatabaseField
 	public String prenom;
 
-	@DatabaseField
+	@DatabaseField(id=true)
 	public String courriel;
 
 	public Personne() {

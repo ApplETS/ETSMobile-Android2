@@ -25,7 +25,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "programme")
 public class Programme extends AttributeContainer implements KvmSerializable {
 
-	@DatabaseField
+	@DatabaseField(id=true)
 	public String code;
 	@DatabaseField
 	public String libelle;

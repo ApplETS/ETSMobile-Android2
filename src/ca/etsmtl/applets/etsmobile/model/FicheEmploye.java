@@ -18,27 +18,40 @@ import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 import ca.etsmtl.applets.etsmobile.http.soap.Helper;
 
+@DatabaseTable(tableName="fiche_employee")
 public class FicheEmploye extends AttributeContainer implements KvmSerializable {
 
+	@DatabaseField(id=true)
 	public Integer Id = 0;
 
+	@DatabaseField
 	public String Nom;
 
+	@DatabaseField
 	public String Prenom;
 
+	@DatabaseField
 	public String TelBureau;
 
+	@DatabaseField
 	public String Emplacement;
 
+	@DatabaseField
 	public String Courriel;
 
+	@DatabaseField
 	public String Service;
 
+	@DatabaseField
 	public String Titre;
 
+	@DatabaseField
 	public DateTime DateModif;
 
 	public FicheEmploye() {
