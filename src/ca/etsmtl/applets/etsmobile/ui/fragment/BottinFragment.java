@@ -1,27 +1,18 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import java.util.List;
-
-import android.app.Activity;
-import android.content.ClipData.Item;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import com.octo.android.robospice.persistence.exception.SpiceException;
-
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
-import ca.etsmtl.applets.etsmobile.model.ArrayOfFicheEmploye;
 import ca.etsmtl.applets.etsmobile.model.ArrayOfService;
-import ca.etsmtl.applets.etsmobile.model.Personne;
-import ca.etsmtl.applets.etsmobile.ui.adapter.BottinAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
+
+import com.octo.android.robospice.persistence.exception.SpiceException;
 
 /**
  * Created by Phil on 17/11/13.
