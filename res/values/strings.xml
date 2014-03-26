@@ -67,7 +67,11 @@
     <string name="profil_credit_potentiel">Crédits potentiel</string>
     <string name="profil_cours_equivalent">Cours équivalents</string>
 
-    
-    
+    <!-- wifi bandwith -->
+    <string name ="bandwith_phase">Phase</string>
+    <string name ="bandwith_app">App</string>
+    <string name ="_0">0</string>
+    <string name ="utilise">Restant:</string>
+    <string name ="gigaoctetx">Go</string>
  
 </resources>

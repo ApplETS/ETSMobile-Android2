@@ -42,7 +42,7 @@ public class ApplicationManager extends Application {
 		mMenu.put(title, new MyMenuItem(title, null));
 
 		title = getString(R.string.menu_section_1_ajd);
-		mMenu.put(title, new MyMenuItem(title, TodaysFragment.class, R.drawable.ic_ico_today));
+		mMenu.put(title, new MyMenuItem(title, TodaysFragment.class, R.drawable.ic_ico_aujourdhui));
 
 		title = getString(R.string.menu_section_1_horaire);
 		mMenu.put(title, new MyMenuItem(title, HoraireFragment.class, R.drawable.ic_ico_schedule));
@@ -50,8 +50,8 @@ public class ApplicationManager extends Application {
 		title = getString(R.string.menu_section_1_notes);
 		mMenu.put(title, new MyMenuItem(title, NotesFragment.class, R.drawable.ic_ico_notes));
 
-		title = getString(R.string.menu_section_1_stages);
-		mMenu.put(title, new MyMenuItem(title, StagesFragment.class, R.drawable.ic_ico_stage));
+		//title = getString(R.string.menu_section_1_stages);
+		//mMenu.put(title, new MyMenuItem(title, StagesFragment.class, R.drawable.ic_ico_stage));
 
 		title = getString(R.string.menu_section_1_profil);
 		mMenu.put(title, new MyMenuItem(title, ProfilFragment.class, R.drawable.ic_ico_profil));
