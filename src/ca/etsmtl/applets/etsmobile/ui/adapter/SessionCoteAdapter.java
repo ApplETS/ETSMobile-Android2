@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteItem;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class SessionCoteAdapter extends BaseAdapter {
@@ -48,15 +49,8 @@ public class SessionCoteAdapter extends BaseAdapter {
 		}
 
 		SessionCoteItem notesSession = sessionCote[position];
-<<<<<<< HEAD
 		((TextView) v.findViewById(R.id.square_note_course_name)).setText(notesSession.sigle);
 		((TextView) v.findViewById(R.id.square_note_course_cote)).setText(notesSession.cote);
-=======
-		((TextView) v.findViewById(R.id.square_note_course_name))
-				.setText(notesSession.course);
-		((TextView) v.findViewById(R.id.square_note_course_cote))
-				.setText(notesSession.cote);
->>>>>>> FETCH_HEAD
 
 
 		return v;

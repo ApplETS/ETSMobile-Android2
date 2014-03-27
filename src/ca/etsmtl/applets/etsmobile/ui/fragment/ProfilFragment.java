@@ -13,8 +13,8 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.Programme;
-import ca.etsmtl.applets.etsmobile.model.StudentProfile;
 import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
+import ca.etsmtl.applets.etsmobile.ui.fragment.HttpFragment;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 

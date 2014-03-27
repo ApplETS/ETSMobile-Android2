@@ -16,6 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
+import ca.etsmtl.applets.etsmobile.ui.adapter.NotesSessionItem;
+import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteItem;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesDetailsFragment;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -37,7 +39,6 @@ public class NoteAdapter extends ArrayAdapter<NotesSessionItem> {
 		final NotesSessionItem notesSession = getItem(position);
 		((TextView) v.findViewById(R.id.row_note_menu_session_text))
 				.setText(notesSession.sessionName);
-<<<<<<< HEAD
 		final GridView gridview = (GridView) v.findViewById(R.id.row_note_menu_gridview);
 		gridview.setAdapter(notesSession.arrayAdapter);
 		gridview.setOnItemClickListener(new OnItemClickListener() {
@@ -52,16 +53,6 @@ public class NoteAdapter extends ArrayAdapter<NotesSessionItem> {
 				FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
 				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "NotesDetailsFragment")
 						.addToBackStack(null).commit();
-=======
-		GridView gridview = (GridView) v
-				.findViewById(R.id.row_note_menu_gridview);
-		gridview.setAdapter(notesSession.arrayAdapter);
-		gridview.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
-				Toast.makeText(context, "" + position, Toast.LENGTH_SHORT)
-						.show();
->>>>>>> FETCH_HEAD
 			}
 		});
 		return v;

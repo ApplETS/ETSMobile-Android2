@@ -20,6 +20,7 @@ import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -214,8 +215,6 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 		showProgress(false);
 
 		if (o != null) {
-
-<<<<<<< HEAD
 			Etudiant etudiant = (Etudiant)o;
 			if(etudiant.erreur!=null){
 				mPasswordView.setError(getString(R.string.error_invalid_pwd));
@@ -234,18 +233,6 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 				startActivity(new Intent(this, MainActivity.class));
 				finish();
 			}
-=======
-			ApplicationManager.userCredentials = userCredentials;
-
-			Editor edit = PreferenceManager.getDefaultSharedPreferences(
-					getApplicationContext()).edit();
-
-			edit.putString(UserCredentials.CODE_U,
-					userCredentials.getUsername());
-			edit.putString(UserCredentials.CODE_P,
-					userCredentials.getPassword());
-			edit.commit();
->>>>>>> FETCH_HEAD
 
 		} else {
 			mPasswordView.setError(getString(R.string.error_invalid_email));
