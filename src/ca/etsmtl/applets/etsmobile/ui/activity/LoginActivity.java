@@ -215,6 +215,7 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 
 		if (o != null) {
 
+<<<<<<< HEAD
 			Etudiant etudiant = (Etudiant)o;
 			if(etudiant.erreur!=null){
 				mPasswordView.setError(getString(R.string.error_invalid_pwd));
@@ -233,6 +234,18 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 				startActivity(new Intent(this, MainActivity.class));
 				finish();
 			}
+=======
+			ApplicationManager.userCredentials = userCredentials;
+
+			Editor edit = PreferenceManager.getDefaultSharedPreferences(
+					getApplicationContext()).edit();
+
+			edit.putString(UserCredentials.CODE_U,
+					userCredentials.getUsername());
+			edit.putString(UserCredentials.CODE_P,
+					userCredentials.getPassword());
+			edit.commit();
+>>>>>>> FETCH_HEAD
 
 		} else {
 			mPasswordView.setError(getString(R.string.error_invalid_email));

@@ -90,7 +90,6 @@ public class ProfilFragment extends HttpFragment implements android.view.View.On
 	@Override
 	void updateUI() {
 		// TODO Auto-generated method stub
-
 	}
 
 	private void refreshUi(){

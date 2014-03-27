@@ -37,6 +37,7 @@ public class NoteAdapter extends ArrayAdapter<NotesSessionItem> {
 		final NotesSessionItem notesSession = getItem(position);
 		((TextView) v.findViewById(R.id.row_note_menu_session_text))
 				.setText(notesSession.sessionName);
+<<<<<<< HEAD
 		final GridView gridview = (GridView) v.findViewById(R.id.row_note_menu_gridview);
 		gridview.setAdapter(notesSession.arrayAdapter);
 		gridview.setOnItemClickListener(new OnItemClickListener() {
@@ -51,6 +52,16 @@ public class NoteAdapter extends ArrayAdapter<NotesSessionItem> {
 				FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
 				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "NotesDetailsFragment")
 						.addToBackStack(null).commit();
+=======
+		GridView gridview = (GridView) v
+				.findViewById(R.id.row_note_menu_gridview);
+		gridview.setAdapter(notesSession.arrayAdapter);
+		gridview.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View v,
+					int position, long id) {
+				Toast.makeText(context, "" + position, Toast.LENGTH_SHORT)
+						.show();
+>>>>>>> FETCH_HEAD
 			}
 		});
 		return v;

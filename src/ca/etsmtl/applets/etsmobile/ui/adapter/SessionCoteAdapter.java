@@ -48,8 +48,15 @@ public class SessionCoteAdapter extends BaseAdapter {
 		}
 
 		SessionCoteItem notesSession = sessionCote[position];
+<<<<<<< HEAD
 		((TextView) v.findViewById(R.id.square_note_course_name)).setText(notesSession.sigle);
 		((TextView) v.findViewById(R.id.square_note_course_cote)).setText(notesSession.cote);
+=======
+		((TextView) v.findViewById(R.id.square_note_course_name))
+				.setText(notesSession.course);
+		((TextView) v.findViewById(R.id.square_note_course_cote))
+				.setText(notesSession.cote);
+>>>>>>> FETCH_HEAD
 
 
 		return v;

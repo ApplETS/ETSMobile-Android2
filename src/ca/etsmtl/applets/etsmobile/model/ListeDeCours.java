@@ -15,8 +15,11 @@ import org.ksoap2.serialization.AttributeContainer;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
+<<<<<<< HEAD
 
 import android.util.Log;
+=======
+>>>>>>> FETCH_HEAD
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 

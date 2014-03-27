@@ -26,7 +26,11 @@ import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
+<<<<<<< HEAD
  * Main Activity for ï¿½TSMobile, handles the login and the menu
+=======
+ * Main Activity for ÉTSMobile, handles the login and the menu
+>>>>>>> FETCH_HEAD
  * 
  * @author Philippe David
  * 
@@ -60,6 +64,37 @@ public class MainActivity extends Activity {
 				.toArray(menuItems)));
 
 		// Set the list's click listener
+<<<<<<< HEAD
+=======
+		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+		mDrawerLayout, /* DrawerLayout object */
+		R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+		R.string.drawer_open, /* "open drawer" description */
+		R.string.drawer_close /* "close drawer" description */
+		) {
+
+			/** Called when a drawer has settled in a completely closed state. */
+			public void onDrawerClosed(View view) {
+				getActionBar().setTitle(mTitle);
+			}
+
+			/** Called when a drawer has settled in a completely open state. */
+			public void onDrawerOpened(View drawerView) {
+				getActionBar().setTitle(getString(R.string.drawer_title));
+			}
+		};
+
+		// Set the drawer toggle as the DrawerListener
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
+
+		MyMenuItem ajdItem = ApplicationManager.mMenu
+				.get(getString(R.string.menu_section_1_ajd));
+>>>>>>> FETCH_HEAD
 
 			mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 			mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
@@ -237,11 +272,18 @@ public class MainActivity extends Activity {
 		}
 	     
 		// Insert the fragment by replacing any existing fragment
+<<<<<<< HEAD
 		FragmentManager fragmentManager = getFragmentManager();	
 			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
 					.addToBackStack(aClass.getName()).commit();
 
 
+=======
+		FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager.beginTransaction()
+				.replace(R.id.content_frame, fragment, aClass.getName())
+				.addToBackStack(null).commit();
+>>>>>>> FETCH_HEAD
 
 		// Highlight the selected item, update the title, and close the drawer
 		mDrawerList.setItemChecked(position, true);

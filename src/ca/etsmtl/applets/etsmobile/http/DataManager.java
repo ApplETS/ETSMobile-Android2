@@ -6,7 +6,11 @@ import java.util.List;
 import android.content.Context;
 import android.os.AsyncTask;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import android.util.Log;
+=======
+import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
+>>>>>>> FETCH_HEAD
 =======
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 >>>>>>> FETCH_HEAD
@@ -103,7 +107,13 @@ public class DataManager {
 						break;
 					case SignetMethods.LIST_COURS:
 <<<<<<< HEAD
+<<<<<<< HEAD
 						result = signetsMobileSoap.listeCours(username, password);
+=======
+
+						result = signetsMobileSoap.listeCours(username,
+								password);
+>>>>>>> FETCH_HEAD
 =======
 
 						result = signetsMobileSoap.listeCours(username,
