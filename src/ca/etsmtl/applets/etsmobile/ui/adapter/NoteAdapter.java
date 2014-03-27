@@ -16,6 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
+import ca.etsmtl.applets.etsmobile.ui.adapter.NotesSessionItem;
+import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteItem;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesDetailsFragment;
 import ca.etsmtl.applets.etsmobile2.R;
 

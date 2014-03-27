@@ -16,6 +16,7 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.NoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotesSessionItem;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteItem;
+import ca.etsmtl.applets.etsmobile.ui.fragment.HttpFragment;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -41,7 +42,8 @@ public class NotesFragment extends HttpFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
-		View v = inflater.inflate(R.layout.activity_note, container, false);
+
+		View v = inflater.inflate(R.layout.fragment_note, container, false);
 		mListView = (ListView) v.findViewById(R.id.activity_note_listview);
 		return v;
 	}
@@ -54,17 +56,17 @@ public class NotesFragment extends HttpFragment {
 		datamanager.getDataFromSignet(SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this, "");
 	}
 
-	@Override
-	void updateUI() {
-	}
 
 	@Override
 	public void onRequestFailure(SpiceException e) {
 
-	}
+	}  
 
 	@Override
 	public void onRequestSuccess(Object o) {
+
+
+		if (o != null)
 			if (o instanceof ListeDeCours) {
 			    listeDeCours = (ListeDeCours)o;
 				refreshList();
@@ -74,7 +76,11 @@ public class NotesFragment extends HttpFragment {
 			}
 	}
 	
-	
+	@Override
+	void updateUI() {
+		// TODO Auto-generated method stub
+	}
+
 	private void refreshList(){
 		if(listeDeCours!=null && listeDeSessions !=null){
 			if(listeDeCours.liste.size()!=0){

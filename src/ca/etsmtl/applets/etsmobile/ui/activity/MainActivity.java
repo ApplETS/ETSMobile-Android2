@@ -21,13 +21,13 @@ import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
- * Main Activity for ÉTSMobile, handles the login and the menu
- * 
+ * Main Activity for ï¿½TSMobile, handles the login and the menu
  * @author Philippe David
  * 
  */
@@ -85,7 +85,6 @@ public class MainActivity extends Activity {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 			getActionBar().setHomeButtonEnabled(true);
 	
-		
 	}
 
 	@Override
@@ -241,7 +240,6 @@ public class MainActivity extends Activity {
 	
 			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
 					.addToBackStack(aClass.getName()).commit();
-
 
 		// Highlight the selected item, update the title, and close the drawer
 		mDrawerList.setItemChecked(position, true);

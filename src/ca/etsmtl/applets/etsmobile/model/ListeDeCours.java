@@ -16,7 +16,6 @@ import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 
-import android.util.Log;
 
 import android.util.Log;
 

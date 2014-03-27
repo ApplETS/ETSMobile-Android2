@@ -20,6 +20,7 @@ import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -232,7 +233,7 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 				startActivity(new Intent(this, MainActivity.class));
 				finish();
 			}
-			
+
 		} else {
 			mPasswordView.setError(getString(R.string.error_invalid_email));
 			mPasswordView.requestFocus();
