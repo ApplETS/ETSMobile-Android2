@@ -60,13 +60,11 @@ public class NotesFragment extends HttpFragment {
 
 	@Override
 	public void onRequestFailure(SpiceException e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onRequestSuccess(Object o) {
-		if (o != null)
 			if (o instanceof ListeDeCours) {
 			    listeDeCours = (ListeDeCours)o;
 				refreshList();

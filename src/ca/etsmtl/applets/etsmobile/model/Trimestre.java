@@ -19,38 +19,44 @@ import org.ksoap2.serialization.SoapPrimitive;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "trimestre")
 public class Trimestre extends AttributeContainer implements KvmSerializable {
-
+	@DatabaseField
 	public String abrege;
-
+	@DatabaseField
 	public String auLong;
-
+	@DatabaseField
 	public String dateDebut;
-
+	@DatabaseField
 	public String dateFin;
-
+	@DatabaseField
 	public String dateFinCours;
-
+	@DatabaseField
 	public String dateDebutChemiNot;
-
+	@DatabaseField
 	public String dateFinChemiNot;
-
+	@DatabaseField
 	public String dateDebutAnnulationAvecRemboursement;
-
+	@DatabaseField
 	public String dateFinAnnulationAvecRemboursement;
-
+	@DatabaseField
 	public String dateFinAnnulationAvecRemboursementNouveauxEtudiants;
-
+	@DatabaseField
 	public String dateDebutAnnulationSansRemboursementNouveauxEtudiants;
-
+	@DatabaseField
 	public String dateFinAnnulationSansRemboursementNouveauxEtudiants;
-
+	@DatabaseField
 	public String dateLimitePourAnnulerASEQ;
-
+	@DatabaseField(id = true)
+	public int id;
 	public Trimestre() {
 	}
 
-	public Trimestre(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
+	public Trimestre(AttributeContainer inObj,
+			ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -135,7 +141,8 @@ public class Trimestre extends AttributeContainer implements KvmSerializable {
 			}
 		}
 		if (soapObject.hasProperty("dateDebutAnnulationAvecRemboursement")) {
-			Object obj = soapObject.getProperty("dateDebutAnnulationAvecRemboursement");
+			Object obj = soapObject
+					.getProperty("dateDebutAnnulationAvecRemboursement");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
@@ -146,7 +153,8 @@ public class Trimestre extends AttributeContainer implements KvmSerializable {
 			}
 		}
 		if (soapObject.hasProperty("dateFinAnnulationAvecRemboursement")) {
-			Object obj = soapObject.getProperty("dateFinAnnulationAvecRemboursement");
+			Object obj = soapObject
+					.getProperty("dateFinAnnulationAvecRemboursement");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
@@ -156,37 +164,43 @@ public class Trimestre extends AttributeContainer implements KvmSerializable {
 				dateFinAnnulationAvecRemboursement = (String) obj;
 			}
 		}
-		if (soapObject.hasProperty("dateFinAnnulationAvecRemboursementNouveauxEtudiants")) {
+		if (soapObject
+				.hasProperty("dateFinAnnulationAvecRemboursementNouveauxEtudiants")) {
 			Object obj = soapObject
 					.getProperty("dateFinAnnulationAvecRemboursementNouveauxEtudiants");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
-					dateFinAnnulationAvecRemboursementNouveauxEtudiants = j.toString();
+					dateFinAnnulationAvecRemboursementNouveauxEtudiants = j
+							.toString();
 				}
 			} else if (obj != null && obj instanceof String) {
 				dateFinAnnulationAvecRemboursementNouveauxEtudiants = (String) obj;
 			}
 		}
-		if (soapObject.hasProperty("dateDebutAnnulationSansRemboursementNouveauxEtudiants")) {
+		if (soapObject
+				.hasProperty("dateDebutAnnulationSansRemboursementNouveauxEtudiants")) {
 			Object obj = soapObject
 					.getProperty("dateDebutAnnulationSansRemboursementNouveauxEtudiants");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
-					dateDebutAnnulationSansRemboursementNouveauxEtudiants = j.toString();
+					dateDebutAnnulationSansRemboursementNouveauxEtudiants = j
+							.toString();
 				}
 			} else if (obj != null && obj instanceof String) {
 				dateDebutAnnulationSansRemboursementNouveauxEtudiants = (String) obj;
 			}
 		}
-		if (soapObject.hasProperty("dateFinAnnulationSansRemboursementNouveauxEtudiants")) {
+		if (soapObject
+				.hasProperty("dateFinAnnulationSansRemboursementNouveauxEtudiants")) {
 			Object obj = soapObject
 					.getProperty("dateFinAnnulationSansRemboursementNouveauxEtudiants");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
-					dateFinAnnulationSansRemboursementNouveauxEtudiants = j.toString();
+					dateFinAnnulationSansRemboursementNouveauxEtudiants = j
+							.toString();
 				}
 			} else if (obj != null && obj instanceof String) {
 				dateFinAnnulationSansRemboursementNouveauxEtudiants = (String) obj;
@@ -256,8 +270,8 @@ public class Trimestre extends AttributeContainer implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1,
-			PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex,
+			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.STRING_CLASS;
 			info.name = "abrege";

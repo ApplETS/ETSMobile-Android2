@@ -90,7 +90,36 @@ public class ProfilFragment extends HttpFragment implements android.view.View.On
 	@Override
 	void updateUI() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	private void refreshUi(){
+		if( etudiant!=null && mlisteDesProgrammes!=null){
+			getActivity().runOnUiThread( new Runnable() {
+				public void run() {
+					View v = getView();
+					if( v!=null){
+						String nom = etudiant.nom.trim();
+						String prenom = etudiant.prenom.trim();
+					
+				        ((TextView)v.findViewById(R.id.profil_nom_prenom_item)).setText(nom+", "+prenom);
+					    ((TextView)v.findViewById(R.id.profil_code_permanent_item)).setText(etudiant.codePerm);
+					    ((TextView)v.findViewById(R.id.profil_solde_item)).setText(etudiant.soldeTotal);
+					    int size = mlisteDesProgrammes.liste.size();
+					    Programme program = mlisteDesProgrammes.liste.get(size-1);
+					  
+					    ((TextView)v.findViewById(R.id.profil_programme_item)).setText(program.libelle);
+					    ((TextView)v.findViewById(R.id.profil_credit_reussis_item)).setText(program.nbCreditsCompletes);
+					    ((TextView)v.findViewById(R.id.profil_cours_reussis_item)).setText(program.nbCrsReussis);
+					    ((TextView)v.findViewById(R.id.profil_credit_echoue_item)).setText(program.nbCrsEchoues);
+					    ((TextView)v.findViewById(R.id.profil_credit_inscrit_item)).setText(program.nbCreditsInscrits);
+					    ((TextView)v.findViewById(R.id.profil_cours_equivalent_item)).setText(program.nbEquivalences);
+					    ((TextView)v.findViewById(R.id.profil_credit_potentiel_item)).setText(program.nbCreditsPotentiels);
+					    ((TextView)v.findViewById(R.id.profil_moyenne_item)).setText(program.moyenne);
+					}
+				}
+			});
+		}
 	}
 
 	private void refreshUi(){

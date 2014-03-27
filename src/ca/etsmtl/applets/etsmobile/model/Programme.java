@@ -10,44 +10,55 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 import java.util.Hashtable;
-import org.ksoap2.serialization.*;
+
+import org.ksoap2.serialization.AttributeContainer;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "programme")
 public class Programme extends AttributeContainer implements KvmSerializable {
 
+	@DatabaseField(id=true)
 	public String code;
-
+	@DatabaseField
 	public String libelle;
-
+	@DatabaseField
 	public String profil;
-
+	@DatabaseField
 	public String statut;
-
+	@DatabaseField
 	public String sessionDebut;
-
+	@DatabaseField
 	public String sessionFin;
-
+	@DatabaseField
 	public String moyenne;
-
+	@DatabaseField
 	public String nbEquivalences;
-
+	@DatabaseField
 	public String nbCrsReussis;
-
+	@DatabaseField
 	public String nbCrsEchoues;
-
+	@DatabaseField
 	public String nbCreditsInscrits;
-
+	@DatabaseField
 	public String nbCreditsCompletes;
-
+	@DatabaseField
 	public String nbCreditsPotentiels;
-
+	@DatabaseField
 	public String nbCreditsRecherche;
 
 	public Programme() {
 	}
 
-	public Programme(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
+	public Programme(AttributeContainer inObj,
+			ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -264,8 +275,8 @@ public class Programme extends AttributeContainer implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1,
-			PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex,
+			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.STRING_CLASS;
 			info.name = "code";

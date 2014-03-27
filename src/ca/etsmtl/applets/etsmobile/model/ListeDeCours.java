@@ -10,7 +10,13 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 import java.util.Hashtable;
-import org.ksoap2.serialization.*;
+
+import org.ksoap2.serialization.AttributeContainer;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+
+import android.util.Log;
 
 import android.util.Log;
 
@@ -23,7 +29,8 @@ public class ListeDeCours extends DonneesRetournees implements KvmSerializable {
 	public ListeDeCours() {
 	}
 
-	public ListeDeCours(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
+	public ListeDeCours(AttributeContainer inObj,
+			ExtendedSoapSerializationEnvelope envelope) {
 		super(inObj, envelope);
 		if (inObj == null)
 			return;
@@ -52,8 +59,8 @@ public class ListeDeCours extends DonneesRetournees implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1,
-			PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex,
+			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		int count = super.getPropertyCount();
 		if (propertyIndex == count + 0) {
 			info.type = PropertyInfo.VECTOR_CLASS;

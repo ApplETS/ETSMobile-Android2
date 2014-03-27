@@ -20,8 +20,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 public class MarshalGuid implements Marshal {
-	public Object readInstance(XmlPullParser parser, String namespace, String name,
-			PropertyInfo expected) throws IOException, XmlPullParserException {
+	public Object readInstance(XmlPullParser parser, String namespace,
+			String name, PropertyInfo expected) throws IOException,
+			XmlPullParserException {
 		return UUID.fromString(parser.nextText());
 	}
 
@@ -29,7 +30,8 @@ public class MarshalGuid implements Marshal {
 		cm.addMapping(cm.xsd, "guid", UUID.class, this);
 	}
 
-	public void writeInstance(XmlSerializer writer, Object obj) throws IOException {
+	public void writeInstance(XmlSerializer writer, Object obj)
+			throws IOException {
 		writer.text(obj.toString());
 	}
 }

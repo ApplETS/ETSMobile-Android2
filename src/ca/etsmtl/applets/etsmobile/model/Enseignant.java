@@ -10,22 +10,35 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 import java.util.Hashtable;
-import org.ksoap2.serialization.*;
+
+import org.ksoap2.serialization.AttributeContainer;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "enseignant")
 public class Enseignant extends Personne implements KvmSerializable {
 
+	@DatabaseField
 	public String localBureau;
 
+	@DatabaseField
 	public String telephone;
 
+	@DatabaseField
 	public String enseignantPrincipal;
 
 	public Enseignant() {
 	}
 
-	public Enseignant(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
+	public Enseignant(AttributeContainer inObj,
+			ExtendedSoapSerializationEnvelope envelope) {
 		super(inObj, envelope);
 		if (inObj == null)
 			return;
@@ -89,8 +102,8 @@ public class Enseignant extends Personne implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1,
-			PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex,
+			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		int count = super.getPropertyCount();
 		if (propertyIndex == count + 0) {
 			info.type = PropertyInfo.STRING_CLASS;

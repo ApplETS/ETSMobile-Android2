@@ -171,7 +171,6 @@ public class BandwithFragment extends Fragment {
 	
 	
 	private class BandwithAsyncTask extends AsyncTask<String, Void , String>{
-
 		@Override
 		protected String doInBackground(String... param) {
 			try {
@@ -267,6 +266,7 @@ public class BandwithFragment extends Fragment {
 			return map;
 		}
 		
+
 	}
 	
 }

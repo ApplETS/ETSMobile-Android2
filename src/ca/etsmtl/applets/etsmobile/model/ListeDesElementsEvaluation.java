@@ -10,11 +10,17 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 import java.util.Hashtable;
-import org.ksoap2.serialization.*;
+
+import org.ksoap2.serialization.AttributeContainer;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class ListeDesElementsEvaluation extends DonneesRetournees implements KvmSerializable {
+public class ListeDesElementsEvaluation extends DonneesRetournees implements
+		KvmSerializable {
 
 	public String noteACeJour;
 
@@ -115,7 +121,8 @@ public class ListeDesElementsEvaluation extends DonneesRetournees implements Kvm
 			}
 		}
 		if (soapObject.hasProperty("noteACeJourElementsIndividuels")) {
-			Object obj = soapObject.getProperty("noteACeJourElementsIndividuels");
+			Object obj = soapObject
+					.getProperty("noteACeJourElementsIndividuels");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
@@ -126,7 +133,8 @@ public class ListeDesElementsEvaluation extends DonneesRetournees implements Kvm
 			}
 		}
 		if (soapObject.hasProperty("noteSur100PourElementsIndividuels")) {
-			Object obj = soapObject.getProperty("noteSur100PourElementsIndividuels");
+			Object obj = soapObject
+					.getProperty("noteSur100PourElementsIndividuels");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
@@ -182,8 +190,8 @@ public class ListeDesElementsEvaluation extends DonneesRetournees implements Kvm
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1,
-			PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex,
+			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		int count = super.getPropertyCount();
 		if (propertyIndex == count + 0) {
 			info.type = PropertyInfo.STRING_CLASS;

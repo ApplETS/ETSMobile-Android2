@@ -9,7 +9,7 @@
     <string name="drawer_close">Close</string>
 
     <!-- MENU -->
-    <!-- Section 1 Moi-->
+    <!-- Section 1 Moi -->
     <string name="menu_section_1_moi">Moi</string>
     <string name="menu_section_1_ajd">Aujourd\'hui</string>
     <string name="menu_section_1_horaire">Horaire</string>
@@ -17,7 +17,7 @@
     <string name="menu_section_1_stages">Stages</string>
     <string name="menu_section_1_profil">Profil</string>
     <string name="menu_section_1_bandwith">Bande Passante</string>
-    <!--Section 2 ÉTS-->
+    <!-- Section 2 �TS -->
     <string name="menu_section_2_ets">ÉTS</string>
     <string name="menu_section_2_news">Nouvelles</string>
     <string name="menu_section_2_bottin">Bottin</string>
@@ -25,21 +25,56 @@
     <string name="menu_section_2_moodle">Moodle</string>
     <string name="menu_section_2_radio">Radio</string>
     <string name="menu_section_2_securite">Sécurité</string>
-    <!-- Section 3 ApplETS-->
+    <!-- Section 3 ApplETS -->
     <string name="menu_section_3_applets">ApplETS</string>
     <string name="menu_section_3_comms">Problème ou Commentaire ?</string>
     <string name="menu_section_3_about">À Propos d\'ÉTSMobile</string>
     <string name="menu_section_3_sponsors">Nos Partenaire</string>
-    
-    
+
     <!-- Moodle Page -->
     <string name="activity_moodle_titre">Instruction Moodle</string>
     <string name="activity_moodle_url_text">Url du site à inscrire:</string>
     <string name="activity_moodle_nom">Nom d\'utilisateur</string>
     <string name="activity_moodle_code_universelle">Votre code Universelle</string>
-    <string name="activity_moodle_pwd" >Mot de passe</string>
+    <string name="activity_moodle_pwd">Mot de passe</string>
     <string name="activity_moodle_pwd_instruc">Votre mot de passe universitaire</string>
     <string name="activity_moodle_app">Moodle App</string>
+    <string name="applets_about">ApplETS se veut avant tout un regroupement d’étudiants qui partagent un intérêt commun pour le domaine des télécommunications et des applications mobiles. Ce club étudiant à pour objectif principal de former, au sein de l’ÉTS, une main d’œuvre spécialisée en ingénierie d’applications mobiles et de promouvoir le développement de ces applications au sein de la communauté étudiante.&#xA;
+		De plus, ApplETS propose des id�es innovatrices afin de stimuler les étudiants et de les intéresser à ce domaine en pleine expansion comme par exemple le développement de l’application mobile officielle de l’ÉTS qui sera distribuée gratuitement et qui sera très utiles pour la communauté universitaire en intégrant des fonctions tel que la consultation des horaires de cours et d’examens, un plan des locaux de l’ÉTS etc.&#xA;
+		ApplETS prévoit également distribuer des classes logicielles libres et gratuites facilitant ainsi l’apprentissage des étudiants en ce qui concerne le développement d’applications mobiles. Comme tout club étudiant, ApplETS participera aussi à des compétitions internationales annuelles dans le but de faire rayonner l’ÉTS à l’étranger. Finalement, ApplETS désire mettre sur pied et organiser une compétition internationale annuelle ici même à l’ÉTS.
+</string>
+    <string name="applets_ens_etsmtl_ca">applets@ens.etsmtl.ca</string>
+    <string name="etsmobile_android_commentaire">ETSMobile-Android : Commentaire</string>
+    <string name="default_comment">Bravo ! 10/10 !</string>
+    
+    <!-- Note detail Page -->
+    <string name="mesCours">Mes cours</string>
+    <string name="sommaire">Sommaire</string>
+    <string name="mesNotes">Mes notes</string>
+    <string name="cote">Cote</string>
+    <string name="noteACejour">Note à ce jour</string>
+    <string name="moyenne">Moyenne</string>
+    <string name="ecartType">Écart-type</string>
+    <string name="mediane">Médiane</string>
+    <string name="rangCentille">Rang centile</string>
+    <string name="ponderation">Pondération</string>
+    
+    <!-- Profil Page -->
+    <string name="profil_nom_prenom">Nom, Prénom</string>
+    <string name="profil_code_permanent">Code permanent</string>
+    <string name="profil_solde">Solde</string>
+    <string name="profil_programme">Programme</string> 
+    <string name="profil_credit_reussis">Crédits réussis</string>
+    <string name="profil_cours_reussis">Cours réussis</string>
+    <string name="profil_cours_echoue">Cours échoué(s)</string>
+    <string name="profil_credit_inscrit">Crédit inscrit</string>
+    <string name="profil_moyenne">Moyenne</string>
+    <string name="profil_logout">Déconnexion</string>
+    <string name="profil_credit_potentiel">Crédits potentiel</string>
+    <string name="profil_cours_equivalent">Cours équivalents</string>
+
+    
+    
     
     <!-- Note detail Page -->
     <string name="mesCours">Mes cours</string>
