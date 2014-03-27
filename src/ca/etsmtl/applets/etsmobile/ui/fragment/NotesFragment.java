@@ -7,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+<<<<<<< HEAD
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
+=======
+>>>>>>> FETCH_HEAD
 import ca.etsmtl.applets.etsmobile.ui.adapter.NoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotesSessionItem;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteAdapter;
@@ -39,7 +42,7 @@ public class NotesFragment extends HttpFragment {
 		super.onCreate(savedInstanceState);
 	}
 
-	@Override
+	@Overrides
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
 		View v = inflater.inflate(R.layout.activity_note, container, false);
 		mListView = (ListView) v.findViewById(R.id.activity_note_listview);
@@ -60,12 +63,12 @@ public class NotesFragment extends HttpFragment {
 
 	@Override
 	public void onRequestFailure(SpiceException e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onRequestSuccess(Object o) {
+
 		if (o != null)
 			if (o instanceof ListeDeCours) {
 			    listeDeCours = (ListeDeCours)o;
@@ -132,6 +135,7 @@ public class NotesFragment extends HttpFragment {
 				});
 			}
 		}
+
 	}
 
 }

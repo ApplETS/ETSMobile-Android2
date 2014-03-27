@@ -25,6 +25,12 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
+/**
+ * Main Activity for �TSMobile, handles the login and the menu
+ * 
+ * @author Philippe David
+ * 
+ */
 public class MainActivity extends Activity {
 
 	private DrawerLayout mDrawerLayout;
@@ -46,12 +52,15 @@ public class MainActivity extends Activity {
 
 		// Set the adapter for the list view
 		int stringSet = ApplicationManager.mMenu.keySet().size();
-		Collection<MyMenuItem> myMenuItems = ApplicationManager.mMenu.values();
+		final Collection<MyMenuItem> myMenuItems = ApplicationManager.mMenu
+				.values();
 
 		MyMenuItem[] menuItems = new MyMenuItem[stringSet];
-		mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems.toArray(menuItems)));
+		mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems
+				.toArray(menuItems)));
 
 		// Set the list's click listener
+
 			mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 			mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
 			mDrawerLayout, /* DrawerLayout object */
@@ -77,7 +86,6 @@ public class MainActivity extends Activity {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 			getActionBar().setHomeButtonEnabled(true);
 	
-		
 	}
 
 	@Override
@@ -157,7 +165,8 @@ public class MainActivity extends Activity {
 				Bundle extras = data.getExtras();
 				String codeU = extras.getString(UserCredentials.CODE_U);
 				String codeP = extras.getString(UserCredentials.CODE_P);
-				ApplicationManager.userCredentials = new UserCredentials(codeU, codeP);
+				ApplicationManager.userCredentials = new UserCredentials(codeU,
+						codeP);
 			}
 		}
 	}
@@ -179,22 +188,41 @@ public class MainActivity extends Activity {
 		else if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-		// Handle your other action bar items...
 
 		return super.onOptionsItemSelected(item);
 	}
 
-	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+	private class DrawerItemClickListener implements
+			ListView.OnItemClickListener {
+		@SuppressWarnings("rawtypes")
 		@Override
-		public void onItemClick(AdapterView parent, View view, int position, long id) {
+		public void onItemClick(AdapterView parent, View view, int position,
+				long id) {
 			final Object itemAtPosition = parent.getItemAtPosition(position);
-			selectItem(((MyMenuItem) itemAtPosition).title, position);
+			MyMenuItem myMenuItem = (MyMenuItem) itemAtPosition;
+
+			if (myMenuItem.resId == R.drawable.ic_ico_comment) {
+				// contact; Ask to open email app; prefill email info
+				Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+				intent.setType("plain/text");
+				intent.putExtra(
+						android.content.Intent.EXTRA_EMAIL,
+						new String[] { getString(R.string.applets_ens_etsmtl_ca) });
+				intent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+						getString(R.string.etsmobile_android_commentaire));
+				intent.putExtra(android.content.Intent.EXTRA_TEXT,
+						getString(R.string.default_comment));
+				startActivity(intent);
+			} else {
+				selectItem(myMenuItem.title, position);
+			}
 		}
 	}
 
 	/**
 	 * Swaps fragments in the main content view
 	 */
+	@SuppressWarnings("rawtypes")
 	private void selectItem(String key, int position) {
 		// Create a new fragment and specify the planet to show based on
 		// position
@@ -209,10 +237,10 @@ public class MainActivity extends Activity {
 		}
 	     
 		// Insert the fragment by replacing any existing fragment
-		FragmentManager fragmentManager = getFragmentManager();
-	
+		FragmentManager fragmentManager = getFragmentManager();	
 			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
 					.addToBackStack(aClass.getName()).commit();
+
 
 
 		// Highlight the selected item, update the title, and close the drawer

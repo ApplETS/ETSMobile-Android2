@@ -45,7 +45,8 @@ import ca.etsmtl.applets.etsmobile.model.listeDesCoequipiers;
 import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
 import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
 
-public class ExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope {
+public class ExtendedSoapSerializationEnvelope extends
+		SoapSerializationEnvelope {
 
 	public interface IReferenceObject {
 	}
@@ -54,16 +55,22 @@ public class ExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope
 	static {
 		classNames.put("http://etsmtl.ca/^^Etudiant", Etudiant.class);
 		classNames.put("http://etsmtl.ca/^^ListeDeCours", ListeDeCours.class);
-		classNames.put("http://etsmtl.ca/^^ListeDeSessions", ListeDeSessions.class);
-		classNames.put("http://etsmtl.ca/^^listeDesProgrammes", listeDesProgrammes.class);
-		classNames.put("http://etsmtl.ca/^^listeDesCoequipiers", listeDesCoequipiers.class);
+		classNames.put("http://etsmtl.ca/^^ListeDeSessions",
+				ListeDeSessions.class);
+		classNames.put("http://etsmtl.ca/^^listeDesProgrammes",
+				listeDesProgrammes.class);
+		classNames.put("http://etsmtl.ca/^^listeDesCoequipiers",
+				listeDesCoequipiers.class);
 		classNames.put("http://etsmtl.ca/^^ListeDesElementsEvaluation",
 				ListeDesElementsEvaluation.class);
-		classNames.put("http://etsmtl.ca/^^listeDesActivitesEtProf", listeDesActivitesEtProf.class);
+		classNames.put("http://etsmtl.ca/^^listeDesActivitesEtProf",
+				listeDesActivitesEtProf.class);
 		classNames.put("http://etsmtl.ca/^^Enseignant", Enseignant.class);
-		classNames.put("http://etsmtl.ca/^^listeCoursHoraire", listeCoursHoraire.class);
+		classNames.put("http://etsmtl.ca/^^listeCoursHoraire",
+				listeCoursHoraire.class);
 		classNames.put("http://etsmtl.ca/^^coursHoraire", coursHoraire.class);
-		classNames.put("http://etsmtl.ca/^^listeJoursRemplaces", listeJoursRemplaces.class);
+		classNames.put("http://etsmtl.ca/^^listeJoursRemplaces",
+				listeJoursRemplaces.class);
 	}
 
 	HashMap<Object, String> reverseReferencesTable = new HashMap<Object, String>();
@@ -83,23 +90,26 @@ public class ExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope
 	}
 
 	@Override
-	public void writeObjectBody(XmlSerializer writer, KvmSerializable obj) throws IOException {
+	public void writeObjectBody(XmlSerializer writer, KvmSerializable obj)
+			throws IOException {
 		if (obj instanceof AttributeContainer) {
 			AttributeContainer soapObject = (AttributeContainer) obj;
 			int cnt = soapObject.getAttributeCount();
 			for (int counter = 0; counter < cnt; counter++) {
 				AttributeInfo attributeInfo = new AttributeInfo();
 				soapObject.getAttributeInfo(counter, attributeInfo);
-				writer.attribute(attributeInfo.getNamespace(), attributeInfo.getName(),
-						attributeInfo.getValue() != null ? attributeInfo.getValue().toString() : "");
+				writer.attribute(attributeInfo.getNamespace(), attributeInfo
+						.getName(),
+						attributeInfo.getValue() != null ? attributeInfo
+								.getValue().toString() : "");
 			}
 		}
 		super.writeObjectBody(writer, obj);
 	}
 
 	@Override
-	protected void writeProperty(XmlSerializer writer, Object obj, PropertyInfo type)
-			throws IOException {
+	protected void writeProperty(XmlSerializer writer, Object obj,
+			PropertyInfo type) throws IOException {
 		if (obj == null) {
 			writer.attribute(xsi, "nil", "true");
 			return;
@@ -113,7 +123,8 @@ public class ExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope
 		} else {
 
 			if (obj instanceof IReferenceObject) {
-				String id = String.format("i%d", reverseReferencesTable.size() + 1);
+				String id = String.format("i%d",
+						reverseReferencesTable.size() + 1);
 				reverseReferencesTable.put(obj, id);
 				writer.attribute(MsNs, "Id", id);
 			}
@@ -121,12 +132,15 @@ public class ExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope
 			Object[] qName = getInfo(null, obj);
 			if (!type.multiRef && qName[2] == null) {
 				if (!implicitTypes
-						|| (obj.getClass() != type.type && !(obj instanceof Vector) && type.type != String.class)) {
-					String xmlName = Helper.getKeyByValue(classNames, obj.getClass());
+						|| (obj.getClass() != type.type
+								&& !(obj instanceof Vector) && type.type != String.class)) {
+					String xmlName = Helper.getKeyByValue(classNames,
+							obj.getClass());
 					if (xmlName != null) {
 						String[] parts = xmlName.split("\\^\\^");
 						String prefix = writer.getPrefix(parts[0], true);
-						writer.attribute(xsi, TYPE_LABEL, prefix + ":" + parts[1]);
+						writer.attribute(xsi, TYPE_LABEL, prefix + ":"
+								+ parts[1]);
 					} else {
 						String prefix = writer.getPrefix(type.namespace, true);
 						writer.attribute(xsi, TYPE_LABEL, prefix + ":"
@@ -139,8 +153,10 @@ public class ExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope
 					Method method = this
 							.getClass()
 							.getSuperclass()
-							.getDeclaredMethod("writeElement", org.xmlpull.v1.XmlSerializer.class,
-									Object.class, PropertyInfo.class, Object.class);
+							.getDeclaredMethod("writeElement",
+									org.xmlpull.v1.XmlSerializer.class,
+									Object.class, PropertyInfo.class,
+									Object.class);
 					method.setAccessible(true);
 					method.invoke(this, writer, obj, type, qName[QNAME_MARSHAL]);
 				} catch (NoSuchMethodException e) {
@@ -170,7 +186,8 @@ public class ExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope
 
 	public SoapObject GetSoapObject(Element detailElement) {
 		try {
-			XmlSerializer xmlSerializer = XmlPullParserFactory.newInstance().newSerializer();
+			XmlSerializer xmlSerializer = XmlPullParserFactory.newInstance()
+					.newSerializer();
 			StringWriter writer = new StringWriter();
 			xmlSerializer.setOutput(writer);
 			detailElement.write(xmlSerializer);
@@ -193,8 +210,9 @@ public class ExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope
 
 	public Object GetHeader(Element detailElement) {
 		if (detailElement.getText(0) != null) {
-			SoapPrimitive primitive = new SoapPrimitive(detailElement.getNamespace(),
-					detailElement.getName(), detailElement.getText(0));
+			SoapPrimitive primitive = new SoapPrimitive(
+					detailElement.getNamespace(), detailElement.getName(),
+					detailElement.getText(0));
 			return primitive;
 		}
 
@@ -220,7 +238,43 @@ public class ExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope
 			} else {
 
 				if (soap instanceof SoapObject) {
-					String key = String.format("%s^^%s", ((SoapObject) soap).getNamespace(),
+					String key = String.format("%s^^%s",
+							((SoapObject) soap).getNamespace(),
+							((SoapObject) soap).getName());
+					if (classNames.containsKey(key)) {
+						cl = classNames.get(key);
+					}
+				}
+				Constructor ctor = cl.getConstructor(AttributeContainer.class,
+						ExtendedSoapSerializationEnvelope.class);
+				return ctor.newInstance(soap, this);
+			}
+		} catch (java.lang.Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+
+	public java.lang.Object get(java.lang.Object soap, java.lang.Class cl) {
+		if (soap == null) {
+			return null;
+		}
+		try {
+			if (soap instanceof Vector) {
+				Constructor ctor = cl.getConstructor(Vector.class,
+						ExtendedSoapSerializationEnvelope.class);
+				return ctor.newInstance(soap, this);
+			}
+			java.lang.Object refAttr = Helper.getAttribute(
+					(AttributeContainer) soap, "Ref",
+					"http://schemas.microsoft.com/2003/10/Serialization/");
+			if (refAttr != null) {
+				java.lang.String ref = (java.lang.String) refAttr;
+				return referencesTable.get(ref);
+			} else {
+				if (soap instanceof SoapObject) {
+					java.lang.String key = String.format("%s^^%s",
+							((SoapObject) soap).getNamespace(),
 							((SoapObject) soap).getName());
 					if (classNames.containsKey(key)) {
 						cl = classNames.get(key);

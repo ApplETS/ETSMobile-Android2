@@ -23,7 +23,8 @@ public class NoteAdapter extends ArrayAdapter<NotesSessionItem> {
 
 	private Context context;
 
-	public NoteAdapter(Context context, int resource, NotesSessionItem[] notesSession) {
+	public NoteAdapter(Context context, int resource,
+			NotesSessionItem[] notesSession) {
 		super(context, resource, notesSession);
 		this.context = context;
 	}

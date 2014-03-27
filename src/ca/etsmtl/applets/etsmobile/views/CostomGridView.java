@@ -34,8 +34,8 @@ public class CostomGridView extends GridView {
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
 		if (isExpanded()) {
-			int expandSize = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
-					MeasureSpec.AT_MOST);
+			int expandSize = MeasureSpec.makeMeasureSpec(
+					Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
 			super.onMeasure(widthMeasureSpec, expandSize);
 			ViewGroup.LayoutParams layoutParams = getLayoutParams();
 			layoutParams.height = getMeasuredHeight();

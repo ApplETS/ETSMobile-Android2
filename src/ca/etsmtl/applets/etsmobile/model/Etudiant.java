@@ -10,24 +10,38 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 import java.util.Hashtable;
-import org.ksoap2.serialization.*;
+
+import org.ksoap2.serialization.AttributeContainer;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class Etudiant extends DonneesRetournees implements KvmSerializable {
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
+@DatabaseTable(tableName = "etudiant")
+public class Etudiant extends DonneesRetournees implements KvmSerializable {
+	
+	@DatabaseField
 	public String nom;
 
+	@DatabaseField
 	public String prenom;
 
+	@DatabaseField(id = true)
 	public String codePerm;
 
+	@DatabaseField
 	public String soldeTotal;
 
 	public Etudiant() {
 	}
 
-	public Etudiant(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
+	public Etudiant(AttributeContainer inObj,
+			ExtendedSoapSerializationEnvelope envelope) {
 		super(inObj, envelope);
 		if (inObj == null)
 			return;
@@ -105,8 +119,8 @@ public class Etudiant extends DonneesRetournees implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1,
-			PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex,
+			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		int count = super.getPropertyCount();
 		if (propertyIndex == count + 0) {
 			info.type = PropertyInfo.STRING_CLASS;
