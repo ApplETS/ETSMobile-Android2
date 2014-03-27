@@ -75,5 +75,38 @@
 
     
     
+    
+    <!-- Note detail Page -->
+    <string name="mesCours">Mes cours</string>
+    <string name="sommaire">Sommaire</string>
+    <string name="mesNotes">Mes notes</string>
+    <string name="cote">Cote</string>
+    <string name="noteACejour">Note à ce jour</string>
+    <string name="moyenne">Moyenne</string>
+    <string name="ecartType">Écart-type</string>
+    <string name="mediane">Médiane</string>
+    <string name="rangCentille">Rang centile</string>
+    <string name="ponderation">Pondération</string>
+    
+    <!-- Profil Page -->
+    <string name="profil_nom_prenom">Nom, Prénom</string>
+    <string name="profil_code_permanent">Code permanent</string>
+    <string name="profil_solde">Solde</string>
+    <string name="profil_programme">Programme</string> 
+    <string name="profil_credit_reussis">Crédits réussis</string>
+    <string name="profil_cours_reussis">Cours réussis</string>
+    <string name="profil_cours_echoue">Cours échoué(s)</string>
+    <string name="profil_credit_inscrit">Crédit inscrit</string>
+    <string name="profil_moyenne">Moyenne</string>
+    <string name="profil_logout">Déconnexion</string>
+    <string name="profil_credit_potentiel">Crédits potentiel</string>
+    <string name="profil_cours_equivalent">Cours équivalents</string>
+
+    <!-- wifi bandwith -->
+    <string name ="bandwith_phase">Phase</string>
+    <string name ="bandwith_app">App</string>
+    <string name ="_0">0</string>
+    <string name ="utilise">Restant:</string>
+    <string name ="gigaoctetx">Go</string>
  
 </resources>

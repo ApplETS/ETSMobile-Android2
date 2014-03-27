@@ -72,6 +72,7 @@ public class NotesDetailsFragment extends HttpFragment{
 	
 	@Override
 	public void onStart() {
+		Log.v("NotesDetailsFragment","Note detailsFragement pwd = "+ ApplicationManager.userCredentials.getPassword());
 		DataManager.getInstance(getActivity()).getDataFromSignet(SignetMethods.LIST_EVAL, ApplicationManager.userCredentials, this, session, groupe, sigle);
 		super.onStart();
 	}

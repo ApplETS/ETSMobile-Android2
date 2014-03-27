@@ -99,8 +99,7 @@ public class DataManager {
 						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_COURS:
-						result = signetsMobileSoap.listeCours(username,
-								password);
+						result = signetsMobileSoap.listeCours(username, password);
 
 						listener.onRequestSuccess(result);
 						break;

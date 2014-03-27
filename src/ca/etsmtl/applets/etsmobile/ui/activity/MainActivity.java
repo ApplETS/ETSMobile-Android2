@@ -238,8 +238,10 @@ public class MainActivity extends Activity {
 	     
 		// Insert the fragment by replacing any existing fragment
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
-				.addToBackStack(null).commit();
+	
+			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
+					.addToBackStack(aClass.getName()).commit();
+
 
 		// Highlight the selected item, update the title, and close the drawer
 		mDrawerList.setItemChecked(position, true);
