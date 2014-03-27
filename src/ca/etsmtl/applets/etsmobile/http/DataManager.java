@@ -200,6 +200,7 @@ public class DataManager {
 
 						listener.onRequestSuccess(result);
 						break;
+
 					case SignetMethods.BOTTIN_GET_ALL:
 						result = new WebServiceSoap().Recherche(null, null,
 								null);
