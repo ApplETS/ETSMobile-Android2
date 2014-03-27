@@ -1,6 +1,7 @@
 package ca.etsmtl.applets.etsmobile.views;
 
 import org.achartengine.ChartFactory;
+import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
 import org.achartengine.model.CategorySeries;
 import org.achartengine.renderer.DefaultRenderer;
@@ -11,6 +12,11 @@ import org.achartengine.renderer.XYSeriesRenderer;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint.Align;
+import android.text.Layout;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 /**
  * code pris de Archartengine
  * @author Laurence de Villers
@@ -20,23 +26,26 @@ public class PieChart {
 	private double[] values;
 	private int[] colors; 
 	private Context context;
-	public PieChart( Context context,  double[] values, int[] colors) {
+	private GraphicalView mChartView;
+	
+	public PieChart( Context context,  double[] values, int[] colors, LinearLayout layout) {
 		this.context = context;
-		values = new double[] { 12, 14, 11, 10 };
-		colors = new int[] { Color.BLUE, Color.GREEN, Color.YELLOW, Color.CYAN };
+	
 		DefaultRenderer renderer = buildCategoryRenderer(colors);
-		renderer.setZoomButtonsVisible(true);
-	    renderer.setZoomEnabled(true);
-	    renderer.setChartTitleTextSize(20);
+	    renderer.setChartTitleTextSize(50);
 	    renderer.setDisplayValues(true);
 	    renderer.setShowLabels(false);
-	    SimpleSeriesRenderer r = renderer.getSeriesRendererAt(0);
-	    r.setGradientEnabled(true);
-	    r.setGradientStart(0, Color.BLUE);
-	    r.setGradientStop(0, Color.GREEN);
-	    r.setHighlighted(true);
-	    Intent intent = ChartFactory.getPieChartIntent(context,
-	        buildCategoryDataset("Project budget", values), renderer, "Budget");
+	    renderer.setPanEnabled(false);
+	    renderer.setZoomEnabled(false);
+	    
+	    
+	    if(mChartView == null){
+	    	mChartView = ChartFactory.getPieChartView(context,  buildCategoryDataset("Project budget", values), renderer);
+	    	layout.addView(mChartView);
+	    }else{
+	    	mChartView.repaint();
+	    }
+	  
 	}
 
 	/**
@@ -49,9 +58,13 @@ public class PieChart {
 	  protected CategorySeries buildCategoryDataset(String title, double[] values) {
 	    CategorySeries series = new CategorySeries(title);
 	    int k = 0;
-	    for (double value : values) {
-	      series.add("Project " + ++k, value);
+	    for(int i=0; i< values.length; i++){
+	    	if(i<values.length-1)
+	    		series.add("Chambre " + ++k+ " : " +values[i]+"Go", values[i]);
+	    	else
+	    		series.add("Go Restant : "+values[i]+"Go", values[i]);
 	    }
+	   
 
 	    return series;
 	  }
@@ -66,41 +79,14 @@ public class PieChart {
 	   */
 	  protected DefaultRenderer buildCategoryRenderer(int[] colors) {
 	    DefaultRenderer renderer = new DefaultRenderer();
-	    renderer.setLabelsTextSize(15);
-	    renderer.setLegendTextSize(15);
-	    renderer.setMargins(new int[] { 20, 30, 15, 0 });
+	    renderer.setLabelsTextSize(40);
+	    renderer.setLegendTextSize(25);
+	    renderer.setMargins(new int[] { 10, 30, 0, 30 });
 	    for (int color : colors) {
 	      SimpleSeriesRenderer r = new SimpleSeriesRenderer();
 	      r.setColor(color);
 	      renderer.addSeriesRenderer(r);
 	    }
 	    return renderer;
-	  }
-	  
-	  
-	  
-	  private XYMultipleSeriesRenderer getDemoRenderer() {
-		    XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
-		    renderer.setAxisTitleTextSize(16);
-		    renderer.setChartTitleTextSize(20);
-		    renderer.setLabelsTextSize(15);
-		    renderer.setLegendTextSize(15);
-		    renderer.setPointSize(5f);
-		    renderer.setMargins(new int[] {20, 30, 15, 0});
-		    XYSeriesRenderer r = new XYSeriesRenderer();
-		    r.setColor(Color.BLUE);
-		    r.setPointStyle(PointStyle.SQUARE);
-		    r.setFillBelowLine(true);
-		    r.setFillBelowLineColor(Color.WHITE);
-		    r.setFillPoints(true);
-		    renderer.addSeriesRenderer(r);
-		    r = new XYSeriesRenderer();
-		    r.setPointStyle(PointStyle.CIRCLE);
-		    r.setColor(Color.GREEN);
-		    r.setFillPoints(true);
-		    renderer.addSeriesRenderer(r);
-		    renderer.setAxesColor(Color.DKGRAY);
-		    renderer.setLabelsColor(Color.LTGRAY);
-		    return renderer;
 	  }
 }
