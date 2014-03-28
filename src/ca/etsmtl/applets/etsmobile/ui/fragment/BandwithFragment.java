@@ -14,21 +14,28 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.achartengine.GraphicalView;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -43,6 +50,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.views.PieChart;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -53,13 +61,15 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class BandwithFragment extends Fragment {
 
-	
-	private String url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22http%3A%2F%2Fets-res";
+
+	private String urlStart = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22http%3A%2F%2Fets-res";
 	private String urlSuite ="%40www2.cooptel.qc.ca%2Fservices%2Ftemps%2F%3F";
 	private String urlSuite2 ="%26cmd%3DVisualiser%22%20and%20xpath%3D'%2F%2Ftable%5B%40border%3D%221%22%5D'&format=json&diagnostics=true&callback="; 
 	private double[] values;
+	private String[] rooms;
 	private LinearLayout chartLayout;
 	private ProgressBar progressBar;
+
 	
 	
 	@Override
@@ -76,8 +86,20 @@ public class BandwithFragment extends Fragment {
 		final EditText editTextApp = (EditText) v.findViewById(R.id.bandwith_editText_app);
 		final EditText editTextPhase = (EditText) v.findViewById(R.id.bandwith_editText_phase);
 		
-	
+		SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		String phase = defaultSharedPreferences.getString("Phase", "");
+		String app = defaultSharedPreferences.getString("App", "");
 		
+		if(phase.length()>0 && app.length()>0){
+			editTextApp.setText(app);
+			editTextPhase.setText(phase);
+			System.currentTimeMillis();
+			Calendar calendar = Calendar.getInstance();
+			int month = calendar.get(Calendar.MONTH);
+			month+=1;
+			String url = urlStart+phase+"-"+app+"%3Aets"+app+urlSuite+"mois%3D"+month+urlSuite2;	
+			new BandwithAsyncTask().execute(url);
+		}
 		editTextApp.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -106,16 +128,12 @@ public class BandwithFragment extends Fragment {
 			}
 
 			@Override
-			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				
+			public void afterTextChanged(Editable s) {	
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		
@@ -130,43 +148,55 @@ public class BandwithFragment extends Fragment {
 			Calendar calendar = Calendar.getInstance();
 			int month = calendar.get(Calendar.MONTH);
 			month+=1;
-			url+=phase+"-"+app+"%3Aets"+app+urlSuite+"mois%3D"+month+urlSuite2;		
+			String url = urlStart+phase+"-"+app+"%3Aets"+app+urlSuite+"mois%3D"+month+urlSuite2;		
+			
+			SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+			Editor editor = defaultSharedPreferences.edit();
+			editor.putString("Phase", phase);
+			editor.putString("App", app);
+			editor.commit();
+			
 			new BandwithAsyncTask().execute(url);
 	}
 	
 	private void drawChart(){
 	
-	
-		getActivity().runOnUiThread(new Runnable() {
+	 Activity activity = getActivity();
+	 if(activity!=null){
+		 activity.runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				int[] colorChoice = new int[]{Color.RED, Color.DKGRAY, Color.GRAY, Color.BLACK, Color.MAGENTA};
+				int[] colorChoice = new int[]{Color.RED, Color.DKGRAY,Color.GRAY,getResources().getColor(R.color.red), Color.BLACK,};
 				int size =values.length;
 				int[] colors = new int[size];
 				for(int i=0; i<size; i++){
 					colors[i]=colorChoice[i];
 				}
-				new PieChart(getActivity(), values, colors,chartLayout);
+				new PieChart(getActivity(), values, colors, rooms, chartLayout);
 			}
 		});
+	 }
 	
 	}
 	
 	private void setProgressBar(final double total, final double quota){
-		getActivity().runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				progressBar.setMax((int) quota);
-				progressBar.setProgress((int) total);
-				View v = getView();
-				String gb = getString(R.string.gigaoctetx);
-				double reste =  Math.round((quota-total) * 100)/100.0;
-				((TextView) v.findViewById(R.id.bandwith_used_lbl)).setText(getString(R.string.utilise)+" "+reste+gb );
-				((TextView) v.findViewById(R.id.bandwith_max)).setText(quota+gb);
-			}
-		});
+		Activity activity = getActivity();
+		if(activity!=null){
+			activity.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					progressBar.setMax((int) quota);
+					progressBar.setProgress((int) total);
+					View v = getView();
+					String gb = getString(R.string.gigaoctetx);
+					double reste =  Math.round((quota-total) * 100)/100.0;
+					((TextView) v.findViewById(R.id.bandwith_used_lbl)).setText(getString(R.string.utilise)+" "+reste+gb );
+					((TextView) v.findViewById(R.id.bandwith_max)).setText(quota+gb);
+				}
+			});
+		}
 	}
 	
 	
@@ -177,49 +207,66 @@ public class BandwithFragment extends Fragment {
 				HttpClient httpClient = new DefaultHttpClient();
 				HttpGet request = new HttpGet();
 				URI uriWeb = new URI(param[0]);
+				Log.v("BandwithAsyncTask", "BandwithAsyncTask uri="+param[0]);
 				
 				request.setURI(uriWeb);
 				HttpResponse response =httpClient.execute(request);
-				BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),"UTF-8"));
-				String json = reader.readLine();
-				JSONObject obj = new JSONObject(json);
-				JSONObject query = (JSONObject) obj.get("query");
-				JSONObject results = (JSONObject) query.get("results");
-				JSONArray arrayTable = results.getJSONArray("table");
-				JSONObject tableauElem = (JSONObject)arrayTable.get(0);
-				JSONObject quota = (JSONObject)arrayTable.get(1);
-				JSONArray arrayElem = tableauElem.getJSONArray("tr");   
-			    HashMap<String, Double> map =getBandwithUserFromPort(arrayElem);
-			    
-			    int size =  map.size();
-			    Log.v("BandwithFragment", "BandwithFragment: size="+ size);
-			    values = new double[size];
-			    Iterator<String> iter = map.keySet().iterator();
-			    int i = 0;
-			    while (iter.hasNext()) {
-			        String entry = iter.next();
-			        if(!entry.equals("total")){
-			            Log.v("BandwithFragment", "BandwithFragment: entry="+ entry);
-			        	double value = map.get(entry);
-			        	values[i] = Math.round((value/1024)*100)/100.0;
-			        	i++;
-			        }
-			    }
-			
-			    Log.v("BandwithFragment", "BandwithFragment: data= "+map.keySet());
-			    JSONArray quotaJson = (JSONArray) quota.getJSONArray("tr");
-			    JSONObject objectQuota = (JSONObject)quotaJson.get(1);
-			    JSONArray arrayQuota = (JSONArray)objectQuota.getJSONArray("td");
-		
-			    double quotaValue = ((JSONObject) arrayQuota.get(1)).getDouble("p");
-			    quotaValue= Math.round(quotaValue/1024*100)/100.0;
-			    double total = map.get("total");
-			    total = Math.round(total/1024*100)/100.0;
-			  
-			    
-			    values[size-1] =  Math.round((quotaValue-total) * 100)/100.0;
-			    setProgressBar(total, quotaValue);
-			    drawChart();
+				int code = response.getStatusLine().getStatusCode();
+				if(code==200){
+					try{
+					BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),"UTF-8"));
+					String json = reader.readLine();
+					JSONObject obj = new JSONObject(json);
+					JSONObject query = (JSONObject) obj.get("query");
+					if(!query.getString("results").equals("null")){
+						JSONObject results = (JSONObject) query.get("results");
+						JSONArray arrayTable = results.getJSONArray("table");
+						JSONObject tableauElem = (JSONObject)arrayTable.get(0);
+						JSONObject quota = (JSONObject)arrayTable.get(1);
+						JSONArray arrayElem = tableauElem.getJSONArray("tr");   
+					    HashMap<String, Double> map =getBandwithUserFromPort(arrayElem);
+					    
+					    int size =  map.size();
+					    Log.v("BandwithFragment", "BandwithFragment: size="+ size);
+					    values = new double[size];
+					    rooms = new String[size];
+					    Iterator<String> iter = map.keySet().iterator();
+					    int i = 0;
+					    while (iter.hasNext()) {
+					        String entry = iter.next();
+					        if(!entry.equals("total")){
+					        	double value = map.get(entry);
+					        	values[i] = Math.round((value/1024)*100)/100.0;
+					        	String[] stringArray= entry.split("-");
+					        	if(stringArray.length>1){
+					        		rooms[i]=stringArray[1].toString();
+					        	}else{
+					        		rooms[i]="Chambre"+i+1;
+					        	}
+					        	i++;
+					        }
+					    }
+					
+					    Log.v("BandwithFragment", "BandwithFragment: data= "+map.keySet());
+					    JSONArray quotaJson = (JSONArray) quota.getJSONArray("tr");
+					    JSONObject objectQuota = (JSONObject)quotaJson.get(1);
+					    JSONArray arrayQuota = (JSONArray)objectQuota.getJSONArray("td");
+				
+					    double quotaValue = ((JSONObject) arrayQuota.get(1)).getDouble("p");
+					    quotaValue= Math.round(quotaValue/1024*100)/100.0;
+					    double total = map.get("total");
+					    total = Math.round(total/1024*100)/100.0;
+					  
+					    
+					    values[size-1] =  Math.round((quotaValue-total) * 100)/100.0;
+					    setProgressBar(total, quotaValue);
+						    drawChart();
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+	
 				
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
@@ -227,10 +274,20 @@ public class BandwithFragment extends Fragment {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-			} catch (JSONException e) {
-				e.printStackTrace();
 			}
+	
 			return null;
+		}
+		
+		private String containtPort( String port, HashMap<String, Double>map){
+			  	Iterator<String> iter = map.keySet().iterator();
+			    while (iter.hasNext()) {
+			    	   String entry = iter.next();
+			    	   if(entry.contains(port)){
+				          return entry;
+				        }
+			    }
+			    return null;
 		}
 		
 		private HashMap<String, Double> getBandwithUserFromPort(JSONArray array){
@@ -244,10 +301,12 @@ public class BandwithFragment extends Fragment {
 					if(i <array.length()-2){
 						JSONObject port = (JSONObject) elem.get(0);
 						String portElem = port.getString("p");
+						if(containtPort(portElem, map)!=null){
+							portElem=containtPort(portElem,map);
+						}
 						JSONObject upload = (JSONObject) elem.get(2);
 						JSONObject downLoad = (JSONObject) elem.get(3);
 						double downUpLoad = upload.getDouble("p")+ downLoad.getDouble("p");
-						Log.v("BandwithAsyncTask","BandwithAsyncTask port1= "+port+" upload ="+upload.getString("p")+" download="+downLoad.getString("p"));
 						if(map.containsKey(portElem)){
 							double downUpLoadValue = map.get(portElem);
 							downUpLoad +=downUpLoadValue;
@@ -257,7 +316,6 @@ public class BandwithFragment extends Fragment {
 						JSONObject totalObject = (JSONObject)elem.get(1);
 						double total = totalObject.getDouble("p");
 						map.put("total", total);	
-						Log.v("BandwithAsyncTask","BandwithAsyncTask total ="+total);
 					}
 				}
 			} catch (JSONException e) {
