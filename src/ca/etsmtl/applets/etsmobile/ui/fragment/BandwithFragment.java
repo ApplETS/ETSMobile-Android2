@@ -69,6 +69,9 @@ public class BandwithFragment extends Fragment {
 	private String[] rooms;
 	private LinearLayout chartLayout;
 	private ProgressBar progressBar;
+	
+	private EditText editTextApp;
+	private EditText editTextPhase;
 
 	
 	
@@ -83,8 +86,8 @@ public class BandwithFragment extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_bandwith, container, false);
 		chartLayout = (LinearLayout) v.findViewById(R.id.chart);
 		progressBar =(ProgressBar) v.findViewById(R.id.bandwith_progress);
-		final EditText editTextApp = (EditText) v.findViewById(R.id.bandwith_editText_app);
-		final EditText editTextPhase = (EditText) v.findViewById(R.id.bandwith_editText_phase);
+		editTextApp = (EditText) v.findViewById(R.id.bandwith_editText_app);
+		editTextPhase = (EditText) v.findViewById(R.id.bandwith_editText_phase);
 		
 		SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String phase = defaultSharedPreferences.getString("Phase", "");
@@ -207,8 +210,6 @@ public class BandwithFragment extends Fragment {
 				HttpClient httpClient = new DefaultHttpClient();
 				HttpGet request = new HttpGet();
 				URI uriWeb = new URI(param[0]);
-				Log.v("BandwithAsyncTask", "BandwithAsyncTask uri="+param[0]);
-				
 				request.setURI(uriWeb);
 				HttpResponse response =httpClient.execute(request);
 				int code = response.getStatusLine().getStatusCode();
@@ -227,7 +228,6 @@ public class BandwithFragment extends Fragment {
 					    HashMap<String, Double> map =getBandwithUserFromPort(arrayElem);
 					    
 					    int size =  map.size();
-					    Log.v("BandwithFragment", "BandwithFragment: size="+ size);
 					    values = new double[size];
 					    rooms = new String[size];
 					    Iterator<String> iter = map.keySet().iterator();
@@ -256,8 +256,6 @@ public class BandwithFragment extends Fragment {
 					    quotaValue= Math.round(quotaValue/1024*100)/100.0;
 					    double total = map.get("total");
 					    total = Math.round(total/1024*100)/100.0;
-					  
-					    
 					    values[size-1] =  Math.round((quotaValue-total) * 100)/100.0;
 					    setProgressBar(total, quotaValue);
 						    drawChart();
@@ -265,6 +263,8 @@ public class BandwithFragment extends Fragment {
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
+				}else{
+					editTextApp.setError(getString(R.string.error_invalid_app));
 				}
 	
 				

@@ -83,6 +83,6 @@
     <string name ="_0">0</string>
     <string name ="utilise">Restant:</string>
     <string name ="gigaoctetx">Go</string>
- 
+    <string name ="error_invalid_app">Erreur appartement invalide</string>
 </resources>
 
