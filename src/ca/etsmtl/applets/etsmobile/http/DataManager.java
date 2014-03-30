@@ -208,6 +208,14 @@ public class DataManager {
 						listener.onRequestSuccess(result);
 						break;
 						
+					case SignetMethods.BOTTIN_GET_FICHE_BY_SERVICE:
+						
+						String filtreServiceCode =  reqParams[0];
+						
+						result = new WebServiceSoap().Recherche(null, null, filtreServiceCode);
+						listener.onRequestSuccess(result);
+						break;
+						
 					default:
 						break;
 					}
@@ -241,6 +249,7 @@ public class DataManager {
 		public static final int BOTTIN_GET_FICHE = 11;
 		public static final int BOTTIN_GET_FICHE_DATA = 12;
 		public static final int BOTTIN_GET_ALL = 13;
+		public static final int BOTTIN_GET_FICHE_BY_SERVICE = 14;
 	}
 
 	/**
