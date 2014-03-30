@@ -102,10 +102,19 @@
          android:id="@+id/chart" 
          android:orientation="horizontal"
          android:layout_width="fill_parent" 
-         android:layout_height="fill_parent" 
+         android:layout_height="300dp" 
          android:paddingLeft="20dp"
          android:paddingRight="20dp"
          android:layout_below="@+id/bandwith_progress_layout"/>
+     <GridView 
+         android:id="@+id/bandwith_grid"
+         android:layout_below="@+id/chart"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:columnWidth="150dp"
+         android:gravity="center"
+         android:layout_marginLeft="30dp"
+       	 android:numColumns="auto_fit"/>
   
     
     

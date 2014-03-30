@@ -136,7 +136,7 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 				break;
 			case 2:// NOTE À CE JOUR
 				holder.txtView.setText(R.string.noteACejour);
-				if(courseEvaluation.noteSur100PourElementsIndividuels!=null){
+				if(courseEvaluation.scoreFinalSur100!=null){
 					final String note = courseEvaluation.scoreFinalSur100;
 					holder.txtViewValue.setText(note + "/" + nf_enUS.format(total) + " (" + courseEvaluation.noteACeJour + "%)");
 				}

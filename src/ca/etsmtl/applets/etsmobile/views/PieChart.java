@@ -27,7 +27,7 @@ public class PieChart {
 	private Context context;
 	private GraphicalView mChartView;
 	
-	public PieChart( Context context,  double[] values, int[] colors,String[] legend, LinearLayout layout) {
+	public PieChart( Context context,  double[] values, int[] colors, LinearLayout layout) {
 		this.context = context;
 	
 		DefaultRenderer renderer = buildCategoryRenderer(colors);
@@ -36,11 +36,12 @@ public class PieChart {
 	    renderer.setShowLabels(false);
 	    renderer.setPanEnabled(false);
 	    renderer.setZoomEnabled(false);
+	    renderer.setShowLegend(false);
 	    
 	    
 	   if(mChartView == null){
 	    	layout.removeAllViews();
-	    	mChartView = ChartFactory.getPieChartView(context,  buildCategoryDataset("Project budget", values, legend), renderer);
+	    	mChartView = ChartFactory.getPieChartView(context,  buildCategoryDataset("Project budget", values), renderer);
 	    	layout.addView(mChartView);
 	    }else{
 	    	mChartView.repaint();
@@ -55,12 +56,12 @@ public class PieChart {
 	   * @param values the values
 	   * @return the category series
 	   */
-	  protected CategorySeries buildCategoryDataset(String title, double[] values, String[] legend) {
+	  protected CategorySeries buildCategoryDataset(String title, double[] values) {
 	    CategorySeries series = new CategorySeries(title);
 	    int k = 0;
 	    for(int i=0; i< values.length; i++){
 	    	if(i<values.length-1)
-	    		series.add(legend[i]+" "+values[i]+"Go",values[i] );
+	    		series.add(" "+values[i]+"Go",values[i]);
 	    	else
 	    		series.add("Go Restant : "+values[i]+"Go", values[i]);
 	    }
@@ -80,9 +81,9 @@ public class PieChart {
 	  protected DefaultRenderer buildCategoryRenderer(int[] colors) {
 	    DefaultRenderer renderer = new DefaultRenderer();
 	    renderer.setLabelsTextSize(40);
-	    renderer.setLegendTextSize(25);
-	    renderer.setMargins(new int[]{10,100,0,100});
-	    renderer.setLegendHeight(200);
+	   // renderer.setLegendTextSize(25);
+	    renderer.setMargins(new int[]{10,0,0,0});
+	  //  renderer.setLegendHeight(200);
 
 	    for (int color : colors) {
 	      SimpleSeriesRenderer r = new SimpleSeriesRenderer();

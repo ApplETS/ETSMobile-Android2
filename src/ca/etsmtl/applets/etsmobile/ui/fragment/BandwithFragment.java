@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.achartengine.GraphicalView;
 import org.apache.http.HttpEntity;
@@ -33,6 +35,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
+import android.graphics.PorterDuff.Mode;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -42,22 +45,23 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
 import ca.etsmtl.applets.etsmobile.views.PieChart;
 import ca.etsmtl.applets.etsmobile2.R;
 
 
 /**
  * Created by Phil on 17/11/13.
- * Modify by Laurence 26/03/14
+ * Coded by Laurence 26/03/14
  */
 public class BandwithFragment extends Fragment {
 
@@ -72,6 +76,7 @@ public class BandwithFragment extends Fragment {
 	
 	private EditText editTextApp;
 	private EditText editTextPhase;
+	private GridView grid;
 
 	
 	
@@ -88,14 +93,18 @@ public class BandwithFragment extends Fragment {
 		progressBar =(ProgressBar) v.findViewById(R.id.bandwith_progress);
 		editTextApp = (EditText) v.findViewById(R.id.bandwith_editText_app);
 		editTextPhase = (EditText) v.findViewById(R.id.bandwith_editText_phase);
+		grid = (GridView) v.findViewById(R.id.bandwith_grid);
+		
+		//Change progressBar color to red
+		progressBar.getProgressDrawable().setColorFilter(Color.RED, Mode.SRC_IN);
 		
 		SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String phase = defaultSharedPreferences.getString("Phase", "");
 		String app = defaultSharedPreferences.getString("App", "");
 		
 		if(phase.length()>0 && app.length()>0){
-			editTextApp.setText(app);
-			editTextPhase.setText(phase);
+			editTextApp.setHint(app);
+			editTextPhase.setHint(phase);
 			System.currentTimeMillis();
 			Calendar calendar = Calendar.getInstance();
 			int month = calendar.get(Calendar.MONTH);
@@ -103,6 +112,31 @@ public class BandwithFragment extends Fragment {
 			String url = urlStart+phase+"-"+app+"%3Aets"+app+urlSuite+"mois%3D"+month+urlSuite2;	
 			new BandwithAsyncTask().execute(url);
 		}
+		editTextPhase.addTextChangedListener (new  TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (s.length() >= 1) {
+					reset();
+					Pattern p = Pattern.compile("[1,2,3,4]");
+					Matcher m = p.matcher(s);
+					if(m.find()){
+						editTextApp.requestFocus();	
+					}else{
+						setError(editTextPhase, getString(R.string.error_invalid_phase));
+					}
+				}
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
 		editTextApp.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -111,14 +145,14 @@ public class BandwithFragment extends Fragment {
 				if (s.length() >= 1) {
 					if(editTextPhase.length()>0){
 						String phase = editTextPhase.getText().toString();
-						if(phase.equals("1")||phase.equals("2")){
+						if(phase.equals("1")||phase.equals("2")||phase.equals("4")){
 							if (editTextApp.getText().length() > 2) {
 								if(editTextPhase.length()>0){
 									String app = editTextApp.getText().toString();
 									getBandwith(phase,app);
 								}
 							}
-						}else if(phase.equals("3")||phase.equals("4")){
+						}else if(phase.equals("3")){
 							if (editTextApp.getText().length() > 3) {
 								if(editTextPhase.length()>0){
 									String app = editTextApp.getText().toString();
@@ -144,6 +178,33 @@ public class BandwithFragment extends Fragment {
 	}
 	
 	
+	public OnFocusChangeListener onFocusChangeColorEditText = new OnFocusChangeListener() {
+		@Override
+		public void onFocusChange(View v, boolean hasFocus) {
+			if(v == editTextApp){
+				editTextApp.setTextColor(Color.RED);
+			}
+			
+		}
+	};
+
+	
+	private void setError(final EditText edit, final String messageError){
+		
+		Activity activity = getActivity();
+		if(activity!=null){
+			activity.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					edit.setError(messageError);
+					edit.requestFocus();
+					edit.setHint(edit.getText());
+					edit.setText("");
+				}
+			});
+		}
+	}
 	private void  getBandwith( String phase, String app){
 			InputMethodManager  imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
@@ -151,20 +212,23 @@ public class BandwithFragment extends Fragment {
 			Calendar calendar = Calendar.getInstance();
 			int month = calendar.get(Calendar.MONTH);
 			month+=1;
-			String url = urlStart+phase+"-"+app+"%3Aets"+app+urlSuite+"mois%3D"+month+urlSuite2;		
-			
-			SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-			Editor editor = defaultSharedPreferences.edit();
-			editor.putString("Phase", phase);
-			editor.putString("App", app);
-			editor.commit();
-			
+			String url = urlStart+phase+"-"+app+"%3Aets"+app+urlSuite+"mois%3D"+month+urlSuite2;	
+			savePhaseAppPreferences(phase,app);			
 			new BandwithAsyncTask().execute(url);
+	}
+	
+	private void savePhaseAppPreferences(String phase, String app){
+		SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		Editor editor = defaultSharedPreferences.edit();
+		editor.putString("Phase", phase);
+		editor.putString("App", app);
+		editor.commit();
+		
 	}
 	
 	private void drawChart(){
 	
-	 Activity activity = getActivity();
+	 final Activity activity = getActivity();
 	 if(activity!=null){
 		 activity.runOnUiThread(new Runnable() {
 			
@@ -176,7 +240,9 @@ public class BandwithFragment extends Fragment {
 				for(int i=0; i<size; i++){
 					colors[i]=colorChoice[i];
 				}
-				new PieChart(getActivity(), values, colors, rooms, chartLayout);
+				LegendAdapter legendAdapter = new LegendAdapter(activity, rooms, colors);
+				grid.setAdapter(legendAdapter);
+				new PieChart(getActivity(), values, colors, chartLayout);
 			}
 		});
 	 }
@@ -202,6 +268,16 @@ public class BandwithFragment extends Fragment {
 		}
 	}
 	
+	private void reset(){
+		View v = getView();
+		if(v!=null){
+			chartLayout.removeAllViews();
+			progressBar.setProgress(0);
+			String gb = getString(R.string.gigaoctetx);
+			((TextView) v.findViewById(R.id.bandwith_used_lbl)).setText("");
+			((TextView) v.findViewById(R.id.bandwith_max)).setText(gb);
+		}
+	}
 	
 	private class BandwithAsyncTask extends AsyncTask<String, Void , String>{
 		@Override
@@ -239,15 +315,15 @@ public class BandwithFragment extends Fragment {
 					        	values[i] = Math.round((value/1024)*100)/100.0;
 					        	String[] stringArray= entry.split("-");
 					        	if(stringArray.length>1){
-					        		rooms[i]=stringArray[1].toString();
+					        		rooms[i]="■ "+stringArray[1].toString()+" "+values[i] +" Go";
 					        	}else{
-					        		rooms[i]="Chambre"+i+1;
+					        		int j = i+1;
+					        		rooms[i]="■ Chambre"+j +" "+values[i]+" Go";
 					        	}
 					        	i++;
 					        }
 					    }
 					
-					    Log.v("BandwithFragment", "BandwithFragment: data= "+map.keySet());
 					    JSONArray quotaJson = (JSONArray) quota.getJSONArray("tr");
 					    JSONObject objectQuota = (JSONObject)quotaJson.get(1);
 					    JSONArray arrayQuota = (JSONArray)objectQuota.getJSONArray("td");
@@ -256,17 +332,18 @@ public class BandwithFragment extends Fragment {
 					    quotaValue= Math.round(quotaValue/1024*100)/100.0;
 					    double total = map.get("total");
 					    total = Math.round(total/1024*100)/100.0;
-					    values[size-1] =  Math.round((quotaValue-total) * 100)/100.0;
+					    double rest = Math.round((quotaValue-total) * 100)/100.0;
+					    values[size-1] = rest;
+					    rooms[size-1]="■ Restant "+ rest +" Go";
 					    setProgressBar(total, quotaValue);
 						    drawChart();
+						}else{
+							setError(editTextApp,getString(R.string.error_invalid_app) );
 						}
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
-				}else{
-					editTextApp.setError(getString(R.string.error_invalid_app));
 				}
-	
 				
 			} catch (URISyntaxException e) {
 				e.printStackTrace();

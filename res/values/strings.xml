@@ -84,5 +84,6 @@
     <string name ="utilise">Restant:</string>
     <string name ="gigaoctetx">Go</string>
     <string name ="error_invalid_app">Erreur appartement invalide</string>
+    <string name ="error_invalid_phase">Erreur phase invalide</string>
 </resources>
 
