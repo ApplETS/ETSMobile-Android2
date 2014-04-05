@@ -5,21 +5,30 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.ArrayOfFicheEmploye;
 import ca.etsmtl.applets.etsmobile.model.ArrayOfService;
+import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
+import com.google.android.gms.internal.fi;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 /**
@@ -34,7 +43,7 @@ public class BottinFragment extends HttpFragment {
 	private ExpandableListAdapter listAdapter;
 	private ExpandableListView expListView;
 	private List<String> listDataHeader;
-	private HashMap<String, List<String>> listDataChild;
+	private HashMap<String, List<FicheEmploye>> listDataChild;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,16 +53,39 @@ public class BottinFragment extends HttpFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
-		View v = inflater.inflate(R.layout.activity_bottin, container, false);
+		View v = inflater.inflate(R.layout.fragment_bottin, container, false);
 //		mListView = (ListView) v.findViewById(R.id.activity_bottin_listview);
 		
 		// get the listview
         expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
  
+        expListView.setOnChildClickListener(new OnChildClickListener() {
+			
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				
+				List<FicheEmploye> listeEmployes = listDataChild.get(listDataHeader.get(groupPosition)); 
+				
+				FicheEmploye ficheEmploye = listeEmployes.get(childPosition);
+				
+//				Log.e("test",ficheEmploye.Nom+" "+ficheEmploye.Prenom);
+				
+				Fragment fragment = BottinDetailsFragment.newInstance(ficheEmploye);
+				
+				
+				
+				showFragment(fragment);
+				
+				return true;
+			}
+		});
+				
+				
 //        // preparing list data
 //        prepareListData();
  
-        listDataChild = new HashMap<String, List<String>>();
+        listDataChild = new HashMap<String, List<FicheEmploye>>();
         listDataHeader = new ArrayList<String>();
         
         listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
@@ -67,6 +99,8 @@ public class BottinFragment extends HttpFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
+		
+		
 		DataManager datamanager = DataManager.getInstance(getActivity());
 		datamanager.getDataFromSignet(SignetMethods.BOTTIN_LIST_DEPT, ApplicationManager.userCredentials, this);
 	}
@@ -100,15 +134,14 @@ public class BottinFragment extends HttpFragment {
 				// System.out.println(arrayOfFicheEmploye.get(0).Service);
 
 				
-				List<String> listeEmploye = new ArrayList<String>();
+				List<FicheEmploye> listeEmploye = new ArrayList<FicheEmploye>();
 				
 				for (int i = 0; i < arrayOfFicheEmploye.size(); i++) {
 					// System.out.println(arrayOfFicheEmploye.get(i).Nom+
 					// " "+arrayOfFicheEmploye.get(i).Prenom);
 
 					
-					listeEmploye.add(arrayOfFicheEmploye.get(i).Nom + " "
-							+ arrayOfFicheEmploye.get(i).Prenom);
+					listeEmploye.add(arrayOfFicheEmploye.get(i));
 
 					listDataChild.put(arrayOfFicheEmploye.get(0).Service,listeEmploye);
 					
@@ -136,18 +169,24 @@ public class BottinFragment extends HttpFragment {
 
 	} 
 	
-//	private void refresh(){
-//		
-//		final BottinAdapter bottinAdapter = new BottinAdapter(getActivity(),R.id.activity_bottin_listview, arrayOfService);
-//		Activity activity = getActivity();
-//		if(activity!=null){
-//			getActivity().runOnUiThread( new Runnable() {
-//				public void run() {
-//					mListView.setAdapter(bottinAdapter);
-//				}
-//			});
-//		}
-//	}
+	private void showFragment(final Fragment fragment) {
+		if (fragment == null)
+			return;
+
+		// Begin a fragment transaction.
+		final FragmentManager fm = getActivity().getFragmentManager();
+		final FragmentTransaction ft = fm.beginTransaction();
+		// We can also animate the changing of fragment.
+//		ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+		// Replace current fragment by the new one.
+		ft.replace(R.id.content_frame, fragment);
+		// Null on the back stack to return on the previous fragment when user
+		// press on back button.
+		ft.addToBackStack(null);
+
+		// Commit changes.
+		ft.commit();
+	}
 
 	@Override
 	void updateUI() {

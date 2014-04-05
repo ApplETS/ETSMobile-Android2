@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
  
 
+
+import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile2.R;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -18,10 +20,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context _context;
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, List<String>> _listDataChild;
+    private HashMap<String, List<FicheEmploye>> _listDataChild;
  
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
-            HashMap<String, List<String>> listChildData) {
+            HashMap<String, List<FicheEmploye>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -42,7 +44,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
             boolean isLastChild, View convertView, ViewGroup parent) {
  
-        final String childText = (String) getChild(groupPosition, childPosition);
+    	FicheEmploye ficheEmploye = (FicheEmploye) getChild(groupPosition, childPosition); 
+        final String childText = ficheEmploye.Nom + " "+ficheEmploye.Prenom;
  
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -54,6 +57,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.lblListItem);
  
         txtListChild.setText(childText);
+        
+   
+        
         return convertView;
     }
  
