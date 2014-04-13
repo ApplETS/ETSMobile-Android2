@@ -136,7 +136,7 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 				break;
 			case 2:// NOTE À CE JOUR
 				holder.txtView.setText(R.string.noteACejour);
-				if(courseEvaluation.noteSur100PourElementsIndividuels!=null){
+				if(courseEvaluation.scoreFinalSur100!=null){
 					final String note = courseEvaluation.scoreFinalSur100;
 					holder.txtViewValue.setText(note + "/" + nf_enUS.format(total) + " (" + courseEvaluation.noteACeJour + "%)");
 				}
@@ -202,7 +202,11 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 
 							holder.txtViewPond.setText(ctx.getString(R.string.ponderation)+": " + element.ponderation + "%");
 						} else {
+							holder.txtViewPond.setVisibility(View.VISIBLE);
+							holder.txtViewMoy.setVisibility(View.VISIBLE);
 							holder.txtViewValue.setText("/" + sur);
+							holder.txtViewPond.setText(ctx.getString(R.string.ponderation)+": " + element.ponderation + "%");
+
 						}
 					} catch (final ParseException e) {
 						e.printStackTrace();

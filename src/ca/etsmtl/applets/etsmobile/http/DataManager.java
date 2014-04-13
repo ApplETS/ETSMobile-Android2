@@ -5,8 +5,9 @@ import java.util.List;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
+import android.util.Log;
+
 import ca.etsmtl.applets.etsmobile.http.soap.SignetsMobileSoap;
 import ca.etsmtl.applets.etsmobile.http.soap.WebServiceSoap;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
@@ -99,9 +100,7 @@ public class DataManager {
 						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_COURS:
-
 						result = signetsMobileSoap.listeCours(username, password);
-
 						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_INT_SESSION:

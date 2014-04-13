@@ -17,6 +17,8 @@ import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 
 
+import android.util.Log;
+
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
 public class ListeDeCours extends DonneesRetournees implements KvmSerializable {

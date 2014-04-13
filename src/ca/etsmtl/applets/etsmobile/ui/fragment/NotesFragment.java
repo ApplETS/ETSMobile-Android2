@@ -42,6 +42,7 @@ public class NotesFragment extends HttpFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
+
 		View v = inflater.inflate(R.layout.fragment_note, container, false);
 		mListView = (ListView) v.findViewById(R.id.activity_note_listview);
 		return v;
@@ -63,6 +64,7 @@ public class NotesFragment extends HttpFragment {
 
 	@Override
 	public void onRequestSuccess(Object o) {
+
 
 		if (o != null)
 			if (o instanceof ListeDeCours) {

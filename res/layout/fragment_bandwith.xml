@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/gray" >
+    
+     <LinearLayout 
+         android:id="@+id/bandwith_info"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:paddingTop="40dp"
+         android:layout_marginLeft="20dp"
+         android:layout_marginRight="20dp">
+         
+          <EditText
+              android:id="@+id/bandwith_editText_phase"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:inputType="number"
+              android:hint="@string/bandwith_phase"
+              android:singleLine="true"
+              android:ems="10" >
+
+              <requestFocus />
+          </EditText>
+          <EditText
+              android:id="@+id/bandwith_editText_app"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:inputType="number"
+              android:hint="@string/bandwith_app"
+              android:singleLine="true"
+              android:ems="10" >
+          </EditText>
+          
+     </LinearLayout>
+     <LinearLayout
+         android:id="@+id/bandwith_progress_layout"
+		 android:layout_width="wrap_content"
+		 android:layout_height="wrap_content"
+		 android:layout_alignParentLeft="true"
+		 android:layout_alignParentRight="true"
+		 android:paddingTop="10dp"
+		 android:layout_marginLeft="20dp"
+		 android:layout_marginRight="20dp"
+		 android:layout_below="@+id/bandwith_info"
+		 android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/textView1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="@string/_0"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/bandwith_used_lbl"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/utilise"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/bandwith_max"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="@string/gigaoctetx"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/bandwith_progress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:progress="1" />
+     </LinearLayout>
+     <LinearLayout 
+         android:id="@+id/chart" 
+         android:orientation="horizontal"
+         android:layout_width="fill_parent" 
+         android:layout_height="300dp" 
+         android:paddingLeft="20dp"
+         android:paddingRight="20dp"
+         android:layout_below="@+id/bandwith_progress_layout"/>
+     <GridView 
+         android:id="@+id/bandwith_grid"
+         android:layout_below="@+id/chart"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:columnWidth="150dp"
+         android:gravity="center"
+         android:layout_marginLeft="30dp"
+       	 android:numColumns="auto_fit"/>
+  
+    
+    
+
+</RelativeLayout>

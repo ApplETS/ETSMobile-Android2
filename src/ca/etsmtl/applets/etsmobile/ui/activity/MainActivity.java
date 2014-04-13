@@ -27,12 +27,7 @@ import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
-<<<<<<< HEAD
  * Main Activity for �TSMobile, handles the login and the menu
-=======
- * Main Activity for �TSMobile, handles the login and the menu
->>>>>>> FETCH_HEAD
- * 
  * @author Philippe David
  * 
  */
@@ -65,34 +60,30 @@ public class MainActivity extends Activity {
 				.toArray(menuItems)));
 
 		// Set the list's click listener
-
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-		mDrawerLayout, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
-		R.string.drawer_open, /* "open drawer" description */
-		R.string.drawer_close /* "close drawer" description */
-		) {
-
-			/** Called when a drawer has settled in a completely closed state. */
-			public void onDrawerClosed(View view) {
-				getActionBar().setTitle(mTitle);
-			}
-
-			/** Called when a drawer has settled in a completely open state. */
-			public void onDrawerOpened(View drawerView) {
-				getActionBar().setTitle(getString(R.string.drawer_title));
-			}
-		};
-
-		// Set the drawer toggle as the DrawerListener
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
-
-
+			mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+			mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+			mDrawerLayout, /* DrawerLayout object */
+			R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+			R.string.drawer_open, /* "open drawer" description */
+			R.string.drawer_close /* "close drawer" description */
+			) {
+	
+				/** Called when a drawer has settled in a completely closed state. */
+				public void onDrawerClosed(View view) {
+					getActionBar().setTitle(mTitle);
+				}
+	
+				/** Called when a drawer has settled in a completely open state. */
+				public void onDrawerOpened(View drawerView) {
+					getActionBar().setTitle(getString(R.string.drawer_title));
+				}
+			};
+	
+			// Set the drawer toggle as the DrawerListener
+			mDrawerLayout.setDrawerListener(mDrawerToggle);
+	
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+			getActionBar().setHomeButtonEnabled(true);
 	
 	}
 
@@ -245,7 +236,8 @@ public class MainActivity extends Activity {
 		}
 	     
 		// Insert the fragment by replacing any existing fragment
-		FragmentManager fragmentManager = getFragmentManager();	
+		FragmentManager fragmentManager = getFragmentManager();
+	
 			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
 					.addToBackStack(aClass.getName()).commit();
 
