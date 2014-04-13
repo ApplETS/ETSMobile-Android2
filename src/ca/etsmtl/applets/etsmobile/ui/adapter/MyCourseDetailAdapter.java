@@ -202,7 +202,11 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 
 							holder.txtViewPond.setText(ctx.getString(R.string.ponderation)+": " + element.ponderation + "%");
 						} else {
+							holder.txtViewPond.setVisibility(View.VISIBLE);
+							holder.txtViewMoy.setVisibility(View.VISIBLE);
 							holder.txtViewValue.setText("/" + sur);
+							holder.txtViewPond.setText(ctx.getString(R.string.ponderation)+": " + element.ponderation + "%");
+
 						}
 					} catch (final ParseException e) {
 						e.printStackTrace();

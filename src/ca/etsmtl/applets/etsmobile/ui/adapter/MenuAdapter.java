@@ -72,7 +72,9 @@ public class MenuAdapter extends ArrayAdapter<MyMenuItem> {
 		}
 
 		final MyMenuItem myMenuItem = getItem(position);
-		holder.title.setText(myMenuItem.title);
+		if(myMenuItem!=null){
+			holder.title.setText(myMenuItem.title);
+		}
 
 		if (itemViewType == ITEM) {
 			holder.title.setCompoundDrawablesWithIntrinsicBounds(
