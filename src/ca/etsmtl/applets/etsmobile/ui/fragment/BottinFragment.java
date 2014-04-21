@@ -1,13 +1,24 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +39,6 @@ import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
-import com.google.android.gms.internal.fi;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 /**
@@ -44,6 +54,7 @@ public class BottinFragment extends HttpFragment {
 	private ExpandableListView expListView;
 	private List<String> listDataHeader;
 	private HashMap<String, List<FicheEmploye>> listDataChild;
+	private ProgressDialog mProgressDialog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -100,9 +111,58 @@ public class BottinFragment extends HttpFragment {
 	public void onStart() {
 		super.onStart();
 		
-		
-		DataManager datamanager = DataManager.getInstance(getActivity());
-		datamanager.getDataFromSignet(SignetMethods.BOTTIN_LIST_DEPT, ApplicationManager.userCredentials, this);
+		try {
+			Activity activity = getActivity();
+			FileInputStream input = activity.openFileInput("bottin.ser");
+			
+			
+			int value;
+			ObjectInputStream ois = new ObjectInputStream(input);
+//			listDataChild.clear();
+			listDataChild = (HashMap) ois.readObject();
+			ois.close();
+			
+			listDataHeader.clear();
+			
+			listDataHeader.addAll(listDataChild.keySet());
+			
+			Collections.sort(listDataHeader);
+			
+			listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
+			 
+	        // setting list adapter
+	        expListView.setAdapter(listAdapter);
+			
+			if (input != null)
+				input.close();
+			
+			
+			
+			if(activity!=null){
+				activity.runOnUiThread( new Runnable() {
+					public void run() {
+						listAdapter.notifyDataSetChanged();
+					}
+				});
+			}
+			
+			
+		} catch (FileNotFoundException e) {
+		  
+			try {
+				mProgressDialog = ProgressDialog.show(getActivity(), null,"Chargement du bottin en cours", true);
+				mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				DataManager datamanager = DataManager.getInstance(getActivity());
+//				datamanager.getDataFromSignet(SignetMethods.BOTTIN_LIST_DEPT, ApplicationManager.userCredentials, this);
+				datamanager.getDataFromSignet(SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP, ApplicationManager.userCredentials, this);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			
+		} catch (Exception e) {
+		  e.printStackTrace();
+		}
+
 	}
 	
 	@Override
@@ -113,57 +173,54 @@ public class BottinFragment extends HttpFragment {
 
 	@Override
 	public void onRequestSuccess(Object o) {
-		if(o instanceof ArrayOfService){
+		
+		
+		
+		if(o instanceof HashMap<?, ?>){
 			
-			arrayOfService = (ArrayOfService) o;
+			HashMap<String, List<FicheEmploye>> listeEmployeByService = (HashMap<String, List<FicheEmploye>>) o; 
 			
-			for(int i = 0 ; i < arrayOfService.size(); i++) {
+			for(String nomService : listeEmployeByService.keySet()) {
 				
-				DataManager datamanager = DataManager.getInstance(getActivity());
-				datamanager.getDataFromSignet(SignetMethods.BOTTIN_GET_FICHE_BY_SERVICE, ApplicationManager.userCredentials, this,""+arrayOfService.get(i).ServiceCode);
+				List<FicheEmploye> listeEmployes = listeEmployeByService.get(nomService);
 				
-//				Log.e("TEST", arrayOfService.get(i).ServiceCode+" -- "+ arrayOfService.get(i).Nom);
-			}
-			
-		}
-		if(o instanceof ArrayOfFicheEmploye) {
-			arrayOfFicheEmploye = (ArrayOfFicheEmploye) o ;
-			
-			if (arrayOfFicheEmploye.size() != 0) {
-				listDataHeader.add(arrayOfFicheEmploye.get(0).Service);
-				// System.out.println(arrayOfFicheEmploye.get(0).Service);
-
-				
-				List<FicheEmploye> listeEmploye = new ArrayList<FicheEmploye>();
-				
-				for (int i = 0; i < arrayOfFicheEmploye.size(); i++) {
-					// System.out.println(arrayOfFicheEmploye.get(i).Nom+
-					// " "+arrayOfFicheEmploye.get(i).Prenom);
-
+				if(listeEmployes.size() != 0) {
 					
-					listeEmploye.add(arrayOfFicheEmploye.get(i));
-
-					listDataChild.put(arrayOfFicheEmploye.get(0).Service,listeEmploye);
-					
-
+					listDataHeader.add(nomService);
+					listDataChild.put(nomService,listeEmployeByService.get(nomService));
 				}
-				
-//				for(String s : listDataChild.get(arrayOfFicheEmploye.get(0).Service)) {
-//					System.out.println(s);
-//				}
-				
-				Activity activity = getActivity();
-				if(activity!=null){
-					getActivity().runOnUiThread( new Runnable() {
-						public void run() {
-							listAdapter.notifyDataSetChanged();
-						}
-					});
-				}
-				
 				
 			}
 			
+			Collections.sort(listDataHeader);
+			
+			FileOutputStream output;
+			try {
+				output = getActivity().openFileOutput("bottin.ser",
+						getActivity().MODE_PRIVATE);
+
+				ObjectOutputStream oos = new ObjectOutputStream(output);
+				oos.writeObject(listDataChild);
+				oos.close();
+				if (output != null)
+					output.close();
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
+			Activity activity = getActivity();
+			if(activity!=null){
+				getActivity().runOnUiThread( new Runnable() {
+					public void run() {
+						listAdapter.notifyDataSetChanged();
+						mProgressDialog.dismiss();
+					}
+				});
+			}
 		}
 		
 
@@ -192,5 +249,21 @@ public class BottinFragment extends HttpFragment {
 	void updateUI() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		System.out.println("onPause");
+		
+	}
+	
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		System.out.println("onStop");
+		
 	}
 }

@@ -21,7 +21,6 @@ import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
-import com.google.android.gms.internal.fi;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 public class BottinDetailsFragment extends HttpFragment {

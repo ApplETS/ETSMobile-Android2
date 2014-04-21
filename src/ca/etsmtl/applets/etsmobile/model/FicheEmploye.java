@@ -9,6 +9,7 @@ package ca.etsmtl.applets.etsmobile.model;
 //
 //---------------------------------------------------
 
+import java.io.Serializable;
 import java.util.Hashtable;
 
 import org.joda.time.DateTime;
@@ -25,7 +26,7 @@ import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 import ca.etsmtl.applets.etsmobile.http.soap.Helper;
 
 @DatabaseTable(tableName="fiche_employee")
-public class FicheEmploye extends AttributeContainer implements KvmSerializable {
+public class FicheEmploye extends AttributeContainer implements KvmSerializable,Serializable {
 
 	@DatabaseField(id=true)
 	public Integer Id = 0;
