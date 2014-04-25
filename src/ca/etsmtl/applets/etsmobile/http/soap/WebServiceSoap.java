@@ -26,11 +26,9 @@ import ca.etsmtl.applets.etsmobile.model.OperationResult;
 
 public class WebServiceSoap {
 	interface IWcfMethod {
-		ExtendedSoapSerializationEnvelope CreateSoapEnvelope()
-				throws java.lang.Exception;
+		ExtendedSoapSerializationEnvelope CreateSoapEnvelope() throws java.lang.Exception;
 
-		Object ProcessResult(ExtendedSoapSerializationEnvelope envelope,
-				SoapObject result) throws java.lang.Exception;
+		Object ProcessResult(ExtendedSoapSerializationEnvelope envelope, SoapObject result) throws java.lang.Exception;
 	}
 
 	String url = "http://etsmtl.ca/cmspages/webservice.asmx";
@@ -65,16 +63,13 @@ public class WebServiceSoap {
 		return new ExtendedSoapSerializationEnvelope();
 	}
 
-	protected void sendRequest(String methodName,
-			ExtendedSoapSerializationEnvelope envelope,
-			org.ksoap2.transport.Transport transport)
-			throws java.lang.Exception {
+	protected void sendRequest(String methodName, ExtendedSoapSerializationEnvelope envelope,
+			org.ksoap2.transport.Transport transport) throws java.lang.Exception {
 		transport.call(methodName, envelope, httpHeaders);
 	}
 
-	Object getResult(java.lang.Class destObj, SoapObject source,
-			String resultName, ExtendedSoapSerializationEnvelope __envelope)
-			throws java.lang.Exception {
+	Object getResult(java.lang.Class destObj, SoapObject source, String resultName,
+			ExtendedSoapSerializationEnvelope __envelope) throws java.lang.Exception {
 		if (source.hasProperty(resultName)) {
 			Object j = source.getProperty(resultName);
 			if (j == null) {
@@ -89,15 +84,13 @@ public class WebServiceSoap {
 		return null;
 	}
 
-	public ArrayOfFicheEmploye Recherche(final String FiltreNom,
-			final String FiltrePrenom, final String FiltreServiceCode)
-			throws java.lang.Exception {
+	public ArrayOfFicheEmploye Recherche(final String FiltreNom, final String FiltrePrenom,
+			final String FiltreServiceCode) throws java.lang.Exception {
 		return (ArrayOfFicheEmploye) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"Recherche");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "Recherche");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -123,18 +116,15 @@ public class WebServiceSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (ArrayOfFicheEmploye) getResult(
-						ArrayOfFicheEmploye.class, __result, "RechercheResult",
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (ArrayOfFicheEmploye) getResult(ArrayOfFicheEmploye.class, __result, "RechercheResult",
 						__envelope);
 			}
 		}, "http://etsmtl.ca/Recherche");
 	}
 
-	public void RechercheAsync(final String FiltreNom,
-			final String FiltrePrenom, final String FiltreServiceCode) {
+	public void RechercheAsync(final String FiltreNom, final String FiltrePrenom, final String FiltreServiceCode) {
 		executeAsync(new Functions.IFunc<ArrayOfFicheEmploye>() {
 			public ArrayOfFicheEmploye Func() throws java.lang.Exception {
 				return Recherche(FiltreNom, FiltrePrenom, FiltreServiceCode);
@@ -142,15 +132,13 @@ public class WebServiceSoap {
 		});
 	}
 
-	public ArrayOfFicheEmployeDate RechercheDate(final String FiltreNom,
-			final String FiltrePrenom, final String FiltreServiceCode)
-			throws java.lang.Exception {
+	public ArrayOfFicheEmployeDate RechercheDate(final String FiltreNom, final String FiltrePrenom,
+			final String FiltreServiceCode) throws java.lang.Exception {
 		return (ArrayOfFicheEmployeDate) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"RechercheDate");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "RechercheDate");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -176,18 +164,15 @@ public class WebServiceSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (ArrayOfFicheEmployeDate) getResult(
-						ArrayOfFicheEmployeDate.class, __result,
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (ArrayOfFicheEmployeDate) getResult(ArrayOfFicheEmployeDate.class, __result,
 						"RechercheDateResult", __envelope);
 			}
 		}, "http://etsmtl.ca/RechercheDate");
 	}
 
-	public void RechercheDateAsync(final String FiltreNom,
-			final String FiltrePrenom, final String FiltreServiceCode) {
+	public void RechercheDateAsync(final String FiltreNom, final String FiltrePrenom, final String FiltreServiceCode) {
 		executeAsync(new Functions.IFunc<ArrayOfFicheEmployeDate>() {
 			public ArrayOfFicheEmployeDate Func() throws java.lang.Exception {
 				return RechercheDate(FiltreNom, FiltrePrenom, FiltreServiceCode);
@@ -195,14 +180,12 @@ public class WebServiceSoap {
 		});
 	}
 
-	public FicheEmploye GetFicheData(final String Id)
-			throws java.lang.Exception {
+	public FicheEmploye GetFicheData(final String Id) throws java.lang.Exception {
 		return (FicheEmploye) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"GetFicheData");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "GetFicheData");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -216,11 +199,9 @@ public class WebServiceSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (FicheEmploye) getResult(FicheEmploye.class, __result,
-						"GetFicheDataResult", __envelope);
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (FicheEmploye) getResult(FicheEmploye.class, __result, "GetFicheDataResult", __envelope);
 			}
 		}, "http://etsmtl.ca/GetFicheData");
 	}
@@ -238,8 +219,7 @@ public class WebServiceSoap {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"GetListeDepartement");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "GetListeDepartement");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -247,11 +227,10 @@ public class WebServiceSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (ArrayOfService) getResult(ArrayOfService.class,
-						__result, "GetListeDepartementResult", __envelope);
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (ArrayOfService) getResult(ArrayOfService.class, __result, "GetListeDepartementResult",
+						__envelope);
 			}
 		}, "http://etsmtl.ca/GetListeDepartement");
 	}
@@ -264,14 +243,12 @@ public class WebServiceSoap {
 		});
 	}
 
-	public String GetFiche(final String numero, final String PathFiche)
-			throws java.lang.Exception {
+	public String GetFiche(final String numero, final String PathFiche) throws java.lang.Exception {
 		return (String) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"GetFiche");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "GetFiche");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -291,13 +268,11 @@ public class WebServiceSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
 				Object obj = __result.getProperty("GetFicheResult");
 				if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
-					SoapPrimitive j = (SoapPrimitive) __result
-							.getProperty("GetFicheResult");
+					SoapPrimitive j = (SoapPrimitive) __result.getProperty("GetFicheResult");
 					return j.toString();
 				}
 				return null;
@@ -313,11 +288,9 @@ public class WebServiceSoap {
 		});
 	}
 
-	protected Object execute(IWcfMethod wcfMethod, String methodName)
-			throws java.lang.Exception {
+	protected Object execute(IWcfMethod wcfMethod, String methodName) throws java.lang.Exception {
 		org.ksoap2.transport.Transport __httpTransport = createTransport();
-		ExtendedSoapSerializationEnvelope __envelope = wcfMethod
-				.CreateSoapEnvelope();
+		ExtendedSoapSerializationEnvelope __envelope = wcfMethod.CreateSoapEnvelope();
 		sendRequest(methodName, __envelope, __httpTransport);
 		Object __retObj = __envelope.bodyIn;
 		if (__retObj instanceof org.ksoap2.SoapFault) {
@@ -355,8 +328,7 @@ public class WebServiceSoap {
 		}.execute();
 	}
 
-	java.lang.Exception convertToException(org.ksoap2.SoapFault fault,
-			ExtendedSoapSerializationEnvelope envelope) {
+	java.lang.Exception convertToException(org.ksoap2.SoapFault fault, ExtendedSoapSerializationEnvelope envelope) {
 		return new java.lang.Exception(fault.faultstring);
 	}
 }

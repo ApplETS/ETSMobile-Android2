@@ -17,15 +17,15 @@ import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
-
-@DatabaseTable(tableName="service")
+@DatabaseTable(tableName = "service")
 public class Service extends AttributeContainer implements KvmSerializable {
 
-	@DatabaseField(id=true)
+	@DatabaseField(id = true)
 	public Integer ServiceCode = 0;
 
 	@DatabaseField
@@ -34,8 +34,7 @@ public class Service extends AttributeContainer implements KvmSerializable {
 	public Service() {
 	}
 
-	public Service(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public Service(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -84,8 +83,7 @@ public class Service extends AttributeContainer implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.INTEGER_CLASS;
 			info.name = "ServiceCode";

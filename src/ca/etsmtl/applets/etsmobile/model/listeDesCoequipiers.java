@@ -18,16 +18,14 @@ import org.ksoap2.serialization.SoapObject;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class listeDesCoequipiers extends DonneesRetournees implements
-		KvmSerializable {
+public class listeDesCoequipiers extends DonneesRetournees implements KvmSerializable {
 
 	public ArrayOfPersonne liste = new ArrayOfPersonne();
 
 	public listeDesCoequipiers() {
 	}
 
-	public listeDesCoequipiers(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public listeDesCoequipiers(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		super(inObj, envelope);
 		if (inObj == null)
 			return;
@@ -56,8 +54,7 @@ public class listeDesCoequipiers extends DonneesRetournees implements
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		int count = super.getPropertyCount();
 		if (propertyIndex == count + 0) {
 			info.type = PropertyInfo.VECTOR_CLASS;

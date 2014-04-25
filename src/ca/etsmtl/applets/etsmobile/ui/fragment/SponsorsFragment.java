@@ -12,8 +12,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 public class SponsorsFragment extends WebFragment {
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		return inflater.inflate(R.layout.fragment_sponsors, container, false);
 	}

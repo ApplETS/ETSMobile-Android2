@@ -19,14 +19,12 @@ import org.ksoap2.serialization.SoapObject;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class ArrayOfJoursRemplaces extends Vector<JoursRemplaces> implements
-		KvmSerializable {
+public class ArrayOfJoursRemplaces extends Vector<JoursRemplaces> implements KvmSerializable {
 
 	public ArrayOfJoursRemplaces() {
 	}
 
-	public ArrayOfJoursRemplaces(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public ArrayOfJoursRemplaces(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		if (inObj == null)
 			return;
 		SoapObject soapObject = (SoapObject) inObj;
@@ -34,10 +32,8 @@ public class ArrayOfJoursRemplaces extends Vector<JoursRemplaces> implements
 		for (int i0 = 0; i0 < size; i0++) {
 			Object obj = soapObject.getProperty(i0);
 			if (obj != null && obj instanceof AttributeContainer) {
-				AttributeContainer j = (AttributeContainer) soapObject
-						.getProperty(i0);
-				JoursRemplaces j1 = (JoursRemplaces) envelope.get(j,
-						JoursRemplaces.class);
+				AttributeContainer j = (AttributeContainer) soapObject.getProperty(i0);
+				JoursRemplaces j1 = (JoursRemplaces) envelope.get(j, JoursRemplaces.class);
 				add(j1);
 			}
 		}
@@ -54,8 +50,7 @@ public class ArrayOfJoursRemplaces extends Vector<JoursRemplaces> implements
 	}
 
 	@Override
-	public void getPropertyInfo(int index,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int index, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		info.name = "JoursRemplaces";
 		info.type = JoursRemplaces.class;
 		info.namespace = "http://etsmtl.ca/";

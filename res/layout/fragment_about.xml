@@ -16,7 +16,7 @@
             android:src="@drawable/logo_applets" />
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/base_layout_error_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="16dp"

@@ -24,7 +24,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "etudiant")
 public class Etudiant extends DonneesRetournees implements KvmSerializable {
-	
+
 	@DatabaseField
 	public String nom;
 
@@ -40,8 +40,7 @@ public class Etudiant extends DonneesRetournees implements KvmSerializable {
 	public Etudiant() {
 	}
 
-	public Etudiant(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public Etudiant(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		super(inObj, envelope);
 		if (inObj == null)
 			return;
@@ -119,8 +118,7 @@ public class Etudiant extends DonneesRetournees implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		int count = super.getPropertyCount();
 		if (propertyIndex == count + 0) {
 			info.type = PropertyInfo.STRING_CLASS;

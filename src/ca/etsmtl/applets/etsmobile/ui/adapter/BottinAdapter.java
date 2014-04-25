@@ -16,39 +16,39 @@ public class BottinAdapter extends ArrayAdapter<FicheEmploye> {
 	private Context context;
 
 	public BottinAdapter(Context context, int resource, List<FicheEmploye> items) {
-		super(context, resource,items);
+		super(context, resource, items);
 		this.context = context;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		 View v = convertView;
+		View v = convertView;
 
-		    if (v == null) {
+		if (v == null) {
 
-		    	LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		        v = inflater.inflate(R.layout.row_bottin_menu, null);
+			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			v = inflater.inflate(R.layout.row_bottin_menu, null);
 
-		    }
+		}
 
-		    FicheEmploye p = getItem(position);
+		FicheEmploye p = getItem(position);
 
-		    if (p != null) {
+		if (p != null) {
 
-		        TextView tv_nom = (TextView) v.findViewById(R.id.textview_bottin_nom);
-		        TextView tv_prenom = (TextView) v.findViewById(R.id.textview_bottin_prenom);
+			TextView tv_nom = (TextView) v.findViewById(R.id.textview_bottin_nom);
+			TextView tv_prenom = (TextView) v.findViewById(R.id.textview_bottin_prenom);
 
-		        if (tv_nom != null) {
-		        	tv_nom.setText(p.Nom);
-		        }
-		        if (tv_prenom != null) {
+			if (tv_nom != null) {
+				tv_nom.setText(p.Nom);
+			}
+			if (tv_prenom != null) {
 
-		        	tv_prenom.setText(p.Prenom);
-		        }
+				tv_prenom.setText(p.Prenom);
+			}
 
-		    }
+		}
 
-		    return v;
+		return v;
 	}
 
 }

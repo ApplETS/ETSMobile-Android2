@@ -24,8 +24,7 @@ public class ArrayOfService extends Vector<Service> implements KvmSerializable {
 	public ArrayOfService() {
 	}
 
-	public ArrayOfService(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public ArrayOfService(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		if (inObj == null)
 			return;
 		SoapObject soapObject = (SoapObject) inObj;
@@ -33,8 +32,7 @@ public class ArrayOfService extends Vector<Service> implements KvmSerializable {
 		for (int i0 = 0; i0 < size; i0++) {
 			java.lang.Object obj = soapObject.getProperty(i0);
 			if (obj != null && obj instanceof AttributeContainer) {
-				AttributeContainer j = (AttributeContainer) soapObject
-						.getProperty(i0);
+				AttributeContainer j = (AttributeContainer) soapObject.getProperty(i0);
 				Service j1 = (Service) envelope.get(j, Service.class);
 				add(j1);
 			}
@@ -53,8 +51,7 @@ public class ArrayOfService extends Vector<Service> implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int index,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int index, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		info.name = "Service";
 		info.type = Service.class;
 		info.namespace = "http://etsmtl.ca/";

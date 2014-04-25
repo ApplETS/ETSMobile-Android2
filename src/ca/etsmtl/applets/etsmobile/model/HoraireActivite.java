@@ -23,8 +23,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "horaire_activite")
-public class HoraireActivite extends AttributeContainer implements
-		KvmSerializable {
+public class HoraireActivite extends AttributeContainer implements KvmSerializable {
 
 	@DatabaseField
 	public String sigle;
@@ -50,15 +49,14 @@ public class HoraireActivite extends AttributeContainer implements
 	public String local;
 	@DatabaseField
 	public String titreCours;
-	
-	@DatabaseField(id=true)
+
+	@DatabaseField(id = true)
 	public int id;
 
 	public HoraireActivite() {
 	}
 
-	public HoraireActivite(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public HoraireActivite(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -233,8 +231,7 @@ public class HoraireActivite extends AttributeContainer implements
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.STRING_CLASS;
 			info.name = "sigle";

@@ -22,8 +22,7 @@ public class BiblioFragment extends WebFragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_web_view, container, false);
 
 		webView = (WebView) v.findViewById(R.id.webView);
@@ -35,8 +34,7 @@ public class BiblioFragment extends WebFragment {
 
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
-			public boolean shouldOverrideUrlLoading(final WebView view,
-					final String url) {
+			public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
 				view.loadUrl(url);
 				return false;
 			}

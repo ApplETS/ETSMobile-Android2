@@ -24,20 +24,7 @@ public class TypedRequest<X> extends SpringAndroidSpiceRequest<X> {
 
 	@Override
 	public X loadDataFromNetwork() throws Exception {
-
-		// HttpAuthentication authHeader = new
-		// HttpBasicAuthentication("aj39950", "Kiss1234");
-		// HttpHeaders requestHeaders = new HttpHeaders();
-		// requestHeaders.setAuthorization(authHeader);
-		// requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-		//
 		RestTemplate restTemplate = getRestTemplate();
-		//
-		// ResponseEntity<StudentProfile> response = restTemplate.exchange(url,
-		// HttpMethod.POST,
-		// new HttpEntity<Object>(requestHeaders), StudentProfile.class);
-
-		// "{'codeAccessUniversel':'aj39950','motPasse':'Kiss1234'}"
 		return restTemplate.postForObject(url, null, klass);
 	}
 
@@ -48,9 +35,7 @@ public class TypedRequest<X> extends SpringAndroidSpiceRequest<X> {
 	 * @return
 	 */
 	public String createCacheKey() {
-		return "etsmobile_v2_cache_key."
-				+ RANDOM.nextInt((int) SystemClock.currentThreadTimeMillis())
-				* 10;
+		return "etsmobile_v2_cache_key." + RANDOM.nextInt((int) SystemClock.currentThreadTimeMillis()) * 10;
 	}
 
 }

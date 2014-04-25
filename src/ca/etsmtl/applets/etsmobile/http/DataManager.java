@@ -6,8 +6,6 @@ import java.util.List;
 import android.content.Context;
 import android.os.AsyncTask;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import android.util.Log;
-
 import ca.etsmtl.applets.etsmobile.http.soap.SignetsMobileSoap;
 import ca.etsmtl.applets.etsmobile.http.soap.WebServiceSoap;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
@@ -53,12 +51,10 @@ public class DataManager {
 	 * @param listener
 	 * @return true if request is sent
 	 */
-	public boolean sendRequest(TypedRequest request,
-			RequestListener<Object> listener) {
+	public boolean sendRequest(TypedRequest request, RequestListener<Object> listener) {
 
 		final Object key = request.createCacheKey();
-		spiceManager.execute(request, key, DurationInMillis.ONE_SECOND,
-				listener);
+		spiceManager.execute(request, key, DurationInMillis.ONE_SECOND, listener);
 		return true;
 	}
 
@@ -74,8 +70,8 @@ public class DataManager {
 	 * @param params
 	 *            Some methods require more than the credentials pass them here
 	 */
-	public void getDataFromSignet(int method, final UserCredentials creds,
-			final RequestListener<Object> listener, String... params) {
+	public void getDataFromSignet(int method, final UserCredentials creds, final RequestListener<Object> listener,
+			String... params) {
 
 		// inline asynctask
 		new AsyncTask<Object, Void, Object>() {
@@ -93,10 +89,8 @@ public class DataManager {
 					switch (methodID) {
 					case SignetMethods.INFO_ETUDIANT:
 
-						result = signetsMobileSoap.infoEtudiant(username,
-								password);
-						dbHelper.getDao(Etudiant.class).createOrUpdate(
-								(Etudiant) result);
+						result = signetsMobileSoap.infoEtudiant(username, password);
+						dbHelper.getDao(Etudiant.class).createOrUpdate((Etudiant) result);
 						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_COURS:
@@ -108,23 +102,19 @@ public class DataManager {
 						String SesFin = reqParams[0];
 						String SesDebut = reqParams[1];
 
-						result = signetsMobileSoap
-								.listeCoursIntervalleSessions(username,
-										password, SesDebut, SesFin);
+						result = signetsMobileSoap.listeCoursIntervalleSessions(username, password, SesDebut, SesFin);
 
 						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_SESSION:
 
-						result = signetsMobileSoap.listeSessions(username,
-								password);
+						result = signetsMobileSoap.listeSessions(username, password);
 
 						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_PROGRAM:
 
-						result = signetsMobileSoap.listeProgrammes(username,
-								password);
+						result = signetsMobileSoap.listeProgrammes(username, password);
 
 						listener.onRequestSuccess(result);
 						break;
@@ -134,8 +124,7 @@ public class DataManager {
 						String pSession = reqParams[1];
 						String pGroupe = reqParams[2];
 						String pSigle = reqParams[3];
-						result = signetsMobileSoap.listeCoequipiers(username,
-								password, pSigle, pGroupe, pSession,
+						result = signetsMobileSoap.listeCoequipiers(username, password, pSigle, pGroupe, pSession,
 								pNomElementEval);
 
 						listener.onRequestSuccess(result);
@@ -145,8 +134,7 @@ public class DataManager {
 						String pSession1 = reqParams[0];
 						String pGroupe1 = reqParams[1];
 						String pSigle1 = reqParams[2];
-						result = signetsMobileSoap.listeElementsEvaluation(
-								username, password, pSigle1, pGroupe1,
+						result = signetsMobileSoap.listeElementsEvaluation(username, password, pSigle1, pGroupe1,
 								pSession1);
 
 						listener.onRequestSuccess(result);
@@ -155,8 +143,7 @@ public class DataManager {
 
 						String pSession2 = reqParams[0];
 
-						result = signetsMobileSoap.listeHoraireEtProf(username,
-								password, pSession2);
+						result = signetsMobileSoap.listeHoraireEtProf(username, password, pSession2);
 
 						listener.onRequestSuccess(result);
 						break;
@@ -165,8 +152,7 @@ public class DataManager {
 						String pSession3 = reqParams[0];
 						String prefixeSigleCours = reqParams[1];
 
-						result = signetsMobileSoap.lireHoraire(pSession3,
-								prefixeSigleCours);
+						result = signetsMobileSoap.lireHoraire(pSession3, prefixeSigleCours);
 
 						listener.onRequestSuccess(result);
 						break;
@@ -174,8 +160,7 @@ public class DataManager {
 
 						String pSession4 = reqParams[0];
 
-						result = signetsMobileSoap
-								.lireJoursRemplaces(pSession4);
+						result = signetsMobileSoap.lireJoursRemplaces(pSession4);
 
 						listener.onRequestSuccess(result);
 						break;
@@ -187,8 +172,7 @@ public class DataManager {
 					case SignetMethods.BOTTIN_GET_FICHE:
 						String numero = reqParams[0];
 						String PathFiche = reqParams[1];
-						result = new WebServiceSoap().GetFiche(numero,
-								PathFiche);
+						result = new WebServiceSoap().GetFiche(numero, PathFiche);
 
 						listener.onRequestSuccess(result);
 						break;
@@ -201,12 +185,11 @@ public class DataManager {
 						break;
 
 					case SignetMethods.BOTTIN_GET_ALL:
-						result = new WebServiceSoap().Recherche(null, null,
-								null);
+						result = new WebServiceSoap().Recherche(null, null, null);
 
 						listener.onRequestSuccess(result);
 						break;
-						
+
 					default:
 						break;
 					}
@@ -248,10 +231,8 @@ public class DataManager {
 	 * @param userCredentials
 	 * @param listener
 	 */
-	public void login(UserCredentials userCredentials,
-			RequestListener<Object> listener) {
-		getDataFromSignet(SignetMethods.INFO_ETUDIANT, userCredentials,
-				listener);
+	public void login(UserCredentials userCredentials, RequestListener<Object> listener) {
+		getDataFromSignet(SignetMethods.INFO_ETUDIANT, userCredentials, listener);
 	}
 
 	public void start() {
@@ -271,8 +252,7 @@ public class DataManager {
 	 */
 	public Etudiant getRegisteredEtudiant() throws SQLException {
 
-		final List<Etudiant> queryForAll = dbHelper.getDao(Etudiant.class)
-				.queryForAll();
+		final List<Etudiant> queryForAll = dbHelper.getDao(Etudiant.class).queryForAll();
 		if (queryForAll.size() > 0)
 			return queryForAll.get(0);
 		return null;

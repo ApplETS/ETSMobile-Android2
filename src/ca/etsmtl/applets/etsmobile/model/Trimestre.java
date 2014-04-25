@@ -52,11 +52,11 @@ public class Trimestre extends AttributeContainer implements KvmSerializable {
 	public String dateLimitePourAnnulerASEQ;
 	@DatabaseField(id = true)
 	public int id;
+
 	public Trimestre() {
 	}
 
-	public Trimestre(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public Trimestre(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -141,8 +141,7 @@ public class Trimestre extends AttributeContainer implements KvmSerializable {
 			}
 		}
 		if (soapObject.hasProperty("dateDebutAnnulationAvecRemboursement")) {
-			Object obj = soapObject
-					.getProperty("dateDebutAnnulationAvecRemboursement");
+			Object obj = soapObject.getProperty("dateDebutAnnulationAvecRemboursement");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
@@ -153,8 +152,7 @@ public class Trimestre extends AttributeContainer implements KvmSerializable {
 			}
 		}
 		if (soapObject.hasProperty("dateFinAnnulationAvecRemboursement")) {
-			Object obj = soapObject
-					.getProperty("dateFinAnnulationAvecRemboursement");
+			Object obj = soapObject.getProperty("dateFinAnnulationAvecRemboursement");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
@@ -164,43 +162,34 @@ public class Trimestre extends AttributeContainer implements KvmSerializable {
 				dateFinAnnulationAvecRemboursement = (String) obj;
 			}
 		}
-		if (soapObject
-				.hasProperty("dateFinAnnulationAvecRemboursementNouveauxEtudiants")) {
-			Object obj = soapObject
-					.getProperty("dateFinAnnulationAvecRemboursementNouveauxEtudiants");
+		if (soapObject.hasProperty("dateFinAnnulationAvecRemboursementNouveauxEtudiants")) {
+			Object obj = soapObject.getProperty("dateFinAnnulationAvecRemboursementNouveauxEtudiants");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
-					dateFinAnnulationAvecRemboursementNouveauxEtudiants = j
-							.toString();
+					dateFinAnnulationAvecRemboursementNouveauxEtudiants = j.toString();
 				}
 			} else if (obj != null && obj instanceof String) {
 				dateFinAnnulationAvecRemboursementNouveauxEtudiants = (String) obj;
 			}
 		}
-		if (soapObject
-				.hasProperty("dateDebutAnnulationSansRemboursementNouveauxEtudiants")) {
-			Object obj = soapObject
-					.getProperty("dateDebutAnnulationSansRemboursementNouveauxEtudiants");
+		if (soapObject.hasProperty("dateDebutAnnulationSansRemboursementNouveauxEtudiants")) {
+			Object obj = soapObject.getProperty("dateDebutAnnulationSansRemboursementNouveauxEtudiants");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
-					dateDebutAnnulationSansRemboursementNouveauxEtudiants = j
-							.toString();
+					dateDebutAnnulationSansRemboursementNouveauxEtudiants = j.toString();
 				}
 			} else if (obj != null && obj instanceof String) {
 				dateDebutAnnulationSansRemboursementNouveauxEtudiants = (String) obj;
 			}
 		}
-		if (soapObject
-				.hasProperty("dateFinAnnulationSansRemboursementNouveauxEtudiants")) {
-			Object obj = soapObject
-					.getProperty("dateFinAnnulationSansRemboursementNouveauxEtudiants");
+		if (soapObject.hasProperty("dateFinAnnulationSansRemboursementNouveauxEtudiants")) {
+			Object obj = soapObject.getProperty("dateFinAnnulationSansRemboursementNouveauxEtudiants");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
-					dateFinAnnulationSansRemboursementNouveauxEtudiants = j
-							.toString();
+					dateFinAnnulationSansRemboursementNouveauxEtudiants = j.toString();
 				}
 			} else if (obj != null && obj instanceof String) {
 				dateFinAnnulationSansRemboursementNouveauxEtudiants = (String) obj;
@@ -270,8 +259,7 @@ public class Trimestre extends AttributeContainer implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.STRING_CLASS;
 			info.name = "abrege";
