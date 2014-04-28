@@ -11,10 +11,10 @@ import ca.etsmtl.applets.etsmobile.http.soap.WebServiceSoap;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 
-import com.octo.android.robospice.GsonSpringAndroidSpiceService;
+import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 /**
  * Singleton to get data from HTTP/SOAP request
@@ -25,13 +25,14 @@ import com.octo.android.robospice.request.listener.RequestListener;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class DataManager {
 
+	private static final String TAG = "DataManager::";
 	private static DataManager instance;
 	private SpiceManager spiceManager;
 	private DatabaseHelper dbHelper;
 	private static Context c;
 
 	private DataManager() {
-		spiceManager = new SpiceManager(GsonSpringAndroidSpiceService.class);
+		spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
 		dbHelper = new DatabaseHelper(c);
 	}
 
@@ -51,12 +52,12 @@ public class DataManager {
 	 * @param listener
 	 * @return true if request is sent
 	 */
-	public boolean sendRequest(TypedRequest request, RequestListener<Object> listener) {
-
-		final Object key = request.createCacheKey();
-		spiceManager.execute(request, key, DurationInMillis.ONE_SECOND, listener);
-		return true;
-	}
+//	public boolean sendRequest(TypedRequest request, RequestListener<Object> listener) {
+//
+//		final Object key = request.createCacheKey();
+//		spiceManager.execute(request, key, DurationInMillis.ONE_SECOND, listener);
+//		return true;
+//	}
 
 	/**
 	 * Send a request to Signet-Mobile Web Service
@@ -226,7 +227,7 @@ public class DataManager {
 	}
 
 	/**
-	 * Convinience method to login a user
+	 * Convenience method to login a user
 	 * 
 	 * @param userCredentials
 	 * @param listener
@@ -256,6 +257,10 @@ public class DataManager {
 		if (queryForAll.size() > 0)
 			return queryForAll.get(0);
 		return null;
+	}
+
+	public void sendRequest(SpringAndroidSpiceRequest request, RequestListener<Object> listener) {
+		spiceManager.execute(request, listener);
 	}
 
 }

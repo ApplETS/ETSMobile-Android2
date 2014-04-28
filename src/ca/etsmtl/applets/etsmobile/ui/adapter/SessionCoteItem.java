@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.adapter;
 
-
 public class SessionCoteItem {
 	public String sigle;
 	public String cote;

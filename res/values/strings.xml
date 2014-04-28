@@ -86,5 +86,9 @@
     <string name ="error_invalid_app">Erreur appartement invalide</string>
     <string name ="error_invalid_phase">Erreur phase invalide</string>
     <string name="default_error_message">Error Message</string>
+    <string name="error_JSON_PARSING">Erreur lors de la récupération des donnés.</string>
+    <string name="today_url_format">http://api.clubapplets.ca/signets/card/login?id=1</string>
+    <string name="error_loading_profile">Error loading profile</string>
+    <string name="lundi_le_26_avril">Lundi le 26 Avril</string>
 </resources>
 

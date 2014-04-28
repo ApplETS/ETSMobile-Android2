@@ -20,7 +20,6 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
-import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -115,6 +114,9 @@ public class MainActivity extends Activity {
 
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivityForResult(intent, 0);
+		} else {
+			MyMenuItem ajdItem = ApplicationManager.mMenu.get(getString(R.string.menu_section_1_ajd));
+			selectItem(ajdItem.title, 1);
 		}
 	}
 
@@ -157,6 +159,9 @@ public class MainActivity extends Activity {
 				String codeU = extras.getString(UserCredentials.CODE_U);
 				String codeP = extras.getString(UserCredentials.CODE_P);
 				ApplicationManager.userCredentials = new UserCredentials(codeU, codeP);
+
+				MyMenuItem ajdItem = ApplicationManager.mMenu.get(getString(R.string.menu_section_1_ajd));
+				selectItem(ajdItem.title, 1);
 			}
 		}
 	}
@@ -171,7 +176,7 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (id == R.id.action_logout) {
-			Utility.deconnexion(this);
+			ApplicationManager.deconnexion(this);
 		}
 		// Pass the event to ActionBarDrawerToggle, if it returns
 		// true, then it has handled the app icon touch event
@@ -222,7 +227,7 @@ public class MainActivity extends Activity {
 		}
 
 		// Insert the fragment by replacing any existing fragment
-		FragmentManager fragmentManager = getFragmentManager();
+		final FragmentManager fragmentManager = getFragmentManager();
 
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
 				.addToBackStack(aClass.getName()).commit();

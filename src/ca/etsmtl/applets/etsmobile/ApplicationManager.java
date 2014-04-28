@@ -2,11 +2,15 @@ package ca.etsmtl.applets.etsmobile;
 
 import java.util.LinkedHashMap;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
@@ -105,5 +109,25 @@ public class ApplicationManager extends Application {
 		if (u.length() > 0 && p.length() > 0) {
 			userCredentials = new UserCredentials(u, p);
 		}
+	}
+
+	public static void deconnexion(final Activity activity) {
+
+		final Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
+		editor.clear();
+		editor.commit();
+
+		ApplicationManager.userCredentials = null;
+		Intent intent = new Intent(activity, MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		activity.startActivity(intent);
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				activity.finish();
+			}
+		}).start();
+
 	}
 }

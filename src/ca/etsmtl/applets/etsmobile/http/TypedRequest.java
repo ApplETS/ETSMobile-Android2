@@ -2,12 +2,11 @@ package ca.etsmtl.applets.etsmobile.http;
 
 import java.util.Random;
 
-import org.springframework.web.client.RestTemplate;
-
 import android.os.SystemClock;
 
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
+@Deprecated
 public class TypedRequest<X> extends SpringAndroidSpiceRequest<X> {
 
 	private static final Random RANDOM = new Random();
@@ -24,8 +23,7 @@ public class TypedRequest<X> extends SpringAndroidSpiceRequest<X> {
 
 	@Override
 	public X loadDataFromNetwork() throws Exception {
-		RestTemplate restTemplate = getRestTemplate();
-		return restTemplate.postForObject(url, null, klass);
+		return getRestTemplate().getForObject(url, klass);
 	}
 
 	/**

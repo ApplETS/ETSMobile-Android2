@@ -17,6 +17,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/default_error_message"
+        android:visibility="invisible"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </FrameLayout>

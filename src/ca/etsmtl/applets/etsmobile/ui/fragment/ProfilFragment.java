@@ -6,14 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.Programme;
 import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
-import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -26,9 +26,12 @@ public class ProfilFragment extends HttpFragment implements android.view.View.On
 	private Etudiant etudiant;
 	private listeDesProgrammes mlisteDesProgrammes;
 
+	RelativeLayout profileLayout;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// layoutId = R.layout.fragment_profil;
 	}
 
 	@Override
@@ -36,29 +39,31 @@ public class ProfilFragment extends HttpFragment implements android.view.View.On
 		View v = inflater.inflate(R.layout.fragment_profil, container, false);
 
 		((Button) v.findViewById(R.id.profil_button_logout)).setOnClickListener(this);
+		profileLayout = (RelativeLayout) v.findViewById(R.id.profil_layout_info);
+		progressBar = (ProgressBar) v.findViewById(R.id.base_layout_loading_pb);
+		errorMessageTv = (TextView) v.findViewById(R.id.base_layout_error_tv);
 		return v;
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
-		DataManager datamanager = DataManager.getInstance(getActivity());
-		datamanager.getDataFromSignet(SignetMethods.INFO_ETUDIANT, ApplicationManager.userCredentials, this, "");
-		datamanager.getDataFromSignet(SignetMethods.LIST_PROGRAM, ApplicationManager.userCredentials, this, "");
+	void updateUI() {
+		dataManager.getDataFromSignet(SignetMethods.INFO_ETUDIANT, ApplicationManager.userCredentials, this, "");
+		dataManager.getDataFromSignet(SignetMethods.LIST_PROGRAM, ApplicationManager.userCredentials, this, "");
 	}
 
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.profil_button_logout) {
-			Utility.deconnexion(getActivity());
+			ApplicationManager.deconnexion(getActivity());
 		}
 
 	}
 
 	@Override
 	public void onRequestFailure(SpiceException arg0) {
-		// TODO Auto-generated method stub
-
+		progressBar.setVisibility(View.INVISIBLE);
+		errorMessageTv.setVisibility(View.VISIBLE);
+		errorMessageTv.setText(R.string.error_loading_profile);
 	}
 
 	@Override
@@ -83,15 +88,16 @@ public class ProfilFragment extends HttpFragment implements android.view.View.On
 
 	}
 
-	@Override
-	void updateUI() {
-		// TODO Auto-generated method stub
-	}
-
 	private void refreshUi() {
 		if (etudiant != null && mlisteDesProgrammes != null) {
 			getActivity().runOnUiThread(new Runnable() {
+
+				@Override
 				public void run() {
+
+					profileLayout.startLayoutAnimation();
+					progressBar.setVisibility(View.GONE);
+
 					View v = getView();
 					if (v != null) {
 						String nom = etudiant.nom.trim();
@@ -119,6 +125,7 @@ public class ProfilFragment extends HttpFragment implements android.view.View.On
 								.setText(program.nbCreditsPotentiels);
 						((TextView) v.findViewById(R.id.profil_moyenne_item)).setText(program.moyenne);
 					}
+
 				}
 			});
 		}
