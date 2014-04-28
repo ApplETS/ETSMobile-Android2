@@ -9,6 +9,7 @@ package ca.etsmtl.applets.etsmobile.model;
 //
 //---------------------------------------------------
 
+import java.io.Serializable;
 import java.util.Hashtable;
 
 import org.joda.time.DateTime;
@@ -25,7 +26,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "fiche_employee")
-public class FicheEmploye extends AttributeContainer implements KvmSerializable {
+public class FicheEmploye extends AttributeContainer implements KvmSerializable,Serializable {
 
 	@DatabaseField(id = true)
 	public Integer Id = 0;

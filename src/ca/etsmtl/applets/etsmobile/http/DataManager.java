@@ -1,6 +1,7 @@
 package ca.etsmtl.applets.etsmobile.http;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -8,7 +9,11 @@ import android.os.AsyncTask;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.soap.SignetsMobileSoap;
 import ca.etsmtl.applets.etsmobile.http.soap.WebServiceSoap;
+import ca.etsmtl.applets.etsmobile.model.ArrayOfFicheEmploye;
+import ca.etsmtl.applets.etsmobile.model.ArrayOfService;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
+import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
+import ca.etsmtl.applets.etsmobile.model.Service;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
@@ -191,6 +196,31 @@ public class DataManager {
 						listener.onRequestSuccess(result);
 						break;
 
+					case SignetMethods.BOTTIN_GET_FICHE_BY_SERVICE:
+						
+						String filtreServiceCode =  reqParams[0];
+						
+						result = new WebServiceSoap().Recherche(null, null, filtreServiceCode);
+						listener.onRequestSuccess(result);
+						break;
+						
+					case SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP:
+						
+						ArrayOfService arrayOfService = new WebServiceSoap().GetListeDepartement();
+
+						HashMap<String, List<FicheEmploye>> listeEmployeByService = new HashMap<String, List<FicheEmploye>>();
+						ArrayOfFicheEmploye arrayOfFicheEmploye;
+						for(int i = 0 ; i< arrayOfService.size(); i++) {
+							Service service = arrayOfService.get(i);
+							arrayOfFicheEmploye = new WebServiceSoap().Recherche(null, null,""+service.ServiceCode);
+							
+							listeEmployeByService.put(service.Nom, arrayOfFicheEmploye);
+						}
+						
+						listener.onRequestSuccess(listeEmployeByService);
+
+						break;
+						
 					default:
 						break;
 					}
@@ -224,6 +254,8 @@ public class DataManager {
 		public static final int BOTTIN_GET_FICHE = 11;
 		public static final int BOTTIN_GET_FICHE_DATA = 12;
 		public static final int BOTTIN_GET_ALL = 13;
+		public static final int BOTTIN_GET_FICHE_BY_SERVICE = 14;
+		public static final int BOTTIN_GET_LIST_SERVICE_AND_EMP = 15;
 	}
 
 	/**
