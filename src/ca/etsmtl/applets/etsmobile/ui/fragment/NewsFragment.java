@@ -1,5 +1,8 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.os.Bundle;
+import ca.etsmtl.applets.etsmobile2.R;
+
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 /**
@@ -8,20 +11,23 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 public class NewsFragment extends HttpFragment {
 
 	@Override
-	public void onRequestFailure(SpiceException arg0) {
+	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		layoutId = R.layout.fragment_news;
+	}
+	
+	@Override
+	public void onRequestFailure(SpiceException arg0) {
 
 	}
 
 	@Override
 	public void onRequestSuccess(Object arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	void updateUI() {
-		// TODO Auto-generated method stub
-
 	}
 }

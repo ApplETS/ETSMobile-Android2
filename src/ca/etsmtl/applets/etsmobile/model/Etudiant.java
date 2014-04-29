@@ -26,6 +26,9 @@ import com.j256.ormlite.table.DatabaseTable;
 public class Etudiant extends DonneesRetournees implements KvmSerializable {
 
 	@DatabaseField
+	public String username;
+	
+	@DatabaseField
 	public String nom;
 
 	@DatabaseField

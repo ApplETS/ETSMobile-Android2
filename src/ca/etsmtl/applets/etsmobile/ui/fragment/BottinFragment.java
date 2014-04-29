@@ -10,18 +10,24 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.InjectView;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
@@ -37,7 +43,10 @@ import ca.etsmtl.applets.etsmobile2.R;
 public class BottinFragment extends HttpFragment {
 
 	private ExpandableListAdapter listAdapter;
-	private ExpandableListView expListView;
+
+	@InjectView(R.id.expandableListView_service_employe)
+	ExpandableListView expListView;
+
 	private List<String> listDataHeader;
 	private HashMap<String, List<FicheEmploye>> listDataChild;
 	private ProgressDialog mProgressDialog;
@@ -45,14 +54,35 @@ public class BottinFragment extends HttpFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		layoutId = R.layout.fragment_bottin;
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// Inflate the options menu from XML
+		Activity activity = getActivity();
+		inflater.inflate(R.menu.menu_bottin, menu);
+
+		// Get the SearchView and set the searchable configuration
+		SearchManager searchManager = (SearchManager) activity.getSystemService(Context.SEARCH_SERVICE);
+		SearchView searchView = (SearchView) menu.findItem(R.id.menu_botin_search).getActionView();
+		// Assumes current activity is the searchable activity
+		searchView.setSearchableInfo(searchManager.getSearchableInfo(activity.getComponentName()));
+		searchView.setIconifiedByDefault(false); // Do not iconify the widget;
+													// expand it by default
+													// return true;
+
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_bottin, container, false);
+		View v = super.onCreateView(inflater, container, savedInstanceState);// inflater.inflate(R.layout.fragment_bottin,
+																				// container,
+																				// false);
 
 		// get the listview
-		expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
+		// expListView = (ExpandableListView)
+		// v.findViewById(R.id.expandableListView_service_employe);
 
 		expListView.setOnChildClickListener(new OnChildClickListener() {
 
@@ -71,34 +101,36 @@ public class BottinFragment extends HttpFragment {
 			}
 		});
 
+		// create empty data
 		listDataChild = new HashMap<String, List<FicheEmploye>>();
 		listDataHeader = new ArrayList<String>();
 
+		// create custom adapter
 		listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
 
 		// setting list adapter
 		expListView.setAdapter(listAdapter);
 
-		progressBar = (ProgressBar) v.findViewById(R.id.base_layout_loading_pb);
-		errorMessageTv = (TextView) v.findViewById(R.id.base_layout_error_tv);
+		// progressBar = (ProgressBar)
+		// v.findViewById(R.id.base_layout_loading_pb);
+		// errorMessageTv = (TextView)
+		// v.findViewById(R.id.base_layout_error_tv);
 
 		return v;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	void updateUI() {
 		try {
 			Activity activity = getActivity();
 			FileInputStream input = activity.openFileInput("bottin.ser");
 
-			int value;
 			ObjectInputStream ois = new ObjectInputStream(input);
-			// listDataChild.clear();
 			listDataChild = (HashMap) ois.readObject();
 			ois.close();
 
 			listDataHeader.clear();
-
 			listDataHeader.addAll(listDataChild.keySet());
 
 			Collections.sort(listDataHeader);
@@ -118,16 +150,14 @@ public class BottinFragment extends HttpFragment {
 					}
 				});
 			}
+			progressBar.setVisibility(View.GONE);
 
 		} catch (FileNotFoundException e) {
 
 			try {
 				mProgressDialog = ProgressDialog.show(getActivity(), null, "Chargement du bottin en cours", true);
 				mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				DataManager datamanager = DataManager.getInstance(getActivity());
-				// datamanager.getDataFromSignet(SignetMethods.BOTTIN_LIST_DEPT,
-				// ApplicationManager.userCredentials, this);
-				datamanager.getDataFromSignet(SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
+				dataManager.getDataFromSignet(SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
 						ApplicationManager.userCredentials, this);
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -142,6 +172,7 @@ public class BottinFragment extends HttpFragment {
 	public void onRequestSuccess(Object o) {
 		super.onRequestSuccess(o);
 		if (o instanceof HashMap<?, ?>) {
+			@SuppressWarnings("unchecked")
 			HashMap<String, List<FicheEmploye>> listeEmployeByService = (HashMap<String, List<FicheEmploye>>) o;
 
 			for (String nomService : listeEmployeByService.keySet()) {

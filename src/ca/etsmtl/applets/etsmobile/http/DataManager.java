@@ -3,6 +3,7 @@ package ca.etsmtl.applets.etsmobile.http;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -57,12 +58,14 @@ public class DataManager {
 	 * @param listener
 	 * @return true if request is sent
 	 */
-//	public boolean sendRequest(TypedRequest request, RequestListener<Object> listener) {
-//
-//		final Object key = request.createCacheKey();
-//		spiceManager.execute(request, key, DurationInMillis.ONE_SECOND, listener);
-//		return true;
-//	}
+	// public boolean sendRequest(TypedRequest request, RequestListener<Object>
+	// listener) {
+	//
+	// final Object key = request.createCacheKey();
+	// spiceManager.execute(request, key, DurationInMillis.ONE_SECOND,
+	// listener);
+	// return true;
+	// }
 
 	/**
 	 * Send a request to Signet-Mobile Web Service
@@ -95,8 +98,20 @@ public class DataManager {
 					switch (methodID) {
 					case SignetMethods.INFO_ETUDIANT:
 
-						result = signetsMobileSoap.infoEtudiant(username, password);
-						dbHelper.getDao(Etudiant.class).createOrUpdate((Etudiant) result);
+						final Map<String, Object> args = new HashMap<String, Object>();
+						args.put("username", username);
+						// get from db
+						List<Etudiant> queryResult = dbHelper.getDao(Etudiant.class).queryForFieldValues(args);
+						if (queryResult.size() > 0) {
+							result = queryResult.get(0);
+						} else {
+							result = signetsMobileSoap.infoEtudiant(username, password);
+
+							((Etudiant) result).username = username;
+
+							dbHelper.getDao(Etudiant.class).createOrUpdate((Etudiant) result);
+						}
+
 						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_COURS:
@@ -197,30 +212,32 @@ public class DataManager {
 						break;
 
 					case SignetMethods.BOTTIN_GET_FICHE_BY_SERVICE:
-						
-						String filtreServiceCode =  reqParams[0];
-						
+
+						String filtreServiceCode = reqParams[0];
+
 						result = new WebServiceSoap().Recherche(null, null, filtreServiceCode);
 						listener.onRequestSuccess(result);
 						break;
-						
+
 					case SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP:
-						
+
 						ArrayOfService arrayOfService = new WebServiceSoap().GetListeDepartement();
 
 						HashMap<String, List<FicheEmploye>> listeEmployeByService = new HashMap<String, List<FicheEmploye>>();
 						ArrayOfFicheEmploye arrayOfFicheEmploye;
-						for(int i = 0 ; i< arrayOfService.size(); i++) {
-							Service service = arrayOfService.get(i);
-							arrayOfFicheEmploye = new WebServiceSoap().Recherche(null, null,""+service.ServiceCode);
+						
+						for (int i = 0; i < arrayOfService.size(); i++) {
 							
+							Service service = arrayOfService.get(i);
+							arrayOfFicheEmploye = new WebServiceSoap().Recherche(null, null, "" + service.ServiceCode);
+
 							listeEmployeByService.put(service.Nom, arrayOfFicheEmploye);
 						}
-						
+
 						listener.onRequestSuccess(listeEmployeByService);
 
 						break;
-						
+
 					default:
 						break;
 					}

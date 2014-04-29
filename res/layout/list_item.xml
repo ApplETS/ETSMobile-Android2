@@ -8,8 +8,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
-        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:paddingLeft="80dp"
         android:paddingTop="5dp"
-        android:textSize="17dip" />
+        android:text="@null" />
 
 </RelativeLayout>

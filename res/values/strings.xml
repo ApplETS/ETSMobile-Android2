@@ -90,5 +90,7 @@
     <string name="today_url_format">http://api.clubapplets.ca/signets/card/login?id=1</string>
     <string name="error_loading_profile">Error loading profile</string>
     <string name="lundi_le_26_avril">Lundi le 26 Avril</string>
+    <string name="menu_botin_search_title">search</string>
+    <string name="categories">Catégories</string>
 </resources>
 

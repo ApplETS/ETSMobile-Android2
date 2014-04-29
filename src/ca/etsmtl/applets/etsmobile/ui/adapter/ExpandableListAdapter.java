@@ -43,7 +43,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 		FicheEmploye ficheEmploye = (FicheEmploye) getChild(groupPosition, childPosition);
 		
-		String prenom = (ficheEmploye.Prenom.length() > 0) ? ficheEmploye.Prenom : "";
+		String prenom = (ficheEmploye.Prenom != null) ? ficheEmploye.Prenom : "";
 		final String childText = ficheEmploye.Nom + " " + prenom;
 
 		if (convertView == null) {

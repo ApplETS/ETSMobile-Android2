@@ -12,7 +12,9 @@ import butterknife.InjectView;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
- * Created by Phil on 17/11/13.
+ * Base fragment 
+ * 
+ * @author Philippe
  */
 public abstract class BaseFragment extends Fragment {
 

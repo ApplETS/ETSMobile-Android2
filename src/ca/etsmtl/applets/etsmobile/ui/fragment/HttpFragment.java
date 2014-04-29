@@ -8,6 +8,12 @@ import ca.etsmtl.applets.etsmobile2.R;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+/**
+ * Base implementation for fragments that use the network
+ * 
+ * @author Philippe
+ * 
+ */
 public abstract class HttpFragment extends BaseFragment implements RequestListener<Object> {
 
 	protected DataManager dataManager;
@@ -24,10 +30,14 @@ public abstract class HttpFragment extends BaseFragment implements RequestListen
 		updateUI();
 	}
 
+	/**
+	 * Method call after onActivityCreated so the child class can send http
+	 * request
+	 */
 	abstract void updateUI();
 
 	@Override
-	public void onRequestFailure(SpiceException arg0) {
+	public void onRequestFailure(SpiceException e) {
 		progressBar.setVisibility(View.GONE);
 		errorMessageTv.setVisibility(View.VISIBLE);
 		errorMessageTv.setText(getString(R.string.error_JSON_PARSING));
@@ -35,8 +45,8 @@ public abstract class HttpFragment extends BaseFragment implements RequestListen
 	}
 
 	@Override
-	public void onRequestSuccess(Object arg0) {
+	public void onRequestSuccess(Object o) {
 		progressBar.setVisibility(View.GONE);
-
+		errorMessageTv.setVisibility(View.GONE);
 	}
 }

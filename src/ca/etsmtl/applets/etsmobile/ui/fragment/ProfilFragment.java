@@ -1,12 +1,12 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import butterknife.InjectView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
@@ -16,32 +16,28 @@ import ca.etsmtl.applets.etsmobile.model.Programme;
 import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
 import ca.etsmtl.applets.etsmobile2.R;
 
-import com.octo.android.robospice.persistence.exception.SpiceException;
-
 /**
- * Created by Phil on 17/11/13. Create content by Laurence on 27/02/2014
+ * @author Philippe, Laurence
  */
 public class ProfilFragment extends HttpFragment implements android.view.View.OnClickListener {
 
+	private static final String TAG = "ProfilFragment";
 	private Etudiant etudiant;
 	private listeDesProgrammes mlisteDesProgrammes;
 
+	@InjectView(R.id.profil_layout_info)
 	RelativeLayout profileLayout;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// layoutId = R.layout.fragment_profil;
+		layoutId = R.layout.fragment_profil;
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_profil, container, false);
-
+		View v = super.onCreateView(inflater, container, savedInstanceState);
 		((Button) v.findViewById(R.id.profil_button_logout)).setOnClickListener(this);
-		profileLayout = (RelativeLayout) v.findViewById(R.id.profil_layout_info);
-		progressBar = (ProgressBar) v.findViewById(R.id.base_layout_loading_pb);
-		errorMessageTv = (TextView) v.findViewById(R.id.base_layout_error_tv);
 		return v;
 	}
 
@@ -56,30 +52,22 @@ public class ProfilFragment extends HttpFragment implements android.view.View.On
 		if (v.getId() == R.id.profil_button_logout) {
 			ApplicationManager.deconnexion(getActivity());
 		}
-
-	}
-
-	@Override
-	public void onRequestFailure(SpiceException arg0) {
-		progressBar.setVisibility(View.INVISIBLE);
-		errorMessageTv.setVisibility(View.VISIBLE);
-		errorMessageTv.setText(R.string.error_loading_profile);
 	}
 
 	@Override
 	public void onRequestSuccess(Object o) {
+		super.onRequestSuccess(o);
 		if (o != null) {
 			if (o instanceof Etudiant) {
 				etudiant = (Etudiant) o;
 				if (etudiant.erreur != null) {
-					Log.d("ProfilFragment", "ProfilFragment : onRequestSuccess: etudiant error" + etudiant.erreur);
+					Log.d(TAG, ": onRequestSuccess: etudiant error" + etudiant.erreur);
 					etudiant = null;
 				}
 			} else if (o instanceof listeDesProgrammes) {
 				mlisteDesProgrammes = (listeDesProgrammes) o;
 				if (mlisteDesProgrammes.erreur != null) {
-					Log.d("ProfilFragment", "ProfilFragment : onRequestSuccess: listeDesProgramme error"
-							+ mlisteDesProgrammes.erreur);
+					Log.d(TAG, ": onRequestSuccess: listeDesProgramme error" + mlisteDesProgrammes.erreur);
 					mlisteDesProgrammes = null;
 				}
 			}
