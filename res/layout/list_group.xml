@@ -5,9 +5,13 @@
 
     <TextView
         android:id="@+id/lblListHeader"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="8dp"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textSize="17dp" />
+        android:paddingTop="8dp"
+        android:minHeight="16dp"
+        android:text="Bureau du Fonds de développement ett du Réseau ÉTS"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

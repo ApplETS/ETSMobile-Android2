@@ -6,7 +6,6 @@ import java.util.Locale;
 import org.joda.time.DateTime;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.InjectView;
@@ -16,8 +15,6 @@ import ca.etsmtl.applets.etsmobile.model.TodaysCourses;
 import ca.etsmtl.applets.etsmobile.model.TodaysCourses.Seance;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SceanceAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
-
-import com.octo.android.robospice.persistence.exception.SpiceException;
 
 /**
  * Created by Phil on 17/11/13.
@@ -37,17 +34,8 @@ public class TodaysFragment extends HttpFragment {
 	}
 
 	@Override
-	public void onRequestFailure(SpiceException arg0) {
-		progressBar.setVisibility(View.GONE);
-		errorMessageTv.setVisibility(View.VISIBLE);
-		errorMessageTv.setText(getString(R.string.error_JSON_PARSING));
-	}
-
-	@Override
 	public void onRequestSuccess(Object parsedJson) {
-
-		progressBar.setVisibility(View.GONE);
-
+		super.onRequestSuccess(parsedJson);
 		if (parsedJson instanceof TodaysCourses) {
 			TodaysCourses today = (TodaysCourses) parsedJson;
 			ArrayList<Seance> s = today.horaire;
