@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_height="match_parent"
+    
+    android:background="#ff212121" >
+
+    <TextView
+        android:id="@+id/tv_dialog_bottin_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Rechargement du bottin"
+        android:textColor="#e6e6e6"
+        android:background="#ff464646" />
+
+    <TextView
+        android:id="@+id/tv_dialog_bottin_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_dialog_bottin_title"
+        android:background="#ff212121"
+        android:padding="20dp"
+        android:text="Le bottin va être supprimé puis téléchargé à nouveau.\nÊtes-vous sûr de votre choix ?"
+        android:textColor="#e6e6e6" />
+
+    <RelativeLayout
+        android:id="@+id/group_dialog_bottin_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_dialog_bottin_text"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="20dp"
+         >
+
+        <Button
+            android:id="@+id/btn_dialog_bottin_yes"
+            android:layout_width="200px"
+            android:layout_height="wrap_content"
+            android:text="Oui" />
+
+        <Button
+            android:id="@+id/btn_dialog_bottin_no"
+            android:layout_width="200px"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/btn_dialog_bottin_yes"
+            android:text="Non" />
+    </RelativeLayout>
+
+</RelativeLayout>

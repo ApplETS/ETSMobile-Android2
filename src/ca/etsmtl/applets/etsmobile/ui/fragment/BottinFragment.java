@@ -1,35 +1,38 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.SearchView;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
@@ -44,7 +47,85 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 /**
  * Created by Phil on 17/11/13.
  */
-public class BottinFragment extends HttpFragment {
+public class BottinFragment extends HttpFragment implements SearchView.OnQueryTextListener  {
+
+	private SearchView searchView;
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// TODO Auto-generated method stub
+		inflater.inflate(R.menu.menu_bottin, menu);
+		
+		
+		// Associate searchable configuration with the SearchView
+		//*
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.menuitem_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setOnQueryTextListener(this);
+		//*/
+		
+		super.onCreateOptionsMenu(menu, inflater);
+		
+		
+	}
+	
+	
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.menu_item_update:
+			
+			final Dialog dialog = new Dialog(getActivity());
+		    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		    dialog.setContentView(R.layout.dialog_bottin);
+		    Button btn_yes = (Button)dialog.findViewById(R.id.btn_dialog_bottin_yes);
+		    btn_yes.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+
+	            	File dir = getActivity().getFilesDir();
+	    			File file = new File(dir, "bottin.ser");
+//	    			Log.e("nom fichier",file.getName());
+	    			boolean deleted = file.delete();
+	    			
+	    			listDataHeader = new ArrayList<String>();
+	    			listDataChild = new HashMap<String, List<FicheEmploye>>();
+	    			
+	    			listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
+	    			
+	    			dialog.dismiss();
+	    			onStart();
+					
+				}
+			});
+		    Button btn_no = (Button) dialog.findViewById(R.id.btn_dialog_bottin_no);
+		    btn_no.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+				}
+			});
+		    dialog.show();
+			
+			
+//			File dir = getActivity().getFilesDir();
+//			File file = new File(dir, "bottin.ser");
+//			Log.e("nom fichier",file.getName());
+//			boolean deleted = file.delete();
+			
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
+
+	}
+
+
 
 	private ListView mListView;
 	private ArrayOfService arrayOfService;
@@ -59,7 +140,7 @@ public class BottinFragment extends HttpFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -76,15 +157,9 @@ public class BottinFragment extends HttpFragment {
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
 				
-				List<FicheEmploye> listeEmployes = listDataChild.get(listDataHeader.get(groupPosition)); 
-				
-				FicheEmploye ficheEmploye = listeEmployes.get(childPosition);
-				
-//				Log.e("test",ficheEmploye.Nom+" "+ficheEmploye.Prenom);
+				FicheEmploye ficheEmploye = (FicheEmploye) listAdapter.getChild(groupPosition, childPosition);
 				
 				Fragment fragment = BottinDetailsFragment.newInstance(ficheEmploye);
-				
-				
 				
 				showFragment(fragment);
 				
@@ -111,6 +186,8 @@ public class BottinFragment extends HttpFragment {
 	public void onStart() {
 		super.onStart();
 		
+//		Log.e("onStart","onStart");
+		
 		try {
 			Activity activity = getActivity();
 			FileInputStream input = activity.openFileInput("bottin.ser");
@@ -135,7 +212,6 @@ public class BottinFragment extends HttpFragment {
 			
 			if (input != null)
 				input.close();
-			
 			
 			
 			if(activity!=null){
@@ -173,8 +249,6 @@ public class BottinFragment extends HttpFragment {
 
 	@Override
 	public void onRequestSuccess(Object o) {
-		
-		
 		
 		if(o instanceof HashMap<?, ?>){
 			
@@ -250,20 +324,25 @@ public class BottinFragment extends HttpFragment {
 		// TODO Auto-generated method stub
 
 	}
-	
+
+
+
 	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		System.out.println("onPause");
-		
+	public boolean onQueryTextSubmit(String query) {
+//		listAdapter.filterData(query);
+		return false;
+	}
+
+
+
+	@Override
+	public boolean onQueryTextChange(String newText) {
+//		if (newText.equals("")) {
+			listAdapter.filterData(newText);
+//        }
+//		listAdapter.filterData(newText);
+		return true;
 	}
 	
-	@Override
-	public void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		System.out.println("onStop");
-		
-	}
+
 }
