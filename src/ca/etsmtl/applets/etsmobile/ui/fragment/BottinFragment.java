@@ -53,19 +53,24 @@ import ca.etsmtl.applets.etsmobile2.R;
 public class BottinFragment extends HttpFragment implements SearchView.OnQueryTextListener  {
 
 	private SearchView searchView;
+	private ExpandableListAdapter listAdapter;
+
+	@InjectView(R.id.expandableListView_service_employe)
+	ExpandableListView expListView;
+
+	private List<String> listDataHeader;
+	private HashMap<String, List<FicheEmploye>> listDataChild;
+	private ProgressDialog mProgressDialog;
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_bottin, menu);
 		
-		
 		// Associate searchable configuration with the SearchView
-		//*
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.menuitem_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setOnQueryTextListener(this);
-		//*/
 		
 		super.onCreateOptionsMenu(menu, inflater);
 		
@@ -78,22 +83,26 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
+		
 		case R.id.menu_item_update:
 			
 			final Dialog dialog = new Dialog(getActivity());
 		    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		    dialog.setContentView(R.layout.dialog_bottin);
 		    Button btn_yes = (Button)dialog.findViewById(R.id.btn_dialog_bottin_yes);
+		    
+		    //Rechargement du bottin
 		    btn_yes.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 
+					//Suppression du bottin
 	            	File dir = getActivity().getFilesDir();
 	    			File file = new File(dir, "bottin.ser");
-//	    			Log.e("nom fichier",file.getName());
 	    			boolean deleted = file.delete();
 	    			
+	    			//Mise à jour de la liste
 	    			listDataHeader = new ArrayList<String>();
 	    			listDataChild = new HashMap<String, List<FicheEmploye>>();
 	    			
@@ -101,10 +110,11 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 	    			
 	    			dialog.dismiss();
 	    			expListView.setAdapter(listAdapter);
-	    			onStart();
+	    			updateUI();
 					
 				}
 			});
+		    
 		    Button btn_no = (Button) dialog.findViewById(R.id.btn_dialog_bottin_no);
 		    btn_no.setOnClickListener(new OnClickListener() {
 				
@@ -122,17 +132,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 
 	}
 
-
-
-	private ExpandableListAdapter listAdapter;
-
-	@InjectView(R.id.expandableListView_service_employe)
-	ExpandableListView expListView;
-
-	private List<String> listDataHeader;
-	private HashMap<String, List<FicheEmploye>> listDataChild;
-	private ProgressDialog mProgressDialog;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -140,18 +139,17 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 		layoutId = R.layout.fragment_bottin;
 	}
 
-
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = super.onCreateView(inflater, container, savedInstanceState);// inflater.inflate(R.layout.fragment_bottin,
-																				// container,
-																				// false);
+		View v = //super.onCreateView(inflater, container, savedInstanceState);// 
+		inflater.inflate(R.layout.fragment_bottin, container, false);
 
 		// get the listview
-		// expListView = (ExpandableListView)
-		// v.findViewById(R.id.expandableListView_service_employe);
+		expListView = (ExpandableListView)
+		v.findViewById(R.id.expandableListView_service_employe);
 
+		
+		//Ouverture du détail
 		expListView.setOnChildClickListener(new OnChildClickListener() {
 
 			@Override
@@ -163,7 +161,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 				Fragment fragment = BottinDetailsFragment.newInstance(ficheEmploye);
 				
 				showFragment(fragment);
-				
 				
 				return true;
 			}
@@ -214,21 +211,17 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 					}
 				});
 			}
-			progressBar.setVisibility(View.GONE);
+//			progressBar.setVisibility(View.GONE);
+			
 
 		} catch (FileNotFoundException e) {
 		  
 			if (Utility.isNetworkAvailable(getActivity())) {
 				try {
 
-					mProgressDialog = ProgressDialog.show(getActivity(), null,
-							"Chargement du bottin en cours", true);
-					mProgressDialog
-							.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-					DataManager datamanager = DataManager
-							.getInstance(getActivity());
-					// datamanager.getDataFromSignet(SignetMethods.BOTTIN_LIST_DEPT,
-					// ApplicationManager.userCredentials, this);
+					mProgressDialog = ProgressDialog.show(getActivity(), null,"Chargement du bottin en cours", true);
+					mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					DataManager datamanager = DataManager.getInstance(getActivity());
 					datamanager.getDataFromSignet(
 							SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
 							ApplicationManager.userCredentials, this);
@@ -246,7 +239,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 
 	@Override
 	public void onRequestSuccess(Object o) {
-		super.onRequestSuccess(o);
+//		super.onRequestSuccess(o);
 		if (o instanceof HashMap<?, ?>) {
 			@SuppressWarnings("unchecked")
 			HashMap<String, List<FicheEmploye>> listeEmployeByService = (HashMap<String, List<FicheEmploye>>) o;
@@ -294,19 +287,10 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 		if (fragment == null)
 			return;
 
-		// Begin a fragment transaction.
 		final FragmentManager fm = getActivity().getFragmentManager();
 		final FragmentTransaction ft = fm.beginTransaction();
-		// We can also animate the changing of fragment.
-		// ft.setCustomAnimations(android.R.anim.slide_in_left,
-		// android.R.anim.slide_out_right);
-		// Replace current fragment by the new one.
 		ft.replace(R.id.content_frame, fragment);
-		// Null on the back stack to return on the previous fragment when user
-		// press on back button.
 		ft.addToBackStack(null);
-
-		// Commit changes.
 		ft.commit();
 	}
 
