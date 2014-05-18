@@ -4,6 +4,7 @@
     android:layout_height="match_parent" >
 
     <ExpandableListView
+        android:layout_marginTop="2dp"
         android:id="@+id/expandableListView_service_employe"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >

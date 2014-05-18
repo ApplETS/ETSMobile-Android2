@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
 public class Utility {
@@ -35,6 +37,13 @@ public static void deconnexion(final Activity activity){
 			}
 		}).start();
 
+	}
+
+	public static boolean isNetworkAvailable(final Activity activity) {
+	    ConnectivityManager connectivityManager 
+	          = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
 }

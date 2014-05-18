@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -40,6 +41,7 @@ import ca.etsmtl.applets.etsmobile.model.ArrayOfFicheEmploye;
 import ca.etsmtl.applets.etsmobile.model.ArrayOfService;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -53,7 +55,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// TODO Auto-generated method stub
 		inflater.inflate(R.menu.menu_bottin, menu);
 		
 		
@@ -98,6 +99,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 	    			listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
 	    			
 	    			dialog.dismiss();
+	    			expListView.setAdapter(listAdapter);
 	    			onStart();
 					
 				}
@@ -111,12 +113,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 				}
 			});
 		    dialog.show();
-			
-			
-//			File dir = getActivity().getFilesDir();
-//			File file = new File(dir, "bottin.ser");
-//			Log.e("nom fichier",file.getName());
-//			boolean deleted = file.delete();
 			
 			return true;
 		}
@@ -146,7 +142,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
 		View v = inflater.inflate(R.layout.fragment_bottin, container, false);
-//		mListView = (ListView) v.findViewById(R.id.activity_bottin_listview);
 		
 		// get the listview
         expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
@@ -163,14 +158,13 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 				
 				showFragment(fragment);
 				
+				
 				return true;
 			}
 		});
 				
 				
 //        // preparing list data
-//        prepareListData();
- 
         listDataChild = new HashMap<String, List<FicheEmploye>>();
         listDataHeader = new ArrayList<String>();
         
@@ -186,12 +180,9 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 	public void onStart() {
 		super.onStart();
 		
-//		Log.e("onStart","onStart");
-		
 		try {
 			Activity activity = getActivity();
 			FileInputStream input = activity.openFileInput("bottin.ser");
-			
 			
 			int value;
 			ObjectInputStream ois = new ObjectInputStream(input);
@@ -225,14 +216,25 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 			
 		} catch (FileNotFoundException e) {
 		  
-			try {
-				mProgressDialog = ProgressDialog.show(getActivity(), null,"Chargement du bottin en cours", true);
-				mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				DataManager datamanager = DataManager.getInstance(getActivity());
-//				datamanager.getDataFromSignet(SignetMethods.BOTTIN_LIST_DEPT, ApplicationManager.userCredentials, this);
-				datamanager.getDataFromSignet(SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP, ApplicationManager.userCredentials, this);
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			if (Utility.isNetworkAvailable(getActivity())) {
+				try {
+
+					mProgressDialog = ProgressDialog.show(getActivity(), null,
+							"Chargement du bottin en cours", true);
+					mProgressDialog
+							.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					DataManager datamanager = DataManager
+							.getInstance(getActivity());
+					// datamanager.getDataFromSignet(SignetMethods.BOTTIN_LIST_DEPT,
+					// ApplicationManager.userCredentials, this);
+					datamanager.getDataFromSignet(
+							SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
+							ApplicationManager.userCredentials, this);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			} else {
+				Toast.makeText(getActivity(), "Une connexion internet est requise pour télécharger le bottin", Toast.LENGTH_LONG).show();
 			}
 			
 		} catch (Exception e) {
@@ -242,10 +244,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 	}
 	
 	@Override
-	public void onRequestFailure(SpiceException arg0) {
-		// TODO Auto-generated method stub
-
-	}
+	public void onRequestFailure(SpiceException arg0) {}
 
 	@Override
 	public void onRequestSuccess(Object o) {
@@ -280,7 +279,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 					output.close();
 				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -320,10 +318,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 	}
 
 	@Override
-	void updateUI() {
-		// TODO Auto-generated method stub
-
-	}
+	void updateUI() {	}
 
 
 

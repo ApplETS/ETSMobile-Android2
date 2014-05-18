@@ -5,6 +5,8 @@
 
     <TextView
         android:id="@+id/lblListHeader"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
