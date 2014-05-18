@@ -21,8 +21,7 @@ import org.ksoap2.serialization.SoapPrimitive;
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 import ca.etsmtl.applets.etsmobile.http.soap.Helper;
 
-public class FicheEmployeDate extends AttributeContainer implements
-		KvmSerializable {
+public class FicheEmployeDate extends AttributeContainer implements KvmSerializable {
 
 	public Integer Id = 0;
 
@@ -31,8 +30,7 @@ public class FicheEmployeDate extends AttributeContainer implements
 	public FicheEmployeDate() {
 	}
 
-	public FicheEmployeDate(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public FicheEmployeDate(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -81,8 +79,7 @@ public class FicheEmployeDate extends AttributeContainer implements
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.INTEGER_CLASS;
 			info.name = "Id";

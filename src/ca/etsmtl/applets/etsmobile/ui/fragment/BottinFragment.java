@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.InjectView;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -34,20 +35,20 @@ import android.widget.Toast;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
+import android.widget.TextView;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
-import ca.etsmtl.applets.etsmobile.model.ArrayOfFicheEmploye;
-import ca.etsmtl.applets.etsmobile.model.ArrayOfService;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
-import com.octo.android.robospice.persistence.exception.SpiceException;
-
 /**
- * Created by Phil on 17/11/13.
+ * 
+ * @author Philippe David, Thibau
  */
 public class BottinFragment extends HttpFragment implements SearchView.OnQueryTextListener  {
 
@@ -123,31 +124,36 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 
 
 
-	private ListView mListView;
-	private ArrayOfService arrayOfService;
-	private ArrayOfFicheEmploye arrayOfFicheEmploye;
-	
 	private ExpandableListAdapter listAdapter;
-	private ExpandableListView expListView;
+
+	@InjectView(R.id.expandableListView_service_employe)
+	ExpandableListView expListView;
+
 	private List<String> listDataHeader;
 	private HashMap<String, List<FicheEmploye>> listDataChild;
 	private ProgressDialog mProgressDialog;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+		layoutId = R.layout.fragment_bottin;
 	}
 
+
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
-		View v = inflater.inflate(R.layout.fragment_bottin, container, false);
-		
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = super.onCreateView(inflater, container, savedInstanceState);// inflater.inflate(R.layout.fragment_bottin,
+																				// container,
+																				// false);
+
 		// get the listview
-        expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
- 
-        expListView.setOnChildClickListener(new OnChildClickListener() {
-			
+		// expListView = (ExpandableListView)
+		// v.findViewById(R.id.expandableListView_service_employe);
+
+		expListView.setOnChildClickListener(new OnChildClickListener() {
+
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
@@ -164,56 +170,52 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 		});
 				
 				
-//        // preparing list data
-        listDataChild = new HashMap<String, List<FicheEmploye>>();
-        listDataHeader = new ArrayList<String>();
-        
-        listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
- 
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
+		// create empty data
+		listDataChild = new HashMap<String, List<FicheEmploye>>();
+		listDataHeader = new ArrayList<String>();
+
+		// create custom adapter
+		listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
+
+		// setting list adapter
+		expListView.setAdapter(listAdapter);
 		
 		return v;
 	}
-	
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void onStart() {
-		super.onStart();
-		
+	void updateUI() {
 		try {
 			Activity activity = getActivity();
 			FileInputStream input = activity.openFileInput("bottin.ser");
-			
-			int value;
+
 			ObjectInputStream ois = new ObjectInputStream(input);
-//			listDataChild.clear();
 			listDataChild = (HashMap) ois.readObject();
 			ois.close();
-			
+
 			listDataHeader.clear();
-			
 			listDataHeader.addAll(listDataChild.keySet());
-			
+
 			Collections.sort(listDataHeader);
-			
+
 			listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
-			 
-	        // setting list adapter
-	        expListView.setAdapter(listAdapter);
-			
+
+			// setting list adapter
+			expListView.setAdapter(listAdapter);
+
 			if (input != null)
 				input.close();
-			
-			
-			if(activity!=null){
-				activity.runOnUiThread( new Runnable() {
+
+			if (activity != null) {
+				activity.runOnUiThread(new Runnable() {
 					public void run() {
 						listAdapter.notifyDataSetChanged();
 					}
 				});
 			}
-			
-			
+			progressBar.setVisibility(View.GONE);
+
 		} catch (FileNotFoundException e) {
 		  
 			if (Utility.isNetworkAvailable(getActivity())) {
@@ -236,57 +238,49 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 			} else {
 				Toast.makeText(getActivity(), "Une connexion internet est requise pour télécharger le bottin", Toast.LENGTH_LONG).show();
 			}
-			
-		} catch (Exception e) {
-		  e.printStackTrace();
-		}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
-	@Override
-	public void onRequestFailure(SpiceException arg0) {}
 
 	@Override
 	public void onRequestSuccess(Object o) {
-		
-		if(o instanceof HashMap<?, ?>){
-			
-			HashMap<String, List<FicheEmploye>> listeEmployeByService = (HashMap<String, List<FicheEmploye>>) o; 
-			
-			for(String nomService : listeEmployeByService.keySet()) {
-				
+		super.onRequestSuccess(o);
+		if (o instanceof HashMap<?, ?>) {
+			@SuppressWarnings("unchecked")
+			HashMap<String, List<FicheEmploye>> listeEmployeByService = (HashMap<String, List<FicheEmploye>>) o;
+
+			for (String nomService : listeEmployeByService.keySet()) {
+
 				List<FicheEmploye> listeEmployes = listeEmployeByService.get(nomService);
-				
-				if(listeEmployes.size() != 0) {
-					
+
+				if (listeEmployes.size() != 0) {
+
 					listDataHeader.add(nomService);
-					listDataChild.put(nomService,listeEmployeByService.get(nomService));
+					listDataChild.put(nomService, listeEmployeByService.get(nomService));
 				}
-				
+
 			}
-			
 			Collections.sort(listDataHeader);
-			
+
 			FileOutputStream output;
 			try {
-				output = getActivity().openFileOutput("bottin.ser",
-						getActivity().MODE_PRIVATE);
+				output = getActivity().openFileOutput("bottin.ser", getActivity().MODE_PRIVATE);
 
 				ObjectOutputStream oos = new ObjectOutputStream(output);
 				oos.writeObject(listDataChild);
 				oos.close();
 				if (output != null)
 					output.close();
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-			
-			
+
 			Activity activity = getActivity();
-			if(activity!=null){
-				getActivity().runOnUiThread( new Runnable() {
+			if (activity != null) {
+				getActivity().runOnUiThread(new Runnable() {
 					public void run() {
 						listAdapter.notifyDataSetChanged();
 						mProgressDialog.dismiss();
@@ -294,10 +288,8 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 				});
 			}
 		}
-		
+	}
 
-	} 
-	
 	private void showFragment(final Fragment fragment) {
 		if (fragment == null)
 			return;
@@ -306,7 +298,8 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 		final FragmentManager fm = getActivity().getFragmentManager();
 		final FragmentTransaction ft = fm.beginTransaction();
 		// We can also animate the changing of fragment.
-//		ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+		// ft.setCustomAnimations(android.R.anim.slide_in_left,
+		// android.R.anim.slide_out_right);
 		// Replace current fragment by the new one.
 		ft.replace(R.id.content_frame, fragment);
 		// Null on the back stack to return on the previous fragment when user
@@ -317,8 +310,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 		ft.commit();
 	}
 
-	@Override
-	void updateUI() {	}
 
 
 

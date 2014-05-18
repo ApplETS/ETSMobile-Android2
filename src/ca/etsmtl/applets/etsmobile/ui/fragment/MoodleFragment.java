@@ -24,12 +24,10 @@ public class MoodleFragment extends WebFragment implements OnClickListener {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		openMoodle();
 		View v = inflater.inflate(R.layout.fragment_moodle, container, false);
-		((Button) v.findViewById(R.id.activity_moodle_button))
-				.setOnClickListener(this);
+		((Button) v.findViewById(R.id.activity_moodle_button)).setOnClickListener(this);
 
 		return v;
 	}
@@ -42,8 +40,7 @@ public class MoodleFragment extends WebFragment implements OnClickListener {
 	}
 
 	private void openMoodle() {
-		Intent intent = getActivity().getPackageManager()
-				.getLaunchIntentForPackage(getString(R.string.moodle));
+		Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(getString(R.string.moodle));
 		if (intent != null) {
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
@@ -52,8 +49,7 @@ public class MoodleFragment extends WebFragment implements OnClickListener {
 			// or let them choose an app?
 			intent = new Intent(Intent.ACTION_VIEW);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.setData(Uri.parse("market://details?id="
-					+ getString(R.string.moodle)));
+			intent.setData(Uri.parse("market://details?id=" + getString(R.string.moodle)));
 			startActivity(intent);
 		}
 	}

@@ -33,11 +33,9 @@ import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
 
 public class SignetsMobileSoap {
 	interface IWcfMethod {
-		ExtendedSoapSerializationEnvelope CreateSoapEnvelope()
-				throws java.lang.Exception;
+		ExtendedSoapSerializationEnvelope CreateSoapEnvelope() throws java.lang.Exception;
 
-		Object ProcessResult(ExtendedSoapSerializationEnvelope envelope,
-				SoapObject result) throws java.lang.Exception;
+		Object ProcessResult(ExtendedSoapSerializationEnvelope envelope, SoapObject result) throws java.lang.Exception;
 	}
 
 	String url = "https://signets-ens.etsmtl.ca/Secure/WebServices/SignetsMobile.asmx";
@@ -72,15 +70,12 @@ public class SignetsMobileSoap {
 		return new ExtendedSoapSerializationEnvelope();
 	}
 
-	protected void sendRequest(String methodName,
-			ExtendedSoapSerializationEnvelope envelope,
-			org.ksoap2.transport.Transport transport)
-			throws java.lang.Exception {
+	protected void sendRequest(String methodName, ExtendedSoapSerializationEnvelope envelope,
+			org.ksoap2.transport.Transport transport) throws java.lang.Exception {
 		transport.call(methodName, envelope, httpHeaders);
 	}
 
-	Object getResult(Class destObj, SoapObject source, String resultName,
-			ExtendedSoapSerializationEnvelope __envelope)
+	Object getResult(Class destObj, SoapObject source, String resultName, ExtendedSoapSerializationEnvelope __envelope)
 			throws java.lang.Exception {
 		if (source.hasProperty(resultName)) {
 			Object j = source.getProperty(resultName);
@@ -101,8 +96,7 @@ public class SignetsMobileSoap {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"HelloWorld");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "HelloWorld");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -110,13 +104,11 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
 				Object obj = __result.getProperty("HelloWorldResult");
 				if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
-					SoapPrimitive j = (SoapPrimitive) __result
-							.getProperty("HelloWorldResult");
+					SoapPrimitive j = (SoapPrimitive) __result.getProperty("HelloWorldResult");
 					return j.toString();
 				}
 				return null;
@@ -137,8 +129,7 @@ public class SignetsMobileSoap {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"echo");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "echo");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -152,13 +143,11 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
 				Object obj = __result.getProperty("echoResult");
 				if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
-					SoapPrimitive j = (SoapPrimitive) __result
-							.getProperty("echoResult");
+					SoapPrimitive j = (SoapPrimitive) __result.getProperty("echoResult");
 					return j.toString();
 				}
 				return null;
@@ -177,14 +166,12 @@ public class SignetsMobileSoap {
 	/**
 	 * Information de base sur l'��tudiant: nom, pr��nom, code permanent, solde
 	 */
-	public Etudiant infoEtudiant(final String codeAccesUniversel,
-			final String motPasse) throws java.lang.Exception {
+	public Etudiant infoEtudiant(final String codeAccesUniversel, final String motPasse) throws java.lang.Exception {
 		return (Etudiant) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"infoEtudiant");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "infoEtudiant");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -204,11 +191,9 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (Etudiant) getResult(Etudiant.class, __result,
-						"infoEtudiantResult", __envelope);
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (Etudiant) getResult(Etudiant.class, __result, "infoEtudiantResult", __envelope);
 			}
 		}, "http://etsmtl.ca/infoEtudiant");
 	}
@@ -216,8 +201,7 @@ public class SignetsMobileSoap {
 	/**
 	 * Information de base sur l'��tudiant: nom, pr��nom, code permanent, solde
 	 */
-	public void infoEtudiantAsync(final String codeAccesUniversel,
-			final String motPasse) {
+	public void infoEtudiantAsync(final String codeAccesUniversel, final String motPasse) {
 		executeAsync(new Functions.IFunc<Etudiant>() {
 			public Etudiant Func() throws java.lang.Exception {
 				return infoEtudiant(codeAccesUniversel, motPasse);
@@ -230,14 +214,12 @@ public class SignetsMobileSoap {
 	 * programme, cote finale, nombre de cr��dits et titre du cours, tri��e par
 	 * session et sigle.
 	 */
-	public ListeDeCours listeCours(final String codeAccesUniversel,
-			final String motPasse) throws java.lang.Exception {
+	public ListeDeCours listeCours(final String codeAccesUniversel, final String motPasse) throws java.lang.Exception {
 		return (ListeDeCours) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"listeCours");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "listeCours");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -257,11 +239,9 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (ListeDeCours) getResult(ListeDeCours.class, __result,
-						"listeCoursResult", __envelope);
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (ListeDeCours) getResult(ListeDeCours.class, __result, "listeCoursResult", __envelope);
 			}
 		}, "http://etsmtl.ca/listeCours");
 	}
@@ -271,8 +251,7 @@ public class SignetsMobileSoap {
 	 * programme, cote finale, nombre de cr��dits et titre du cours, tri��e par
 	 * session et sigle.
 	 */
-	public void listeCoursAsync(final String codeAccesUniversel,
-			final String motPasse) {
+	public void listeCoursAsync(final String codeAccesUniversel, final String motPasse) {
 		executeAsync(new Functions.IFunc<ListeDeCours>() {
 			public ListeDeCours Func() throws java.lang.Exception {
 				return listeCours(codeAccesUniversel, motPasse);
@@ -284,15 +263,13 @@ public class SignetsMobileSoap {
 	 * Retourne 'true' si le code d'acc��s universel et le mot de passe sont
 	 * valides dans AD des ��tudiants
 	 */
-	public Boolean donneesAuthentificationValides(
-			final String codeAccesUniversel, final String motPasse)
+	public Boolean donneesAuthentificationValides(final String codeAccesUniversel, final String motPasse)
 			throws java.lang.Exception {
 		return (Boolean) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"donneesAuthentificationValides");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "donneesAuthentificationValides");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -312,14 +289,11 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				Object obj = __result
-						.getProperty("donneesAuthentificationValidesResult");
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				Object obj = __result.getProperty("donneesAuthentificationValidesResult");
 				if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
-					SoapPrimitive j = (SoapPrimitive) __result
-							.getProperty("donneesAuthentificationValidesResult");
+					SoapPrimitive j = (SoapPrimitive) __result.getProperty("donneesAuthentificationValidesResult");
 					return new Boolean(j.toString());
 				}
 				return null;
@@ -331,12 +305,10 @@ public class SignetsMobileSoap {
 	 * Retourne 'true' si le code d'acc��s universel et le mot de passe sont
 	 * valides dans AD des ��tudiants
 	 */
-	public void donneesAuthentificationValidesAsync(
-			final String codeAccesUniversel, final String motPasse) {
+	public void donneesAuthentificationValidesAsync(final String codeAccesUniversel, final String motPasse) {
 		executeAsync(new Functions.IFunc<Boolean>() {
 			public Boolean Func() throws java.lang.Exception {
-				return donneesAuthentificationValides(codeAccesUniversel,
-						motPasse);
+				return donneesAuthentificationValides(codeAccesUniversel, motPasse);
 			}
 		});
 	}
@@ -346,16 +318,13 @@ public class SignetsMobileSoap {
 	 * session, programme, cote finale, nombre de cr��dits et titre du cours,
 	 * tri��e par session et sigle.
 	 */
-	public ListeDeCours listeCoursIntervalleSessions(
-			final String codeAccesUniversel, final String motPasse,
-			final String SesDebut, final String SesFin)
-			throws java.lang.Exception {
+	public ListeDeCours listeCoursIntervalleSessions(final String codeAccesUniversel, final String motPasse,
+			final String SesDebut, final String SesFin) throws java.lang.Exception {
 		return (ListeDeCours) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"listeCoursIntervalleSessions");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "listeCoursIntervalleSessions");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -387,11 +356,10 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (ListeDeCours) getResult(ListeDeCours.class, __result,
-						"listeCoursIntervalleSessionsResult", __envelope);
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (ListeDeCours) getResult(ListeDeCours.class, __result, "listeCoursIntervalleSessionsResult",
+						__envelope);
 			}
 		}, "http://etsmtl.ca/listeCoursIntervalleSessions");
 	}
@@ -401,13 +369,11 @@ public class SignetsMobileSoap {
 	 * session, programme, cote finale, nombre de cr��dits et titre du cours,
 	 * tri��e par session et sigle.
 	 */
-	public void listeCoursIntervalleSessionsAsync(
-			final String codeAccesUniversel, final String motPasse,
+	public void listeCoursIntervalleSessionsAsync(final String codeAccesUniversel, final String motPasse,
 			final String SesDebut, final String SesFin) {
 		executeAsync(new Functions.IFunc<ListeDeCours>() {
 			public ListeDeCours Func() throws java.lang.Exception {
-				return listeCoursIntervalleSessions(codeAccesUniversel,
-						motPasse, SesDebut, SesFin);
+				return listeCoursIntervalleSessions(codeAccesUniversel, motPasse, SesDebut, SesFin);
 			}
 		});
 	}
@@ -416,14 +382,13 @@ public class SignetsMobileSoap {
 	 * Liste de toutes les sessions o�� l'��tudiant a ��t�� actif �� l'��TS, en
 	 * version courte (A2011) et longue (Automne 2011)
 	 */
-	public ListeDeSessions listeSessions(final String codeAccesUniversel,
-			final String motPasse) throws java.lang.Exception {
+	public ListeDeSessions listeSessions(final String codeAccesUniversel, final String motPasse)
+			throws java.lang.Exception {
 		return (ListeDeSessions) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"listeSessions");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "listeSessions");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -443,11 +408,9 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (ListeDeSessions) getResult(ListeDeSessions.class,
-						__result, "listeSessionsResult", __envelope);
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (ListeDeSessions) getResult(ListeDeSessions.class, __result, "listeSessionsResult", __envelope);
 			}
 		}, "http://etsmtl.ca/listeSessions");
 	}
@@ -456,8 +419,7 @@ public class SignetsMobileSoap {
 	 * Liste de toutes les sessions o�� l'��tudiant a ��t�� actif �� l'��TS, en
 	 * version courte (A2011) et longue (Automne 2011)
 	 */
-	public void listeSessionsAsync(final String codeAccesUniversel,
-			final String motPasse) {
+	public void listeSessionsAsync(final String codeAccesUniversel, final String motPasse) {
 		executeAsync(new Functions.IFunc<ListeDeSessions>() {
 			public ListeDeSessions Func() throws java.lang.Exception {
 				return listeSessions(codeAccesUniversel, motPasse);
@@ -469,14 +431,13 @@ public class SignetsMobileSoap {
 	 * Liste des programmes d'��tudes de l'��tudiant: code, libell��, moyenne,
 	 * cr��dits r��ussis, etc.)
 	 */
-	public listeDesProgrammes listeProgrammes(final String codeAccesUniversel,
-			final String motPasse) throws java.lang.Exception {
+	public listeDesProgrammes listeProgrammes(final String codeAccesUniversel, final String motPasse)
+			throws java.lang.Exception {
 		return (listeDesProgrammes) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"listeProgrammes");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "listeProgrammes");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -496,11 +457,10 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (listeDesProgrammes) getResult(listeDesProgrammes.class,
-						__result, "listeProgrammesResult", __envelope);
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (listeDesProgrammes) getResult(listeDesProgrammes.class, __result, "listeProgrammesResult",
+						__envelope);
 			}
 		}, "http://etsmtl.ca/listeProgrammes");
 	}
@@ -509,8 +469,7 @@ public class SignetsMobileSoap {
 	 * Liste des programmes d'��tudes de l'��tudiant: code, libell��, moyenne,
 	 * cr��dits r��ussis, etc.)
 	 */
-	public void listeProgrammesAsync(final String codeAccesUniversel,
-			final String motPasse) {
+	public void listeProgrammesAsync(final String codeAccesUniversel, final String motPasse) {
 		executeAsync(new Functions.IFunc<listeDesProgrammes>() {
 			public listeDesProgrammes Func() throws java.lang.Exception {
 				return listeProgrammes(codeAccesUniversel, motPasse);
@@ -522,16 +481,14 @@ public class SignetsMobileSoap {
 	 * Liste de co��quipiers de l'��tudiant pour le cours-groupe et l'��l��ment
 	 * d'��valuation pass��s en param��tre: nom, pr��nom et courriel
 	 */
-	public listeDesCoequipiers listeCoequipiers(
-			final String codeAccesUniversel, final String motPasse,
-			final String pSigle, final String pGroupe, final String pSession,
-			final String pNomElementEval) throws java.lang.Exception {
+	public listeDesCoequipiers listeCoequipiers(final String codeAccesUniversel, final String motPasse,
+			final String pSigle, final String pGroupe, final String pSession, final String pNomElementEval)
+			throws java.lang.Exception {
 		return (listeDesCoequipiers) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"listeCoequipiers");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "listeCoequipiers");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -575,12 +532,10 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (listeDesCoequipiers) getResult(
-						listeDesCoequipiers.class, __result,
-						"listeCoequipiersResult", __envelope);
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (listeDesCoequipiers) getResult(listeDesCoequipiers.class, __result, "listeCoequipiersResult",
+						__envelope);
 			}
 		}, "http://etsmtl.ca/listeCoequipiers");
 	}
@@ -589,13 +544,11 @@ public class SignetsMobileSoap {
 	 * Liste de co��quipiers de l'��tudiant pour le cours-groupe et l'��l��ment
 	 * d'��valuation pass��s en param��tre: nom, pr��nom et courriel
 	 */
-	public void listeCoequipiersAsync(final String codeAccesUniversel,
-			final String motPasse, final String pSigle, final String pGroupe,
-			final String pSession, final String pNomElementEval) {
+	public void listeCoequipiersAsync(final String codeAccesUniversel, final String motPasse, final String pSigle,
+			final String pGroupe, final String pSession, final String pNomElementEval) {
 		executeAsync(new Functions.IFunc<listeDesCoequipiers>() {
 			public listeDesCoequipiers Func() throws java.lang.Exception {
-				return listeCoequipiers(codeAccesUniversel, motPasse, pSigle,
-						pGroupe, pSession, pNomElementEval);
+				return listeCoequipiers(codeAccesUniversel, motPasse, pSigle, pGroupe, pSession, pNomElementEval);
 			}
 		});
 	}
@@ -604,16 +557,13 @@ public class SignetsMobileSoap {
 	 * Liste des ��l��ments d'��valuation (devoirs, labos, examens, etc.) avec
 	 * la note obtenue et les statisques, comme dans SIGNETS
 	 */
-	public ListeDesElementsEvaluation listeElementsEvaluation(
-			final String codeAccesUniversel, final String motPasse,
-			final String pSigle, final String pGroupe, final String pSession)
-			throws java.lang.Exception {
+	public ListeDesElementsEvaluation listeElementsEvaluation(final String codeAccesUniversel, final String motPasse,
+			final String pSigle, final String pGroupe, final String pSession) throws java.lang.Exception {
 		return (ListeDesElementsEvaluation) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"listeElementsEvaluation");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "listeElementsEvaluation");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -651,11 +601,9 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (ListeDesElementsEvaluation) getResult(
-						ListeDesElementsEvaluation.class, __result,
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (ListeDesElementsEvaluation) getResult(ListeDesElementsEvaluation.class, __result,
 						"listeElementsEvaluationResult", __envelope);
 			}
 		}, "http://etsmtl.ca/listeElementsEvaluation");
@@ -665,13 +613,11 @@ public class SignetsMobileSoap {
 	 * Liste des ��l��ments d'��valuation (devoirs, labos, examens, etc.) avec
 	 * la note obtenue et les statisques, comme dans SIGNETS
 	 */
-	public void listeElementsEvaluationAsync(final String codeAccesUniversel,
-			final String motPasse, final String pSigle, final String pGroupe,
-			final String pSession) {
+	public void listeElementsEvaluationAsync(final String codeAccesUniversel, final String motPasse,
+			final String pSigle, final String pGroupe, final String pSession) {
 		executeAsync(new Functions.IFunc<ListeDesElementsEvaluation>() {
 			public ListeDesElementsEvaluation Func() throws java.lang.Exception {
-				return listeElementsEvaluation(codeAccesUniversel, motPasse,
-						pSigle, pGroupe, pSession);
+				return listeElementsEvaluation(codeAccesUniversel, motPasse, pSigle, pGroupe, pSession);
 			}
 		});
 	}
@@ -680,15 +626,13 @@ public class SignetsMobileSoap {
 	 * Liste de activit��s (cours, TP, Lab, etc) avec leur horaire et leur
 	 * local, ainsi que les enseignants
 	 */
-	public listeDesActivitesEtProf listeHoraireEtProf(
-			final String codeAccesUniversel, final String motPasse,
+	public listeDesActivitesEtProf listeHoraireEtProf(final String codeAccesUniversel, final String motPasse,
 			final String pSession) throws java.lang.Exception {
 		return (listeDesActivitesEtProf) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"listeHoraireEtProf");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "listeHoraireEtProf");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -714,11 +658,9 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (listeDesActivitesEtProf) getResult(
-						listeDesActivitesEtProf.class, __result,
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (listeDesActivitesEtProf) getResult(listeDesActivitesEtProf.class, __result,
 						"listeHoraireEtProfResult", __envelope);
 			}
 		}, "http://etsmtl.ca/listeHoraireEtProf");
@@ -728,12 +670,10 @@ public class SignetsMobileSoap {
 	 * Liste de activit��s (cours, TP, Lab, etc) avec leur horaire et leur
 	 * local, ainsi que les enseignants
 	 */
-	public void listeHoraireEtProfAsync(final String codeAccesUniversel,
-			final String motPasse, final String pSession) {
+	public void listeHoraireEtProfAsync(final String codeAccesUniversel, final String motPasse, final String pSession) {
 		executeAsync(new Functions.IFunc<listeDesActivitesEtProf>() {
 			public listeDesActivitesEtProf Func() throws java.lang.Exception {
-				return listeHoraireEtProf(codeAccesUniversel, motPasse,
-						pSession);
+				return listeHoraireEtProf(codeAccesUniversel, motPasse, pSession);
 			}
 		});
 	}
@@ -742,14 +682,13 @@ public class SignetsMobileSoap {
 	 * Liste des cours pour le trimestre et le sigle de cours partiel pass��s en
 	 * param��tres. Tous les CTN1 �� l'hiver 2012, par exemple
 	 */
-	public listeCoursHoraire lireHoraire(final String pSession,
-			final String prefixeSigleCours) throws java.lang.Exception {
+	public listeCoursHoraire lireHoraire(final String pSession, final String prefixeSigleCours)
+			throws java.lang.Exception {
 		return (listeCoursHoraire) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"lireHoraire");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "lireHoraire");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -769,11 +708,9 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (listeCoursHoraire) getResult(listeCoursHoraire.class,
-						__result, "lireHoraireResult", __envelope);
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (listeCoursHoraire) getResult(listeCoursHoraire.class, __result, "lireHoraireResult", __envelope);
 			}
 		}, "http://etsmtl.ca/lireHoraire");
 	}
@@ -782,8 +719,7 @@ public class SignetsMobileSoap {
 	 * Liste des cours pour le trimestre et le sigle de cours partiel pass��s en
 	 * param��tres. Tous les CTN1 �� l'hiver 2012, par exemple
 	 */
-	public void lireHoraireAsync(final String pSession,
-			final String prefixeSigleCours) {
+	public void lireHoraireAsync(final String pSession, final String prefixeSigleCours) {
 		executeAsync(new Functions.IFunc<listeCoursHoraire>() {
 			public listeCoursHoraire Func() throws java.lang.Exception {
 				return lireHoraire(pSession, prefixeSigleCours);
@@ -795,14 +731,12 @@ public class SignetsMobileSoap {
 	 * Liste des jours qui en remplacent d'autres, par exemple, les cours du
 	 * lundi 8 octobre sont donn��s le mercredi 21 novembre.
 	 */
-	public listeJoursRemplaces lireJoursRemplaces(final String pSession)
-			throws java.lang.Exception {
+	public listeJoursRemplaces lireJoursRemplaces(final String pSession) throws java.lang.Exception {
 		return (listeJoursRemplaces) execute(new IWcfMethod() {
 			@Override
 			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope() {
 				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
-				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/",
-						"lireJoursRemplaces");
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "lireJoursRemplaces");
 				__envelope.setOutputSoapObject(__soapReq);
 
 				PropertyInfo __info = null;
@@ -816,12 +750,10 @@ public class SignetsMobileSoap {
 			}
 
 			@Override
-			public Object ProcessResult(
-					ExtendedSoapSerializationEnvelope __envelope,
-					SoapObject __result) throws java.lang.Exception {
-				return (listeJoursRemplaces) getResult(
-						listeJoursRemplaces.class, __result,
-						"lireJoursRemplacesResult", __envelope);
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result)
+					throws java.lang.Exception {
+				return (listeJoursRemplaces) getResult(listeJoursRemplaces.class, __result, "lireJoursRemplacesResult",
+						__envelope);
 			}
 		}, "http://etsmtl.ca/lireJoursRemplaces");
 	}
@@ -838,11 +770,9 @@ public class SignetsMobileSoap {
 		});
 	}
 
-	protected Object execute(IWcfMethod wcfMethod, String methodName)
-			throws java.lang.Exception {
+	protected Object execute(IWcfMethod wcfMethod, String methodName) throws java.lang.Exception {
 		org.ksoap2.transport.Transport __httpTransport = createTransport();
-		ExtendedSoapSerializationEnvelope __envelope = wcfMethod
-				.CreateSoapEnvelope();
+		ExtendedSoapSerializationEnvelope __envelope = wcfMethod.CreateSoapEnvelope();
 		sendRequest(methodName, __envelope, __httpTransport);
 		Object __retObj = __envelope.bodyIn;
 		if (__retObj instanceof SoapFault) {
@@ -880,8 +810,7 @@ public class SignetsMobileSoap {
 		}.execute();
 	}
 
-	java.lang.Exception convertToException(SoapFault fault,
-			ExtendedSoapSerializationEnvelope envelope) {
+	java.lang.Exception convertToException(SoapFault fault, ExtendedSoapSerializationEnvelope envelope) {
 		return new java.lang.Exception(fault.faultstring);
 	}
 }

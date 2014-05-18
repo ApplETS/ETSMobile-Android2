@@ -4,15 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
- 
-
-
-
-
-
-
 import java.util.Map.Entry;
-
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile2.R;
 import android.content.Context;
@@ -185,6 +177,5 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		notifyDataSetChanged();
 
 	}
-    
-    
+
 }

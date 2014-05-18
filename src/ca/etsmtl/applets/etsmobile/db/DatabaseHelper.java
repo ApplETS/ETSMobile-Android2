@@ -13,10 +13,10 @@ import ca.etsmtl.applets.etsmobile.model.HoraireActivite;
 import ca.etsmtl.applets.etsmobile.model.JoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.Personne;
 import ca.etsmtl.applets.etsmobile.model.Programme;
+import ca.etsmtl.applets.etsmobile.model.TodaysCourses;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -33,10 +33,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	// any time you make changes to your database objects, you may have to
 	// increase the database version
 	private static final int DATABASE_VERSION = 1;
-
-	// the DAO object we use to access the Etudiant table
-	@SuppressWarnings("unused")
-	private RuntimeExceptionDao<Etudiant, Integer> etudiantDao = null;
 
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -60,6 +56,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, Personne.class);
 			TableUtils.createTable(connectionSource, Programme.class);
 			TableUtils.createTable(connectionSource, Trimestre.class);
+			TableUtils.createTable(connectionSource, TodaysCourses.class);
+			TableUtils.createTable(connectionSource, TodaysCourses.Seance.class);
 		} catch (SQLException e) {
 			Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
 			throw new RuntimeException(e);
@@ -72,8 +70,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	 * new version number.
 	 */
 	@Override
-	public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource,
-			int oldVersion, int newVersion) {
+	public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
 		try {
 			Log.i(DatabaseHelper.class.getName(), "onUpgrade");
 			TableUtils.dropTable(connectionSource, Etudiant.class, true);
@@ -91,6 +88,5 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	@Override
 	public void close() {
 		super.close();
-		etudiantDao = null;
 	}
 }

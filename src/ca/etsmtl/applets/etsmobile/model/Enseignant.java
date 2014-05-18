@@ -37,8 +37,7 @@ public class Enseignant extends Personne implements KvmSerializable {
 	public Enseignant() {
 	}
 
-	public Enseignant(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public Enseignant(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		super(inObj, envelope);
 		if (inObj == null)
 			return;
@@ -102,8 +101,7 @@ public class Enseignant extends Personne implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		int count = super.getPropertyCount();
 		if (propertyIndex == count + 0) {
 			info.type = PropertyInfo.STRING_CLASS;

@@ -10,28 +10,20 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
-import ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
-import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
-<<<<<<< HEAD
  * Main Activity for �TSMobile, handles the login and the menu
-=======
- * Main Activity for �TSMobile, handles the login and the menu
->>>>>>> FETCH_HEAD
  * 
  * @author Philippe David
  * 
@@ -43,8 +35,7 @@ public class MainActivity extends Activity {
 	private CharSequence mTitle;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private Fragment fragment;
-	private String TAG ="FRAGMENTTAG";
-
+	private String TAG = "FRAGMENTTAG";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,21 +44,16 @@ public class MainActivity extends Activity {
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
-		
 
 		// Set the adapter for the list view
 		int stringSet = ApplicationManager.mMenu.keySet().size();
-		final Collection<MyMenuItem> myMenuItems = ApplicationManager.mMenu
-				.values();
+		final Collection<MyMenuItem> myMenuItems = ApplicationManager.mMenu.values();
 
 		MyMenuItem[] menuItems = new MyMenuItem[stringSet];
-		mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems
-				.toArray(menuItems)));
+		mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems.toArray(menuItems)));
 
 		// Set the list's click listener
-
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
 		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
 		mDrawerLayout, /* DrawerLayout object */
 		R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
@@ -92,8 +78,6 @@ public class MainActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-
-	
 	}
 
 	@Override
@@ -102,14 +86,12 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
-
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
-	  mDrawerToggle.syncState();	
+		mDrawerToggle.syncState();
 
 	}
 
@@ -132,19 +114,22 @@ public class MainActivity extends Activity {
 
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivityForResult(intent, 0);
+		} else {
+			MyMenuItem ajdItem = ApplicationManager.mMenu.get(getString(R.string.menu_section_1_ajd));
+			selectItem(ajdItem.title, 1);
 		}
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		FragmentManager manager = getFragmentManager();
-		if(fragment!=null){
+		if (fragment != null) {
 			manager.putFragment(outState, fragment.getTag(), fragment);
 			outState.putString(TAG, fragment.getTag());
 			super.onSaveInstanceState(outState);
 		}
 	}
-	
+
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		instantiateFragments(savedInstanceState);
@@ -154,15 +139,15 @@ public class MainActivity extends Activity {
 		MyMenuItem ajdItem = ApplicationManager.mMenu.get(getString(R.string.menu_section_1_ajd));
 
 		// Select Aujourd'Hui
-		if(savedInstanceState !=null){
+		if (savedInstanceState != null) {
 			FragmentManager fragmentManager = getFragmentManager();
-			String tag= savedInstanceState.getString(TAG);
-			fragment = fragmentManager.getFragment(savedInstanceState,tag);
-			
-		}else{
+			String tag = savedInstanceState.getString(TAG);
+			fragment = fragmentManager.getFragment(savedInstanceState, tag);
+
+		} else {
 			selectItem(ajdItem.title, 1);
 		}
-		
+
 	}
 
 	@Override
@@ -173,8 +158,10 @@ public class MainActivity extends Activity {
 				Bundle extras = data.getExtras();
 				String codeU = extras.getString(UserCredentials.CODE_U);
 				String codeP = extras.getString(UserCredentials.CODE_P);
-				ApplicationManager.userCredentials = new UserCredentials(codeU,
-						codeP);
+				ApplicationManager.userCredentials = new UserCredentials(codeU, codeP);
+
+				MyMenuItem ajdItem = ApplicationManager.mMenu.get(getString(R.string.menu_section_1_ajd));
+				selectItem(ajdItem.title, 1);
 			}
 		}
 	}
@@ -188,8 +175,8 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if(id == R.id.action_logout){
-			Utility.deconnexion(this);
+		if (id == R.id.action_logout) {
+			ApplicationManager.deconnexion(this);
 		}
 		// Pass the event to ActionBarDrawerToggle, if it returns
 		// true, then it has handled the app icon touch event
@@ -200,12 +187,10 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private class DrawerItemClickListener implements
-			ListView.OnItemClickListener {
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		@SuppressWarnings("rawtypes")
 		@Override
-		public void onItemClick(AdapterView parent, View view, int position,
-				long id) {
+		public void onItemClick(AdapterView parent, View view, int position, long id) {
 			final Object itemAtPosition = parent.getItemAtPosition(position);
 			MyMenuItem myMenuItem = (MyMenuItem) itemAtPosition;
 
@@ -213,13 +198,10 @@ public class MainActivity extends Activity {
 				// contact; Ask to open email app; prefill email info
 				Intent intent = new Intent(android.content.Intent.ACTION_SEND);
 				intent.setType("plain/text");
-				intent.putExtra(
-						android.content.Intent.EXTRA_EMAIL,
+				intent.putExtra(android.content.Intent.EXTRA_EMAIL,
 						new String[] { getString(R.string.applets_ens_etsmtl_ca) });
-				intent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-						getString(R.string.etsmobile_android_commentaire));
-				intent.putExtra(android.content.Intent.EXTRA_TEXT,
-						getString(R.string.default_comment));
+				intent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.etsmobile_android_commentaire));
+				intent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.default_comment));
 				startActivity(intent);
 			} else {
 				selectItem(myMenuItem.title, position);
@@ -243,11 +225,12 @@ public class MainActivity extends Activity {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-	     
+
 		// Insert the fragment by replacing any existing fragment
-		FragmentManager fragmentManager = getFragmentManager();	
-			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
-					.addToBackStack(aClass.getName()).commit();
+		final FragmentManager fragmentManager = getFragmentManager();
+
+		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
+				.addToBackStack(aClass.getName()).commit();
 
 		// Highlight the selected item, update the title, and close the drawer
 		mDrawerList.setItemChecked(position, true);

@@ -19,16 +19,16 @@ import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 import ca.etsmtl.applets.etsmobile.http.soap.Helper;
 
-@DatabaseTable(tableName="fiche_employee")
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "fiche_employee")
 public class FicheEmploye extends AttributeContainer implements KvmSerializable,Serializable {
 
-	@DatabaseField(id=true)
+	@DatabaseField(id = true)
 	public Integer Id = 0;
 
 	@DatabaseField
@@ -58,8 +58,7 @@ public class FicheEmploye extends AttributeContainer implements KvmSerializable,
 	public FicheEmploye() {
 	}
 
-	public FicheEmploye(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public FicheEmploye(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -206,8 +205,7 @@ public class FicheEmploye extends AttributeContainer implements KvmSerializable,
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.INTEGER_CLASS;
 			info.name = "Id";

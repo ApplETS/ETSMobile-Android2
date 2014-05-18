@@ -2,8 +2,6 @@ package ca.etsmtl.applets.etsmobile.model;
 
 import android.content.SharedPreferences;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by Phil on 17/11/13.
  */
@@ -16,10 +14,8 @@ public class UserCredentials {
 
 	public static final String REZ = "rez";
 
-	@SerializedName("motPasse")
 	private String password = "";
 
-	@SerializedName("codeAccesUniversel")
 	private String username = "";
 
 	private String phase = "";

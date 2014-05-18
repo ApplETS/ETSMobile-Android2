@@ -31,14 +31,13 @@ public class Personne extends AttributeContainer implements KvmSerializable {
 	@DatabaseField
 	public String prenom;
 
-	@DatabaseField(id=true)
+	@DatabaseField(id = true)
 	public String courriel;
 
 	public Personne() {
 	}
 
-	public Personne(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public Personne(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -101,8 +100,7 @@ public class Personne extends AttributeContainer implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.STRING_CLASS;
 			info.name = "nom";

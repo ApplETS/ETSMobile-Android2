@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteItem;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class SessionCoteAdapter extends BaseAdapter {
@@ -41,8 +40,7 @@ public class SessionCoteAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v;
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			v = inflater.inflate(R.layout.square_note, parent, false);
 		} else {
 			v = convertView;
@@ -52,11 +50,10 @@ public class SessionCoteAdapter extends BaseAdapter {
 		((TextView) v.findViewById(R.id.square_note_course_name)).setText(notesSession.sigle);
 		((TextView) v.findViewById(R.id.square_note_course_cote)).setText(notesSession.cote);
 
-
 		return v;
 	}
-	
-	public SessionCoteItem[] getArray(){
+
+	public SessionCoteItem[] getArray() {
 		return sessionCote;
 	}
 

@@ -19,14 +19,12 @@ import org.ksoap2.serialization.SoapObject;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class ArrayOfFicheEmployeDate extends Vector<FicheEmployeDate> implements
-		KvmSerializable {
+public class ArrayOfFicheEmployeDate extends Vector<FicheEmployeDate> implements KvmSerializable {
 
 	public ArrayOfFicheEmployeDate() {
 	}
 
-	public ArrayOfFicheEmployeDate(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public ArrayOfFicheEmployeDate(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		if (inObj == null)
 			return;
 		SoapObject soapObject = (SoapObject) inObj;
@@ -34,10 +32,8 @@ public class ArrayOfFicheEmployeDate extends Vector<FicheEmployeDate> implements
 		for (int i0 = 0; i0 < size; i0++) {
 			java.lang.Object obj = soapObject.getProperty(i0);
 			if (obj != null && obj instanceof AttributeContainer) {
-				AttributeContainer j = (AttributeContainer) soapObject
-						.getProperty(i0);
-				FicheEmployeDate j1 = (FicheEmployeDate) envelope.get(j,
-						FicheEmployeDate.class);
+				AttributeContainer j = (AttributeContainer) soapObject.getProperty(i0);
+				FicheEmployeDate j1 = (FicheEmployeDate) envelope.get(j, FicheEmployeDate.class);
 				add(j1);
 			}
 		}
@@ -55,8 +51,7 @@ public class ArrayOfFicheEmployeDate extends Vector<FicheEmployeDate> implements
 	}
 
 	@Override
-	public void getPropertyInfo(int index,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int index, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		info.name = "FicheEmployeDate";
 		info.type = FicheEmployeDate.class;
 		info.namespace = "http://etsmtl.ca/";

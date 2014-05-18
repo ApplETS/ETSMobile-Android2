@@ -3,10 +3,10 @@ package ca.etsmtl.applets.etsmobile.http;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.soap.SignetsMobileSoap;
 import ca.etsmtl.applets.etsmobile.http.soap.WebServiceSoap;
@@ -17,10 +17,10 @@ import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.model.Service;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 
-import com.octo.android.robospice.GsonSpringAndroidSpiceService;
+import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 /**
  * Singleton to get data from HTTP/SOAP request
@@ -31,13 +31,14 @@ import com.octo.android.robospice.request.listener.RequestListener;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class DataManager {
 
+	private static final String TAG = "DataManager::";
 	private static DataManager instance;
 	private SpiceManager spiceManager;
 	private DatabaseHelper dbHelper;
 	private static Context c;
 
 	private DataManager() {
-		spiceManager = new SpiceManager(GsonSpringAndroidSpiceService.class);
+		spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
 		dbHelper = new DatabaseHelper(c);
 	}
 
@@ -57,14 +58,14 @@ public class DataManager {
 	 * @param listener
 	 * @return true if request is sent
 	 */
-	public boolean sendRequest(TypedRequest request,
-			RequestListener<Object> listener) {
-
-		final Object key = request.createCacheKey();
-		spiceManager.execute(request, key, DurationInMillis.ONE_SECOND,
-				listener);
-		return true;
-	}
+	// public boolean sendRequest(TypedRequest request, RequestListener<Object>
+	// listener) {
+	//
+	// final Object key = request.createCacheKey();
+	// spiceManager.execute(request, key, DurationInMillis.ONE_SECOND,
+	// listener);
+	// return true;
+	// }
 
 	/**
 	 * Send a request to Signet-Mobile Web Service
@@ -78,8 +79,8 @@ public class DataManager {
 	 * @param params
 	 *            Some methods require more than the credentials pass them here
 	 */
-	public void getDataFromSignet(int method, final UserCredentials creds,
-			final RequestListener<Object> listener, String... params) {
+	public void getDataFromSignet(int method, final UserCredentials creds, final RequestListener<Object> listener,
+			String... params) {
 
 		// inline asynctask
 		new AsyncTask<Object, Void, Object>() {
@@ -97,16 +98,24 @@ public class DataManager {
 					switch (methodID) {
 					case SignetMethods.INFO_ETUDIANT:
 
-						result = signetsMobileSoap.infoEtudiant(username,
-								password);
-						dbHelper.getDao(Etudiant.class).createOrUpdate(
-								(Etudiant) result);
+						final Map<String, Object> args = new HashMap<String, Object>();
+						args.put("username", username);
+						// get from db
+						List<Etudiant> queryResult = dbHelper.getDao(Etudiant.class).queryForFieldValues(args);
+						if (queryResult.size() > 0) {
+							result = queryResult.get(0);
+						} else {
+							result = signetsMobileSoap.infoEtudiant(username, password);
+
+							((Etudiant) result).username = username;
+
+							dbHelper.getDao(Etudiant.class).createOrUpdate((Etudiant) result);
+						}
+
 						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_COURS:
-
 						result = signetsMobileSoap.listeCours(username, password);
-
 						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_INT_SESSION:
@@ -114,23 +123,19 @@ public class DataManager {
 						String SesFin = reqParams[0];
 						String SesDebut = reqParams[1];
 
-						result = signetsMobileSoap
-								.listeCoursIntervalleSessions(username,
-										password, SesDebut, SesFin);
+						result = signetsMobileSoap.listeCoursIntervalleSessions(username, password, SesDebut, SesFin);
 
 						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_SESSION:
 
-						result = signetsMobileSoap.listeSessions(username,
-								password);
+						result = signetsMobileSoap.listeSessions(username, password);
 
 						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_PROGRAM:
 
-						result = signetsMobileSoap.listeProgrammes(username,
-								password);
+						result = signetsMobileSoap.listeProgrammes(username, password);
 
 						listener.onRequestSuccess(result);
 						break;
@@ -140,8 +145,7 @@ public class DataManager {
 						String pSession = reqParams[1];
 						String pGroupe = reqParams[2];
 						String pSigle = reqParams[3];
-						result = signetsMobileSoap.listeCoequipiers(username,
-								password, pSigle, pGroupe, pSession,
+						result = signetsMobileSoap.listeCoequipiers(username, password, pSigle, pGroupe, pSession,
 								pNomElementEval);
 
 						listener.onRequestSuccess(result);
@@ -151,8 +155,7 @@ public class DataManager {
 						String pSession1 = reqParams[0];
 						String pGroupe1 = reqParams[1];
 						String pSigle1 = reqParams[2];
-						result = signetsMobileSoap.listeElementsEvaluation(
-								username, password, pSigle1, pGroupe1,
+						result = signetsMobileSoap.listeElementsEvaluation(username, password, pSigle1, pGroupe1,
 								pSession1);
 
 						listener.onRequestSuccess(result);
@@ -161,8 +164,7 @@ public class DataManager {
 
 						String pSession2 = reqParams[0];
 
-						result = signetsMobileSoap.listeHoraireEtProf(username,
-								password, pSession2);
+						result = signetsMobileSoap.listeHoraireEtProf(username, password, pSession2);
 
 						listener.onRequestSuccess(result);
 						break;
@@ -171,8 +173,7 @@ public class DataManager {
 						String pSession3 = reqParams[0];
 						String prefixeSigleCours = reqParams[1];
 
-						result = signetsMobileSoap.lireHoraire(pSession3,
-								prefixeSigleCours);
+						result = signetsMobileSoap.lireHoraire(pSession3, prefixeSigleCours);
 
 						listener.onRequestSuccess(result);
 						break;
@@ -180,8 +181,7 @@ public class DataManager {
 
 						String pSession4 = reqParams[0];
 
-						result = signetsMobileSoap
-								.lireJoursRemplaces(pSession4);
+						result = signetsMobileSoap.lireJoursRemplaces(pSession4);
 
 						listener.onRequestSuccess(result);
 						break;
@@ -193,8 +193,7 @@ public class DataManager {
 					case SignetMethods.BOTTIN_GET_FICHE:
 						String numero = reqParams[0];
 						String PathFiche = reqParams[1];
-						result = new WebServiceSoap().GetFiche(numero,
-								PathFiche);
+						result = new WebServiceSoap().GetFiche(numero, PathFiche);
 
 						listener.onRequestSuccess(result);
 						break;
@@ -207,37 +206,38 @@ public class DataManager {
 						break;
 
 					case SignetMethods.BOTTIN_GET_ALL:
-						result = new WebServiceSoap().Recherche(null, null,
-								null);
+						result = new WebServiceSoap().Recherche(null, null, null);
 
 						listener.onRequestSuccess(result);
 						break;
-						
+
 					case SignetMethods.BOTTIN_GET_FICHE_BY_SERVICE:
-						
-						String filtreServiceCode =  reqParams[0];
-						
+
+						String filtreServiceCode = reqParams[0];
+
 						result = new WebServiceSoap().Recherche(null, null, filtreServiceCode);
 						listener.onRequestSuccess(result);
 						break;
-						
+
 					case SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP:
-						
+
 						ArrayOfService arrayOfService = new WebServiceSoap().GetListeDepartement();
 
 						HashMap<String, List<FicheEmploye>> listeEmployeByService = new HashMap<String, List<FicheEmploye>>();
 						ArrayOfFicheEmploye arrayOfFicheEmploye;
-						for(int i = 0 ; i< arrayOfService.size(); i++) {
-							Service service = arrayOfService.get(i);
-							arrayOfFicheEmploye = new WebServiceSoap().Recherche(null, null,""+service.ServiceCode);
+						
+						for (int i = 0; i < arrayOfService.size(); i++) {
 							
+							Service service = arrayOfService.get(i);
+							arrayOfFicheEmploye = new WebServiceSoap().Recherche(null, null, "" + service.ServiceCode);
+
 							listeEmployeByService.put(service.Nom, arrayOfFicheEmploye);
 						}
-						
+
 						listener.onRequestSuccess(listeEmployeByService);
 
 						break;
-						
+
 					default:
 						break;
 					}
@@ -276,15 +276,13 @@ public class DataManager {
 	}
 
 	/**
-	 * Convinience method to login a user
+	 * Convenience method to login a user
 	 * 
 	 * @param userCredentials
 	 * @param listener
 	 */
-	public void login(UserCredentials userCredentials,
-			RequestListener<Object> listener) {
-		getDataFromSignet(SignetMethods.INFO_ETUDIANT, userCredentials,
-				listener);
+	public void login(UserCredentials userCredentials, RequestListener<Object> listener) {
+		getDataFromSignet(SignetMethods.INFO_ETUDIANT, userCredentials, listener);
 	}
 
 	public void start() {
@@ -304,11 +302,14 @@ public class DataManager {
 	 */
 	public Etudiant getRegisteredEtudiant() throws SQLException {
 
-		final List<Etudiant> queryForAll = dbHelper.getDao(Etudiant.class)
-				.queryForAll();
+		final List<Etudiant> queryForAll = dbHelper.getDao(Etudiant.class).queryForAll();
 		if (queryForAll.size() > 0)
 			return queryForAll.get(0);
 		return null;
+	}
+
+	public void sendRequest(SpringAndroidSpiceRequest request, RequestListener<Object> listener) {
+		spiceManager.execute(request, listener);
 	}
 
 }

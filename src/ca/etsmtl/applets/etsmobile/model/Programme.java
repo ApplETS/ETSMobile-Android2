@@ -25,7 +25,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "programme")
 public class Programme extends AttributeContainer implements KvmSerializable {
 
-	@DatabaseField(id=true)
+	@DatabaseField(id = true)
 	public String code;
 	@DatabaseField
 	public String libelle;
@@ -57,8 +57,7 @@ public class Programme extends AttributeContainer implements KvmSerializable {
 	public Programme() {
 	}
 
-	public Programme(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public Programme(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -275,8 +274,7 @@ public class Programme extends AttributeContainer implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.STRING_CLASS;
 			info.name = "code";

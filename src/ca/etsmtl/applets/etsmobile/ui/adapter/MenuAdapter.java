@@ -60,11 +60,9 @@ public class MenuAdapter extends ArrayAdapter<MyMenuItem> {
 			holder = (ViewHolder) convertView.getTag();
 		} else {
 			if (itemViewType == ITEM) {
-				convertView = layoutInflater.inflate(R.layout.menu_item,
-						parent, false);
+				convertView = layoutInflater.inflate(R.layout.menu_item, parent, false);
 			} else {
-				convertView = layoutInflater.inflate(
-						R.layout.menu_item_separator, parent, false);
+				convertView = layoutInflater.inflate(R.layout.menu_item_separator, parent, false);
 			}
 
 			holder = new ViewHolder(convertView);
@@ -72,11 +70,13 @@ public class MenuAdapter extends ArrayAdapter<MyMenuItem> {
 		}
 
 		final MyMenuItem myMenuItem = getItem(position);
-		holder.title.setText(myMenuItem.title);
+		if (myMenuItem != null) {
+			holder.title.setText(myMenuItem.title);
+		}
 
 		if (itemViewType == ITEM) {
-			holder.title.setCompoundDrawablesWithIntrinsicBounds(
-					resources.getDrawable(myMenuItem.resId), null, null, null);
+			holder.title.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(myMenuItem.resId), null, null,
+					null);
 		} else {
 			holder.title.setCompoundDrawables(null, null, null, null);
 		}

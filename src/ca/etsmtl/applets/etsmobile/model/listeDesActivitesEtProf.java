@@ -18,8 +18,7 @@ import org.ksoap2.serialization.SoapObject;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class listeDesActivitesEtProf extends DonneesRetournees implements
-		KvmSerializable {
+public class listeDesActivitesEtProf extends DonneesRetournees implements KvmSerializable {
 
 	public ArrayOfHoraireActivite listeActivites = new ArrayOfHoraireActivite();
 
@@ -28,8 +27,7 @@ public class listeDesActivitesEtProf extends DonneesRetournees implements
 	public listeDesActivitesEtProf() {
 	}
 
-	public listeDesActivitesEtProf(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public listeDesActivitesEtProf(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		super(inObj, envelope);
 		if (inObj == null)
 			return;
@@ -37,13 +35,11 @@ public class listeDesActivitesEtProf extends DonneesRetournees implements
 		SoapObject soapObject = (SoapObject) inObj;
 
 		if (soapObject.hasProperty("listeActivites")) {
-			SoapObject j = (SoapObject) soapObject
-					.getProperty("listeActivites");
+			SoapObject j = (SoapObject) soapObject.getProperty("listeActivites");
 			listeActivites = new ArrayOfHoraireActivite(j, envelope);
 		}
 		if (soapObject.hasProperty("listeEnseignants")) {
-			SoapObject j = (SoapObject) soapObject
-					.getProperty("listeEnseignants");
+			SoapObject j = (SoapObject) soapObject.getProperty("listeEnseignants");
 			listeEnseignants = new ArrayOfEnseignant(j, envelope);
 		}
 
@@ -67,8 +63,7 @@ public class listeDesActivitesEtProf extends DonneesRetournees implements
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		int count = super.getPropertyCount();
 		if (propertyIndex == count + 0) {
 			info.type = PropertyInfo.VECTOR_CLASS;

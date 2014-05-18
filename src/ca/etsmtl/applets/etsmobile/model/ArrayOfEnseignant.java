@@ -19,14 +19,12 @@ import org.ksoap2.serialization.SoapObject;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class ArrayOfEnseignant extends Vector<Enseignant> implements
-		KvmSerializable {
+public class ArrayOfEnseignant extends Vector<Enseignant> implements KvmSerializable {
 
 	public ArrayOfEnseignant() {
 	}
 
-	public ArrayOfEnseignant(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public ArrayOfEnseignant(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		if (inObj == null)
 			return;
 		SoapObject soapObject = (SoapObject) inObj;
@@ -34,8 +32,7 @@ public class ArrayOfEnseignant extends Vector<Enseignant> implements
 		for (int i0 = 0; i0 < size; i0++) {
 			Object obj = soapObject.getProperty(i0);
 			if (obj != null && obj instanceof AttributeContainer) {
-				AttributeContainer j = (AttributeContainer) soapObject
-						.getProperty(i0);
+				AttributeContainer j = (AttributeContainer) soapObject.getProperty(i0);
 				Enseignant j1 = (Enseignant) envelope.get(j, Enseignant.class);
 				add(j1);
 			}
@@ -53,8 +50,7 @@ public class ArrayOfEnseignant extends Vector<Enseignant> implements
 	}
 
 	@Override
-	public void getPropertyInfo(int index,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int index, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		info.name = "Enseignant";
 		info.type = Enseignant.class;
 		info.namespace = "http://etsmtl.ca/";
