@@ -26,11 +26,14 @@ public abstract class BaseFragment extends Fragment {
 
 	protected int layoutId = -1;
 
-	@Override
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	//View onCreateView = super.onCreateView(inflater, container, savedInstanceState);
 		View v = inflater.inflate(layoutId, container, false);
 		ButterKnife.inject(this, v);
-		this.errorMessageTv.setVisibility(View.GONE);
+		if(errorMessageTv!=null){
+		   this.errorMessageTv.setVisibility(View.GONE);
+		}
 		return v;
 	}
 

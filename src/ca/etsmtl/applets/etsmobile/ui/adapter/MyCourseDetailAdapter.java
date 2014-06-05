@@ -9,15 +9,19 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
+import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
+import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
+import ca.etsmtl.applets.etsmobile2.R;
+
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
-import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
-import ca.etsmtl.applets.etsmobile2.R;
+
 
 public class MyCourseDetailAdapter extends BaseAdapter {
 
@@ -43,9 +47,9 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 	private ListeDesElementsEvaluation courseEvaluation;
 	private double total;
 	private final LayoutInflater li;
-	private final Context ctx;
+	private final Context ctx; 
 	private ViewHolder holder = null;
-	private String cote;
+	private String cote ;
 
 	public MyCourseDetailAdapter(final Context context, final ListeDesElementsEvaluation courseEvaluation, String cote) {
 		super();
@@ -54,20 +58,22 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 		nf_frCA = new DecimalFormat("##,#", new DecimalFormatSymbols(Locale.CANADA_FRENCH));
 		nf_enUS = new DecimalFormat("##.#");
 		// parse exams results
-		for (ElementEvaluation evaluationElement : courseEvaluation.liste) {
-			if (evaluationElement.note != null) {
-				try {
-					final String pond = evaluationElement.ponderation;
-					final double value = nf_frCA.parse(pond).doubleValue();
-					total += value;
-					if (total > 100) {
-						total = 100;
+		for ( ElementEvaluation evaluationElement : courseEvaluation.liste) {
+			if(evaluationElement.note !=null){
+				if(evaluationElement.ignoreDuCalcul.equals("Non")){
+					try {
+						final String pond = evaluationElement.ponderation;
+						final double value = nf_frCA.parse(pond).doubleValue();
+						total += value;
+						if(total>100){
+							total = 100;
+						}
+					} catch (final ParseException e) {
 					}
-				} catch (final ParseException e) {
 				}
 			}
 		}
-
+		
 		ctx = context;
 		li = (LayoutInflater) ctx.getSystemService(inflater);
 	}
@@ -113,7 +119,7 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 			// get tag
 			holder = (ViewHolder) convertView.getTag();
 		}
-
+	
 		// ui display of inflated xml
 		if (type == MyCourseDetailAdapter.ITEM_VIEW_TYPE_SEPARATOR) {
 			if (position == 0) {
@@ -127,6 +133,9 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 			holder.txtViewCent.setVisibility(View.GONE);
 			holder.txtViewEcType.setVisibility(View.GONE);
 			holder.txtViewPond.setVisibility(View.GONE);
+			holder.txtViewValue.setTextColor(Color.BLACK);
+			holder.txtViewPond.setTextColor(Color.BLACK);
+			holder.txtView.setTextColor(Color.BLACK);
 			switch (position) {
 			case 1:// COURS EVAL
 				holder.txtView.setText(R.string.cote);
@@ -134,19 +143,20 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 				break;
 			case 2:// NOTE À CE JOUR
 				holder.txtView.setText(R.string.noteACejour);
-				if (courseEvaluation.scoreFinalSur100 != null) {
+				if(courseEvaluation.scoreFinalSur100!=null){
 					final String note = courseEvaluation.scoreFinalSur100;
-					holder.txtViewValue.setText(note + "/" + nf_enUS.format(total) + " ("
-							+ courseEvaluation.noteACeJour + "%)");
+					ctx.getString(R.string.noteOnPourcent,note , nf_enUS.format(total), courseEvaluation.noteACeJour );
+					holder.txtViewValue.setText(ctx.getString(R.string.noteOnPourcent,note , nf_enUS.format(total), courseEvaluation.noteACeJour));
 				}
 				break;
 			case 3:// MOYENNE CLASSE
 				holder.txtView.setText(R.string.moyenne);
-				if (courseEvaluation.moyenneClasse != null) {
+				if(courseEvaluation.moyenneClasse!=null){
 					final String m = courseEvaluation.moyenneClasse;
 					try {
-						holder.txtViewValue.setText(m + "/" + nf_enUS.format(total) + " ("
-								+ nf_enUS.format(+(nf_frCA.parse(m).doubleValue() / total) * 100) + "%)");
+						String value = nf_enUS.format(+(nf_frCA.parse(m).doubleValue() / total) * 100);
+						holder.txtViewValue.setText(ctx.getString(R.string.noteOnPourcent,m,nf_enUS.format(total), value));
+						
 					} catch (final ParseException e1) {
 						e1.printStackTrace();
 					}
@@ -158,7 +168,7 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 				break;
 			case 5:// MÉDIANE
 				holder.txtView.setText(R.string.mediane);
-				holder.txtViewValue.setText(courseEvaluation.medianeClasse);
+			    holder.txtViewValue.setText(courseEvaluation.medianeClasse);
 				break;
 			case 6:// RAND CENTILLE
 				holder.txtView.setText(R.string.rangCentille);
@@ -173,11 +183,11 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 						final String notee = element.note;
 						final String sur = element.corrigeSur;
 						double sur100 = 0;
-						if (element.note != null && sur != null) {
+						if (element.note!=null && sur!=null) {
 							sur100 = nf_frCA.parse(notee).doubleValue() / nf_frCA.parse(sur).doubleValue() * 100;
 
 							final String tmp = nf_enUS.format(sur100);
-							holder.txtViewValue.setText(element.note + "/" + element.corrigeSur + " (" + tmp + "%)");
+							holder.txtViewValue.setText(ctx.getString(R.string.noteOnPourcent,element.note,element.corrigeSur,tmp));
 
 							holder.txtViewMoy.setVisibility(View.VISIBLE);
 							holder.txtViewMed.setVisibility(View.VISIBLE);
@@ -190,30 +200,32 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 									+ nf_enUS.format(nf_frCA.parse(element.moyenne).doubleValue()
 											/ nf_frCA.parse(sur).doubleValue() * 100) + "%");
 
-							holder.txtViewMed.setText(ctx.getString(R.string.mediane)
-									+ ": "
+							holder.txtViewMed.setText(ctx.getString(R.string.mediane)+": "
 									+ nf_enUS.format(nf_frCA.parse(element.mediane).doubleValue()
 											/ nf_frCA.parse(sur).doubleValue() * 100) + "%");
 
-							holder.txtViewCent.setText(ctx.getString(R.string.rangCentille) + ": "
-									+ element.rangCentile);
+							holder.txtViewCent.setText(ctx.getString(R.string.rangCentille)+": " + element.rangCentile);
 
-							holder.txtViewEcType.setText(ctx.getString(R.string.ecartType) + ": " + element.ecartType);
+							holder.txtViewEcType.setText(ctx.getString(R.string.ecartType)+": " + element.ecartType);
 
-							holder.txtViewPond.setText(ctx.getString(R.string.ponderation) + ": " + element.ponderation
-									+ "%");
+							holder.txtViewPond.setText(ctx.getString(R.string.ponderation)+": " + element.ponderation + "%");
+							
+							if(element.ignoreDuCalcul.equals("Oui")){
+								holder.txtViewValue.setTextColor(Color.RED);
+								holder.txtViewPond.setTextColor(Color.RED);
+								holder.txtView.setTextColor(Color.RED);
+							}
 						} else {
 							holder.txtViewPond.setVisibility(View.VISIBLE);
 							holder.txtViewMoy.setVisibility(View.VISIBLE);
 							holder.txtViewValue.setText("/" + sur);
-							holder.txtViewPond.setText(ctx.getString(R.string.ponderation) + ": " + element.ponderation
-									+ "%");
+							holder.txtViewPond.setText(ctx.getString(R.string.ponderation)+": " + element.ponderation + "%");
 
 						}
 					} catch (final ParseException e) {
 						e.printStackTrace();
 					}
-
+					
 				}
 				break;
 			}

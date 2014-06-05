@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/urgence_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+	<LinearLayout
+        android:id="@+id/ll_v_"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="false"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/urgence_appel_urgence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="@color/ets_red"
+            android:text="@string/appel_d_apos_urgence"
+            android:textColor="#fff" />
+
+        <Button
+            android:id="@+id/voirPDF_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/black_gray"
+            android:text="@string/voirPDF"
+            android:textColor="#fff" />
+    </LinearLayout>
+    
+
+    <WebView 
+        android:id="@+id/web_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_v_"/>
+
+
+    
+</RelativeLayout>

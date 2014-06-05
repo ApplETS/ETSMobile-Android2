@@ -16,7 +16,7 @@ import ca.etsmtl.applets.etsmobile2.R;
  * @author Laurence
  * 
  */
-public class MoodleFragment extends WebFragment implements OnClickListener {
+public class MoodleFragment extends BaseFragment implements OnClickListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

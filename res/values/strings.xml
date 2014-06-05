@@ -50,6 +50,7 @@
     <string name="etsmobile_android_commentaire">ETSMobile-Android : Commentaire</string>
     <string name="default_comment">Bravo ! 10/10 !</string>
 
+
     
     <!-- Note detail Page -->
     <string name="mesCours">Mes cours</string>
@@ -62,6 +63,7 @@
     <string name="mediane">Médiane</string>
     <string name="rangCentille">Rang centile</string>
     <string name="ponderation">Pondération</string>
+    <string name="noteOnPourcent">%1$s/%2$s (%3$s%%)</string>
     
     <!-- Profil Page -->
     <string name="profil_nom_prenom">Nom, Prénom</string>
@@ -85,6 +87,34 @@
     <string name ="gigaoctetx">Go</string>
     <string name ="error_invalid_app">Erreur appartement invalide</string>
     <string name ="error_invalid_phase">Erreur phase invalide</string>
+    
+    <!-- Securite -->
+       <string name="secu_title1">Joindre la sécurité</string>
+    <string name="secu_phone_lbl">514–396–8900</string>
+    <string name="secu_title2">Procédures d\'urgence</string>
+    <string name="secu_appel_lbl">Appel d\'urgence</string>
+    <string name="secu_ext_lbl">À l\'interne</string>
+    <string name="secu_ext">Poste 55</string>
+    <string name="secu_title">Sécurité</string>
+    <string name="welcome">Bienvenue!</string>
+    <string name="Ajourdhui">Ajd.</string>
+    <string name="voirPDF">Voir PDF</string>
+
+    <string-array name="secu_urgence">
+        <item>Appel à la bombe</item>
+        <item>Colis suspect</item>
+        <item>Incendie</item>
+        <item>Odeur suspecte</item>
+        <item>Panne d\'ascenseur</item>
+        <item>Panne électrique</item>
+        <item>Personne armée</item>
+        <item>Urgence médicale</item>
+    </string-array>
+    
+    <!-- Urgence  -->
+   <string name="appel_d_apos_urgence">Appel d\'urgence</string>
+   
+
     <string name="default_error_message">Error Message</string>
     <string name="error_JSON_PARSING">Erreur lors de la récupération des donnés.</string>
     <string name="today_url_format">http://api.clubapplets.ca/signets/card/login?id=1</string>
@@ -92,5 +122,9 @@
     <string name="lundi_le_26_avril">Lundi le 26 Avril</string>
     <string name="menu_botin_search_title">search</string>
     <string name="categories">Catégories</string>
+
+
 </resources>
+
+
 

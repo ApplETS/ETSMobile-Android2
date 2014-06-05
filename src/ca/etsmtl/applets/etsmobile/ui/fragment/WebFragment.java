@@ -10,6 +10,8 @@ public class WebFragment extends BaseFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		assert progressBar != null;
-		progressBar.setVisibility(View.INVISIBLE);
+		if( progressBar!=null){
+			progressBar.setVisibility(View.INVISIBLE);
+		}
 	}
 }
