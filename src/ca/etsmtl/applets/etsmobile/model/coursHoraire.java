@@ -25,8 +25,7 @@ public class coursHoraire extends HoraireActivite implements KvmSerializable {
 	public coursHoraire() {
 	}
 
-	public coursHoraire(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public coursHoraire(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		super(inObj, envelope);
 		if (inObj == null)
 			return;
@@ -55,8 +54,7 @@ public class coursHoraire extends HoraireActivite implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		int count = super.getPropertyCount();
 		if (propertyIndex == count + 0) {
 			info.type = PropertyInfo.VECTOR_CLASS;

@@ -14,12 +14,6 @@
         android:layout_alignParentTop="true"
         android:layout_gravity="fill_vertical|fill_horizontal" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+    <include layout="@layout/base_layout"/>
 
 </RelativeLayout>

@@ -8,7 +8,7 @@ public class WebFragment extends BaseFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
+
 		assert progressBar != null;
 		if( progressBar!=null){
 			progressBar.setVisibility(View.INVISIBLE);

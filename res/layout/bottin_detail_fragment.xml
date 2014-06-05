@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tv_nom_prenom_bottin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="nom et le prénom de la personne" />
+
+    <TextView
+        android:id="@+id/tv_titre_bottin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="fonction à l&apos;ÉTS"
+        android:layout_below="@+id/tv_nom_prenom_bottin" />
+
+    <TextView
+        android:id="@+id/tv_service_bottin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="département"
+        android:layout_below="@+id/tv_titre_bottin" />
+
+    <TextView
+        android:id="@+id/tv_emplacement_bottin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="coordonnées de son bureau" 
+        android:layout_below="@+id/tv_service_bottin"/>
+
+    <TextView
+        android:id="@+id/tv_telbureau_bottin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="numéro de téléphone" 
+        android:layout_below="@+id/tv_emplacement_bottin"/>
+
+    <TextView
+        android:id="@+id/tv_courriel_bottin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="adresse courriel"
+        android:layout_below="@+id/tv_telbureau_bottin" />
+
+</RelativeLayout>

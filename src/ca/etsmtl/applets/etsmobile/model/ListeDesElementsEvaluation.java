@@ -19,8 +19,7 @@ import org.ksoap2.serialization.SoapPrimitive;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class ListeDesElementsEvaluation extends DonneesRetournees implements
-		KvmSerializable {
+public class ListeDesElementsEvaluation extends DonneesRetournees implements KvmSerializable {
 
 	public String noteACeJour;
 
@@ -40,14 +39,13 @@ public class ListeDesElementsEvaluation extends DonneesRetournees implements
 
 	public ArrayOfElementEvaluation liste = new ArrayOfElementEvaluation();
 
-	//add by Laurence
-	//public String cote;
+	// add by Laurence
+	// public String cote;
 	//
 	public ListeDesElementsEvaluation() {
 	}
 
-	public ListeDesElementsEvaluation(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public ListeDesElementsEvaluation(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		super(inObj, envelope);
 		if (inObj == null)
 			return;
@@ -121,8 +119,7 @@ public class ListeDesElementsEvaluation extends DonneesRetournees implements
 			}
 		}
 		if (soapObject.hasProperty("noteACeJourElementsIndividuels")) {
-			Object obj = soapObject
-					.getProperty("noteACeJourElementsIndividuels");
+			Object obj = soapObject.getProperty("noteACeJourElementsIndividuels");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
@@ -133,8 +130,7 @@ public class ListeDesElementsEvaluation extends DonneesRetournees implements
 			}
 		}
 		if (soapObject.hasProperty("noteSur100PourElementsIndividuels")) {
-			Object obj = soapObject
-					.getProperty("noteSur100PourElementsIndividuels");
+			Object obj = soapObject.getProperty("noteSur100PourElementsIndividuels");
 			if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
 				SoapPrimitive j = (SoapPrimitive) obj;
 				if (j.toString() != null) {
@@ -190,8 +186,7 @@ public class ListeDesElementsEvaluation extends DonneesRetournees implements
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		int count = super.getPropertyCount();
 		if (propertyIndex == count + 0) {
 			info.type = PropertyInfo.STRING_CLASS;

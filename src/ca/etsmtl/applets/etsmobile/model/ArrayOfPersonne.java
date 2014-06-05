@@ -19,14 +19,12 @@ import org.ksoap2.serialization.SoapObject;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class ArrayOfPersonne extends Vector<Personne> implements
-		KvmSerializable {
+public class ArrayOfPersonne extends Vector<Personne> implements KvmSerializable {
 
 	public ArrayOfPersonne() {
 	}
 
-	public ArrayOfPersonne(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public ArrayOfPersonne(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		if (inObj == null)
 			return;
 		SoapObject soapObject = (SoapObject) inObj;
@@ -34,8 +32,7 @@ public class ArrayOfPersonne extends Vector<Personne> implements
 		for (int i0 = 0; i0 < size; i0++) {
 			Object obj = soapObject.getProperty(i0);
 			if (obj != null && obj instanceof AttributeContainer) {
-				AttributeContainer j = (AttributeContainer) soapObject
-						.getProperty(i0);
+				AttributeContainer j = (AttributeContainer) soapObject.getProperty(i0);
 				Personne j1 = (Personne) envelope.get(j, Personne.class);
 				add(j1);
 			}
@@ -53,8 +50,7 @@ public class ArrayOfPersonne extends Vector<Personne> implements
 	}
 
 	@Override
-	public void getPropertyInfo(int index,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int index, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		info.name = "Personne";
 		info.type = Personne.class;
 		info.namespace = "http://etsmtl.ca/";

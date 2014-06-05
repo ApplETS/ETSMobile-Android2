@@ -19,14 +19,12 @@ import org.ksoap2.serialization.SoapObject;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class ArrayOfCoursHoraire extends Vector<coursHoraire> implements
-		KvmSerializable {
+public class ArrayOfCoursHoraire extends Vector<coursHoraire> implements KvmSerializable {
 
 	public ArrayOfCoursHoraire() {
 	}
 
-	public ArrayOfCoursHoraire(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public ArrayOfCoursHoraire(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		if (inObj == null)
 			return;
 		SoapObject soapObject = (SoapObject) inObj;
@@ -34,10 +32,8 @@ public class ArrayOfCoursHoraire extends Vector<coursHoraire> implements
 		for (int i0 = 0; i0 < size; i0++) {
 			Object obj = soapObject.getProperty(i0);
 			if (obj != null && obj instanceof AttributeContainer) {
-				AttributeContainer j = (AttributeContainer) soapObject
-						.getProperty(i0);
-				coursHoraire j1 = (coursHoraire) envelope.get(j,
-						coursHoraire.class);
+				AttributeContainer j = (AttributeContainer) soapObject.getProperty(i0);
+				coursHoraire j1 = (coursHoraire) envelope.get(j, coursHoraire.class);
 				add(j1);
 			}
 		}
@@ -54,8 +50,7 @@ public class ArrayOfCoursHoraire extends Vector<coursHoraire> implements
 	}
 
 	@Override
-	public void getPropertyInfo(int index,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int index, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		info.name = "coursHoraire";
 		info.type = coursHoraire.class;
 		info.namespace = "http://etsmtl.ca/";

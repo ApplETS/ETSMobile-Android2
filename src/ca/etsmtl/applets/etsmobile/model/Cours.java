@@ -45,15 +45,14 @@ public class Cours extends AttributeContainer implements KvmSerializable {
 
 	@DatabaseField
 	public String titreCours;
-	
+
 	@DatabaseField(id = true)
 	public int id;
 
 	public Cours() {
 	}
 
-	public Cours(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public Cours(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
 			return;
@@ -172,8 +171,7 @@ public class Cours extends AttributeContainer implements KvmSerializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int propertyIndex,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		if (propertyIndex == +0) {
 			info.type = PropertyInfo.STRING_CLASS;
 			info.name = "sigle";

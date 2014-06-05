@@ -19,14 +19,12 @@ import org.ksoap2.serialization.SoapObject;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
-public class ArrayOfElementEvaluation extends Vector<ElementEvaluation>
-		implements KvmSerializable {
+public class ArrayOfElementEvaluation extends Vector<ElementEvaluation> implements KvmSerializable {
 
 	public ArrayOfElementEvaluation() {
 	}
 
-	public ArrayOfElementEvaluation(AttributeContainer inObj,
-			ExtendedSoapSerializationEnvelope envelope) {
+	public ArrayOfElementEvaluation(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 		if (inObj == null)
 			return;
 		SoapObject soapObject = (SoapObject) inObj;
@@ -34,10 +32,8 @@ public class ArrayOfElementEvaluation extends Vector<ElementEvaluation>
 		for (int i0 = 0; i0 < size; i0++) {
 			Object obj = soapObject.getProperty(i0);
 			if (obj != null && obj instanceof AttributeContainer) {
-				AttributeContainer j = (AttributeContainer) soapObject
-						.getProperty(i0);
-				ElementEvaluation j1 = (ElementEvaluation) envelope.get(j,
-						ElementEvaluation.class);
+				AttributeContainer j = (AttributeContainer) soapObject.getProperty(i0);
+				ElementEvaluation j1 = (ElementEvaluation) envelope.get(j, ElementEvaluation.class);
 				add(j1);
 			}
 		}
@@ -54,8 +50,7 @@ public class ArrayOfElementEvaluation extends Vector<ElementEvaluation>
 	}
 
 	@Override
-	public void getPropertyInfo(int index,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+	public void getPropertyInfo(int index, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		info.name = "ElementEvaluation";
 		info.type = ElementEvaluation.class;
 		info.namespace = "http://etsmtl.ca/";

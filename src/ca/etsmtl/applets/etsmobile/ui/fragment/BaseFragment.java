@@ -6,26 +6,40 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
- * Created by Phil on 17/11/13.
+ * Base fragment 
+ * 
+ * @author Philippe
  */
 public abstract class BaseFragment extends Fragment {
 
-	@InjectView(R.id.progressBar)
-	ProgressBar progressBar;
-	
-	public BaseFragment() {
-	}
+	@InjectView(R.id.base_layout_loading_pb)
+	protected ProgressBar progressBar;
+
+	@InjectView(R.id.base_layout_error_tv)
+	protected TextView errorMessageTv;
+
+	protected int layoutId = -1;
 
 	@Override
+<<<<<<< HEAD
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View onCreateView = super.onCreateView(inflater, container, savedInstanceState);
 		//ButterKnife.inject(onCreateView);
 		return onCreateView;
+=======
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = inflater.inflate(layoutId, container, false);
+		ButterKnife.inject(this, v);
+		this.errorMessageTv.setVisibility(View.GONE);
+		return v;
+>>>>>>> FETCH_HEAD
 	}
+
 }

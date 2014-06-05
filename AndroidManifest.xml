@@ -54,13 +54,14 @@
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity"
             android:label="@string/title_activity_login"
+            android:exported="false"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity"/>
 
         <service
-            android:name="com.octo.android.robospice.GsonSpringAndroidSpiceService"
+            android:name="com.octo.android.robospice.JacksonSpringAndroidSpiceService"
             android:exported="false" />
     </application>
 

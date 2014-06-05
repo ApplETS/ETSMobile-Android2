@@ -1,5 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+<<<<<<< HEAD
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -112,5 +113,18 @@ public class SecuriteFragment extends BaseFragment {
 				});
 				
 		return v; 
+=======
+import android.os.Bundle;
+import ca.etsmtl.applets.etsmobile2.R;
+
+/**
+ * Created by Phil on 17/11/13.
+ */
+public class SecuriteFragment extends WebFragment {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		layoutId = R.layout.fragment_securite;
+>>>>>>> FETCH_HEAD
 	}
 }
