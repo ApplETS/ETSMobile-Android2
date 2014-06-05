@@ -33,3 +33,5 @@ bin/resources.ap_
 .classpath
 
 project.properties
+
+*.properties
