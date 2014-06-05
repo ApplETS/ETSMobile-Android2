@@ -26,20 +26,13 @@ public abstract class BaseFragment extends Fragment {
 
 	protected int layoutId = -1;
 
-	@Override
-<<<<<<< HEAD
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View onCreateView = super.onCreateView(inflater, container, savedInstanceState);
-		//ButterKnife.inject(onCreateView);
-		return onCreateView;
-=======
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	//View onCreateView = super.onCreateView(inflater, container, savedInstanceState);
 		View v = inflater.inflate(layoutId, container, false);
 		ButterKnife.inject(this, v);
 		this.errorMessageTv.setVisibility(View.GONE);
 		return v;
->>>>>>> FETCH_HEAD
 	}
 
 }
