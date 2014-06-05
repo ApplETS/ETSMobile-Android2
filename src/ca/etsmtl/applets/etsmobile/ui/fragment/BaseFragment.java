@@ -31,7 +31,9 @@ public abstract class BaseFragment extends Fragment {
 	//View onCreateView = super.onCreateView(inflater, container, savedInstanceState);
 		View v = inflater.inflate(layoutId, container, false);
 		ButterKnife.inject(this, v);
-		this.errorMessageTv.setVisibility(View.GONE);
+		if(errorMessageTv!=null){
+		   this.errorMessageTv.setVisibility(View.GONE);
+		}
 		return v;
 	}
 
