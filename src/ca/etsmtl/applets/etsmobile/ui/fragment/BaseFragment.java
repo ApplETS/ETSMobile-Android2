@@ -25,7 +25,7 @@ public abstract class BaseFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View onCreateView = super.onCreateView(inflater, container, savedInstanceState);
-		ButterKnife.inject(onCreateView);
+		//ButterKnife.inject(onCreateView);
 		return onCreateView;
 	}
 }

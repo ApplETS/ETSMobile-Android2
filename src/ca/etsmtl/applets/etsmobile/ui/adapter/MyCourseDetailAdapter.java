@@ -14,6 +14,8 @@ import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,14 +60,16 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 		// parse exams results
 		for ( ElementEvaluation evaluationElement : courseEvaluation.liste) {
 			if(evaluationElement.note !=null){
-				try {
-					final String pond = evaluationElement.ponderation;
-					final double value = nf_frCA.parse(pond).doubleValue();
-					total += value;
-					if(total>100){
-						total = 100;
+				if(evaluationElement.ignoreDuCalcul.equals("Non")){
+					try {
+						final String pond = evaluationElement.ponderation;
+						final double value = nf_frCA.parse(pond).doubleValue();
+						total += value;
+						if(total>100){
+							total = 100;
+						}
+					} catch (final ParseException e) {
 					}
-				} catch (final ParseException e) {
 				}
 			}
 		}
@@ -115,7 +119,7 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 			// get tag
 			holder = (ViewHolder) convertView.getTag();
 		}
-
+	
 		// ui display of inflated xml
 		if (type == MyCourseDetailAdapter.ITEM_VIEW_TYPE_SEPARATOR) {
 			if (position == 0) {
@@ -129,6 +133,9 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 			holder.txtViewCent.setVisibility(View.GONE);
 			holder.txtViewEcType.setVisibility(View.GONE);
 			holder.txtViewPond.setVisibility(View.GONE);
+			holder.txtViewValue.setTextColor(Color.BLACK);
+			holder.txtViewPond.setTextColor(Color.BLACK);
+			holder.txtView.setTextColor(Color.BLACK);
 			switch (position) {
 			case 1:// COURS EVAL
 				holder.txtView.setText(R.string.cote);
@@ -138,7 +145,8 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 				holder.txtView.setText(R.string.noteACejour);
 				if(courseEvaluation.scoreFinalSur100!=null){
 					final String note = courseEvaluation.scoreFinalSur100;
-					holder.txtViewValue.setText(note + "/" + nf_enUS.format(total) + " (" + courseEvaluation.noteACeJour + "%)");
+					ctx.getString(R.string.noteOnPourcent,note , nf_enUS.format(total), courseEvaluation.noteACeJour );
+					holder.txtViewValue.setText(ctx.getString(R.string.noteOnPourcent,note , nf_enUS.format(total), courseEvaluation.noteACeJour));
 				}
 				break;
 			case 3:// MOYENNE CLASSE
@@ -146,8 +154,9 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 				if(courseEvaluation.moyenneClasse!=null){
 					final String m = courseEvaluation.moyenneClasse;
 					try {
-						holder.txtViewValue.setText(m + "/" + nf_enUS.format(total) + " ("
-								+ nf_enUS.format(+(nf_frCA.parse(m).doubleValue() / total) * 100) + "%)");
+						String value = nf_enUS.format(+(nf_frCA.parse(m).doubleValue() / total) * 100);
+						holder.txtViewValue.setText(ctx.getString(R.string.noteOnPourcent,m,nf_enUS.format(total), value));
+						
 					} catch (final ParseException e1) {
 						e1.printStackTrace();
 					}
@@ -178,8 +187,7 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 							sur100 = nf_frCA.parse(notee).doubleValue() / nf_frCA.parse(sur).doubleValue() * 100;
 
 							final String tmp = nf_enUS.format(sur100);
-							holder.txtViewValue.setText(element.note + "/" + element.corrigeSur + " (" + tmp
-									+ "%)");
+							holder.txtViewValue.setText(ctx.getString(R.string.noteOnPourcent,element.note,element.corrigeSur,tmp));
 
 							holder.txtViewMoy.setVisibility(View.VISIBLE);
 							holder.txtViewMed.setVisibility(View.VISIBLE);
@@ -201,6 +209,12 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 							holder.txtViewEcType.setText(ctx.getString(R.string.ecartType)+": " + element.ecartType);
 
 							holder.txtViewPond.setText(ctx.getString(R.string.ponderation)+": " + element.ponderation + "%");
+							
+							if(element.ignoreDuCalcul.equals("Oui")){
+								holder.txtViewValue.setTextColor(Color.RED);
+								holder.txtViewPond.setTextColor(Color.RED);
+								holder.txtView.setTextColor(Color.RED);
+							}
 						} else {
 							holder.txtViewPond.setVisibility(View.VISIBLE);
 							holder.txtViewMoy.setVisibility(View.VISIBLE);
