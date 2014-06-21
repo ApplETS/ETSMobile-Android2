@@ -34,12 +34,9 @@ public class SecuriteFragment extends BaseFragment {
 	
 	
 	private ListView listView;
-	private SupportMapFragment fragment;
 	private MapView mapView;
 	GoogleMap map;
 	
-
-
 	double lat = 45.494498;
 	double lng = -73.563124;
 
