@@ -1,0 +1,60 @@
+apply plugin: 'android'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+    }
+
+    defaultConfig {
+        applicationId "ca.etsmtl.applets.etsmobile2"
+        minSdkVersion 14
+        targetSdkVersion 20
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    //Google play service
+    compile 'com.google.android.gms:play-services:5.0.77+'
+
+    // BugSense
+    compile "com.bugsense.trace:bugsense:3.6.1"
+
+    // Robospice
+    compile 'com.octo.android.robospice:robospice-spring-android:1.4.12'
+    compile 'com.octo.android.robospice:robospice:1.4.12'
+    // Robospice - JSON
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.3.3'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.3'
+   // compile 'com.fasterxml.jackson.core:jackson-core:2.3.3'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.11'
+
+    // Robospice - XML
+    compile('org.simpleframework:simple-xml:2.7.1') {
+        exclude module: 'stax-api'
+    }
+
+    // JodaTime objects
+    compile 'joda-time:joda-time:2.3'
+
+}
+
