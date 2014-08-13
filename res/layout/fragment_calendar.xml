@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
+    android:layout_height="match_parent" >
 
-</LinearLayout>
+    <Button android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vider la table"
+        android:id="@+id/btn_vider_table_horaireActivite"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:layout_below="@+id/btn_vider_table_horaireActivite">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/tv_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="" />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

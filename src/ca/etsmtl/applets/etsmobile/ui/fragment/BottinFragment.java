@@ -21,6 +21,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,7 +49,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 /**
  * 
- * @author Philippe David, Thibau
+ * @author Philippe David, Thibaut
  */
 public class BottinFragment extends HttpFragment implements SearchView.OnQueryTextListener  {
 
@@ -271,12 +272,17 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 				e.printStackTrace();
 			}
 
-			Activity activity = getActivity();
+			 Activity activity = getActivity();
 			if (activity != null) {
 				getActivity().runOnUiThread(new Runnable() {
 					public void run() {
 						listAdapter.notifyDataSetChanged();
+						Log.v("BottinFragment","BottinFragment: runOnUiThread");
 						mProgressDialog.dismiss();
+						((BaseFragment)BottinFragment.this).progressBar.clearAnimation();;
+						((BaseFragment)BottinFragment.this).progressBar.setVisibility(View.GONE);
+				
+						
 					}
 				});
 			}

@@ -3,7 +3,6 @@ package ca.etsmtl.applets.etsmobile.ui.fragment;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.google.android.gms.internal.em;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import android.accounts.Account;
@@ -60,19 +59,17 @@ public class ContactAdderFragment extends HttpFragment implements
 	private String phone;
 	private String nom;
 
-	
-	public static ContactAdderFragment newInstance(Bundle args){
-		
+	public static ContactAdderFragment newInstance(Bundle args) {
+
 		ContactAdderFragment fragment = new ContactAdderFragment();
-		if(args != null) {
-			
+		if (args != null) {
+
 			fragment.setArguments(args);
 		}
 		return fragment;
-		
+
 	}
-	
-	
+
 	/**
 	 * Called when the activity is first created. Responsible for initializing
 	 * the UI.
@@ -80,7 +77,7 @@ public class ContactAdderFragment extends HttpFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		if (getArguments() != null) {
 
 			Bundle bundle = getArguments();
@@ -98,40 +95,43 @@ public class ContactAdderFragment extends HttpFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
 
 		View v = inflater.inflate(R.layout.contactadder, container, false);
-		
+
 		Log.v(TAG, "Activity State: onCreate()");
 
-//		final Bundle extras = getArguments();
-//
-//		nom = BottinDetailsFragment.NOM;
-//		prenom = BottinDetailsFragment.PRENOM;
-//		service = BottinDetailsFragment.SERVICE;
-//		// empl = extras.getString("empl");
-//		titre = BottinDetailsFragment.TITRE;
-//		courriel = BottinDetailsFragment.COURRIEL;
-//		phone = BottinDetailsFragment.TELBUREAU;
+		// final Bundle extras = getArguments();
+		//
+		// nom = BottinDetailsFragment.NOM;
+		// prenom = BottinDetailsFragment.PRENOM;
+		// service = BottinDetailsFragment.SERVICE;
+		// // empl = extras.getString("empl");
+		// titre = BottinDetailsFragment.TITRE;
+		// courriel = BottinDetailsFragment.COURRIEL;
+		// phone = BottinDetailsFragment.TELBUREAU;
 
 		// Obtain handles to UI objects
 		mAccountSpinner = (Spinner) v.findViewById(R.id.accountSpinner);
 
-		mContactNameEditText = (EditText) v.findViewById(R.id.contactNameEditText);
+		mContactNameEditText = (EditText) v
+				.findViewById(R.id.contactNameEditText);
 		System.out.println(prenom);
 		mContactNameEditText.setText(prenom + " " + nom);
-		mContactPhoneEditText = (EditText) v.findViewById(R.id.contactPhoneEditText);
+		mContactPhoneEditText = (EditText) v
+				.findViewById(R.id.contactPhoneEditText);
 		mContactPhoneEditText.setText(phone);
-		mContactEmailEditText = (EditText) v.findViewById(R.id.contactEmailEditText);
+		mContactEmailEditText = (EditText) v
+				.findViewById(R.id.contactEmailEditText);
 		mContactEmailEditText.setText(courriel);
 
-		mContactPhoneTypeSpinner = (Spinner) v.findViewById(R.id.contactPhoneTypeSpinner);
-		mContactEmailTypeSpinner = (Spinner) v.findViewById(R.id.contactEmailTypeSpinner);
-		
-		mContactAddressEditText = (EditText) v.findViewById(R.id.addressEditText);
+		mContactPhoneTypeSpinner = (Spinner) v
+				.findViewById(R.id.contactPhoneTypeSpinner);
+		mContactEmailTypeSpinner = (Spinner) v
+				.findViewById(R.id.contactEmailTypeSpinner);
+
+		mContactAddressEditText = (EditText) v
+				.findViewById(R.id.addressEditText);
 		mContactAddressEditText.setText(empl);
-		
-		
 
 		mContactSaveButton = (Button) v.findViewById(R.id.contactSaveButton);
 
@@ -141,15 +141,23 @@ public class ContactAdderFragment extends HttpFragment implements
 		// be computed
 		// separately.
 		mContactPhoneTypes = new ArrayList<Integer>();
-		mContactPhoneTypes.add(ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
-		mContactPhoneTypes.add(ContactsContract.CommonDataKinds.Phone.TYPE_WORK);
-		mContactPhoneTypes.add(ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
-		mContactPhoneTypes.add(ContactsContract.CommonDataKinds.Phone.TYPE_OTHER);
+		mContactPhoneTypes
+				.add(ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
+		mContactPhoneTypes
+				.add(ContactsContract.CommonDataKinds.Phone.TYPE_WORK);
+		mContactPhoneTypes
+				.add(ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
+		mContactPhoneTypes
+				.add(ContactsContract.CommonDataKinds.Phone.TYPE_OTHER);
 		mContactEmailTypes = new ArrayList<Integer>();
-		mContactEmailTypes.add(ContactsContract.CommonDataKinds.Email.TYPE_HOME);
-		mContactEmailTypes.add(ContactsContract.CommonDataKinds.Email.TYPE_WORK);
-		mContactEmailTypes.add(ContactsContract.CommonDataKinds.Email.TYPE_MOBILE);
-		mContactEmailTypes.add(ContactsContract.CommonDataKinds.Email.TYPE_OTHER);
+		mContactEmailTypes
+				.add(ContactsContract.CommonDataKinds.Email.TYPE_HOME);
+		mContactEmailTypes
+				.add(ContactsContract.CommonDataKinds.Email.TYPE_WORK);
+		mContactEmailTypes
+				.add(ContactsContract.CommonDataKinds.Email.TYPE_MOBILE);
+		mContactEmailTypes
+				.add(ContactsContract.CommonDataKinds.Email.TYPE_OTHER);
 
 		// Prepare model for account spinner
 		mAccounts = new ArrayList<AccountData>();
@@ -158,14 +166,14 @@ public class ContactAdderFragment extends HttpFragment implements
 
 		// Populate list of account types for phone
 		ArrayAdapter<String> adapter;
-		adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item);
+		adapter = new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Iterator<Integer> iter;
 		iter = mContactPhoneTypes.iterator();
 		while (iter.hasNext()) {
 			adapter.add(ContactsContract.CommonDataKinds.Phone.getTypeLabel(
-					this.getResources(), iter.next(),
-					"undefined").toString());
+					this.getResources(), iter.next(), "undefined").toString());
 		}
 		mContactPhoneTypeSpinner.setAdapter(adapter);
 		mContactPhoneTypeSpinner.setPrompt("select");
@@ -177,8 +185,7 @@ public class ContactAdderFragment extends HttpFragment implements
 		iter = mContactEmailTypes.iterator();
 		while (iter.hasNext()) {
 			adapter.add(ContactsContract.CommonDataKinds.Email.getTypeLabel(
-					this.getResources(), iter.next(),
-					"undefined").toString());
+					this.getResources(), iter.next(), "undefined").toString());
 		}
 		mContactEmailTypeSpinner.setAdapter(adapter);
 		mContactEmailTypeSpinner.setPrompt("select");
@@ -186,7 +193,8 @@ public class ContactAdderFragment extends HttpFragment implements
 		// Prepare the system account manager. On registering the listener
 		// below, we also ask for
 		// an initial callback to pre-populate the account list.
-		AccountManager.get(getActivity()).addOnAccountsUpdatedListener(this, null, true);
+		AccountManager.get(getActivity()).addOnAccountsUpdatedListener(this,
+				null, true);
 
 		// Register handlers for UI elements
 		mAccountSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -209,8 +217,7 @@ public class ContactAdderFragment extends HttpFragment implements
 				onSaveButtonClicked();
 			}
 		});
-		
-		
+
 		return v;
 	}
 
@@ -246,42 +253,73 @@ public class ContactAdderFragment extends HttpFragment implements
 		// and create a
 		// coresponding entry in the ContactsContract.Contacts provider for us.
 		final ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
-		ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
-				.withValue(ContactsContract.RawContacts.ACCOUNT_TYPE,mSelectedAccount.getType())
-				.withValue(ContactsContract.RawContacts.ACCOUNT_NAME,mSelectedAccount.getName()).build());
-		ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+		ops.add(ContentProviderOperation
+				.newInsert(ContactsContract.RawContacts.CONTENT_URI)
+				.withValue(ContactsContract.RawContacts.ACCOUNT_TYPE,
+						mSelectedAccount.getType())
+				.withValue(ContactsContract.RawContacts.ACCOUNT_NAME,
+						mSelectedAccount.getName()).build());
+		ops.add(ContentProviderOperation
+				.newInsert(ContactsContract.Data.CONTENT_URI)
 				.withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-				.withValue(ContactsContract.Data.MIMETYPE,ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-				.withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, name)
-//				.withValue(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME,name)
-//				.withValue(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,prenom)
+				.withValue(
+						ContactsContract.Data.MIMETYPE,
+						ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+				.withValue(
+						ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
+						name)
+				// .withValue(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME,name)
+				// .withValue(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,prenom)
 				.build());
-		ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+		ops.add(ContentProviderOperation
+				.newInsert(ContactsContract.Data.CONTENT_URI)
 				.withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-				.withValue(ContactsContract.Data.MIMETYPE,ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+				.withValue(
+						ContactsContract.Data.MIMETYPE,
+						ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
 				.withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
-				.withValue(ContactsContract.CommonDataKinds.Phone.TYPE,phoneType).build());
-		ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+				.withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
+						phoneType).build());
+		ops.add(ContentProviderOperation
+				.newInsert(ContactsContract.Data.CONTENT_URI)
 				.withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-				.withValue(ContactsContract.Data.MIMETYPE,ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)
+				.withValue(
+						ContactsContract.Data.MIMETYPE,
+						ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)
 				.withValue(ContactsContract.CommonDataKinds.Email.DATA, email)
-				.withValue(ContactsContract.CommonDataKinds.Email.TYPE,emailType).build());
-		ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+				.withValue(ContactsContract.CommonDataKinds.Email.TYPE,
+						emailType).build());
+		ops.add(ContentProviderOperation
+				.newInsert(ContactsContract.Data.CONTENT_URI)
 				.withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-				.withValue(ContactsContract.Data.MIMETYPE,ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE)
-				.withValue(ContactsContract.CommonDataKinds.Organization.COMPANY,"École de technologie supérieure")
-				.withValue(ContactsContract.CommonDataKinds.Organization.DEPARTMENT,service)
-				.withValue(ContactsContract.CommonDataKinds.Organization.TITLE,titre).build());
-		ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+				.withValue(
+						ContactsContract.Data.MIMETYPE,
+						ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE)
+				.withValue(
+						ContactsContract.CommonDataKinds.Organization.COMPANY,
+						"École de technologie supérieure")
+				.withValue(
+						ContactsContract.CommonDataKinds.Organization.DEPARTMENT,
+						service)
+				.withValue(ContactsContract.CommonDataKinds.Organization.TITLE,
+						titre).build());
+		ops.add(ContentProviderOperation
+				.newInsert(ContactsContract.Data.CONTENT_URI)
 				.withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-				.withValue(ContactsContract.Data.MIMETYPE,ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE)
-				.withValue(ContactsContract.CommonDataKinds.StructuredPostal.DATA,empl).build());
+				.withValue(
+						ContactsContract.Data.MIMETYPE,
+						ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE)
+				.withValue(
+						ContactsContract.CommonDataKinds.StructuredPostal.DATA,
+						empl).build());
 
 		// Ask the Contact provider to create a new contact
-		Log.i(TAG, "Selected account: " + mSelectedAccount.getName() + " (" + mSelectedAccount.getType() + ")");
+		Log.i(TAG, "Selected account: " + mSelectedAccount.getName() + " ("
+				+ mSelectedAccount.getType() + ")");
 		Log.i(TAG, "Creating contact: " + name);
 		try {
-			getActivity().getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+			getActivity().getContentResolver().applyBatch(
+					ContactsContract.AUTHORITY, ops);
 		} catch (final Exception e) {
 			// Display warning
 			final Context ctx = getActivity();
@@ -316,7 +354,8 @@ public class ContactAdderFragment extends HttpFragment implements
 		mAccounts.clear();
 
 		// Get account data from system
-		final AuthenticatorDescription[] accountTypes = AccountManager.get(getActivity()).getAuthenticatorTypes();
+		final AuthenticatorDescription[] accountTypes = AccountManager.get(
+				getActivity()).getAuthenticatorTypes();
 
 		// Populate tables
 		for (final Account element : a) {
@@ -324,7 +363,8 @@ public class ContactAdderFragment extends HttpFragment implements
 			// need to construct a
 			// meaningful display name for each.
 			final String systemAccountType = element.type;
-			final AuthenticatorDescription ad = getAuthenticatorDescription(systemAccountType, accountTypes);
+			final AuthenticatorDescription ad = getAuthenticatorDescription(
+					systemAccountType, accountTypes);
 			final AccountData data = new AccountData(element.name, ad);
 			mAccounts.add(data);
 		}
@@ -456,12 +496,17 @@ public class ContactAdderFragment extends HttpFragment implements
 				ViewGroup parent) {
 			// Inflate a view template
 			if (convertView == null) {
-				final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-				convertView = layoutInflater.inflate(R.layout.account_entry,parent, false);
+				final LayoutInflater layoutInflater = getActivity()
+						.getLayoutInflater();
+				convertView = layoutInflater.inflate(R.layout.account_entry,
+						parent, false);
 			}
-			final TextView firstAccountLine = (TextView) convertView.findViewById(R.id.firstAccountLine);
-			final TextView secondAccountLine = (TextView) convertView.findViewById(R.id.secondAccountLine);
-			final ImageView accountIcon = (ImageView) convertView.findViewById(R.id.accountIcon);
+			final TextView firstAccountLine = (TextView) convertView
+					.findViewById(R.id.firstAccountLine);
+			final TextView secondAccountLine = (TextView) convertView
+					.findViewById(R.id.secondAccountLine);
+			final ImageView accountIcon = (ImageView) convertView
+					.findViewById(R.id.accountIcon);
 
 			// Populate template
 			final AccountData data = getItem(position);
@@ -469,7 +514,8 @@ public class ContactAdderFragment extends HttpFragment implements
 			secondAccountLine.setText(data.getTypeLabel());
 			Drawable icon = data.getIcon();
 			if (icon == null) {
-				icon = getResources().getDrawable(android.R.drawable.ic_menu_search);
+				icon = getResources().getDrawable(
+						android.R.drawable.ic_menu_search);
 			}
 			accountIcon.setImageDrawable(icon);
 			return convertView;
@@ -477,11 +523,14 @@ public class ContactAdderFragment extends HttpFragment implements
 	}
 
 	@Override
-	public void onRequestFailure(SpiceException arg0) {}
+	public void onRequestFailure(SpiceException arg0) {
+	}
 
 	@Override
-	public void onRequestSuccess(Object arg0) {}
+	public void onRequestSuccess(Object arg0) {
+	}
 
 	@Override
-	void updateUI() {}
+	void updateUI() {
+	}
 }
