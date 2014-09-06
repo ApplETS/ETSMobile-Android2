@@ -15,7 +15,12 @@ import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.HoraireActivite;
+import ca.etsmtl.applets.etsmobile.model.HoraireExamenFinal;
+import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.model.listeDesActivitesEtProf;
+import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
+import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
+import ca.etsmtl.applets.etsmobile.model.listeSeances;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import com.j256.ormlite.dao.Dao;
@@ -33,6 +38,12 @@ public class HoraireManager implements RequestListener<Object> {
 		dataManager.getDataFromSignet(
 				SignetMethods.LIST_HORAIRE_PROF,
 				ApplicationManager.userCredentials,this,"É2014");
+		
+		dataManager.getDataFromSignet(
+				SignetMethods.LIST_EXAMENS_FINAUX,
+				ApplicationManager.userCredentials,this,"É2014");
+		
+//		dataManager.getDataFromSignet(SignetMethods.LIST_SEANCES, ApplicationManager.userCredentials, this, "");
 	}
 	
 	@Override
@@ -49,20 +60,54 @@ public class HoraireManager implements RequestListener<Object> {
 			listeDesActivitesEtProf listeDesActivitesEtProf = (listeDesActivitesEtProf) o;
 			
 			deleteExpiredHoraireActivite(listeDesActivitesEtProf);
-			addHoraireActiviteInDB(listeDesActivitesEtProf);
+			createOrUpdateHoraireActiviteInDB(listeDesActivitesEtProf);
+		} else {
+			Log.e("ELSE",""+o.toString());
+		}
+		
+		//lireJoursRemplaces
+		if(o instanceof listeJoursRemplaces) {
+			listeJoursRemplaces listeJoursRemplaces = (listeJoursRemplaces) o;
+			
+//			deleteExpiredJoursRemplaces(listeJoursRemplaces);
+//			createOrUpdateJoursRemplacesInDB(listeJoursRemplaces);
 		}
 		
 		
-		
-		
-		//lireJoursRemplaces
 		//listeHoraireExamensFin
+		if(o instanceof listeHoraireExamensFinaux ) {
+			listeHoraireExamensFinaux listeHoraireExamensFinaux = (listeHoraireExamensFinaux) o;
+			
+			for(HoraireExamenFinal horaireExamenFinal : listeHoraireExamensFinaux.listeHoraire) {
+				Log.e("HoraireExamenFinal",	horaireExamenFinal.sigle+" "+
+											horaireExamenFinal.dateExamen+" "+
+											horaireExamenFinal.heureDebut+" "+
+											horaireExamenFinal.heureFin);
+			}
+			
+		}
+		
+		if(o instanceof listeSeances) {
+			
+			
+			listeSeances listeSeances = (listeSeances) o;
+			Log.e("Seance","o instanceof listeSeances "+listeSeances.ListeDesSeances.size());
+			
+			for(Seances seances : listeSeances.ListeDesSeances) {
+				Log.e("Seance",seances.libelleCours+"");
+			}
+			
+		}
 		
 		
 
 
 	}
 	
+	/**
+	 * Deletes entries in DB that doesn't exist on API
+	 * @param listeDesActivitesEtProf API list
+	 */
 	private void deleteExpiredHoraireActivite(listeDesActivitesEtProf listeDesActivitesEtProf){
 		DatabaseHelper dbHelper = new DatabaseHelper(activity);
 
@@ -96,7 +141,7 @@ public class HoraireManager implements RequestListener<Object> {
 					Dao<HoraireActivite, String> horaireActiviteDao = dbHelper.getDao(HoraireActivite.class);
 
 					horaireActiviteDao.deleteById(horaireActiviteInDB.id);
-					Log.e("Supression", horaireActiviteInDB.id+" supprimé");
+					Log.v("Supression", horaireActiviteInDB.id+" supprimé");
 				}
 
 			}
@@ -108,13 +153,17 @@ public class HoraireManager implements RequestListener<Object> {
 		
 	}
 
-	private void addHoraireActiviteInDB(listeDesActivitesEtProf listeDesActivitesEtProf){
+	
+	/**
+	 * Adds new API entries on DB or updates existing ones
+	 * @param listeDesActivitesEtProf API list
+	 */
+	private void createOrUpdateHoraireActiviteInDB(listeDesActivitesEtProf listeDesActivitesEtProf){
 		DatabaseHelper dbHelper = new DatabaseHelper(activity);
 		
 		try {
-			
 			for(HoraireActivite horaireActivite : listeDesActivitesEtProf.listeActivites) {
-				dbHelper.getDao(HoraireActivite.class).createIfNotExists(horaireActivite);
+				dbHelper.getDao(HoraireActivite.class).createOrUpdate(horaireActivite);
 			}
 			
 		} catch (SQLException e) {

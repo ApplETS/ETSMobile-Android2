@@ -16,6 +16,7 @@ import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.model.Service;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
 
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
@@ -237,6 +238,22 @@ public class DataManager {
 						listener.onRequestSuccess(listeEmployeByService);
 
 						break;
+						
+						
+					case SignetMethods.LIST_EXAMENS_FINAUX:
+						String pSession5 = reqParams[0];
+						result = signetsMobileSoap.listeHoraireExamensFin(username, password, pSession5);
+						
+						listener.onRequestSuccess(result);
+						break;
+						
+						
+					case SignetMethods.LIST_SEANCES:
+						result = signetsMobileSoap.lireHoraireDesSeances(username, password, "LOG240-01", "É2014", "2014-04-01", "2014-08-01");
+						
+						listener.onRequestSuccess(result);
+						break;
+						
 
 					default:
 						break;
@@ -273,6 +290,9 @@ public class DataManager {
 		public static final int BOTTIN_GET_ALL = 13;
 		public static final int BOTTIN_GET_FICHE_BY_SERVICE = 14;
 		public static final int BOTTIN_GET_LIST_SERVICE_AND_EMP = 15;
+		public static final int LIST_EXAMENS_FINAUX = 16;
+		public static final int LIST_SEANCES = 17;
+		
 	}
 
 	/**

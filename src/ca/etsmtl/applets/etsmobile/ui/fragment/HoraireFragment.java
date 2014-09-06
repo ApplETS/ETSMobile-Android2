@@ -39,6 +39,9 @@ import com.j256.ormlite.support.DatabaseConnection;
 import com.j256.ormlite.support.DatabaseResults;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
+/**
+ * Created by Phil on 17/11/13. content create by Laurence on 07/02/14
+ */
 public class HoraireFragment extends HttpFragment {
 
 	private TextView message;
@@ -81,6 +84,10 @@ public class HoraireFragment extends HttpFragment {
 			}
 		});
 				
+		
+		
+		
+
 		
 		/* Lancement de l'application calendrier du cellulaire
 		long startMillis = java.lang.System.currentTimeMillis();
