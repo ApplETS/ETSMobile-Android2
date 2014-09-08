@@ -272,7 +272,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 				e.printStackTrace();
 			}
 
-			 Activity activity = getActivity();
+			Activity activity = getActivity();
 			if (activity != null) {
 				getActivity().runOnUiThread(new Runnable() {
 					public void run() {
@@ -281,8 +281,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 						mProgressDialog.dismiss();
 						((BaseFragment)BottinFragment.this).progressBar.clearAnimation();;
 						((BaseFragment)BottinFragment.this).progressBar.setVisibility(View.GONE);
-				
-						
 					}
 				});
 			}

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
@@ -14,9 +16,13 @@ import ca.etsmtl.applets.etsmobile.model.ArrayOfFicheEmploye;
 import ca.etsmtl.applets.etsmobile.model.ArrayOfService;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
+import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Service;
+import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
+import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
+import ca.etsmtl.applets.etsmobile.model.listeSeances;
 
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
@@ -178,7 +184,7 @@ public class DataManager {
 
 						listener.onRequestSuccess(result);
 						break;
-					case SignetMethods.LIRE_JOUR_REMPLACE:
+					case SignetMethods.LIRE_JOURS_REMPLACES:
 
 						String pSession4 = reqParams[0];
 
@@ -249,9 +255,87 @@ public class DataManager {
 						
 						
 					case SignetMethods.LIST_SEANCES:
-						result = signetsMobileSoap.lireHoraireDesSeances(username, password, "LOG240-01", "É2014", "2014-04-01", "2014-08-01");
+						
+						String pCoursGroupe = reqParams[0];
+						String pSession6 = reqParams[1];
+						String pDateDebut = reqParams[2];
+						String pDateFin = reqParams[3];
+						
+						result = signetsMobileSoap.lireHoraireDesSeances(username, password, pCoursGroupe, pSession6, pDateDebut, pDateFin);
 						
 						listener.onRequestSuccess(result);
+						break;
+						
+					case SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION:
+						
+						ListeDeSessions listeDeSessions = signetsMobileSoap.listeSessions(username, password);
+						
+						listeSeances listeSeances = new listeSeances();
+						
+						DateTime dt = new DateTime();
+						DateTime dtEnd = new DateTime();
+						
+						for(Trimestre trimestre : listeDeSessions.liste) {
+							
+							dtEnd = new DateTime(trimestre.dateFin);
+							
+							if(dt.isBefore(dtEnd)) {
+								listeSeances.ListeDesSeances.addAll( signetsMobileSoap.lireHoraireDesSeances(username, password, "", trimestre.abrege, "1964-01-01", "3000-12-01").ListeDesSeances);
+							}
+						}
+						
+						result = listeSeances;
+						listener.onRequestSuccess(result);
+						
+						break;
+						
+					case SignetMethods.LIST_EXAM_CURRENT_AND_NEXT_SESSION:
+						
+						ListeDeSessions listeDeSessions2 = signetsMobileSoap.listeSessions(username, password);
+						
+						listeHoraireExamensFinaux listeHoraireExamensFinaux = new listeHoraireExamensFinaux();
+						
+						DateTime dt2 = new DateTime();
+						DateTime dtEnd2 = new DateTime();
+						
+						for(Trimestre trimestre : listeDeSessions2.liste) {
+							
+							dtEnd2 = new DateTime(trimestre.dateFin);
+							
+							if(dt2.isBefore(dtEnd2)) {
+								listeHoraireExamensFinaux.listeHoraire.addAll( signetsMobileSoap.listeHoraireExamensFin(username, password, trimestre.abrege).listeHoraire );
+							}
+						}
+						
+						result = listeHoraireExamensFinaux;
+						listener.onRequestSuccess(result);
+						
+						break;
+						
+					case SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION:
+						
+						ListeDeSessions listeDeSessions3 = signetsMobileSoap.listeSessions(username, password);
+						
+						listeJoursRemplaces listeJoursRemplaces = new listeJoursRemplaces();
+						
+						
+						DateTime dt3 = new DateTime();
+						DateTime dtEnd3 = new DateTime();
+						
+						for(Trimestre trimestre : listeDeSessions3.liste) {
+							
+							dtEnd3 = new DateTime(trimestre.dateFin);
+							
+							if(dt3.isBefore(dtEnd3)) {
+								
+								listeJoursRemplaces.listeJours.addAll( signetsMobileSoap.lireJoursRemplaces(trimestre.abrege).listeJours );
+								
+							}
+						}
+						
+						result = listeJoursRemplaces;
+						listener.onRequestSuccess(result);
+						
 						break;
 						
 
@@ -283,7 +367,7 @@ public class DataManager {
 		public static final int LIST_EVAL = 1;
 		public static final int LIST_HORAIRE_PROF = 7;
 		public static final int LIRE_HORAIRE = 8;
-		public static final int LIRE_JOUR_REMPLACE = 9;
+		public static final int LIRE_JOURS_REMPLACES = 9;
 		public static final int BOTTIN_LIST_DEPT = 10;
 		public static final int BOTTIN_GET_FICHE = 11;
 		public static final int BOTTIN_GET_FICHE_DATA = 12;
@@ -292,7 +376,9 @@ public class DataManager {
 		public static final int BOTTIN_GET_LIST_SERVICE_AND_EMP = 15;
 		public static final int LIST_EXAMENS_FINAUX = 16;
 		public static final int LIST_SEANCES = 17;
-		
+		public static final int LIST_SEANCES_CURRENT_AND_NEXT_SESSION = 18;
+		public static final int LIST_EXAM_CURRENT_AND_NEXT_SESSION = 19;
+		public static final int LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION = 20;
 	}
 
 	/**

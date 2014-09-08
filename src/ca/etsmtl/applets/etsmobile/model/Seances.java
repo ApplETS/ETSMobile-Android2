@@ -19,25 +19,39 @@ import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 import ca.etsmtl.applets.etsmobile.http.soap.Helper;
 
+@DatabaseTable(tableName = "seances")
 public class Seances extends AttributeContainer implements KvmSerializable
 {
   
+  @DatabaseField
   public String dateDebut;
   
+  @DatabaseField
   public String dateFin;
   
+  @DatabaseField
   public String coursGroupe;
   
+  @DatabaseField
   public String nomActivite;
   
+  @DatabaseField
   public String local;
   
+  @DatabaseField
   public String descriptionActivite;
   
+  @DatabaseField
   public String libelleCours;
+  
+  @DatabaseField(id = true)
+  public String id;
 
   public Seances ()
   {

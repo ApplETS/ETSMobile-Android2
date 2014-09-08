@@ -24,6 +24,7 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.http.soap.WebServiceSoap;
 import ca.etsmtl.applets.etsmobile.model.HoraireActivite;
+import ca.etsmtl.applets.etsmobile.model.HoraireExamenFinal;
 import ca.etsmtl.applets.etsmobile.model.coursHoraire;
 import ca.etsmtl.applets.etsmobile.model.listeCoursHoraire;
 import ca.etsmtl.applets.etsmobile.model.listeDesActivitesEtProf;
@@ -45,6 +46,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 public class HoraireFragment extends HttpFragment {
 
 	private TextView message;
+	private HoraireManager horaireManager;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -102,14 +104,15 @@ public class HoraireFragment extends HttpFragment {
 		
 		//*/
 		
-
+		horaireManager = new HoraireManager(this, getActivity());
 		
-//		datamanager.getDataFromSignet(
-//				SignetMethods.LIST_HORAIRE_PROF,
-//				ApplicationManager.userCredentials,this,"É2014");
+		DataManager dataManager = DataManager.getInstance(getActivity());
 		
+		dataManager.getDataFromSignet(SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
 		
+		dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
 		
+		dataManager.getDataFromSignet(SignetMethods.LIST_EXAM_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
 		
 		return v;
 	}
@@ -118,34 +121,37 @@ public class HoraireFragment extends HttpFragment {
 	public void onRequestFailure(SpiceException arg0) {}
 
 	@Override
-	public void onRequestSuccess(Object o) {}
+	public void onRequestSuccess(Object o) {
+		horaireManager.onRequestSuccess(o);
+		
+	}
 
 	@Override
 	void updateUI() {
 		
 		DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
 		
-		HoraireManager horaireManager = new HoraireManager(this, getActivity());
+		
 		
 		
 		// Affichage des entrées
 		message.setText("");
 		try {
-			List<HoraireActivite> list = null;
-			list = dbHelper.getDao(HoraireActivite.class).queryForAll();
+			List<HoraireExamenFinal> list = null;
+			list = dbHelper.getDao(HoraireExamenFinal.class).queryForAll();
 		
 			if(list.isEmpty()) {
 				Log.e("liste vide", "liste vide");
 			}
 			
-			for(HoraireActivite horaireActivite : list){
-				message.setText(message.getText() +horaireActivite.id+" "+ horaireActivite.titreCours + " "
-						+ horaireActivite.jour + " " + horaireActivite.journee + " "
-						+ horaireActivite.heureDebut+"\n");
+			for(HoraireExamenFinal horaireExamenFinal : list){
+				message.setText(message.getText() +horaireExamenFinal.id+" "+ horaireExamenFinal.sigle + " "
+						+ horaireExamenFinal.local + " " + horaireExamenFinal.dateExamen + " "
+						+ horaireExamenFinal.heureDebut+"\n");
 				
-				Log.d("cours", horaireActivite.titreCours + " "
-				+ horaireActivite.jour + " " + horaireActivite.journee + " "
-				+ horaireActivite.heureDebut);
+//				Log.d("cours", horaireExamenFinal.titreCours + " "
+//				+ horaireExamenFinal.jour + " " + horaireExamenFinal.journee + " "
+//				+ horaireExamenFinal.heureDebut);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

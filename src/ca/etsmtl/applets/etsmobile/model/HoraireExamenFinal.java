@@ -14,22 +14,35 @@ import java.util.Hashtable;
 
 import org.ksoap2.serialization.*;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
+@DatabaseTable(tableName = "horaire_examen_final")
 public class HoraireExamenFinal extends AttributeContainer implements KvmSerializable
 {
   
+  @DatabaseField
   public String sigle;
   
+  @DatabaseField
   public String groupe;
   
+  @DatabaseField
   public String dateExamen;
   
+  @DatabaseField
   public String heureDebut;
   
+  @DatabaseField
   public String heureFin;
   
+  @DatabaseField
   public String local;
+  
+  @DatabaseField(id = true)
+  public String id;
 
   public HoraireExamenFinal ()
   {
