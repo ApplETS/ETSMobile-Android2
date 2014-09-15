@@ -6,6 +6,9 @@ import java.util.Locale;
 import org.joda.time.DateTime;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.InjectView;
@@ -21,16 +24,28 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class TodaysFragment extends HttpFragment {
 
-	@InjectView(R.id.todays_list)
+//	@InjectView(R.id.todays_list)
 	ListView list;
 
-	@InjectView(R.id.todays_name)
+//	@InjectView(R.id.todays_name)
 	TextView todaysTv;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		layoutId = R.layout.fragment_today;
+		
+		
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_today, container, false);
+		super.onCreateView(inflater, v , savedInstanceState);
+		list = (ListView) v.findViewById(R.id.todays_list) ;
+		todaysTv = (TextView) v.findViewById(R.id.todays_name);
+		return v;
 	}
 
 	@Override

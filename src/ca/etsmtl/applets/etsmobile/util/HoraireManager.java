@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Observable;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,9 +30,14 @@ import com.j256.ormlite.dao.DaoManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-public class HoraireManager implements RequestListener<Object> {
+public class HoraireManager extends Observable implements RequestListener<Object> {
 
 	private Activity activity;
+	private boolean syncSeancesEnded = false;
+	private boolean syncJoursRemplacesEnded = false;
+	private boolean syncExamensEnded = false;
+	
+	public enum Synchronized {DB_CALENDAR, ANDROID_CALENDAR}; 
 	
 	public HoraireManager(final RequestListener<Object> listener, Activity activity) {
 		this.activity = activity;
@@ -61,10 +67,12 @@ public class HoraireManager implements RequestListener<Object> {
 			
 			deleteExpiredJoursRemplaces(listeJoursRemplaces);
 			createOrUpdateJoursRemplacesInDB(listeJoursRemplaces);
+			syncJoursRemplacesEnded = true;
 			
-			for(JoursRemplaces joursRemplaces : listeJoursRemplaces.listeJours) {
-				Log.e("JoursRemplaces",joursRemplaces.dateOrigine+ " : "+joursRemplaces.description);
-			}
+//			for(JoursRemplaces joursRemplaces : listeJoursRemplaces.listeJours) {
+//				Log.e("JoursRemplaces",joursRemplaces.dateOrigine+ " : "+joursRemplaces.description);
+//			}
+			
 			
 		}
 		
@@ -74,13 +82,14 @@ public class HoraireManager implements RequestListener<Object> {
 			
 			deleteExpiredExamensFinaux(listeHoraireExamensFinaux);
 			createOrUpdateExamensFinauxInDB(listeHoraireExamensFinaux);
+			syncExamensEnded = true;
 			
-			for(HoraireExamenFinal horaireExamenFinal : listeHoraireExamensFinaux.listeHoraire) {
-				Log.e("HoraireExamenFinal",	horaireExamenFinal.sigle+" "+
-											horaireExamenFinal.dateExamen+" "+
-											horaireExamenFinal.heureDebut+" "+
-											horaireExamenFinal.heureFin);
-			}
+//			for(HoraireExamenFinal horaireExamenFinal : listeHoraireExamensFinaux.listeHoraire) {
+//				Log.e("HoraireExamenFinal",	horaireExamenFinal.sigle+" "+
+//											horaireExamenFinal.dateExamen+" "+
+//											horaireExamenFinal.heureDebut+" "+
+//											horaireExamenFinal.heureFin);
+//			}
 			
 		}
 		
@@ -91,10 +100,16 @@ public class HoraireManager implements RequestListener<Object> {
 			
 			deleteExpiredSeances(listeSeances);
 			createOrUpdateSeancesInDB(listeSeances);
+			syncSeancesEnded = true;
 			
-			for(Seances seances : listeSeances.ListeDesSeances) {
-				Log.e("Seance",seances.dateDebut+ " : "+seances.libelleCours);
-			}
+//			for(Seances seances : listeSeances.ListeDesSeances) {
+//				Log.e("Seance",seances.dateDebut+ " : "+seances.libelleCours);
+//			}
+		}
+		
+		if(syncExamensEnded && syncJoursRemplacesEnded && syncSeancesEnded) {
+			this.setChanged();
+			this.notifyObservers(Synchronized.DB_CALENDAR);
 		}
 
 	}

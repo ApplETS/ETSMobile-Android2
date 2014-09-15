@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import android.content.ContentUris;
 import android.content.Intent;
@@ -18,35 +20,26 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
-import ca.etsmtl.applets.etsmobile.http.soap.WebServiceSoap;
 import ca.etsmtl.applets.etsmobile.model.HoraireActivite;
 import ca.etsmtl.applets.etsmobile.model.HoraireExamenFinal;
-import ca.etsmtl.applets.etsmobile.model.coursHoraire;
-import ca.etsmtl.applets.etsmobile.model.listeCoursHoraire;
-import ca.etsmtl.applets.etsmobile.model.listeDesActivitesEtProf;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
 
-import com.j256.ormlite.stmt.PreparedDelete;
-import com.j256.ormlite.stmt.PreparedQuery;
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.StatementBuilder.StatementType;
-import com.j256.ormlite.support.CompiledStatement;
-import com.j256.ormlite.support.DatabaseConnection;
-import com.j256.ormlite.support.DatabaseResults;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 /**
- * Created by Phil on 17/11/13. content create by Laurence on 07/02/14
+ * Created by Thibaut on 30/08/14.
  */
-public class HoraireFragment extends HttpFragment {
+public class HoraireFragment extends HttpFragment implements Observer {
 
 	private TextView message;
 	private HoraireManager horaireManager;
+	private CustomProgressDialog customProgressDialog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +80,17 @@ public class HoraireFragment extends HttpFragment {
 		});
 				
 		
+		Button updateCalendarButton = (Button) v.findViewById(R.id.btn_update_calendar);
+		
+		updateCalendarButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				
+			}
+		});
+		
 		
 		
 
@@ -105,34 +109,34 @@ public class HoraireFragment extends HttpFragment {
 		//*/
 		
 		horaireManager = new HoraireManager(this, getActivity());
+		horaireManager.addObserver(this);
 		
-		DataManager dataManager = DataManager.getInstance(getActivity());
+		customProgressDialog = new CustomProgressDialog(getActivity(), R.drawable.loading_spinner,"Synchronisation en cours");
+		customProgressDialog.show();
 		
 		dataManager.getDataFromSignet(SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-		
 		dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-		
 		dataManager.getDataFromSignet(SignetMethods.LIST_EXAM_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
 		
 		return v;
 	}
 
 	@Override
-	public void onRequestFailure(SpiceException arg0) {}
+	public void onRequestFailure(SpiceException arg0) {
+		customProgressDialog.dismiss();
+		Toast.makeText(getActivity(), "La synchronisation a échoué.", Toast.LENGTH_SHORT).show();
+	}
 
 	@Override
 	public void onRequestSuccess(Object o) {
 		horaireManager.onRequestSuccess(o);
 		
 	}
-
+	
 	@Override
 	void updateUI() {
 		
 		DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-		
-		
-		
 		
 		// Affichage des entrées
 		message.setText("");
@@ -187,6 +191,19 @@ public class HoraireFragment extends HttpFragment {
 		 */
 		
 
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		
+		if(data == HoraireManager.Synchronized.DB_CALENDAR) {
+			customProgressDialog.dismiss();
+			message.setText(message.getText()+"DB Synchronisée\n");
+			
+		}
+		
+		
+		
 	}
 
 }

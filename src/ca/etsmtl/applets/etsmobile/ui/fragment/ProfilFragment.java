@@ -25,7 +25,6 @@ public class ProfilFragment extends HttpFragment implements android.view.View.On
 	private Etudiant etudiant;
 	private listeDesProgrammes mlisteDesProgrammes;
 
-	@InjectView(R.id.profil_layout_info)
 	RelativeLayout profileLayout;
 
 	@Override
@@ -36,7 +35,9 @@ public class ProfilFragment extends HttpFragment implements android.view.View.On
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = super.onCreateView(inflater, container, savedInstanceState);
+		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_profil, container,  false);
+        super.onCreateView(inflater, v, savedInstanceState);
+		profileLayout = (RelativeLayout) v.findViewById(R.id.profil_layout_info);
 		((Button) v.findViewById(R.id.profil_button_logout)).setOnClickListener(this);
 		return v;
 	}

@@ -18,10 +18,10 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public abstract class BaseFragment extends Fragment {
 
-	@InjectView(R.id.base_layout_loading_pb)
+//	@InjectView(R.id.base_layout_loading_pb)
 	protected ProgressBar progressBar;
 
-	@InjectView(R.id.base_layout_error_tv)
+//	@InjectView(R.id.base_layout_error_tv)
 	protected TextView errorMessageTv;
 
 	protected int layoutId = -1;
@@ -29,7 +29,11 @@ public abstract class BaseFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(layoutId, container, false);
-		ButterKnife.inject(this, v);
+		
+		progressBar = (ProgressBar) v.findViewById(R.id.base_layout_loading_pb);
+		errorMessageTv = (TextView) v.findViewById(R.id.base_layout_error_tv);
+		
+//		ButterKnife.inject(this, v);
 		this.errorMessageTv.setVisibility(View.GONE);
 		return v;
 	}
