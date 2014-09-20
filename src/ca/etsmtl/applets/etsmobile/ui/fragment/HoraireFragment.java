@@ -1,9 +1,12 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -11,6 +14,7 @@ import java.util.Observer;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
@@ -26,6 +30,8 @@ import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.HoraireActivite;
 import ca.etsmtl.applets.etsmobile.model.HoraireExamenFinal;
+import ca.etsmtl.applets.etsmobile.model.JoursRemplaces;
+import ca.etsmtl.applets.etsmobile.util.AndroidCalendarManager;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile2.R;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
@@ -80,16 +86,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
 		});
 				
 		
-		Button updateCalendarButton = (Button) v.findViewById(R.id.btn_update_calendar);
 		
-		updateCalendarButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				
-			}
-		});
 		
 		
 		
@@ -116,7 +113,53 @@ public class HoraireFragment extends HttpFragment implements Observer {
 		
 		dataManager.getDataFromSignet(SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
 		dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-		dataManager.getDataFromSignet(SignetMethods.LIST_EXAM_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+//		dataManager.getDataFromSignet(SignetMethods.LIST_EXAM_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+		
+		
+		Button updateCalendarButton = (Button) v.findViewById(R.id.btn_update_calendar);
+		
+		updateCalendarButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				
+				new AsyncTask<Object, Void, Object>() {
+					private Exception exception = null;
+					protected void onPreExecute() {
+						customProgressDialog = new CustomProgressDialog(getActivity(), R.drawable.loading_spinner,"Mise à jour du calendrier en cours");
+						customProgressDialog.show();
+					}
+					
+					@Override
+					protected Object doInBackground(Object... params) {
+						try {
+							horaireManager.updateCalendar();
+						} catch(Exception e) {
+							exception = e;
+						}
+						return null;
+					}
+					
+					protected void onPostExecute(Object result) {
+						
+						customProgressDialog.dismiss();
+						if (exception != null) {
+							message.setText(message.getText()+"Une erreur est survenue lors de la synchronisation\n");
+						} else {
+							message.setText(message.getText()+"Calendrier local synchronisé\n");
+						}
+					}
+			
+				}.execute();
+
+				
+			}
+		});
+		
+		
+		
+		
 		
 		return v;
 	}
@@ -138,6 +181,8 @@ public class HoraireFragment extends HttpFragment implements Observer {
 		
 		DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
 		
+		
+		/*
 		// Affichage des entrées
 		message.setText("");
 		try {
@@ -162,6 +207,8 @@ public class HoraireFragment extends HttpFragment implements Observer {
 		}
 		
 		message.setText(message.getText() +"\n\n");
+		
+		//*/
 		
 		
 		/*
@@ -202,8 +249,18 @@ public class HoraireFragment extends HttpFragment implements Observer {
 			
 		}
 		
+		if(data == HoraireManager.Synchronized.ANDROID_CALENDAR) {
+			customProgressDialog.dismiss();
+			message.setText(message.getText()+"Calendrier local synchronisé\n");
+		}
 		
+		if(data == HoraireManager.Synchronized.ERROR) {
+			
+			message.setText(message.getText()+"Une erreur est survenue lors de la synchronisation\n");
+		}
 		
 	}
+	
+	
 
 }

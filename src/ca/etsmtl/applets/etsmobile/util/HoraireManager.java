@@ -1,9 +1,11 @@
 package ca.etsmtl.applets.etsmobile.util;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 
 import android.app.Activity;
@@ -35,9 +37,9 @@ public class HoraireManager extends Observable implements RequestListener<Object
 	private Activity activity;
 	private boolean syncSeancesEnded = false;
 	private boolean syncJoursRemplacesEnded = false;
-	private boolean syncExamensEnded = false;
+//	private boolean syncExamensEnded = false;
 	
-	public enum Synchronized {DB_CALENDAR, ANDROID_CALENDAR}; 
+	public enum Synchronized {DB_CALENDAR, ANDROID_CALENDAR, ERROR}; 
 	
 	public HoraireManager(final RequestListener<Object> listener, Activity activity) {
 		this.activity = activity;
@@ -76,6 +78,8 @@ public class HoraireManager extends Observable implements RequestListener<Object
 			
 		}
 		
+		/*
+		
 		//listeHoraireExamensFin
 		if(o instanceof listeHoraireExamensFinaux ) {
 			listeHoraireExamensFinaux listeHoraireExamensFinaux = (listeHoraireExamensFinaux) o;
@@ -93,6 +97,8 @@ public class HoraireManager extends Observable implements RequestListener<Object
 			
 		}
 		
+		*/
+		
 		//listeSeances
 		if(o instanceof listeSeances) {
 			
@@ -107,9 +113,10 @@ public class HoraireManager extends Observable implements RequestListener<Object
 //			}
 		}
 		
-		if(syncExamensEnded && syncJoursRemplacesEnded && syncSeancesEnded) {
+		if(syncJoursRemplacesEnded && syncSeancesEnded) {
 			this.setChanged();
 			this.notifyObservers(Synchronized.DB_CALENDAR);
+			Log.e("ENOVYE","ENVOYE");
 		}
 
 	}
@@ -335,5 +342,73 @@ public class HoraireManager extends Observable implements RequestListener<Object
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	public void updateCalendar() throws Exception {
+		
+		String calendarName = "Calendrier ApplETS";
+		
+		DatabaseHelper dbHelper = new DatabaseHelper(activity);
+		AndroidCalendarManager androidCalendarManager = new AndroidCalendarManager(activity);
+		
+		androidCalendarManager.deleteCalendar(calendarName);
+		androidCalendarManager.createCalendar(calendarName);
+		
+		
+		//Inserting JoursRemplaces in local calendar
+		SimpleDateFormat joursRemplacesFormatter = new SimpleDateFormat("yyyy-MM-dd",Locale.CANADA_FRENCH);
+		ArrayList<JoursRemplaces> listeJoursRemplaces = (ArrayList<JoursRemplaces>) dbHelper.getDao(JoursRemplaces.class).queryForAll();
+		
+		
+		for(JoursRemplaces joursRemplaces : listeJoursRemplaces) {
+			androidCalendarManager.insertEventInCalendar(calendarName, 
+					joursRemplaces.description, 
+					joursRemplaces.description, 
+					"",
+					joursRemplacesFormatter.parse(joursRemplaces.dateOrigine), 
+					joursRemplacesFormatter.parse(joursRemplaces.dateOrigine));
+		}
+		
+		
+		//Inserting Seances in local calendar
+		SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.CANADA_FRENCH);
+		ArrayList<Seances> seances = (ArrayList<Seances>) dbHelper.getDao(Seances.class).queryForAll();
+		
+		
+		for(Seances seance : seances) {
+			
+			
+			androidCalendarManager.insertEventInCalendar(calendarName, 
+					seance.descriptionActivite.equals("Examen final") ? "Examen final "+seance.coursGroupe : seance.coursGroupe , 
+					seance.libelleCours+ " - "+  seance.descriptionActivite, 
+					seance.local,
+					seancesFormatter.parse(seance.dateDebut), 
+					seancesFormatter.parse(seance.dateFin));
+		}
+		
+		
+		/*
+		//Inserting HoraireExamenFinal in local calendar
+		ArrayList<HoraireExamenFinal> examenFinaux = (ArrayList<HoraireExamenFinal>) dbHelper.getDao(HoraireExamenFinal.class).queryForAll();
+		String dateDebutExamen = "";
+		String dateFinExamen = "";
+		
+		for(HoraireExamenFinal examenFinal : examenFinaux) {
+			
+			dateDebutExamen = examenFinal.dateExamen+"T"+examenFinal.heureDebut+":00";
+			dateFinExamen = examenFinal.dateExamen+"T"+examenFinal.heureFin+":00";
+			
+			
+			androidCalendarManager.insertEventInCalendar(calendarName, 
+					"Examen : "+examenFinal.sigle+"-"+examenFinal.groupe, 
+					"Examen : "+examenFinal.sigle+"-"+examenFinal.groupe, 
+					examenFinal.local,
+					seancesFormatter.parse(dateDebutExamen), 
+					seancesFormatter.parse(dateFinExamen));
+		}
+		*/
+			
+
 	}
 }
