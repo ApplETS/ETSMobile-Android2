@@ -2,7 +2,6 @@ package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import java.util.Vector;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,12 +13,10 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
-import ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotesSessionItem;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteItem;
-import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;

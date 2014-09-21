@@ -25,11 +25,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.TextView;
+
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;

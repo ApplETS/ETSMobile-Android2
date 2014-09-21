@@ -1,34 +1,30 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
-import ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity;
-import ca.etsmtl.applets.etsmobile2.R;
-
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity;
+import ca.etsmtl.applets.etsmobile2.R;
 
 public class SecuriteFragment extends BaseFragment {
 	
@@ -58,7 +54,7 @@ public class SecuriteFragment extends BaseFragment {
 	    map.getUiSettings().setMyLocationButtonEnabled(false);
         map.setMyLocationEnabled(true);
  
-        MapsInitializer.initialize(this.getActivity()); 
+        MapsInitializer.initialize(this.getActivity());
 // 
         // Updates the location and zoom of the MapView 
        

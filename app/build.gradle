@@ -1,8 +1,8 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 20
-    buildToolsVersion "20.0.0"
+    compileSdkVersion 19
+    buildToolsVersion '20.0.0'
 
     packagingOptions {
         exclude 'LICENSE.txt'
@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId "ca.etsmtl.applets.etsmobile2"
         minSdkVersion 14
-        targetSdkVersion 20
+        targetSdkVersion 19
         versionCode 1
         versionName "1.0"
     }
@@ -31,30 +31,24 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     //Google play service
-    compile 'com.google.android.gms:play-services:5.0.77+'
-
+    compile 'com.google.android.gms:play-services:5.2.08'
     // BugSense
-    compile "com.bugsense.trace:bugsense:3.6.1"
-
+//    compile 'com.bugsense.trace:bugsense:3.6.1'
     // Robospice
     compile 'com.octo.android.robospice:robospice-spring-android:1.4.12'
     compile 'com.octo.android.robospice:robospice:1.4.12'
     // Robospice - JSON
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.3'
-   // compile 'com.fasterxml.jackson.core:jackson-core:2.3.3'
+    // compile 'com.fasterxml.jackson.core:jackson-core:2.3.3'
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.11'
-
     // Robospice - XML
     compile('org.simpleframework:simple-xml:2.7.1') {
         exclude module: 'stax-api'
     }
-
     // JodaTime objects
     compile 'joda-time:joda-time:2.3'
-
 }
 

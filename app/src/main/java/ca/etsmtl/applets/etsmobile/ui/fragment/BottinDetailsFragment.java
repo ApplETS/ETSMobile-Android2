@@ -1,24 +1,12 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.TextView;
-import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
-import ca.etsmtl.applets.etsmobile.model.ArrayOfFicheEmploye;
-import ca.etsmtl.applets.etsmobile.model.ArrayOfService;
+
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
-import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
