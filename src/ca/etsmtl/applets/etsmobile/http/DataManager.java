@@ -262,21 +262,20 @@ public class DataManager {
 							
 							listeSeances listeSeances = new listeSeances();
 							
-//							DateTime dt = new DateTime();
-//							DateTime dtEnd = new DateTime();
-//							
-//							for(Trimestre trimestre : listeDeSessions.liste) {
-//								
-//								dtEnd = new DateTime(trimestre.dateFin);
-//								
-//								if(dt.isBefore(dtEnd)) {
-//									listeSeances.ListeDesSeances.addAll( signetsMobileSoap.lireHoraireDesSeances(username, password, "", trimestre.abrege, "", "").ListeDesSeances);
-//								}
-//							}
+							DateTime dt = new DateTime();
+							DateTime dtEnd = new DateTime();
+							
+							for(Trimestre trimestre : listeDeSessions.liste) {
+								
+								dtEnd = new DateTime(trimestre.dateFin);
+								
+								if(dt.isBefore(dtEnd)) {
+									listeSeances.ListeDesSeances.addAll( signetsMobileSoap.lireHoraireDesSeances(username, password, "", trimestre.abrege, "", "").ListeDesSeances);
+								}
+							}
 							
 							
 							
-							listeSeances.ListeDesSeances.addAll( signetsMobileSoap.lireHoraireDesSeances(username, password, "", "É2014", "", "").ListeDesSeances);
 							result = listeSeances;
 						
 						break;
@@ -288,21 +287,18 @@ public class DataManager {
 							
 							listeHoraireExamensFinaux listeHoraireExamensFinaux = new listeHoraireExamensFinaux();
 							
-//							DateTime dt2 = new DateTime();
-//							DateTime dtEnd2 = new DateTime();
-//							
-//							for(Trimestre trimestre : listeDeSessions2.liste) {
-//								
-//								dtEnd2 = new DateTime(trimestre.dateFin);
-//								
-//								if(dt2.isBefore(dtEnd2)) {
-//									listeHoraireExamensFinaux.listeHoraire.addAll( signetsMobileSoap.listeHoraireExamensFin(username, password, trimestre.abrege).listeHoraire );
-//								}
-//							}
+							DateTime dt2 = new DateTime();
+							DateTime dtEnd2 = new DateTime();
 							
+							for(Trimestre trimestre : listeDeSessions2.liste) {
+								
+								dtEnd2 = new DateTime(trimestre.dateFin);
+								
+								if(dt2.isBefore(dtEnd2)) {
+									listeHoraireExamensFinaux.listeHoraire.addAll( signetsMobileSoap.listeHoraireExamensFin(username, password, trimestre.abrege).listeHoraire );
+								}
+							}
 							
-							
-							listeHoraireExamensFinaux.listeHoraire.addAll( signetsMobileSoap.listeHoraireExamensFin(username, password, "É2014").listeHoraire );
 							result = listeHoraireExamensFinaux;
 						break;
 						
@@ -313,22 +309,21 @@ public class DataManager {
 							listeJoursRemplaces listeJoursRemplaces = new listeJoursRemplaces();
 							
 							
-//							DateTime dt3 = new DateTime();
-//							DateTime dtEnd3 = new DateTime();
-//							
-//							for(Trimestre trimestre : listeDeSessions3.liste) {
-//								
-//								dtEnd3 = new DateTime(trimestre.dateFin);
-//								
-//								if(dt3.isBefore(dtEnd3)) {
-//									
-//									listeJoursRemplaces.listeJours.addAll( signetsMobileSoap.lireJoursRemplaces(trimestre.abrege).listeJours );
-//									
-//								}
-//							}
+							DateTime dt3 = new DateTime();
+							DateTime dtEnd3 = new DateTime();
+							
+							for(Trimestre trimestre : listeDeSessions3.liste) {
+								
+								dtEnd3 = new DateTime(trimestre.dateFin);
+								
+								if(dt3.isBefore(dtEnd3)) {
+									
+									listeJoursRemplaces.listeJours.addAll( signetsMobileSoap.lireJoursRemplaces(trimestre.abrege).listeJours );
+									
+								}
+							}
 							
 							
-							listeJoursRemplaces.listeJours.addAll( signetsMobileSoap.lireJoursRemplaces("É2014").listeJours );
 							result = listeJoursRemplaces;
 						
 						break;

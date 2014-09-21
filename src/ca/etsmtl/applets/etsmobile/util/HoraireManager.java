@@ -4,19 +4,12 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.HoraireActivite;
 import ca.etsmtl.applets.etsmobile.model.HoraireExamenFinal;
 import ca.etsmtl.applets.etsmobile.model.JoursRemplaces;
@@ -25,10 +18,8 @@ import ca.etsmtl.applets.etsmobile.model.listeDesActivitesEtProf;
 import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
 import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.listeSeances;
-import ca.etsmtl.applets.etsmobile2.R;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -37,9 +28,9 @@ public class HoraireManager extends Observable implements RequestListener<Object
 	private Activity activity;
 	private boolean syncSeancesEnded = false;
 	private boolean syncJoursRemplacesEnded = false;
-//	private boolean syncExamensEnded = false;
 	
-	public enum Synchronized {DB_CALENDAR, ANDROID_CALENDAR, ERROR}; 
+	private String calendarName = "Mes cours";
+	
 	
 	public HoraireManager(final RequestListener<Object> listener, Activity activity) {
 		this.activity = activity;
@@ -52,8 +43,6 @@ public class HoraireManager extends Observable implements RequestListener<Object
 
 	@Override
 	public void onRequestSuccess(Object o) {
-		
-		Log.e("object",""+o.getClass());
 		
 		//listeHoraireEtProf
 		if (o instanceof listeDesActivitesEtProf) {
@@ -70,53 +59,20 @@ public class HoraireManager extends Observable implements RequestListener<Object
 			deleteExpiredJoursRemplaces(listeJoursRemplaces);
 			createOrUpdateJoursRemplacesInDB(listeJoursRemplaces);
 			syncJoursRemplacesEnded = true;
-			
-//			for(JoursRemplaces joursRemplaces : listeJoursRemplaces.listeJours) {
-//				Log.e("JoursRemplaces",joursRemplaces.dateOrigine+ " : "+joursRemplaces.description);
-//			}
-			
-			
 		}
-		
-		/*
-		
-		//listeHoraireExamensFin
-		if(o instanceof listeHoraireExamensFinaux ) {
-			listeHoraireExamensFinaux listeHoraireExamensFinaux = (listeHoraireExamensFinaux) o;
-			
-			deleteExpiredExamensFinaux(listeHoraireExamensFinaux);
-			createOrUpdateExamensFinauxInDB(listeHoraireExamensFinaux);
-			syncExamensEnded = true;
-			
-//			for(HoraireExamenFinal horaireExamenFinal : listeHoraireExamensFinaux.listeHoraire) {
-//				Log.e("HoraireExamenFinal",	horaireExamenFinal.sigle+" "+
-//											horaireExamenFinal.dateExamen+" "+
-//											horaireExamenFinal.heureDebut+" "+
-//											horaireExamenFinal.heureFin);
-//			}
-			
-		}
-		
-		*/
 		
 		//listeSeances
 		if(o instanceof listeSeances) {
-			
 			listeSeances listeSeances = (listeSeances) o;
 			
 			deleteExpiredSeances(listeSeances);
 			createOrUpdateSeancesInDB(listeSeances);
 			syncSeancesEnded = true;
-			
-//			for(Seances seances : listeSeances.ListeDesSeances) {
-//				Log.e("Seance",seances.dateDebut+ " : "+seances.libelleCours);
-//			}
 		}
 		
 		if(syncJoursRemplacesEnded && syncSeancesEnded) {
 			this.setChanged();
-			this.notifyObservers(Synchronized.DB_CALENDAR);
-			Log.e("ENOVYE","ENVOYE");
+			this.notifyObservers();
 		}
 
 	}
@@ -347,8 +303,6 @@ public class HoraireManager extends Observable implements RequestListener<Object
 	
 	public void updateCalendar() throws Exception {
 		
-		String calendarName = "Calendrier ApplETS";
-		
 		DatabaseHelper dbHelper = new DatabaseHelper(activity);
 		AndroidCalendarManager androidCalendarManager = new AndroidCalendarManager(activity);
 		
@@ -387,28 +341,5 @@ public class HoraireManager extends Observable implements RequestListener<Object
 					seancesFormatter.parse(seance.dateFin));
 		}
 		
-		
-		/*
-		//Inserting HoraireExamenFinal in local calendar
-		ArrayList<HoraireExamenFinal> examenFinaux = (ArrayList<HoraireExamenFinal>) dbHelper.getDao(HoraireExamenFinal.class).queryForAll();
-		String dateDebutExamen = "";
-		String dateFinExamen = "";
-		
-		for(HoraireExamenFinal examenFinal : examenFinaux) {
-			
-			dateDebutExamen = examenFinal.dateExamen+"T"+examenFinal.heureDebut+":00";
-			dateFinExamen = examenFinal.dateExamen+"T"+examenFinal.heureFin+":00";
-			
-			
-			androidCalendarManager.insertEventInCalendar(calendarName, 
-					"Examen : "+examenFinal.sigle+"-"+examenFinal.groupe, 
-					"Examen : "+examenFinal.sigle+"-"+examenFinal.groupe, 
-					examenFinal.local,
-					seancesFormatter.parse(dateDebutExamen), 
-					seancesFormatter.parse(dateFinExamen));
-		}
-		*/
-			
-
 	}
 }
