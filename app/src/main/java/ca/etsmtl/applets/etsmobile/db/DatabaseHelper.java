@@ -10,9 +10,11 @@ import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
 import ca.etsmtl.applets.etsmobile.model.Enseignant;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.HoraireActivite;
+import ca.etsmtl.applets.etsmobile.model.HoraireExamenFinal;
 import ca.etsmtl.applets.etsmobile.model.JoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.Personne;
 import ca.etsmtl.applets.etsmobile.model.Programme;
+import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.model.TodaysCourses;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
 
@@ -58,6 +60,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, Trimestre.class);
 			TableUtils.createTable(connectionSource, TodaysCourses.class);
 			TableUtils.createTable(connectionSource, TodaysCourses.Seance.class);
+			TableUtils.createTable(connectionSource, HoraireExamenFinal.class);
+			TableUtils.createTable(connectionSource, Seances.class);
 		} catch (SQLException e) {
 			Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
 			throw new RuntimeException(e);

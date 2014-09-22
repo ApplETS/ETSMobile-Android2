@@ -33,16 +33,21 @@ public class HoraireActivite extends AttributeContainer implements KvmSerializab
 
 	@DatabaseField
 	public String jour;
+	
 	@DatabaseField
 	public String journee;
+	
+	
 	@DatabaseField
 	public String codeActivite;
 	@DatabaseField
 	public String nomActivite;
 	@DatabaseField
 	public String activitePrincipale;
+	
 	@DatabaseField
 	public String heureDebut;
+	
 	@DatabaseField
 	public String heureFin;
 	@DatabaseField
@@ -51,11 +56,14 @@ public class HoraireActivite extends AttributeContainer implements KvmSerializab
 	public String titreCours;
 
 	@DatabaseField(id = true)
-	public int id;
+	public String id;
 
 	public HoraireActivite() {
 	}
 
+
+
+	
 	public HoraireActivite(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 
 		if (inObj == null)
@@ -186,6 +194,7 @@ public class HoraireActivite extends AttributeContainer implements KvmSerializab
 		}
 
 	}
+	
 
 	@Override
 	public Object getProperty(int propertyIndex) {
@@ -292,5 +301,7 @@ public class HoraireActivite extends AttributeContainer implements KvmSerializab
 	@Override
 	public void setProperty(int arg0, Object arg1) {
 	}
+	
+	
 
 }

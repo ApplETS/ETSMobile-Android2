@@ -1,12 +1,21 @@
 package ca.etsmtl.applets.etsmobile.http;
 
+import android.content.Context;
+import android.os.AsyncTask;
+
+import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
+
+import org.joda.time.DateTime;
+
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.soap.SignetsMobileSoap;
 import ca.etsmtl.applets.etsmobile.http.soap.WebServiceSoap;
@@ -14,13 +23,13 @@ import ca.etsmtl.applets.etsmobile.model.ArrayOfFicheEmploye;
 import ca.etsmtl.applets.etsmobile.model.ArrayOfService;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
+import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Service;
+import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
-
-import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
-import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.request.listener.RequestListener;
-import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
+import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
+import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
+import ca.etsmtl.applets.etsmobile.model.listeSeances;
 
 /**
  * Singleton to get data from HTTP/SOAP request
@@ -84,13 +93,18 @@ public class DataManager {
 
 		// inline asynctask
 		new AsyncTask<Object, Void, Object>() {
+			
+			private Exception exception = null;
+			private Object result;
+			
+
 			@Override
 			protected Object doInBackground(Object... params) {
 				try {
 
 					final int methodID = (Integer) params[0];
 					String[] reqParams = (String[]) params[1];
-					Object result;
+					
 
 					final SignetsMobileSoap signetsMobileSoap = new SignetsMobileSoap();
 					String username = creds.getUsername();
@@ -112,11 +126,9 @@ public class DataManager {
 							dbHelper.getDao(Etudiant.class).createOrUpdate((Etudiant) result);
 						}
 
-						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_COURS:
 						result = signetsMobileSoap.listeCours(username, password);
-						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_INT_SESSION:
 
@@ -125,19 +137,16 @@ public class DataManager {
 
 						result = signetsMobileSoap.listeCoursIntervalleSessions(username, password, SesDebut, SesFin);
 
-						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_SESSION:
 
 						result = signetsMobileSoap.listeSessions(username, password);
 
-						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_PROGRAM:
 
 						result = signetsMobileSoap.listeProgrammes(username, password);
 
-						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_COEQ:
 
@@ -148,7 +157,6 @@ public class DataManager {
 						result = signetsMobileSoap.listeCoequipiers(username, password, pSigle, pGroupe, pSession,
 								pNomElementEval);
 
-						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_EVAL:
 
@@ -158,7 +166,6 @@ public class DataManager {
 						result = signetsMobileSoap.listeElementsEvaluation(username, password, pSigle1, pGroupe1,
 								pSession1);
 
-						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIST_HORAIRE_PROF:
 
@@ -166,7 +173,6 @@ public class DataManager {
 
 						result = signetsMobileSoap.listeHoraireEtProf(username, password, pSession2);
 
-						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.LIRE_HORAIRE:
 
@@ -175,40 +181,34 @@ public class DataManager {
 
 						result = signetsMobileSoap.lireHoraire(pSession3, prefixeSigleCours);
 
-						listener.onRequestSuccess(result);
 						break;
-					case SignetMethods.LIRE_JOUR_REMPLACE:
+					case SignetMethods.LIRE_JOURS_REMPLACES:
 
 						String pSession4 = reqParams[0];
 
 						result = signetsMobileSoap.lireJoursRemplaces(pSession4);
 
-						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.BOTTIN_LIST_DEPT:
 						result = new WebServiceSoap().GetListeDepartement();
 
-						listener.onRequestSuccess(result);
 						break;
 					case SignetMethods.BOTTIN_GET_FICHE:
 						String numero = reqParams[0];
 						String PathFiche = reqParams[1];
 						result = new WebServiceSoap().GetFiche(numero, PathFiche);
 
-						listener.onRequestSuccess(result);
 						break;
 
 					case SignetMethods.BOTTIN_GET_FICHE_DATA:
 						String Id = reqParams[0];
 						result = new WebServiceSoap().GetFicheData(Id);
 
-						listener.onRequestSuccess(result);
 						break;
 
 					case SignetMethods.BOTTIN_GET_ALL:
 						result = new WebServiceSoap().Recherche(null, null, null);
 
-						listener.onRequestSuccess(result);
 						break;
 
 					case SignetMethods.BOTTIN_GET_FICHE_BY_SERVICE:
@@ -216,7 +216,6 @@ public class DataManager {
 						String filtreServiceCode = reqParams[0];
 
 						result = new WebServiceSoap().Recherche(null, null, filtreServiceCode);
-						listener.onRequestSuccess(result);
 						break;
 
 					case SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP:
@@ -234,9 +233,101 @@ public class DataManager {
 							listeEmployeByService.put(service.Nom, arrayOfFicheEmploye);
 						}
 
-						listener.onRequestSuccess(listeEmployeByService);
 
 						break;
+						
+						
+					case SignetMethods.LIST_EXAMENS_FINAUX:
+						String pSession5 = reqParams[0];
+						result = signetsMobileSoap.listeHoraireExamensFin(username, password, pSession5);
+						
+						break;
+						
+						
+					case SignetMethods.LIST_SEANCES:
+						
+						String pCoursGroupe = reqParams[0];
+						String pSession6 = reqParams[1];
+						String pDateDebut = reqParams[2];
+						String pDateFin = reqParams[3];
+						
+						result = signetsMobileSoap.lireHoraireDesSeances(username, password, pCoursGroupe, pSession6, pDateDebut, pDateFin);
+						
+						break;
+						
+					case SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION:
+						
+						
+							ListeDeSessions listeDeSessions = signetsMobileSoap.listeSessions(username, password);
+							
+							listeSeances listeSeances = new listeSeances();
+							
+							DateTime dt = new DateTime();
+							DateTime dtEnd = new DateTime();
+							
+							for(Trimestre trimestre : listeDeSessions.liste) {
+								
+								dtEnd = new DateTime(trimestre.dateFin);
+								
+								if(dt.isBefore(dtEnd)) {
+									listeSeances.ListeDesSeances.addAll( signetsMobileSoap.lireHoraireDesSeances(username, password, "", trimestre.abrege, "", "").ListeDesSeances);
+								}
+							}
+							
+							
+							
+							result = listeSeances;
+						
+						break;
+						
+					case SignetMethods.LIST_EXAM_CURRENT_AND_NEXT_SESSION:
+						
+							ListeDeSessions listeDeSessions2 = signetsMobileSoap.listeSessions(username, password);
+							
+							
+							listeHoraireExamensFinaux listeHoraireExamensFinaux = new listeHoraireExamensFinaux();
+							
+							DateTime dt2 = new DateTime();
+							DateTime dtEnd2 = new DateTime();
+							
+							for(Trimestre trimestre : listeDeSessions2.liste) {
+								
+								dtEnd2 = new DateTime(trimestre.dateFin);
+								
+								if(dt2.isBefore(dtEnd2)) {
+									listeHoraireExamensFinaux.listeHoraire.addAll( signetsMobileSoap.listeHoraireExamensFin(username, password, trimestre.abrege).listeHoraire );
+								}
+							}
+							
+							result = listeHoraireExamensFinaux;
+						break;
+						
+					case SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION:
+						
+							ListeDeSessions listeDeSessions3 = signetsMobileSoap.listeSessions(username, password);
+							
+							listeJoursRemplaces listeJoursRemplaces = new listeJoursRemplaces();
+							
+							
+							DateTime dt3 = new DateTime();
+							DateTime dtEnd3 = new DateTime();
+							
+							for(Trimestre trimestre : listeDeSessions3.liste) {
+								
+								dtEnd3 = new DateTime(trimestre.dateFin);
+								
+								if(dt3.isBefore(dtEnd3)) {
+									
+									listeJoursRemplaces.listeJours.addAll( signetsMobileSoap.lireJoursRemplaces(trimestre.abrege).listeJours );
+									
+								}
+							}
+							
+							
+							result = listeJoursRemplaces;
+						
+						break;
+						
 
 					default:
 						break;
@@ -244,9 +335,20 @@ public class DataManager {
 
 				} catch (Exception e) {
 					e.printStackTrace();
+					exception = e ;
+					
 				}
 				return null;
 			}
+			
+			protected void onPostExecute(Object result2) {
+				if (exception != null) {
+					listener.onRequestFailure(new SpiceException("Couldn't get datas"));
+				} else {
+					listener.onRequestSuccess(result);
+				}
+			}
+			
 		}.execute(method, params);
 	}
 
@@ -266,13 +368,18 @@ public class DataManager {
 		public static final int LIST_EVAL = 1;
 		public static final int LIST_HORAIRE_PROF = 7;
 		public static final int LIRE_HORAIRE = 8;
-		public static final int LIRE_JOUR_REMPLACE = 9;
+		public static final int LIRE_JOURS_REMPLACES = 9;
 		public static final int BOTTIN_LIST_DEPT = 10;
 		public static final int BOTTIN_GET_FICHE = 11;
 		public static final int BOTTIN_GET_FICHE_DATA = 12;
 		public static final int BOTTIN_GET_ALL = 13;
 		public static final int BOTTIN_GET_FICHE_BY_SERVICE = 14;
 		public static final int BOTTIN_GET_LIST_SERVICE_AND_EMP = 15;
+		public static final int LIST_EXAMENS_FINAUX = 16;
+		public static final int LIST_SEANCES = 17;
+		public static final int LIST_SEANCES_CURRENT_AND_NEXT_SESSION = 18;
+		public static final int LIST_EXAM_CURRENT_AND_NEXT_SESSION = 19;
+		public static final int LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION = 20;
 	}
 
 	/**

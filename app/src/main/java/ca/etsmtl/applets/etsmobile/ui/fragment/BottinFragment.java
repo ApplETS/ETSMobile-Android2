@@ -1,16 +1,7 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -21,25 +12,43 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SearchView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
-import ca.etsmtl.applets.etsmobile.views.LoadingView;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
  * 
- * @author Philippe David, Thibau
+ * @author Thibaut
  */
-public class BottinFragment extends HttpFragment {
+public class BottinFragment extends HttpFragment implements SearchView.OnQueryTextListener  {
 
+	private SearchView searchView;
 	private ExpandableListAdapter listAdapter;
 
 	ExpandableListView expListView;
@@ -49,27 +58,80 @@ public class BottinFragment extends HttpFragment {
 	private ProgressDialog mProgressDialog;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		//layoutId = R.layout.fragment_bottin;
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_bottin, menu);
+		
+		// Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.menuitem_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setOnQueryTextListener(this);
+		
+		super.onCreateOptionsMenu(menu, inflater);
+		
+		
 	}
+	
+	
 
 	
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// Inflate the options menu from XML
-		Activity activity = getActivity();
-		inflater.inflate(R.menu.menu_bottin, menu);
+	public boolean onOptionsItemSelected(MenuItem item) {
 
-		// Get the SearchView and set the searchable configuration
-		SearchManager searchManager = (SearchManager) activity.getSystemService(Context.SEARCH_SERVICE);
-		SearchView searchView = (SearchView) menu.findItem(R.id.menu_botin_search).getActionView();
-		// Assumes current activity is the searchable activity
-		searchView.setSearchableInfo(searchManager.getSearchableInfo(activity.getComponentName()));
-		searchView.setIconifiedByDefault(false); // Do not iconify the widget;
-													// expand it by default
-													// return true;
+		switch (item.getItemId()) {
+		
+		case R.id.menu_item_update:
+			
+			final Dialog dialog = new Dialog(getActivity());
+		    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		    dialog.setContentView(R.layout.dialog_bottin);
+		    Button btn_yes = (Button)dialog.findViewById(R.id.btn_dialog_bottin_yes);
+		    
+		    //Rechargement du bottin
+		    btn_yes.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
 
+					//Suppression du bottin
+	            	File dir = getActivity().getFilesDir();
+	    			File file = new File(dir, "bottin.ser");
+	    			boolean deleted = file.delete();
+	    			
+	    			//Mise à jour de la liste
+	    			listDataHeader = new ArrayList<String>();
+	    			listDataChild = new HashMap<String, List<FicheEmploye>>();
+	    			
+	    			listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
+	    			
+	    			dialog.dismiss();
+	    			expListView.setAdapter(listAdapter);
+	    			updateUI();
+					
+				}
+			});
+		    
+		    Button btn_no = (Button) dialog.findViewById(R.id.btn_dialog_bottin_no);
+		    btn_no.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+				}
+			});
+		    dialog.show();
+			
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
+
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -79,19 +141,20 @@ public class BottinFragment extends HttpFragment {
 		// get the listview
 		expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
 
+		
+		//Ouverture du détail
 		expListView.setOnChildClickListener(new OnChildClickListener() {
 
 			@Override
-			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-
-				List<FicheEmploye> listeEmployes = listDataChild.get(listDataHeader.get(groupPosition));
-
-				FicheEmploye ficheEmploye = listeEmployes.get(childPosition);
-
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				
+				FicheEmploye ficheEmploye = (FicheEmploye) listAdapter.getChild(groupPosition, childPosition);
+				
 				Fragment fragment = BottinDetailsFragment.newInstance(ficheEmploye);
-
+				
 				showFragment(fragment);
-
+				
 				return true;
 			}
 		});
@@ -105,7 +168,7 @@ public class BottinFragment extends HttpFragment {
 
 		// setting list adapter
 		expListView.setAdapter(listAdapter);
-
+		
 		return v;
 	}
 
@@ -140,17 +203,24 @@ public class BottinFragment extends HttpFragment {
 					}
 				});
 			}
-            LoadingView.hideLoadingView(loadingView);
+
 
 		} catch (FileNotFoundException e) {
+		  
+			if (Utility.isNetworkAvailable(getActivity())) {
+				try {
 
-			try {
-				mProgressDialog = ProgressDialog.show(getActivity(), null, "Chargement du bottin en cours", true);
-				mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				dataManager.getDataFromSignet(SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
-						ApplicationManager.userCredentials, this);
-			} catch (Exception e1) {
-				e1.printStackTrace();
+					mProgressDialog = ProgressDialog.show(getActivity(), null,"Chargement du bottin en cours", true);
+					mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					DataManager datamanager = DataManager.getInstance(getActivity());
+					datamanager.getDataFromSignet(
+							SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
+							ApplicationManager.userCredentials, this);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			} else {
+				Toast.makeText(getActivity(), "Une connexion internet est requise pour télécharger le bottin", Toast.LENGTH_LONG).show();
 			}
 
 		} catch (Exception e) {
@@ -208,20 +278,32 @@ public class BottinFragment extends HttpFragment {
 		if (fragment == null)
 			return;
 
-		// Begin a fragment transaction.
 		final FragmentManager fm = getActivity().getFragmentManager();
 		final FragmentTransaction ft = fm.beginTransaction();
-		// We can also animate the changing of fragment.
-		// ft.setCustomAnimations(android.R.anim.slide_in_left,
-		// android.R.anim.slide_out_right);
-		// Replace current fragment by the new one.
 		ft.replace(R.id.content_frame, fragment);
-		// Null on the back stack to return on the previous fragment when user
-		// press on back button.
 		ft.addToBackStack(null);
-
-		// Commit changes.
 		ft.commit();
 	}
+
+
+
+
+	@Override
+	public boolean onQueryTextSubmit(String query) {
+//		listAdapter.filterData(query);
+		return false;
+	}
+
+
+
+	@Override
+	public boolean onQueryTextChange(String newText) {
+//		if (newText.equals("")) {
+			listAdapter.filterData(newText);
+//        }
+//		listAdapter.filterData(newText);
+		return true;
+	}
+	
 
 }

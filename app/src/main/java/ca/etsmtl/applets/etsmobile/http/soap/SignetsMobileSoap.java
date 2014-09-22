@@ -9,7 +9,7 @@ package ca.etsmtl.applets.etsmobile.http.soap;
 //
 //---------------------------------------------------
 
-import java.util.List;
+import android.os.AsyncTask;
 
 import org.ksoap2.HeaderProperty;
 import org.ksoap2.SoapFault;
@@ -19,7 +19,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.transport.HttpTransportSE;
 
-import android.os.AsyncTask;
+import java.util.List;
+
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
@@ -29,7 +30,9 @@ import ca.etsmtl.applets.etsmobile.model.listeCoursHoraire;
 import ca.etsmtl.applets.etsmobile.model.listeDesActivitesEtProf;
 import ca.etsmtl.applets.etsmobile.model.listeDesCoequipiers;
 import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
+import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
 import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
+import ca.etsmtl.applets.etsmobile.model.listeSeances;
 
 public class SignetsMobileSoap {
 	interface IWcfMethod {
@@ -677,6 +680,58 @@ public class SignetsMobileSoap {
 			}
 		});
 	}
+	
+	
+    public listeHoraireExamensFinaux listeHoraireExamensFin(final String codeAccesUniversel,final String motPasse,final String pSession ) throws Exception
+    {
+        return (listeHoraireExamensFinaux) execute(new IWcfMethod() {
+			
+			@Override
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result) throws Exception {
+				return (listeHoraireExamensFinaux) getResult(listeHoraireExamensFinaux.class, __result,
+						"listeHoraireExamensFinResult", __envelope);
+			}
+			
+			@Override
+			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope()
+					throws Exception {
+				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "listeHoraireExamensFin");
+				__envelope.setOutputSoapObject(__soapReq);
+
+				PropertyInfo __info = null;
+				__info = new PropertyInfo();
+				__info.namespace = "http://etsmtl.ca/";
+				__info.name = "codeAccesUniversel";
+				__info.type = PropertyInfo.STRING_CLASS;
+				__info.setValue(codeAccesUniversel);
+				__soapReq.addProperty(__info);
+				__info = new PropertyInfo();
+				__info.namespace = "http://etsmtl.ca/";
+				__info.name = "motPasse";
+				__info.type = PropertyInfo.STRING_CLASS;
+				__info.setValue(motPasse);
+				__soapReq.addProperty(__info);
+				__info = new PropertyInfo();
+				__info.namespace = "http://etsmtl.ca/";
+				__info.name = "pSession";
+				__info.type = PropertyInfo.STRING_CLASS;
+				__info.setValue(pSession);
+				__soapReq.addProperty(__info);
+				return __envelope;
+			}
+		},"http://etsmtl.ca/listeHoraireExamensFin");    
+    }
+    
+    public void listeHoraireExamensFinAsync(final String codeAccesUniversel,final String motPasse,final String pSession)
+    {
+        executeAsync(new Functions.IFunc< listeHoraireExamensFinaux>() {
+            public listeHoraireExamensFinaux Func() throws java.lang.Exception {
+                return listeHoraireExamensFin( codeAccesUniversel,motPasse,pSession);
+            }
+        });
+    }
+	
 
 	/**
 	 * Liste des cours pour le trimestre et le sigle de cours partiel pass��s en
@@ -770,7 +825,78 @@ public class SignetsMobileSoap {
 		});
 	}
 
-	protected Object execute(IWcfMethod wcfMethod, String methodName) throws Exception {
+	
+    public listeSeances lireHoraireDesSeances(final String codeAccesUniversel,final String motPasse,final String pCoursGroupe,final String pSession,final String pDateDebut,final String pDateFin ) throws java.lang.Exception
+    {
+        return (listeSeances) execute(new IWcfMethod() {
+			
+			@Override
+			public Object ProcessResult(ExtendedSoapSerializationEnvelope __envelope, SoapObject __result) throws Exception {
+				return (listeSeances) getResult(listeSeances.class, __result,
+						"lireHoraireDesSeancesResult", __envelope);
+			}
+			
+			@Override
+			public ExtendedSoapSerializationEnvelope CreateSoapEnvelope()
+					throws Exception {
+				ExtendedSoapSerializationEnvelope __envelope = createEnvelope();
+				SoapObject __soapReq = new SoapObject("http://etsmtl.ca/", "lireHoraireDesSeances");
+				__envelope.setOutputSoapObject(__soapReq);
+
+				PropertyInfo __info = null;
+				__info = new PropertyInfo();
+				__info.namespace = "http://etsmtl.ca/";
+				__info.name = "codeAccesUniversel";
+				__info.type = PropertyInfo.STRING_CLASS;
+				__info.setValue(codeAccesUniversel);
+				__soapReq.addProperty(__info);
+				__info = new PropertyInfo();
+				__info.namespace = "http://etsmtl.ca/";
+				__info.name = "motPasse";
+				__info.type = PropertyInfo.STRING_CLASS;
+				__info.setValue(motPasse);
+				__soapReq.addProperty(__info);
+				
+				__info = new PropertyInfo();
+				__info.namespace = "http://etsmtl.ca/";
+				__info.name = "pCoursGroupe";
+				__info.type = PropertyInfo.STRING_CLASS;
+				__info.setValue(pCoursGroupe);
+				__soapReq.addProperty(__info);
+				
+				__info = new PropertyInfo();
+				__info.namespace = "http://etsmtl.ca/";
+				__info.name = "pSession";
+				__info.type = PropertyInfo.STRING_CLASS;
+				__info.setValue(pSession);
+				__soapReq.addProperty(__info);
+				__info = new PropertyInfo();
+				__info.namespace = "http://etsmtl.ca/";
+				__info.name = "pDateDebut";
+				__info.type = PropertyInfo.STRING_CLASS;
+				__info.setValue(pDateDebut);
+				__soapReq.addProperty(__info);
+				__info = new PropertyInfo();
+				__info.namespace = "http://etsmtl.ca/";
+				__info.name = "pDateFin";
+				__info.type = PropertyInfo.STRING_CLASS;
+				__info.setValue(pDateFin);
+				__soapReq.addProperty(__info);
+				return __envelope;
+			}
+		}, "http://etsmtl.ca/lireHoraireDesSeances");    
+    }
+    
+    public void lireHoraireDesSeancesAsync(final String codeAccesUniversel,final String motPasse,final String pCoursGroupe,final String pSession,final String pDateDebut,final String pDateFin)
+    {
+        executeAsync(new Functions.IFunc<listeSeances>() {
+            public listeSeances Func() throws java.lang.Exception {
+                return lireHoraireDesSeances( codeAccesUniversel,motPasse,pCoursGroupe,pSession,pDateDebut,pDateFin);
+            }
+        });
+    }
+	
+	protected Object execute(IWcfMethod wcfMethod, String methodName) throws java.lang.Exception {
 		org.ksoap2.transport.Transport __httpTransport = createTransport();
 		ExtendedSoapSerializationEnvelope __envelope = wcfMethod.CreateSoapEnvelope();
 		sendRequest(methodName, __envelope, __httpTransport);

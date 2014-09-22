@@ -9,4 +9,5 @@
 	<color name="blue_ets">#4E88BE</color>
     <color name="holoLight">#fff3f3f3</color>
     <color name="transparent">#00000000</color>
+	<color name="white">#FFF</color>
 </resources>
