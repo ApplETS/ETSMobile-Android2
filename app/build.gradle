@@ -34,8 +34,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //Google play service
     compile 'com.google.android.gms:play-services:5.2.08'
-    // BugSense
-//    compile 'com.bugsense.trace:bugsense:3.6.1'
+
     // Robospice
     compile 'com.octo.android.robospice:robospice-spring-android:1.4.12'
     compile 'com.octo.android.robospice:robospice:1.4.12'
