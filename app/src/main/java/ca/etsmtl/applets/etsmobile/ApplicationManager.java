@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+
+import com.bugsense.trace.BugSenseHandler;
+
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
@@ -39,7 +42,10 @@ public class ApplicationManager extends Application {
 	public void onCreate() {
 		super.onCreate();
 
-		// Section 1 - Moi
+        //BugSenseHandler.initAndStartSession(this, getString(R.string.bugsense));
+
+
+        // Section 1 - Moi
 		String title = getString(R.string.menu_section_1_moi);
 		mMenu.put(title, new MyMenuItem(title, null));
 
@@ -115,6 +121,7 @@ public class ApplicationManager extends Application {
 	}
 
 	public static void deconnexion(final Activity activity) {
+
 
 		final Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
 		editor.clear();
