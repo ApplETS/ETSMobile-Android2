@@ -2,6 +2,7 @@ package ca.etsmtl.applets.etsmobile.http;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
@@ -231,10 +232,11 @@ public class DataManager {
 							arrayOfFicheEmploye = new WebServiceSoap().Recherche(null, null, "" + service.ServiceCode);
 
 							listeEmployeByService.put(service.Nom, arrayOfFicheEmploye);
+
 						}
+                        result = listeEmployeByService;
 
-
-						break;
+                        break;
 						
 						
 					case SignetMethods.LIST_EXAMENS_FINAUX:

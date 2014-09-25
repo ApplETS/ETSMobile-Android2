@@ -23,6 +23,8 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -68,11 +70,8 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         searchView.setOnQueryTextListener(this);
 		
 		super.onCreateOptionsMenu(menu, inflater);
-		
-		
+
 	}
-	
-	
 
 	
 	@Override
@@ -140,7 +139,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         super.onCreateView(inflater, v, savedInstanceState);
 		// get the listview
 		expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
-
 		
 		//Ouverture du détail
 		expListView.setOnChildClickListener(new OnChildClickListener() {
@@ -168,7 +166,8 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 
 		// setting list adapter
 		expListView.setAdapter(listAdapter);
-		
+
+
 		return v;
 	}
 
@@ -274,7 +273,13 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 		}
 	}
 
-	private void showFragment(final Fragment fragment) {
+
+    @Override
+    public void onRequestFailure(SpiceException e) {
+        super.onRequestFailure(e);
+    }
+
+    private void showFragment(final Fragment fragment) {
 		if (fragment == null)
 			return;
 
