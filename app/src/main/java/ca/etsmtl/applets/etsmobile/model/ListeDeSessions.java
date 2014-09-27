@@ -68,4 +68,14 @@ public class ListeDeSessions extends DonneesRetournees implements KvmSerializabl
 	public void setProperty(int arg0, Object arg1) {
 	}
 
+
+    public Trimestre getTrimestre(String session){
+        for(Trimestre trimestre : liste){
+            if(trimestre.abrege.equals(session)){
+                return trimestre;
+            }
+        }
+        return null;
+    }
+
 }
