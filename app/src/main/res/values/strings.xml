@@ -50,7 +50,9 @@
     <string name="etsmobile_android_commentaire">ETSMobile-Android : Commentaire</string>
     <string name="default_comment">Bravo ! 10/10 !</string>
 
-
+    <!-- Radio Page -->
+    <string name="desc_radio">Radio Piranha, la radio étudiante de l\'ÉTS.</string>
+    <string name="listing">Écouter</string>
     
     <!-- Note detail Page -->
     <string name="mesCours">Mes cours</string>
