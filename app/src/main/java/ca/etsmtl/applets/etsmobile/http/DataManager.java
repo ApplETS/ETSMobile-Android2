@@ -261,22 +261,26 @@ public class DataManager {
 						
 						
 							ListeDeSessions listeDeSessions = signetsMobileSoap.listeSessions(username, password);
-							
+
 							listeSeances listeSeances = new listeSeances();
-							
-							DateTime dt = new DateTime();
-							DateTime dtEnd = new DateTime();
-							
-							for(Trimestre trimestre : listeDeSessions.liste) {
-								
-								dtEnd = new DateTime(trimestre.dateFin);
-								
-								if(dt.isBefore(dtEnd)) {
-									listeSeances.ListeDesSeances.addAll( signetsMobileSoap.lireHoraireDesSeances(username, password, "", trimestre.abrege, "", "").ListeDesSeances);
-								}
-							}
-							
-							
+
+//
+//                            DateTime dt = new DateTime();
+//
+//
+//
+//							DateTime dtEnd = new DateTime();
+//
+//							for(Trimestre trimestre : listeDeSessions.liste) {
+//
+//								dtEnd = new DateTime(trimestre.dateFin);
+//
+//								if(dt.isBefore(dtEnd)) {
+//									listeSeances.ListeDesSeances.addAll( signetsMobileSoap.lireHoraireDesSeances(username, password, "", trimestre.abrege, "", "").ListeDesSeances);
+//								}
+//							}
+
+                            listeSeances.ListeDesSeances.addAll( signetsMobileSoap.lireHoraireDesSeances(username, password, "", "É2014", "", "").ListeDesSeances);
 							
 							result = listeSeances;
 						
@@ -285,7 +289,6 @@ public class DataManager {
 					case SignetMethods.LIST_EXAM_CURRENT_AND_NEXT_SESSION:
 						
 							ListeDeSessions listeDeSessions2 = signetsMobileSoap.listeSessions(username, password);
-							
 							
 							listeHoraireExamensFinaux listeHoraireExamensFinaux = new listeHoraireExamensFinaux();
 							

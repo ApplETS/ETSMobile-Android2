@@ -24,10 +24,10 @@
         tools:listitem="@layout/seances_item" >
     </ListView>
 
-    <ca.etsmtl.applets.etsmobile.views.LoadingView
-        android:id="@+id/loadingView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <!--<ca.etsmtl.applets.etsmobile.views.LoadingView-->
+        <!--android:id="@+id/loadingView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
 
 
 </RelativeLayout>

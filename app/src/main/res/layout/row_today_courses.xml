@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="150px">
+
+    <RelativeLayout
+        android:id="@+id/rl_heures_deb_fin"
+        android:layout_width="90px"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3px">
+
+        <TextView
+            android:id="@+id/tv_today_heure_debut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/tv_today_heure_fin"
+            android:text="9h00" />
+
+        <TextView
+            android:id="@+id/tv_today_heure_fin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="12h30" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_vertical_separator"
+        android:layout_width="7px"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="13px"
+        android:layout_toRightOf="@+id/rl_heures_deb_fin"
+        android:background="@color/black" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/tv_vertical_separator"
+        android:background="@color/ets_red">
+
+        <TextView
+            android:id="@+id/tv_today_nom_activite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="10px"
+            android:text="Cours"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_today_cours_groupe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="COM110-03"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_today_local"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10px"
+            android:text="A-1240"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
