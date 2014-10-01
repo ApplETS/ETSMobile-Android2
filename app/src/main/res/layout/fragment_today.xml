@@ -24,6 +24,15 @@
         tools:listitem="@layout/seances_item" >
     </ListView>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_todays_no_courses"
+        android:text="Pas de cours aujourd'hui."
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/todays_name"/>
+
     <!--<ca.etsmtl.applets.etsmobile.views.LoadingView-->
         <!--android:id="@+id/loadingView"-->
         <!--android:layout_width="match_parent"-->

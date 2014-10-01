@@ -1,13 +1,13 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import org.joda.time.DateTime;
 
@@ -29,16 +29,15 @@ import ca.etsmtl.applets.etsmobile2.R;
 /**
  * Created by Phil on 17/11/13.
  */
-public class TodaysFragment extends HttpFragment implements Observer {
-
+public class TodayFragment extends HttpFragment implements Observer {
 
 	private ListView list;
     private HoraireManager horaireManager;
 	private TextView todaysTv;
-    private DateTime dt;
-    private DatabaseHelper db;
+    private DateTime dateTime;
+    private DatabaseHelper databaseHelper;
     private TodaySeancesAdapter todaySeancesAdapter;
-
+    private TextView tvNoCourses;
     private  ArrayList<Seances> listSeances;
 
 	@Override
@@ -53,10 +52,10 @@ public class TodaysFragment extends HttpFragment implements Observer {
 		super.onCreateView(inflater, v , savedInstanceState);
 		list = (ListView) v.findViewById(R.id.todays_list) ;
 		todaysTv = (TextView) v.findViewById(R.id.todays_name);
+        tvNoCourses = (TextView) v.findViewById(R.id.tv_todays_no_courses);
 
         horaireManager = new HoraireManager(this, getActivity());
         horaireManager.addObserver(this);
-
 
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
@@ -64,89 +63,65 @@ public class TodaysFragment extends HttpFragment implements Observer {
 		return v;
 	}
 
-
     @Override
     public void onRequestSuccess(Object o) {
         horaireManager.onRequestSuccess(o);
-
     }
 
-//	@Override
-//	public void onRequestSuccess(Object parsedJson) {
-//		super.onRequestSuccess(parsedJson);
-//		if (parsedJson instanceof TodaysCourses) {
-//			TodaysCourses today = (TodaysCourses) parsedJson;
-//			ArrayList<Seance> s = today.horaire;
-//			list.setAdapter(new SceanceAdapter(getActivity(), s));
-//		}
-//	}
+    @Override
+    public void onRequestFailure(SpiceException e) {}
 
 	@Override
 	void updateUI() {
-//		String url = getActivity().getString(R.string.today_url_format);
-//		TodaysRequest request = new TodaysRequest(url, ApplicationManager.userCredentials);
-//        loadingView.showLoadingView();
 
-        dt = new DateTime();
-        dt = dt.withDate(2014,04,28);
-        DateTime.Property pDoW = dt.dayOfWeek();
-        DateTime.Property pDoM = dt.dayOfMonth();
-        DateTime.Property pMoY = dt.monthOfYear();
+        dateTime = new DateTime();
 
-        todaysTv.setText(String.format("Horaire du %s le %d %s", pDoW.getAsText(Locale.FRENCH), pDoM.get(),pMoY.getAsText(Locale.FRENCH)));
+        DateTime.Property pDoW = dateTime.dayOfWeek();
+        DateTime.Property pDoM = dateTime.dayOfMonth();
+        DateTime.Property pMoY = dateTime.monthOfYear();
 
+        todaysTv.setText(String.format("Horaire du %s %d %s", pDoW.getAsText(Locale.FRENCH), pDoM.get(),pMoY.getAsText(Locale.FRENCH)));
 
-
-
-
-        db = new DatabaseHelper(getActivity());
+        databaseHelper = new DatabaseHelper(getActivity());
         listSeances = new ArrayList<Seances>();
         try {
             SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd",Locale.CANADA_FRENCH);
-            Log.e("TEST",""+seancesFormatter.format(dt.toDate()).toString());
-            listSeances = (ArrayList<Seances>) db.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dt.toDate()).toString() + "%").query();
 
-            Seances seance = new Seances();
-            seance.coursGroupe = "test";
-            seance.dateDebut = "2014-04-08";
-            seance.dateFin = "2014-04-08";
-            seance.nomActivite ="courss";
-            seance.local = "DTC";
-
-            listSeances = new ArrayList<Seances>();
-            listSeances.add(seance);
-
-            Log.e("for","for");
-            for(Seances s : listSeances)
-            {
-                Log.e(" ",s.coursGroupe);
-            }
+            listSeances = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         todaySeancesAdapter = new TodaySeancesAdapter(getActivity(),R.layout.row_today_courses, listSeances);
         list.setAdapter(todaySeancesAdapter);
 
-
+        if(listSeances.isEmpty()) {
+            tvNoCourses.setVisibility(View.VISIBLE);
+        } else {
+            tvNoCourses.setVisibility(View.GONE);
+        }
 
 	}
 
     @Override
     public void update(Observable observable, Object data) {
-        Toast.makeText(getActivity(),"update",Toast.LENGTH_LONG).show();
-        dt = new DateTime();
-        dt = dt.withDate(2014,04,28);
-        db = new DatabaseHelper(getActivity());
+        dateTime = new DateTime();
+        databaseHelper = new DatabaseHelper(getActivity());
         try {
             SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd",Locale.CANADA_FRENCH);
             listSeances.clear();
-            listSeances.addAll((ArrayList<Seances>) db.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dt.toDate()).toString() + "%").query());
+            listSeances.addAll((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dateTime.toDate()).toString() + "%").query());
             todaySeancesAdapter.notifyDataSetChanged();
+
+            if(listSeances.isEmpty()) {
+                tvNoCourses.setVisibility(View.VISIBLE);
+            } else {
+                tvNoCourses.setVisibility(View.GONE);
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 }
