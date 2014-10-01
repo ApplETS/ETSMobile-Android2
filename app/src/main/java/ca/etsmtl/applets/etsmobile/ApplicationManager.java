@@ -9,8 +9,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
@@ -27,7 +25,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.ProfilFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.RadioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.TodaysFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -50,7 +48,7 @@ public class ApplicationManager extends Application {
 		mMenu.put(title, new MyMenuItem(title, null));
 
 		title = getString(R.string.menu_section_1_ajd);
-		mMenu.put(title, new MyMenuItem(title, TodaysFragment.class, R.drawable.ic_ico_aujourdhui));
+		mMenu.put(title, new MyMenuItem(title, TodayFragment.class, R.drawable.ic_ico_aujourdhui));
 
 		title = getString(R.string.menu_section_1_horaire);
 		mMenu.put(title, new MyMenuItem(title, HoraireFragment.class, R.drawable.ic_ico_schedule));
