@@ -1,13 +1,12 @@
 package ca.etsmtl.applets.etsmobile;
 
-import java.util.LinkedHashMap;
-
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+
+import java.util.LinkedHashMap;
 
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
@@ -26,6 +25,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.RadioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
+import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -109,9 +109,9 @@ public class ApplicationManager extends Application {
 		// if (registeredEtudiant != null) {
 		// userCredentials = new UserCredentials("", "");
 		// }
-		SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		String u = defaultSharedPreferences.getString(UserCredentials.CODE_U, "");
-		String p = defaultSharedPreferences.getString(UserCredentials.CODE_P, "");
+        SecurePreferences securePreferences = new SecurePreferences(this);
+		String u = securePreferences.getString(UserCredentials.CODE_U, "");
+		String p = securePreferences.getString(UserCredentials.CODE_P, "");
 
 		if (u.length() > 0 && p.length() > 0) {
 			userCredentials = new UserCredentials(u, p);

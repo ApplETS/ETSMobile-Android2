@@ -5,10 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,14 +14,16 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
-
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -210,11 +210,16 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 				Log.v("LoginActivity", "LoginActivity: o=" + o);
 				ApplicationManager.userCredentials = userCredentials;
 
-				Editor edit = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+                SecurePreferences securePreferences = new SecurePreferences(this);
+                securePreferences.edit().putString(userCredentials.CODE_U, userCredentials.getUsername()).commit();
+                securePreferences.edit().putString(userCredentials.CODE_P, userCredentials.getPassword()).commit();
 
-				edit.putString(UserCredentials.CODE_U, userCredentials.getUsername());
-				edit.putString(UserCredentials.CODE_P, userCredentials.getPassword());
-				edit.commit();
+
+//				Editor edit = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+//
+//				edit.putString(UserCredentials.CODE_U, userCredentials.getUsername());
+//				edit.putString(UserCredentials.CODE_P, userCredentials.getPassword());
+//				edit.commit();
 				finishActivity(1);
 				startActivity(new Intent(this, MainActivity.class));
 				finish();

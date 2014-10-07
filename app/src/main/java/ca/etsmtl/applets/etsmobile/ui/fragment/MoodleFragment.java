@@ -16,7 +16,7 @@ import ca.etsmtl.applets.etsmobile2.R;
  * @author Laurence
  * 
  */
-public class MoodleFragment extends BaseFragment implements OnClickListener {
+public class MoodleFragment extends BaseFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -25,18 +25,15 @@ public class MoodleFragment extends BaseFragment implements OnClickListener {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		openMoodle();
 		View v = inflater.inflate(R.layout.fragment_moodle, container, false);
-		((Button) v.findViewById(R.id.activity_moodle_button)).setOnClickListener(this);
+		((Button) v.findViewById(R.id.activity_moodle_button)).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMoodle();
+            }
+        });
 
 		return v;
-	}
-
-	@Override
-	public void onClick(View v) {
-		if (v.getId() == R.id.activity_moodle_button) {
-			openMoodle();
-		}
 	}
 
 	private void openMoodle() {

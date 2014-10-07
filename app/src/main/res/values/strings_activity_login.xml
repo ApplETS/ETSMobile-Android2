@@ -10,7 +10,7 @@
 
     <string name="login_progress_signing_in">Connexion &#8230;</string>
 
-    <string name="error_invalid_email">Le code universel est invalid</string>
-    <string name="error_invalid_pwd">Le mot de passe est invalid</string>
+    <string name="error_invalid_email">Le code universel est invalide</string>
+    <string name="error_invalid_pwd">Le mot de passe est invalide</string>
     <string name="error_field_required">Ce champ est requis</string>
 </resources>
