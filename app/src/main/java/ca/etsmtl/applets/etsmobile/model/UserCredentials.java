@@ -1,6 +1,6 @@
 package ca.etsmtl.applets.etsmobile.model;
 
-import android.content.SharedPreferences;
+import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 
 /**
  * Created by Phil on 17/11/13.
@@ -22,7 +22,7 @@ public class UserCredentials {
 
 	private String appt = "";
 
-	public UserCredentials(final SharedPreferences prefs) {
+	public UserCredentials(final SecurePreferences prefs) {
 		if (prefs != null) {
 			username = prefs.getString(UserCredentials.CODE_P, "");
 			password = prefs.getString(UserCredentials.CODE_U, "");

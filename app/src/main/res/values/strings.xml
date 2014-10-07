@@ -31,24 +31,27 @@
     <string name="menu_section_3_applets">ApplETS</string>
     <string name="menu_section_3_comms">Problème ou Commentaire ?</string>
     <string name="menu_section_3_about">À Propos d\'ÉTSMobile</string>
-    <string name="menu_section_3_sponsors">Nos Partenaire</string>
+    <string name="menu_section_3_sponsors">Nos Partenaires</string>
    
 
     <!-- Moodle Page -->
-    <string name="activity_moodle_titre">Instruction Moodle</string>
+    <string name="activity_moodle_titre">Instructions Moodle</string>
     <string name="activity_moodle_url_text">Url du site à inscrire:</string>
     <string name="activity_moodle_nom">Nom d\'utilisateur</string>
-    <string name="activity_moodle_code_universelle">Votre code Universelle</string>
+    <string name="activity_moodle_code_universelle">Votre code Universel</string>
     <string name="activity_moodle_pwd">Mot de passe</string>
     <string name="activity_moodle_pwd_instruc">Votre mot de passe universitaire</string>
     <string name="activity_moodle_app">Moodle App</string>
-    <string name="applets_about">ApplETS se veut avant tout un regroupement d’étudiants qui partagent un intérêt commun pour le domaine des télécommunications et des applications mobiles. Ce club étudiant à pour objectif principal de former, au sein de l’ÉTS, une main d’œuvre spécialisée en ingénierie d’applications mobiles et de promouvoir le développement de ces applications au sein de la communauté étudiante.&#xA;
-		De plus, ApplETS propose des idées innovatrices afin de stimuler les étudiants et de les intéresser à ce domaine en pleine expansion comme par exemple le développement de l’application mobile officielle de l’ÉTS qui sera distribuée gratuitement et qui sera très utiles pour la communauté universitaire en intégrant des fonctions tel que la consultation des horaires de cours et d’examens, un plan des locaux de l’ÉTS etc.&#xA;
-		ApplETS prévoit également distribuer des classes logicielles libres et gratuites facilitant ainsi l’apprentissage des étudiants en ce qui concerne le développement d’applications mobiles. Comme tout club étudiant, ApplETS participera aussi à des compétitions internationales annuelles dans le but de faire rayonner l’ÉTS à l’étranger. Finalement, ApplETS désire mettre sur pied et organiser une compétition internationale annuelle ici même à l’ÉTS.
+    <string name="applets_about">ApplETS se veut, avant tout, un regroupement d’étudiants qui partagent un intérêt commun pour le domaine des télécommunications et des applications mobiles.
+Ce club étudiant a pour objectif principal de former, au sein de l’ÉTS, une main d’œuvre spécialisée en ingénierie d’applications mobiles et de promouvoir le développement de ces applications au sein de la communauté étudiante.
+ApplETS propose ainsi des idées innovatrices afin de stimuler les étudiants et les amener à s\'investir dans le domaine du développement mobile, actuellement en pleine expansion.
+ApplETS est notamment responsable du développement de l’application mobile officielle de l’ÉTS, distribuée gratuitement et très utile pour la communauté universitaire. Cette application intègre de multiples fonctionnalités : la consultation des horaires de cours et d’examens, les résultats obtenus par l\'étudiant au cours de son cursus, ou encore l\'annuaire du personnel de l\'ÉTS.
+ApplETS distribue également le code source de ses applications, facilitant ainsi l’apprentissage des étudiants relatif au développement mobile.
+Enfin, ApplETS participe à des compétitions internationales annuelles dans le but de faire rayonner l’ÉTS à l’étranger. ApplETS désire, par ailleurs, organiser une compétition internationale annuelle ici même, à l’ÉTS.
 	</string>
     <string name="applets_ens_etsmtl_ca">applets@ens.etsmtl.ca</string>
     <string name="etsmobile_android_commentaire">ETSMobile-Android : Commentaire</string>
-    <string name="default_comment">Bravo ! 10/10 !</string>
+    <string name="default_comment"></string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, la radio étudiante de l\'ÉTS.</string>
@@ -75,10 +78,10 @@
     <string name="profil_credit_reussis">Crédits réussis</string>
     <string name="profil_cours_reussis">Cours réussis</string>
     <string name="profil_cours_echoue">Cours échoué(s)</string>
-    <string name="profil_credit_inscrit">Crédit inscrit</string>
+    <string name="profil_credit_inscrit">Crédits inscrits</string>
     <string name="profil_moyenne">Moyenne</string>
     <string name="profil_logout">Déconnexion</string>
-    <string name="profil_credit_potentiel">Crédits potentiel</string>
+    <string name="profil_credit_potentiel">Crédits potentiels</string>
     <string name="profil_cours_equivalent">Cours équivalents</string>
 
     <!-- wifi bandwith -->
@@ -118,7 +121,7 @@
    
 
     <string name="default_error_message">Error Message</string>
-    <string name="error_JSON_PARSING">Erreur lors de la récupération des donnés.</string>
+    <string name="error_JSON_PARSING">Erreur lors de la récupération des données.</string>
     <string name="today_url_format">http://api.clubapplets.ca/signets/card/login?id=1</string>
     <string name="error_loading_profile">Error loading profile</string>
     <string name="lundi_le_26_avril">Lundi le 26 Avril</string>
