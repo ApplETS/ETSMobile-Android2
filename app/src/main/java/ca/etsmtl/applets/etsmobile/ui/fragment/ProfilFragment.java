@@ -96,7 +96,7 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 
 						Programme program = null;
 						for (Programme p : mlisteDesProgrammes.liste) {
-							if (p.statut.equals("actif")) {
+							if (p.statut.equals("actif") || p.statut.equals("tutuelle")) {
 								program = p;
 							}
 						}

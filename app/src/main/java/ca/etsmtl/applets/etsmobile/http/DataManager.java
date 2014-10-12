@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
+
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -48,7 +48,7 @@ public class DataManager {
 	private static Context c;
 
 	private DataManager() {
-		spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
+		spiceManager = new SpiceManager(MyJackSpringAndroidSpiceService.class);
 		dbHelper = new DatabaseHelper(c);
 	}
 
@@ -380,6 +380,7 @@ public class DataManager {
 		public static final int LIST_EXAM_CURRENT_AND_NEXT_SESSION = 19;
 		public static final int LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION = 20;
 	}
+
 
 	/**
 	 * Convenience method to login a user

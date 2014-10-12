@@ -11,7 +11,8 @@
         android:paddingBottom="@dimen/activity_horizontal_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_horizontal_margin"
-        android:text="@string/lundi_le_26_avril"
+        android:textStyle="bold"
+        tools:text="@string/lundi_le_26_avril"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ListView

@@ -56,7 +56,7 @@
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity"/>
 
         <service
-            android:name="com.octo.android.robospice.JacksonSpringAndroidSpiceService"
+            android:name="ca.etsmtl.applets.etsmobile.http.MyJackSpringAndroidSpiceService"
             android:exported="false" />
     </application>
 

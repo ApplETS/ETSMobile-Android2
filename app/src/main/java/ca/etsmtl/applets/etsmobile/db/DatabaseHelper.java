@@ -9,6 +9,8 @@ import ca.etsmtl.applets.etsmobile.model.Cours;
 import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
 import ca.etsmtl.applets.etsmobile.model.Enseignant;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
+import ca.etsmtl.applets.etsmobile.model.Event;
+import ca.etsmtl.applets.etsmobile.model.EventList;
 import ca.etsmtl.applets.etsmobile.model.HoraireActivite;
 import ca.etsmtl.applets.etsmobile.model.HoraireExamenFinal;
 import ca.etsmtl.applets.etsmobile.model.JoursRemplaces;
@@ -58,6 +60,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, Personne.class);
 			TableUtils.createTable(connectionSource, Programme.class);
 			TableUtils.createTable(connectionSource, Trimestre.class);
+            TableUtils.createTable(connectionSource, Event.class);
 			TableUtils.createTable(connectionSource, TodaysCourses.class);
 			TableUtils.createTable(connectionSource, TodaysCourses.Seance.class);
 			TableUtils.createTable(connectionSource, HoraireExamenFinal.class);
