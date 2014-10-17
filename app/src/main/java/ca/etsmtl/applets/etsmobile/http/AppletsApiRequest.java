@@ -4,9 +4,6 @@ import android.content.Context;
 
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
-import org.springframework.web.client.RestTemplate;
-
-import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.EventList;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -17,15 +14,12 @@ public class AppletsApiRequest extends SpringAndroidSpiceRequest<EventList> {
     private String startDate;
     private String endDate;
 
-
     public AppletsApiRequest(Context context, String startDate, String endDate) {
         super(EventList.class);
         this.context = context;
         this.startDate = startDate;
         this.endDate = endDate;
     }
-
-
 
     @Override
     public EventList loadDataFromNetwork() throws Exception {
