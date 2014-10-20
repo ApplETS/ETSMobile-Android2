@@ -13,4 +13,8 @@
     <string name="applets_api_calendar">http://api.clubapplets.ca/calendar/%1$s/%2$s/%3$s</string>
     <string name="moodle_api_get_token">https://ena.etsmtl.ca/login/token.php?username=%1$s&amp;password=%2$s&amp;service=moodle_mobile_app</string>
     <string name="moodle_api_get_siteinfo">https://ena.etsmtl.ca/webservice/rest/server.php?moodlewsrestformat=json&amp;wsfunction=moodle_webservice_get_siteinfo&amp;wstoken=%s</string>
+    <string name="moodle_api_enrol_get_users_courses">https://ena.etsmtl.ca/webservice/rest/server.php?moodlewsrestformat=json&amp;wsfunction=moodle_enrol_get_users_courses&amp;wstoken=%1$s&amp;userid=%2$s</string>
+    <string name="moodle_api_core_course_get_contents">https://ena.etsmtl.ca/webservice/rest/server.php?moodlewsrestformat=json&amp;wsfunction=core_course_get_contents&amp;wstoken=%1$s&amp;courseid=%2$s</string>
+
+
 </resources>

@@ -14,21 +14,17 @@ import org.joda.time.DateTime;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.AppletsApiRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
-import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodaySeancesAdapter;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
-import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -73,20 +69,20 @@ public class TodayFragment extends HttpFragment implements Observer {
 
         if (o instanceof ListeDeSessions) {
 
-            ListeDeSessions listeDeSessions = (ListeDeSessions) o;
-            Date currentDate = new Date();
-            Date dateStart;
-            Date dateEnd;
-            for (int i = listeDeSessions.liste.size() - 1; i > 0; i++) {
-                dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
-                dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
-                if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
-                    String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
-                    String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
-                    dataManager.sendRequest(new AppletsApiRequest(getActivity(), dateStartString, dateEndString), TodayFragment.this);
-                    break;
-                }
-            }
+//            ListeDeSessions listeDeSessions = (ListeDeSessions) o;
+//            Date currentDate = new Date();
+//            Date dateStart;
+//            Date dateEnd;
+//            for (int i = listeDeSessions.liste.size() - 1; i > 0; i++) {
+//                dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
+//                dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
+//                if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
+//                    String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
+//                    String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
+//                    dataManager.sendRequest(new AppletsApiRequest(getActivity(), dateStartString, dateEndString), TodayFragment.this);
+//                    break;
+//                }
+//            }
         }
         else {
             horaireManager.onRequestSuccess(o);

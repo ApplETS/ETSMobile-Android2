@@ -23,8 +23,8 @@ public class TodaySeancesAdapter extends ArrayAdapter<Seances> {
 
     private LayoutInflater inflater;
 
-    public TodaySeancesAdapter(Context context, int textViewResourceId, List<Seances> listSeances) {
-        super(context, textViewResourceId, listSeances);
+    public TodaySeancesAdapter(Context context, int rowResourceId, List<Seances> listSeances) {
+        super(context, rowResourceId, listSeances);
         this.inflater = LayoutInflater.from(context);
     }
 

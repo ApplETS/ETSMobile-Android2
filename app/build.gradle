@@ -48,5 +48,8 @@ dependencies {
     }
     // JodaTime objects
     compile 'joda-time:joda-time:2.3'
+
+    //To parse html
+    //compile 'org.jsoup:jsoup:1.8.1'
 }
 
