@@ -256,4 +256,5 @@ public class MainActivity extends Activity {
         mTitle = title;
         getActionBar().setTitle(mTitle);
     }
+
 }
