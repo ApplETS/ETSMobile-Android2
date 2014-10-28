@@ -1,7 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
-import java.util.Collection;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -16,11 +14,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.Collection;
+
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
+import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -163,7 +164,7 @@ public class MainActivity extends Activity {
                 Bundle extras = data.getExtras();
                 String codeU = extras.getString(UserCredentials.CODE_U);
                 String codeP = extras.getString(UserCredentials.CODE_P);
-                ApplicationManager.userCredentials = new UserCredentials(codeU, codeP);
+                ApplicationManager.userCredentials = new UserCredentials(new SecurePreferences(this));
 
 
                 MyMenuItem ajdItem = ApplicationManager.mMenu.get(getString(R.string.menu_section_1_ajd));

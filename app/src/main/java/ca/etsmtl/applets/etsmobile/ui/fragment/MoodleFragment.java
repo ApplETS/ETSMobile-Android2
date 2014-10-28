@@ -20,18 +20,20 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
+import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MoodleCoursesAdapter;
+import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
- * Open the moodle Application
+ * Interacts with Moodle API
  * 
- * @author Laurence
+ * @author Thibaut
  * 
  */
 public class MoodleFragment extends HttpFragment {
 
-    MoodleToken moodleToken;
+
     ListView moodleCoursesListView;
     private MoodleCoursesAdapter moodleCoursesAdapter;
 
@@ -74,7 +76,12 @@ public class MoodleFragment extends HttpFragment {
     public void onRequestSuccess(Object o) {
         if(o instanceof MoodleToken){
 
-            moodleToken = (MoodleToken) o;
+            MoodleToken moodleToken = (MoodleToken) o;
+
+            SecurePreferences securePreferences = new SecurePreferences(getActivity());
+            securePreferences.edit().putString(UserCredentials.MOODLE_TOKEN, moodleToken.getToken()).commit();
+
+            ApplicationManager.userCredentials.setMoodleToken(moodleToken.getToken());
 
             queryMoodleProfile(moodleToken);
 
@@ -90,13 +97,6 @@ public class MoodleFragment extends HttpFragment {
 
         if(o instanceof MoodleCourses) {
             MoodleCourses moodleCourses = (MoodleCourses) o;
-
-
-            //TO REMOVE
-            for(MoodleCourse moodleCourse : moodleCourses) {
-                moodleCourse.token = moodleToken.getToken();
-            }
-            //
 
             moodleCoursesAdapter = new MoodleCoursesAdapter(getActivity(), R.layout.row_moodle_course, moodleCourses, this);
             moodleCoursesListView.setAdapter(moodleCoursesAdapter);
@@ -123,7 +123,7 @@ public class MoodleFragment extends HttpFragment {
 
             @Override
             public MoodleCoreCourses loadDataFromNetwork() throws Exception {
-                String url = getActivity().getString(R.string.moodle_api_core_course_get_contents, moodleToken.getToken(),moodleCourse.getId());
+                String url = getActivity().getString(R.string.moodle_api_core_course_get_contents, ApplicationManager.userCredentials.getMoodleToken(),moodleCourse.getId());
 
                 return getRestTemplate().getForObject(url, MoodleCoreCourses.class);
             }
@@ -137,7 +137,7 @@ public class MoodleFragment extends HttpFragment {
 
             @Override
             public MoodleCourses loadDataFromNetwork() throws Exception {
-                String url = getActivity().getString(R.string.moodle_api_enrol_get_users_courses, moodleToken.getToken(),moodleProfile.getUserId());
+                String url = getActivity().getString(R.string.moodle_api_enrol_get_users_courses, ApplicationManager.userCredentials.getMoodleToken(),moodleProfile.getUserId());
 
                 return getRestTemplate().getForObject(url, MoodleCourses.class);
             }

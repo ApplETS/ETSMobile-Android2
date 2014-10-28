@@ -13,6 +13,7 @@ import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceReques
 
 import java.util.List;
 
+import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourses;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
@@ -45,9 +46,6 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
             holder.tvCourseName = (TextView) view.findViewById(R.id.tv_moodle_course_name);
             holder.tvCourseSigle = (TextView) view.findViewById(R.id.tv_moodle_course_sigle);
 
-
-
-
             view.setTag(holder);
         }
 
@@ -73,7 +71,7 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
 
             @Override
             public MoodleCoreCourses loadDataFromNetwork() throws Exception {
-                String url = inflater.getContext().getString(R.string.moodle_api_core_course_get_contents, moodleCourse.token,moodleCourse.getId());
+                String url = inflater.getContext().getString(R.string.moodle_api_core_course_get_contents, ApplicationManager.userCredentials.getMoodleToken(),moodleCourse.getId());
 
                 return getRestTemplate().getForObject(url, MoodleCoreCourses.class);
             }

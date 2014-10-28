@@ -16,10 +16,6 @@ public class MoodleCourse {
     private String idNumber;
     private int visible;
 
-
-    //TO REMOVE
-    public String token;
-
     public int getId() {
         return id;
     }

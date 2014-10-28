@@ -139,6 +139,7 @@ public class LoginActivity extends Activity implements RequestListener<Object> {
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
 			userCredentials = new UserCredentials(mEmail, mPassword);
+
 			dataManager.login(userCredentials, this);
 		}
 	}
