@@ -15,7 +15,9 @@
 	      android:layout_centerHorizontal="true"
 	      android:textSize="28sp"
 	      android:text="GTI619"
-	      android:textColor="@color/gray"/>
+          android:gravity="center_horizontal"
+          android:layout_gravity="center_vertical"
+          android:textColor="@color/gray"/>
     </RelativeLayout>
 
      <ListView 
