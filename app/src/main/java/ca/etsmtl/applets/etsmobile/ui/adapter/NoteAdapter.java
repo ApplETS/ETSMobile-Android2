@@ -41,7 +41,7 @@ public class NoteAdapter extends ArrayAdapter<NotesSessionItem> {
 					cote = sessionCote.cote;
 				}
 				Fragment fragment = NotesDetailsFragment.newInstance(sessionCote.sigle, notesSession.sessionName, cote,
-						sessionCote.groupe);
+						sessionCote.groupe,sessionCote.titreCours);
 				FragmentManager fragmentManager = ((Activity) context).getFragmentManager();
 				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "NotesDetailsFragment")
 						.addToBackStack(null).commit();
