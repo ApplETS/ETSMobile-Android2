@@ -19,6 +19,8 @@ public class MoodleCoreModule {
     private String modplural;
     private int indent;
 
+    private int position;
+
     private ArrayList<MoodleModuleContent> contents;
 
     public int getId() {
@@ -56,4 +58,13 @@ public class MoodleCoreModule {
     public ArrayList<MoodleModuleContent> getContents() {
         return contents;
     }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
 }

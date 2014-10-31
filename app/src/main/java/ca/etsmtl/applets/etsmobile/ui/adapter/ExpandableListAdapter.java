@@ -1,12 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.adapter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
-import ca.etsmtl.applets.etsmobile2.R;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -14,6 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+
+import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
+import ca.etsmtl.applets.etsmobile2.R;
  
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
  
@@ -144,16 +146,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		if (query.isEmpty()) {
 			_listDataChild = (HashMap<String, List<FicheEmploye>>) _listDataChildOriginal.clone();
 			_listDataHeader.addAll(_listDataHeaderOriginal);
-			System.out.println("VIDE\n _listDataHeader.size : "+_listDataHeader.size()+"\n_listDataChlid : "+_listDataChild.size());
 		} else {
-			System.out.println("PAS VIDE");
 			List<FicheEmploye> newList= new ArrayList<FicheEmploye>();
 
 			for (Entry<String, List<FicheEmploye>> entry : _listDataChildOriginal.entrySet()) {
 				String departement = entry.getKey();
-//				System.out.println(departement);
 				List<FicheEmploye> listeFicheEmploye = entry.getValue();
-
 
 				for (FicheEmploye ficheEmploye : listeFicheEmploye) {
 					String nom = ficheEmploye.Nom == null ? "" : ficheEmploye.Nom.toLowerCase();

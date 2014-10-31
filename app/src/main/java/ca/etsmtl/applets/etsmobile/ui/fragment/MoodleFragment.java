@@ -14,7 +14,6 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourses;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
@@ -74,47 +73,48 @@ public class MoodleFragment extends HttpFragment {
 
     @Override
     public void onRequestSuccess(Object o) {
-        if(o instanceof MoodleToken){
+        try {
+            if (o instanceof MoodleToken) {
 
-            MoodleToken moodleToken = (MoodleToken) o;
+                MoodleToken moodleToken = (MoodleToken) o;
 
-            SecurePreferences securePreferences = new SecurePreferences(getActivity());
-            securePreferences.edit().putString(UserCredentials.MOODLE_TOKEN, moodleToken.getToken()).commit();
+                SecurePreferences securePreferences = new SecurePreferences(getActivity());
+                securePreferences.edit().putString(UserCredentials.MOODLE_TOKEN, moodleToken.getToken()).commit();
 
-            ApplicationManager.userCredentials.setMoodleToken(moodleToken.getToken());
+                ApplicationManager.userCredentials.setMoodleToken(moodleToken.getToken());
 
-            queryMoodleProfile(moodleToken);
+                if (moodleToken.getToken().equals("")) {
+                    throw new Exception("Impossible de se connecter");
 
-            Log.e("Token Moodle","TOKEN : "+moodleToken.getToken());
-        }
+                }
 
-        if(o instanceof MoodleProfile) {
-            MoodleProfile moodleProfile = (MoodleProfile) o;
-            Log.e("Profil Moodle","PROFIL : "+moodleProfile.getUsername()+" "+moodleProfile.getUserId());
 
-            queryMoodleCourses(moodleProfile);
-        }
+                queryMoodleProfile(moodleToken);
 
-        if(o instanceof MoodleCourses) {
-            MoodleCourses moodleCourses = (MoodleCourses) o;
+                Log.e("Token Moodle", "TOKEN : " + moodleToken.getToken());
+            }
 
-            moodleCoursesAdapter = new MoodleCoursesAdapter(getActivity(), R.layout.row_moodle_course, moodleCourses, this);
-            moodleCoursesListView.setAdapter(moodleCoursesAdapter);
+            if (o instanceof MoodleProfile) {
+                MoodleProfile moodleProfile = (MoodleProfile) o;
+                Log.e("Profil Moodle", "PROFIL : " + moodleProfile.getUsername() + " " + moodleProfile.getUserId());
 
+                queryMoodleCourses(moodleProfile);
+            }
+
+            if (o instanceof MoodleCourses) {
+                MoodleCourses moodleCourses = (MoodleCourses) o;
+
+                moodleCoursesAdapter = new MoodleCoursesAdapter(getActivity(), R.layout.row_moodle_course, moodleCourses, this);
+                moodleCoursesListView.setAdapter(moodleCoursesAdapter);
 
 
 //            queryMoodleCoreCourses(moodleCourses.get(0));
-        }
-
-        if(o instanceof MoodleCoreCourses) {
-
-            MoodleCoreCourses moodleCoreCourses = (MoodleCoreCourses) o;
-
-            for(MoodleCoreCourse moodleCoreCourse : moodleCoreCourses) {
-
-                Toast.makeText(getActivity(),moodleCoreCourse.getName(),Toast.LENGTH_SHORT).show();
             }
+        }catch (Exception e) {
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+
+
 
     }
 

@@ -1,6 +1,9 @@
 package ca.etsmtl.applets.etsmobile.ui.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,14 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.octo.android.robospice.request.listener.RequestListener;
-import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import java.util.List;
 
-import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourses;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
+import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleCourseDetailsFragment;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -57,8 +57,11 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(inflater.getContext(), "" + item.getId(), Toast.LENGTH_SHORT).show();
-                queryMoodleCoreCourses(item);
+                Fragment fragment = MoodleCourseDetailsFragment.newInstance(item.getId());
+                FragmentManager fragmentManager = ((Activity) inflater.getContext()).getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "MoodleCourseDetailsFragment")
+                        .addToBackStack(null).commit();
+
             }
         });
 
@@ -66,21 +69,7 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
         return view;
     }
 
-    private void queryMoodleCoreCourses(final MoodleCourse moodleCourse) {
-        SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
 
-            @Override
-            public MoodleCoreCourses loadDataFromNetwork() throws Exception {
-                String url = inflater.getContext().getString(R.string.moodle_api_core_course_get_contents, ApplicationManager.userCredentials.getMoodleToken(),moodleCourse.getId());
-
-                return getRestTemplate().getForObject(url, MoodleCoreCourses.class);
-            }
-        };
-
-        DataManager dataManager = DataManager.getInstance(inflater.getContext());
-
-        dataManager.sendRequest(request, listener);
-    }
 
     static class ViewHolder {
         TextView tvCourseSigle;
