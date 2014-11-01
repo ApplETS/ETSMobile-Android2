@@ -50,22 +50,11 @@ public class MoodleCoursesDetailsAdapter extends ArrayAdapter<MoodleCoreModule> 
 //        holder.tvCourseDetail.setText(item.getShortname());
         holder.tvCourseDetail.setText(item.getName());
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Fragment fragment = MoodleCourseDetailsFragment.newInstance(item.getId());
-//                FragmentManager fragmentManager = ((Activity) inflater.getContext()).getFragmentManager();
-//                fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "MoodleCourseDetailsFragment")
-//                        .addToBackStack(null).commit();
 
-            }
-        });
 
 
         return view;
     }
-
-
 
     static class ViewHolder {
         TextView tvCourseDetail;

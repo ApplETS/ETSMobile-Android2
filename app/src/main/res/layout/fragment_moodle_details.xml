@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ExpandableListView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/expandableListView_moodle_courses_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    >
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView_moodle_courses_details">
+    </ListView>
+
+    <TextView
+        android:id="@+id/tv_vertical_separator"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/listView_moodle_courses_details"
+        android:background="@color/black" />
+
+<ExpandableListView
+
+    android:id="@+id/expandableListView_moodle_courses_details"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/tv_vertical_separator"
     android:layoutAnimation="@anim/fade_in"
     tools:listitem="@layout/list_group"></ExpandableListView>
 
+</RelativeLayout>

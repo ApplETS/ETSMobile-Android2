@@ -1,14 +1,23 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.app.DownloadManager;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
+
+import org.apache.commons.io.FilenameUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,12 +45,14 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     private ListView moodleCoreListView;
     private String moodleCourseId;
 
-    private ExpandableListMoodleAdapter listAdapter;
+    private ExpandableListMoodleAdapter expandableListMoodleAdapter;
 
     private ExpandableListView expListView;
 
     private List<MoodleCoreModule> listDataHeader;
     private HashMap<MoodleCoreModule, List<MoodleModuleContent>> listDataChild;
+
+    private ArrayList<MoodleCoreModule> listMoodleLinkModules;
 
 
     public static MoodleCourseDetailsFragment newInstance(int moodleCourseId) {
@@ -67,9 +78,10 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_moodle_details, container, false);
-        //moodleCoreListView = (ListView) v.findViewById(R.id.listView_moodle_courses_details);
 
         expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_moodle_courses_details);
+
+        moodleCoreListView = (ListView) v.findViewById(R.id.listView_moodle_courses_details);
 
         queryMoodleCoreCourses(moodleCourseId);
         return v;
@@ -99,6 +111,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
             // create empty data
             listDataChild = new HashMap<MoodleCoreModule, List<MoodleModuleContent>>();
             listDataHeader = new ArrayList<MoodleCoreModule>();
+            listMoodleLinkModules = new ArrayList<MoodleCoreModule>();
 
             int position = 0;
 
@@ -109,8 +122,8 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
                     if(coreModule.getModname().equals("folder")) {
                         listDataChild.put(coreModule,coreModule.getContents());
-                    } else {
-                        //TODO ListView au dessus pour les liens
+                    } else if (coreModule.getModname().equals("url") || coreModule.getModname().equals("forum")) {
+                        listMoodleLinkModules.add(coreModule);
                     }
 
                 }
@@ -136,16 +149,70 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
             });
 
 
-            listAdapter = new ExpandableListMoodleAdapter(getActivity(), listDataHeader, listDataChild);
-            expListView.setAdapter(listAdapter);
+            expandableListMoodleAdapter = new ExpandableListMoodleAdapter(getActivity(), listDataHeader, listDataChild);
+            expListView.setAdapter(expandableListMoodleAdapter);
+            expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                @Override
+                public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+                    MoodleModuleContent item = (MoodleModuleContent) expandableListMoodleAdapter.getChild(groupPosition, childPosition);
+
+                    String url = item.getFileurl()+"&token="+ ApplicationManager.userCredentials.getMoodleToken();
+                    Uri uri = Uri.parse(url);
+                    DownloadManager.Request r = new DownloadManager.Request(uri);
+
+                    r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, item.getFilename());
+
+//                    r.allowScanningByMediaScanner();
+
+                    r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                    MimeTypeMap mimetype = MimeTypeMap.getSingleton();
+                    String extension = FilenameUtils.getExtension(item.getFilename());
+
+                    r.setMimeType(mimetype.getMimeTypeFromExtension(extension));
 
 
-//            moodleCoursesDetailsAdapter = new MoodleCoursesDetailsAdapter(getActivity(), R.layout.row_moodle_course_detail, modules, this);
-//            moodleCoreListView.setAdapter(moodleCoursesDetailsAdapter);
+
+
+                    DownloadManager dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+                    dm.enqueue(r);
+
+                    return true;
+                }
+            });
+
+
+            moodleCoursesDetailsAdapter = new MoodleCoursesDetailsAdapter(getActivity(), R.layout.row_moodle_course_detail, listMoodleLinkModules, this);
+            moodleCoreListView.setAdapter(moodleCoursesDetailsAdapter);
+
+            moodleCoreListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+
+                    MoodleCoreModule item = (MoodleCoreModule) moodleCoreListView.getItemAtPosition(position);
+
+                    String url = "";
+                    if(item.getModname().equals("url")) {
+                        url = item.getContents().get(0).getFileurl();
+                    } else {
+                        url = item.getUrl();
+                    }
+
+
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+
+                }
+            });
+
+
+
 
         }
 
     }
+
 
     private void queryMoodleCoreCourses(final String idCourse) {
         SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
