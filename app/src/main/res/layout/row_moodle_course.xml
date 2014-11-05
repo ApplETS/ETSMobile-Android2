@@ -2,22 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="80dp">
 
     <TextView
         android:id="@+id/tv_moodle_course_sigle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="LOG121"
+        tools:text="TIN501-03-05-06"
         android:textSize="24sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:id="@+id/tv_moodle_course_name"
         android:layout_below="@+id/tv_moodle_course_sigle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Conception orientée objet"
-        android:textSize="18sp"/>
+        tools:text="Environnement, technologie et société (A2014)"
+        android:textSize="18sp"
+        android:layout_marginLeft="20dp" />
 
 </RelativeLayout>

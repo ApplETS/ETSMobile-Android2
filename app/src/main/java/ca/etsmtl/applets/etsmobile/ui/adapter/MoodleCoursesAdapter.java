@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleCourseDetailsFragment;
@@ -51,8 +53,18 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
 
         final MoodleCourse item = getItem(position);
 
-        holder.tvCourseSigle.setText(item.getShortname());
-        holder.tvCourseName.setText(item.getFullname());
+
+        Pattern pattern = Pattern.compile("(?:[^-]*-)(.*)");
+//        Pattern pattern = Pattern.compile("([A-Z]{3,3}\\d{3,3}[-0-9]{0,3}) ([^\\(]*)(?:\\()?([AÉH]\\d{4,4})?");
+
+        Matcher matcher = pattern.matcher(item.getShortname());
+        if(matcher.find())
+            holder.tvCourseSigle.setText(matcher.group(1));
+
+        pattern = Pattern.compile("(?:[^ ]* )(.*)");
+        matcher = pattern.matcher(item.getFullname());
+        if(matcher.find())
+            holder.tvCourseName.setText(matcher.group(1));
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -14,8 +14,6 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourses;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
@@ -118,19 +116,19 @@ public class MoodleFragment extends HttpFragment {
 
     }
 
-    private void queryMoodleCoreCourses(final MoodleCourse moodleCourse) {
-        SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
-
-            @Override
-            public MoodleCoreCourses loadDataFromNetwork() throws Exception {
-                String url = getActivity().getString(R.string.moodle_api_core_course_get_contents, ApplicationManager.userCredentials.getMoodleToken(),moodleCourse.getId());
-
-                return getRestTemplate().getForObject(url, MoodleCoreCourses.class);
-            }
-        };
-
-        dataManager.sendRequest(request, MoodleFragment.this);
-    }
+//    private void queryMoodleCoreCourses(final MoodleCourse moodleCourse) {
+//        SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
+//
+//            @Override
+//            public MoodleCoreCourses loadDataFromNetwork() throws Exception {
+//                String url = getActivity().getString(R.string.moodle_api_core_course_get_contents, ApplicationManager.userCredentials.getMoodleToken(),moodleCourse.getId());
+//
+//                return getRestTemplate().getForObject(url, MoodleCoreCourses.class);
+//            }
+//        };
+//
+//        dataManager.sendRequest(request, MoodleFragment.this);
+//    }
 
     private void queryMoodleCourses(final MoodleProfile moodleProfile) {
         SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {

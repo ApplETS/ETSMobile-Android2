@@ -13,6 +13,7 @@ import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreModule;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleModuleContent;
+import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleCourseDetailsFragment;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -21,13 +22,13 @@ import ca.etsmtl.applets.etsmobile2.R;
 public class ExpandableListMoodleAdapter extends BaseExpandableListAdapter {
 
     private Context _context;
-    private List<MoodleCoreModule> _listDataHeader;
-    private HashMap<MoodleCoreModule, List<MoodleModuleContent>> _listDataChild;
+    private List<MoodleCourseDetailsFragment.HeaderText> _listDataHeader;
+    private HashMap<MoodleCourseDetailsFragment.HeaderText, Object[]> _listDataChild;
+//    List<MoodleModuleContent>
 
 
-
-    public ExpandableListMoodleAdapter(Context context, List<MoodleCoreModule> listDataHeader,
-                                       HashMap<MoodleCoreModule, List<MoodleModuleContent>> listChildData) {
+    public ExpandableListMoodleAdapter(Context context, List<MoodleCourseDetailsFragment.HeaderText> listDataHeader,
+                                       HashMap<MoodleCourseDetailsFragment.HeaderText, Object[]> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -38,11 +39,8 @@ public class ExpandableListMoodleAdapter extends BaseExpandableListAdapter {
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
 
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition))[childPosititon];
 
-        MoodleModuleContent moodleModuleContent = this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosititon);
-
-
-        return moodleModuleContent;
     }
 
     @Override
@@ -54,22 +52,32 @@ public class ExpandableListMoodleAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        MoodleModuleContent moodleModuleContent = (MoodleModuleContent) getChild(groupPosition, childPosition);
-
-        final String childText = moodleModuleContent.getFilename();
-
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_item, null);
         }
+        String childText = "";
+        TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
 
-        TextView txtListChild = (TextView) convertView
-                .findViewById(R.id.lblListItem);
+        Object object = getChild(groupPosition, childPosition);
+
+
+        if(object instanceof MoodleModuleContent ) {
+            MoodleModuleContent moodleModuleContent = (MoodleModuleContent) getChild(groupPosition, childPosition);
+            childText = moodleModuleContent.getFilename();
+        }
+
+        if(object instanceof MoodleCoreModule){
+            MoodleCoreModule moodleCoreModule = (MoodleCoreModule) getChild(groupPosition, childPosition);
+            childText = moodleCoreModule.getName();
+        }
+
+
+
+
 
         txtListChild.setText(childText);
-
-
 
         return convertView;
     }
@@ -77,7 +85,7 @@ public class ExpandableListMoodleAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
         try {
-            return this._listDataChild.get(this._listDataHeader.get(groupPosition)).size();
+            return this._listDataChild.get(this._listDataHeader.get(groupPosition)).length;
         } catch (NullPointerException e) {
             return 0;
         }
@@ -101,7 +109,7 @@ public class ExpandableListMoodleAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,View convertView, ViewGroup parent) {
-        MoodleCoreModule headerMoodleCoreModule = (MoodleCoreModule) getGroup(groupPosition);
+        MoodleCourseDetailsFragment.HeaderText header = (MoodleCourseDetailsFragment.HeaderText) getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_group, null);
@@ -109,7 +117,7 @@ public class ExpandableListMoodleAdapter extends BaseExpandableListAdapter {
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
         lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(headerMoodleCoreModule.getName());
+        lblListHeader.setText(header.getHeaderName());
 
         return convertView;
     }

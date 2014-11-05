@@ -10,9 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
@@ -31,7 +29,6 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourses;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreModule;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleModuleContent;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAdapter;
-import ca.etsmtl.applets.etsmobile.ui.adapter.MoodleCoursesDetailsAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -41,18 +38,17 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
     public static String COURSE_ID = "COURSE_ID";
 
-    private MoodleCoursesDetailsAdapter moodleCoursesDetailsAdapter;
-    private ListView moodleCoreListView;
     private String moodleCourseId;
 
     private ExpandableListMoodleAdapter expandableListMoodleAdapter;
 
     private ExpandableListView expListView;
 
-    private List<MoodleCoreModule> listDataHeader;
-    private HashMap<MoodleCoreModule, List<MoodleModuleContent>> listDataChild;
+    private List<HeaderText> listDataHeader;
+    private HashMap<HeaderText, Object[]> listDataChild;
 
     private ArrayList<MoodleCoreModule> listMoodleLinkModules;
+    private ArrayList<MoodleModuleContent> listMoodleResourceContents;
 
 
     public static MoodleCourseDetailsFragment newInstance(int moodleCourseId) {
@@ -81,8 +77,6 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
         expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_moodle_courses_details);
 
-        moodleCoreListView = (ListView) v.findViewById(R.id.listView_moodle_courses_details);
-
         queryMoodleCoreCourses(moodleCourseId);
         return v;
     }
@@ -109,37 +103,42 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
             MoodleCoreCourses moodleCoreCourses = (MoodleCoreCourses) o;
 
             // create empty data
-            listDataChild = new HashMap<MoodleCoreModule, List<MoodleModuleContent>>();
-            listDataHeader = new ArrayList<MoodleCoreModule>();
+            listDataChild = new HashMap<HeaderText, Object[]>();
+            listDataHeader = new ArrayList<HeaderText>();
             listMoodleLinkModules = new ArrayList<MoodleCoreModule>();
+            listMoodleResourceContents = new ArrayList<MoodleModuleContent>();
 
-            int position = 0;
+            int position = 2;
 
             for(MoodleCoreCourse coreCourse : moodleCoreCourses) {
                 for(MoodleCoreModule coreModule : coreCourse.getModules()) {
-                    coreModule.setPosition(position);
-                    position++;
 
                     if(coreModule.getModname().equals("folder")) {
-                        listDataChild.put(coreModule,coreModule.getContents());
+                        listDataChild.put(new HeaderText(coreModule.getName(),position), coreModule.getContents().toArray());
                     } else if (coreModule.getModname().equals("url") || coreModule.getModname().equals("forum")) {
                         listMoodleLinkModules.add(coreModule);
+                    } else if (coreModule.getModname().equals("resource")) {
+                        listMoodleResourceContents.addAll(coreModule.getContents());
                     }
 
+                    position++;
                 }
             }
 
 
+            listDataChild.put(new HeaderText("Liens",0),listMoodleLinkModules.toArray());
+            listDataChild.put(new HeaderText("Ressources",1),listMoodleResourceContents.toArray());
+
 
             listDataHeader.addAll(listDataChild.keySet());
 
-            Collections.sort(listDataHeader, new Comparator<MoodleCoreModule>() {
+            Collections.sort(listDataHeader, new Comparator<HeaderText>() {
                 @Override
-                public int compare(MoodleCoreModule moodleCoreModule1, MoodleCoreModule MoodleCoreModule2) {
+                public int compare(HeaderText headerText1, HeaderText headerText2) {
 
-                    if(moodleCoreModule1.getPosition() < MoodleCoreModule2.getPosition()) {
+                    if(headerText1.getPosition() < headerText2.getPosition()) {
                         return -1;
-                    } else if (moodleCoreModule1.getPosition() == MoodleCoreModule2.getPosition()) {
+                    } else if (headerText1.getPosition() == headerText2.getPosition()) {
                         return 0;
                     } else {
                         return 1;
@@ -155,58 +154,53 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                 @Override
                 public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 
-                    MoodleModuleContent item = (MoodleModuleContent) expandableListMoodleAdapter.getChild(groupPosition, childPosition);
+                    Object object = expandableListMoodleAdapter.getChild(groupPosition, childPosition);
 
-                    String url = item.getFileurl()+"&token="+ ApplicationManager.userCredentials.getMoodleToken();
-                    Uri uri = Uri.parse(url);
-                    DownloadManager.Request r = new DownloadManager.Request(uri);
+                    if(object instanceof MoodleModuleContent) {
+                        MoodleModuleContent item = (MoodleModuleContent) object;
 
-                    r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, item.getFilename());
+                        String url = item.getFileurl()+"&token="+ ApplicationManager.userCredentials.getMoodleToken();
+                        Uri uri = Uri.parse(url);
+                        DownloadManager.Request r = new DownloadManager.Request(uri);
+
+                        r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, item.getFilename());
 
 //                    r.allowScanningByMediaScanner();
 
-                    r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                    MimeTypeMap mimetype = MimeTypeMap.getSingleton();
-                    String extension = FilenameUtils.getExtension(item.getFilename());
+                        r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                        MimeTypeMap mimetype = MimeTypeMap.getSingleton();
+                        String extension = FilenameUtils.getExtension(item.getFilename());
 
-                    r.setMimeType(mimetype.getMimeTypeFromExtension(extension));
-
-
+                        r.setMimeType(mimetype.getMimeTypeFromExtension(extension));
 
 
-                    DownloadManager dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-                    dm.enqueue(r);
+
+
+                        DownloadManager dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+                        dm.enqueue(r);
+                    }
+
+                    if(object instanceof MoodleCoreModule) {
+                        MoodleCoreModule item = (MoodleCoreModule) object;
+
+                        String url = "";
+                        if(item.getModname().equals("url")) {
+                            url = item.getContents().get(0).getFileurl();
+                        } else {
+                            url = item.getUrl();
+                        }
+
+
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+                    }
+
+
 
                     return true;
                 }
             });
-
-
-            moodleCoursesDetailsAdapter = new MoodleCoursesDetailsAdapter(getActivity(), R.layout.row_moodle_course_detail, listMoodleLinkModules, this);
-            moodleCoreListView.setAdapter(moodleCoursesDetailsAdapter);
-
-            moodleCoreListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-
-                    MoodleCoreModule item = (MoodleCoreModule) moodleCoreListView.getItemAtPosition(position);
-
-                    String url = "";
-                    if(item.getModname().equals("url")) {
-                        url = item.getContents().get(0).getFileurl();
-                    } else {
-                        url = item.getUrl();
-                    }
-
-
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-
-                }
-            });
-
-
 
 
         }
@@ -234,5 +228,31 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     void updateUI() {
         // TODO Auto-generated method stub
 
+    }
+
+    public class HeaderText {
+        String headerName;
+        int position;
+
+        public HeaderText(String headerName, int position) {
+            this.headerName = headerName;
+            this.position = position;
+        }
+
+        public int getPosition() {
+            return position;
+        }
+
+        public void setPosition(int position) {
+            this.position = position;
+        }
+
+        public String getHeaderName() {
+            return headerName;
+        }
+
+        public void setHeaderName(String headerName) {
+            this.headerName = headerName;
+        }
     }
 }
