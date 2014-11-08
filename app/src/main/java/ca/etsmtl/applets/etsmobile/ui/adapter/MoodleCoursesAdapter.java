@@ -1,9 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +15,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
-import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleCourseDetailsFragment;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -66,16 +62,7 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
         if(matcher.find())
             holder.tvCourseName.setText(matcher.group(1));
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = MoodleCourseDetailsFragment.newInstance(item.getId());
-                FragmentManager fragmentManager = ((Activity) inflater.getContext()).getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "MoodleCourseDetailsFragment")
-                        .addToBackStack(null).commit();
 
-            }
-        });
 
 
         return view;

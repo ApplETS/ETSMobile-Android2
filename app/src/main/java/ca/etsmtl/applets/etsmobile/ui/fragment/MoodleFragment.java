@@ -3,10 +3,10 @@ package ca.etsmtl.applets.etsmobile.ui.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -14,10 +14,12 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MoodleCoursesAdapter;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -51,7 +53,6 @@ public class MoodleFragment extends HttpFragment {
 
         moodleCoursesListView = (ListView) v.findViewById(R.id.listView_moodle_courses);
 
-
         queryMoodleToken();
 
 		return v;
@@ -83,18 +84,14 @@ public class MoodleFragment extends HttpFragment {
 
                 if (moodleToken.getToken().equals("")) {
                     throw new Exception("Impossible de se connecter");
-
                 }
-
 
                 queryMoodleProfile(moodleToken);
 
-                Log.e("Token Moodle", "TOKEN : " + moodleToken.getToken());
             }
 
             if (o instanceof MoodleProfile) {
                 MoodleProfile moodleProfile = (MoodleProfile) o;
-                Log.e("Profil Moodle", "PROFIL : " + moodleProfile.getUsername() + " " + moodleProfile.getUserId());
 
                 queryMoodleCourses(moodleProfile);
             }
@@ -106,7 +103,31 @@ public class MoodleFragment extends HttpFragment {
                 moodleCoursesListView.setAdapter(moodleCoursesAdapter);
 
 
-//            queryMoodleCoreCourses(moodleCourses.get(0));
+                moodleCoursesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        MoodleCourse moodleCourse = (MoodleCourse) parent.getItemAtPosition(position);
+                        Intent i = new Intent(getActivity(), MoodleCourseActivity.class);
+                        i.putExtra("idCours", moodleCourse.getId());
+                        i.putExtra("nameCours", moodleCourse.getShortname());
+                        getActivity().startActivity(i);
+
+                    }
+                });
+//                    @Override
+//                    public void onClick(View v) {
+
+
+
+//                Fragment fragment = MoodleCourseDetailsFragment.newInstance(item.getId());
+//                FragmentManager fragmentManager = ((Activity) inflater.getContext()).getFragmentManager();
+//                fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "MoodleCourseDetailsFragment")
+//                        .addToBackStack(null).commit();
+
+//                    }
+//                });
+
+
             }
         }catch (Exception e) {
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -116,19 +137,6 @@ public class MoodleFragment extends HttpFragment {
 
     }
 
-//    private void queryMoodleCoreCourses(final MoodleCourse moodleCourse) {
-//        SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
-//
-//            @Override
-//            public MoodleCoreCourses loadDataFromNetwork() throws Exception {
-//                String url = getActivity().getString(R.string.moodle_api_core_course_get_contents, ApplicationManager.userCredentials.getMoodleToken(),moodleCourse.getId());
-//
-//                return getRestTemplate().getForObject(url, MoodleCoreCourses.class);
-//            }
-//        };
-//
-//        dataManager.sendRequest(request, MoodleFragment.this);
-//    }
 
     private void queryMoodleCourses(final MoodleProfile moodleProfile) {
         SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
