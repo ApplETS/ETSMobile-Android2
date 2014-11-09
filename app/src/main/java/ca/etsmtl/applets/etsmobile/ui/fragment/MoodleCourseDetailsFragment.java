@@ -32,7 +32,9 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
- * Created by gnut3ll4 on 10/30/14.
+ * Displays downloadable resources for a Moodle course
+ *
+ * @author Thibaut
  */
 public class MoodleCourseDetailsFragment extends HttpFragment {
 
@@ -83,15 +85,11 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
     @Override
     public void onStart() {
-//        Log.v("NotesDetailsFragment", "Note detailsFragement pwd = " + ApplicationManager.userCredentials.getPassword());
-//        DataManager.getInstance(getActivity()).getDataFromSignet(DataManager.SignetMethods.LIST_EVAL,
-//                ApplicationManager.userCredentials, this, session, groupe, sigle);
         super.onStart();
     }
 
     @Override
     public void onRequestFailure(SpiceException arg0) {
-
 
     }
 
@@ -165,7 +163,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
                         r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, item.getFilename());
 
-//                    r.allowScanningByMediaScanner();
+//                      r.allowScanningByMediaScanner();
 
                         r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                         MimeTypeMap mimetype = MimeTypeMap.getSingleton();
@@ -196,8 +194,6 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                         startActivity(i);
                     }
 
-
-
                     return true;
                 }
             });
@@ -208,6 +204,10 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     }
 
 
+    /**
+     * Query all resources for a Moodle course
+     * @param idCourse
+     */
     private void queryMoodleCoreCourses(final String idCourse) {
         SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
 
@@ -230,6 +230,9 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
     }
 
+    /**
+     * Holder for headers in ExpandableListView
+     */
     public class HeaderText {
         String headerName;
         int position;

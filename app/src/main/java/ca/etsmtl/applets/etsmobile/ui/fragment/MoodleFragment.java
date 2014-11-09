@@ -44,15 +44,8 @@ public class MoodleFragment extends HttpFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_moodle, container, false);
-//		((Button) v.findViewById(R.id.activity_moodle_button)).setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openMoodle();
-//            }
-//        });
 
         moodleCoursesListView = (ListView) v.findViewById(R.id.listView_moodle_courses);
-
         queryMoodleToken();
 
 		return v;
@@ -114,19 +107,6 @@ public class MoodleFragment extends HttpFragment {
 
                     }
                 });
-//                    @Override
-//                    public void onClick(View v) {
-
-
-
-//                Fragment fragment = MoodleCourseDetailsFragment.newInstance(item.getId());
-//                FragmentManager fragmentManager = ((Activity) inflater.getContext()).getFragmentManager();
-//                fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "MoodleCourseDetailsFragment")
-//                        .addToBackStack(null).commit();
-
-//                    }
-//                });
-
 
             }
         }catch (Exception e) {
@@ -137,7 +117,10 @@ public class MoodleFragment extends HttpFragment {
 
     }
 
-
+    /**
+     * Query for moodle courses
+     * @param moodleProfile
+     */
     private void queryMoodleCourses(final MoodleProfile moodleProfile) {
         SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
 
@@ -154,7 +137,10 @@ public class MoodleFragment extends HttpFragment {
 
     }
 
-
+    /**
+     * Query for Moodle profile
+     * @param moodleToken
+     */
     private void queryMoodleProfile(final MoodleToken moodleToken) {
         SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
 
@@ -169,6 +155,9 @@ public class MoodleFragment extends HttpFragment {
         dataManager.sendRequest(request, MoodleFragment.this);
     }
 
+    /**
+     * Query for Moodle token
+     */
     private void queryMoodleToken() {
         SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
 
@@ -185,6 +174,9 @@ public class MoodleFragment extends HttpFragment {
     }
 
 
+    /**
+     * @deprecated Opens Moodle's official application
+     */
     private void openMoodle() {
 		Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(getString(R.string.moodle));
 		if (intent != null) {

@@ -17,8 +17,11 @@ import java.util.regex.Pattern;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile2.R;
 
+
 /**
- * Created by gnut3ll4 on 10/19/14.
+ * Adapter listing all Moodle courses
+ *
+ * @author Thibaut
  */
 public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
 
@@ -50,20 +53,17 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
         final MoodleCourse item = getItem(position);
 
 
+        // Extracts course and group
         Pattern pattern = Pattern.compile("(?:[^-]*-)(.*)");
-//        Pattern pattern = Pattern.compile("([A-Z]{3,3}\\d{3,3}[-0-9]{0,3}) ([^\\(]*)(?:\\()?([AÉH]\\d{4,4})?");
-
         Matcher matcher = pattern.matcher(item.getShortname());
         if(matcher.find())
             holder.tvCourseSigle.setText(matcher.group(1));
 
+        //Extracts course's full name and session
         pattern = Pattern.compile("(?:[^ ]* )(.*)");
         matcher = pattern.matcher(item.getFullname());
         if(matcher.find())
             holder.tvCourseName.setText(matcher.group(1));
-
-
-
 
         return view;
     }
