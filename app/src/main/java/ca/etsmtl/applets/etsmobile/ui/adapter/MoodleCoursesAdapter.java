@@ -54,8 +54,8 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
 
 
         // Extracts course and group
-        Pattern pattern = Pattern.compile("(?:[^-]*-)(.*)");
-        Matcher matcher = pattern.matcher(item.getShortname());
+        Pattern pattern = Pattern.compile("([A-Z]{3,3}\\d{3,3}(-.[^ ]*)?)");
+        Matcher matcher = pattern.matcher(item.getFullname());
         if(matcher.find())
             holder.tvCourseSigle.setText(matcher.group(1));
 

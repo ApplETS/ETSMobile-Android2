@@ -1,8 +1,12 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.app.DownloadManager;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
@@ -40,6 +45,9 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
     public static String COURSE_ID = "COURSE_ID";
 
+    private long enqueue;
+    private DownloadManager dm;
+
     private String moodleCourseId;
 
     private ExpandableListMoodleAdapter expandableListMoodleAdapter;
@@ -62,7 +70,6 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +77,44 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
             Bundle bundle = getArguments();
             moodleCourseId = bundle.getString(COURSE_ID);
         }
+
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                    long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
+                    DownloadManager.Query query = new DownloadManager.Query();
+                    query.setFilterById(enqueue);
+                    Cursor c = dm.query(query);
+                    if (c.moveToFirst()) {
+                        int columnIndex = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
+                        if (DownloadManager.STATUS_SUCCESSFUL == c.getInt(columnIndex)) {
+
+                            String uriString = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+                            MimeTypeMap map = MimeTypeMap.getSingleton();
+                            String ext = MimeTypeMap.getFileExtensionFromUrl(uriString);
+                            String type = map.getMimeTypeFromExtension(ext);
+
+                            if (type == null)
+                                type = "*/*";
+
+                            Intent openFile = new Intent(Intent.ACTION_VIEW);
+                            openFile.setDataAndType(Uri.parse(uriString), type);
+                            try {
+                                startActivity(openFile);
+                            } catch(ActivityNotFoundException e) {
+                                Toast.makeText(getActivity(),"Aucune application ne peut ouvrir ce fichier",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        getActivity().registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+
 
     }
 
@@ -159,23 +204,20 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
                         String url = item.getFileurl()+"&token="+ ApplicationManager.userCredentials.getMoodleToken();
                         Uri uri = Uri.parse(url);
-                        DownloadManager.Request r = new DownloadManager.Request(uri);
+                        DownloadManager.Request request = new DownloadManager.Request(uri);
 
-                        r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, item.getFilename());
+                        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, item.getFilename());
 
 //                      r.allowScanningByMediaScanner();
 
-                        r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                         MimeTypeMap mimetype = MimeTypeMap.getSingleton();
                         String extension = FilenameUtils.getExtension(item.getFilename());
 
-                        r.setMimeType(mimetype.getMimeTypeFromExtension(extension));
+                        request.setMimeType(mimetype.getMimeTypeFromExtension(extension));
 
-
-
-
-                        DownloadManager dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-                        dm.enqueue(r);
+                        dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+                        enqueue = dm.enqueue(request);
                     }
 
                     if(object instanceof MoodleCoreModule) {
