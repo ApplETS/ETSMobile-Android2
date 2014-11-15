@@ -102,7 +102,7 @@ Enfin, ApplETS participe à des compétitions internationales annuelles dans le 
     <string name="secu_ext">Poste 55</string>
     <string name="secu_title">Sécurité</string>
     <string name="welcome">Bienvenue!</string>
-    <string name="Ajourdhui">Ajd.</string>
+    <string name="Aujourdhui">Ajd.</string>
     <string name="voirPDF">Voir PDF</string>
 
     <string-array name="secu_urgence">
@@ -127,6 +127,11 @@ Enfin, ApplETS participe à des compétitions internationales annuelles dans le 
     <string name="lundi_le_26_avril">Lundi le 26 Avril</string>
     <string name="menu_botin_search_title">search</string>
     <string name="categories">Catégories</string>
+
+    <!--Today  -->
+    <string name="today_course">Mes cours</string>
+    <string name="today_event">Événement</string>
+    <string name="horaire">Horaire du %1$s %2$s %3$s</string>
 
 
 </resources>

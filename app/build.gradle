@@ -34,6 +34,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     //Google play service
     compile 'com.google.android.gms:play-services:6.1.11'
+
     // Robospice
     compile 'com.octo.android.robospice:robospice-spring-android:1.4.12'
     compile 'com.octo.android.robospice:robospice:1.4.12'

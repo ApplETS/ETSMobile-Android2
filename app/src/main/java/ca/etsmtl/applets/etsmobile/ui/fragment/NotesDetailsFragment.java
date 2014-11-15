@@ -23,20 +23,24 @@ public class NotesDetailsFragment extends HttpFragment {
 	public static String SESSION = "SESSION";
 	public static String COTE = "COTE";
 	public static String GROUPE = "GROUPE";
+    public static String TITLECOURS = "TITLECOURS";
+
 
 	private ListView mlistView;
 	private String cote;
 	private String sigle;
 	private String session;
 	private String groupe;
+    private String titreCours;
 
-	public static NotesDetailsFragment newInstance(String sigle, String session, String cote, String groupe) {
+	public static NotesDetailsFragment newInstance(String sigle, String session, String cote, String groupe,String titreCours) {
 		NotesDetailsFragment fragment = new NotesDetailsFragment();
 		Bundle args = new Bundle();
 		args.putString(SIGLE, sigle);
 		args.putString(SESSION, session);
 		args.putString(COTE, cote);
 		args.putString(GROUPE, groupe);
+        args.putString(TITLECOURS, titreCours);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -50,6 +54,8 @@ public class NotesDetailsFragment extends HttpFragment {
 			cote = bundle.getString(COTE);
 			session = bundle.getString(SESSION);
 			groupe = bundle.getString(GROUPE);
+            titreCours = bundle.getString(TITLECOURS);
+            System.out.print(titreCours);
 		}
 
 	}
@@ -57,7 +63,7 @@ public class NotesDetailsFragment extends HttpFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.notes_details_fragment, container, false);
-		((TextView) v.findViewById(R.id.notes_fragment_sigle)).setText(sigle);
+     	((TextView) v.findViewById(R.id.notes_fragment_sigle)).setText(sigle+ "\n" + titreCours);
 		mlistView = (ListView) v.findViewById(android.R.id.list);
 		return v;
 	}
@@ -83,6 +89,8 @@ public class NotesDetailsFragment extends HttpFragment {
 			Log.v("NotesDetailsFragment", "NotesDetailsFragment: list =" + courseEvaluation.liste.size() + " cote="
 					+ cote);
 			refresh(courseEvaluation, cote);
+
+            /// need to add for tittle
 		}
 
 	}

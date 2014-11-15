@@ -64,6 +64,7 @@ public class NotesFragment extends HttpFragment {
         DataManager datamanager = DataManager.getInstance(getActivity());
         datamanager.getDataFromSignet(SignetMethods.LIST_COURS, ApplicationManager.userCredentials, this, "");
         datamanager.getDataFromSignet(SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this, "");
+
     }
 
 
@@ -103,13 +104,17 @@ public class NotesFragment extends HttpFragment {
                     // des cours dans la session
                     if (mapSession.containsKey(listeDeCours.liste.get(i).session)) {
                         ArrayList<SessionCoteItem> arrayList = mapSession.get(listeDeCours.liste.get(i).session);
+                       // listeDeCours.liste.get(i).titreCours
                         arrayList.add(new SessionCoteItem(listeDeCours.liste.get(i).sigle, listeDeCours.liste.get(i).cote,
-                                listeDeCours.liste.get(i).groupe));
+                                listeDeCours.liste.get(i).groupe,listeDeCours.liste.get(i).titreCours));
+
+                       // arrayList.add(new SessionCoteItem(listeDeCours.liste.get(i).sigle, listeDeCours.liste.get(i).cote,
+                         //       listeDeCours.liste.get(i).groupe));
                         mapSession.put(listeDeCours.liste.get(i).session, arrayList);
                     } else {
                         ArrayList<SessionCoteItem> arrayList = new ArrayList<SessionCoteItem>();
                         arrayList.add(new SessionCoteItem(listeDeCours.liste.get(i).sigle, listeDeCours.liste.get(i).cote,
-                                listeDeCours.liste.get(i).groupe));
+                                listeDeCours.liste.get(i).groupe,listeDeCours.liste.get(i).titreCours));
                         mapSession.put(listeDeCours.liste.get(i).session, arrayList);
                     }
                 }
