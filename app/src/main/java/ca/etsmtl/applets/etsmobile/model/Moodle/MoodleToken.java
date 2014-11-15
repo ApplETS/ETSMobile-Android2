@@ -1,4 +1,4 @@
-package ca.etsmtl.applets.etsmobile.model;
+package ca.etsmtl.applets.etsmobile.model.Moodle;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
