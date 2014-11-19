@@ -77,7 +77,7 @@ public class TodayFragment extends HttpFragment implements Observer {
             Date currentDate = new Date();
             Date dateStart;
             Date dateEnd;
-            for (int i = listeDeSessions.liste.size() - 1; i > 0; i++) {
+            for (int i = listeDeSessions.liste.size() - 1; i > 0; i--) {
                 dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
                 dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
                 if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
