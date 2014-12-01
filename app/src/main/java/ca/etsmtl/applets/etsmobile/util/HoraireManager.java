@@ -1,15 +1,18 @@
 package ca.etsmtl.applets.etsmobile.util;
 
+import android.app.Activity;
+import android.util.Log;
+
+import com.j256.ormlite.dao.Dao;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Observable;
-
-import android.app.Activity;
-import android.util.Log;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.model.Event;
@@ -22,10 +25,6 @@ import ca.etsmtl.applets.etsmobile.model.listeDesActivitesEtProf;
 import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
 import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.listeSeances;
-
-import com.j256.ormlite.dao.Dao;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
 public class HoraireManager extends Observable implements RequestListener<Object> {
 
@@ -91,7 +90,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
     }
 
     /**
-     * Deletes entris in DB that doesn't exist on API
+     * Deletes entries in DB that doesn't exist on API
      *
      * @param
      */

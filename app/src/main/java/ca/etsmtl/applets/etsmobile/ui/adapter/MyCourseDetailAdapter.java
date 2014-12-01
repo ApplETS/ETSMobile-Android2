@@ -170,7 +170,7 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 			    holder.txtViewValue.setText(courseEvaluation.medianeClasse);
 				break;
 			case 6:// RAND CENTILLE
-				holder.txtView.setText(R.string.rangCentille);
+				holder.txtView.setText(R.string.rangCentile);
 				holder.txtViewValue.setText(courseEvaluation.rangCentileClasse);
 				break;
 			default:// ELSE
@@ -203,7 +203,7 @@ public class MyCourseDetailAdapter extends BaseAdapter {
 									+ nf_enUS.format(nf_frCA.parse(element.mediane).doubleValue()
 											/ nf_frCA.parse(sur).doubleValue() * 100) + "%");
 
-							holder.txtViewCent.setText(ctx.getString(R.string.rangCentille)+": " + element.rangCentile);
+							holder.txtViewCent.setText(ctx.getString(R.string.rangCentile)+": " + element.rangCentile);
 
 							holder.txtViewEcType.setText(ctx.getString(R.string.ecartType)+": " + element.ecartType);
 

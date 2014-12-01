@@ -21,7 +21,7 @@ import java.util.Observer;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.AppletsApiRequest;
+import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
@@ -77,13 +77,13 @@ public class TodayFragment extends HttpFragment implements Observer {
             Date currentDate = new Date();
             Date dateStart;
             Date dateEnd;
-            for (int i = listeDeSessions.liste.size() - 1; i > 0; i--) {
+            for (int i = listeDeSessions.liste.size() - 1; i > 0; i-- ) {
                 dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
                 dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
                 if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
                     String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
                     String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
-                    dataManager.sendRequest(new AppletsApiRequest(getActivity(), dateStartString, dateEndString), TodayFragment.this);
+                    dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateStartString, dateEndString), TodayFragment.this);
                     break;
                 }
             }

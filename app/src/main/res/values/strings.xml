@@ -65,7 +65,7 @@ Enfin, ApplETS participe à des compétitions internationales annuelles dans le 
     <string name="moyenne">Moyenne</string>
     <string name="ecartType">Écart-type</string>
     <string name="mediane">Médiane</string>
-    <string name="rangCentille">Rang centile</string>
+    <string name="rangCentile">Rang centile</string>
     <string name="ponderation">Pondération</string>
     <string name="noteOnPourcent">%1$s/%2$s (%3$s%%)</string>
 
@@ -130,6 +130,54 @@ Enfin, ApplETS participe à des compétitions internationales annuelles dans le 
     <string name="today_course">Mes cours</string>
     <string name="today_event">Événement</string>
     <string name="horaire">Horaire du %1$s %2$s %3$s</string>
+
+    <!-- Nouvelles -->
+    <string-array name="sources_news">
+        <item>ets</item>
+        <item>substance</item>
+        <item>centresportif</item>
+        <item>applets</item>
+        <item>esports</item>
+        <item>rafale</item>
+        <item>rockanddance</item>
+        <item>conjure</item>
+        <item>rockets</item>
+        <item>phoenix</item>
+        <item>avioncargo</item>
+        <item>clubcycliste</item>
+        <item>football</item>
+        <item>ingenieuses</item>
+        <item>debatpiranha</item>
+        <item>radiopiranha</item>
+        <item>walkingmachine</item>
+        <item>atlhetsiques</item>
+        <item>aeets</item>
+        <item>rugby</item>
+        <item>bibliotheque</item>
+        <item>capra</item>
+        <item>ieee</item>
+        <item>pontpop</item>
+        <item>omer</item>
+        <item>baja</item>
+        <item>canoedebeton</item>
+        <item>chinook</item>
+        <item>sonia</item>
+        <item>lanets</item>
+        <item>formuleets</item>
+        <item>eclipse</item>
+        <item>turbulence</item>
+        <item>preci</item>
+        <item>reflets</item>
+        <item>crabeets</item>
+        <item>decliq</item>
+        <item>quiets</item>
+        <item>dronolab</item>
+        <item>liets</item>
+        <item>radiosansgenie</item>
+        <item>coopets</item>
+        <item>integrale</item>
+        <item>geniale</item>
+    </string-array>
 
 
 </resources>

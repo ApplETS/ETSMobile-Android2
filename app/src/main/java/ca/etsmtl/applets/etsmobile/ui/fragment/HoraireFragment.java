@@ -18,7 +18,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.AppletsApiRequest;
+import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
@@ -79,7 +79,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
                 if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
                     String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
                     String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
-                    dataManager.sendRequest(new AppletsApiRequest(getActivity(), dateStartString, dateEndString), HoraireFragment.this);
+                    dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateStartString, dateEndString), HoraireFragment.this);
                     break;
                 }
             }

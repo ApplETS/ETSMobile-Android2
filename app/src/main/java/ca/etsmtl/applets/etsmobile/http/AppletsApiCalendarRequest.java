@@ -8,13 +8,13 @@ import ca.etsmtl.applets.etsmobile.model.EventList;
 import ca.etsmtl.applets.etsmobile2.R;
 
 
-public class AppletsApiRequest extends SpringAndroidSpiceRequest<EventList> {
+public class AppletsApiCalendarRequest extends SpringAndroidSpiceRequest<EventList> {
 
     private Context context;
     private String startDate;
     private String endDate;
 
-    public AppletsApiRequest(Context context, String startDate, String endDate) {
+    public AppletsApiCalendarRequest(Context context, String startDate, String endDate) {
         super(EventList.class);
         this.context = context;
         this.startDate = startDate;
