@@ -10,8 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Nouvelle {
 
-//    @JsonProperty("event_id")
-
     String from;
     String image;
     String title;

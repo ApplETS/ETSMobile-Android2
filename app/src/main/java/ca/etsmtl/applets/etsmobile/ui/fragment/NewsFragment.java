@@ -1,7 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +10,22 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import ca.etsmtl.applets.etsmobile.http.AppletsApiNewsRequest;
+import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
+import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
-/**
- * Created by Phil on 17/11/13.
- */
+
 public class NewsFragment extends HttpFragment {
 
     private final long DAY_IN_MS = 1000 * 60 * 60 * 24;
     private ListView newsListView;
+    private NewsAdapter adapter;
+    private ArrayList<Nouvelle> nouvellesList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class NewsFragment extends HttpFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_news, container, false);
+		View v = inflater.inflate(R.layout.fragment_news, container, false);
 
         newsListView = (ListView) v.findViewById(R.id.listView_news);
 
@@ -44,6 +46,7 @@ public class NewsFragment extends HttpFragment {
         String dateDebut = DateFormatUtils.format(dateStart, "yyyy-MM-dd");
         String dateFin = DateFormatUtils.format(currentDate, "yyyy-MM-dd");
 
+        nouvellesList = new ArrayList<Nouvelle>();
 
         dataManager.sendRequest( new AppletsApiNewsRequest(getActivity(),"ets",dateDebut,dateFin), NewsFragment.this);
 
@@ -60,14 +63,16 @@ public class NewsFragment extends HttpFragment {
 
         if(o instanceof Nouvelles) {
             Nouvelles nouvelles = (Nouvelles)o;
-
-            Log.e("NEWSFRAGMENT","nombre d'articles : "+nouvelles.getNouvelles().size() );
-
+            adapter = new NewsAdapter(getActivity(),R.layout.row_news, nouvelles,this);
+            newsListView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
 
 	}
 
 	@Override
 	void updateUI() {
+
+
 	}
 }
