@@ -51,6 +51,7 @@ public class NewsAdapter extends ArrayAdapter<Nouvelle> {
         }
 
         Nouvelle item = getItem(position);
+
         holder.tvTitre.setText(item.getTitle());
         String updatedTime = item.getUpdated_time();
 
@@ -60,6 +61,7 @@ public class NewsAdapter extends ArrayAdapter<Nouvelle> {
 
         holder.tvDate.setText(dateToDisplay.print(date));
         holder.tvTitre.setText(item.getTitle());
+        holder.imageSource.setImageResource(item.getImageResource());
 
         return view;
     }

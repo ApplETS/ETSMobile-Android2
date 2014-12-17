@@ -132,7 +132,7 @@ Enfin, ApplETS participe à des compétitions internationales annuelles dans le 
     <string name="horaire">Horaire du %1$s %2$s %3$s</string>
 
     <!-- Nouvelles -->
-    <string-array name="sources_news">
+    <string-array name="sources_news_values">
         <item>ets</item>
         <item>substance</item>
         <item>centresportif</item>
@@ -177,6 +177,53 @@ Enfin, ApplETS participe à des compétitions internationales annuelles dans le 
         <item>coopets</item>
         <item>integrale</item>
         <item>geniale</item>
+    </string-array>
+
+    <string-array name="sources_news">
+        <item>ÉTS</item>
+        <item>Substance</item>
+        <item>Centre Sportif</item>
+        <item>ApplETS</item>
+        <item>EsporTS</item>
+        <item>Rafale</item>
+        <item>Rock &amp; Dance</item>
+        <item>Conjure</item>
+        <item>RockETS</item>
+        <item>Phoenix</item>
+        <item>Avion Cargo</item>
+        <item>Club Cycliste</item>
+        <item>Football</item>
+        <item>Ingénieuses</item>
+        <item>Débat Piranha</item>
+        <item>Radio Piranha</item>
+        <item>Walking Machine</item>
+        <item>Atlhétsiques</item>
+        <item>AÉÉTS</item>
+        <item>Rugby</item>
+        <item>Bibliothèque</item>
+        <item>Capra</item>
+        <item>IEEE</item>
+        <item>Pontpop</item>
+        <item>Omer</item>
+        <item>Baja</item>
+        <item>Canoë de béton</item>
+        <item>Chinook</item>
+        <item>Sonia</item>
+        <item>LanETS</item>
+        <item>Formule ETS</item>
+        <item>Eclipse</item>
+        <item>Turbulence</item>
+        <item>PRÉCI</item>
+        <item>Reflets</item>
+        <item>Crabe ÉTS</item>
+        <item>DécliQ</item>
+        <item>QuiETS</item>
+        <item>Dronolab</item>
+        <item>LiÉTS</item>
+        <item>Radio Sans Génie</item>
+        <item>Coop ÉTS</item>
+        <item>Intégrale</item>
+        <item>GéniALE</item>
     </string-array>
 
 

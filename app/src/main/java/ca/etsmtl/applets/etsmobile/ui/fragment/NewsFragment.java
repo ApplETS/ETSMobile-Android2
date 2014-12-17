@@ -1,7 +1,13 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -17,16 +23,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Set;
 
 import ca.etsmtl.applets.etsmobile.http.AppletsApiNewsRequest;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
+import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
 
 public class NewsFragment extends HttpFragment {
 
+    private static String TAG = NewsFragment.class.getName();
     private final long DAY_IN_MS = 1000 * 60 * 60 * 24;
     private ListView newsListView;
     private NewsAdapter adapter;
@@ -35,7 +44,9 @@ public class NewsFragment extends HttpFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 	}
+
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,12 +64,75 @@ public class NewsFragment extends HttpFragment {
 
         nouvellesList = new ArrayList<Nouvelle>();
 
-        dataManager.sendRequest( new AppletsApiNewsRequest(getActivity(),"ets",dateDebut,dateFin), NewsFragment.this);
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Set<String> selection = sharedPrefs.getStringSet("multi_pref", null);
+        String[] selectedItems = selection.toArray(new String[] {});
+        String sources = "";
+
+        for(int i = 0 ; i < selectedItems.length; i++) {
+            sources += selectedItems[i] + (i == (selectedItems.length-1)?"":",");
+        }
+
+        dataManager.sendRequest( new AppletsApiNewsRequest(getActivity(),sources,dateDebut,dateFin), NewsFragment.this);
+
+
+
+
+
+
+
+
 
 		return v;
 	}
-	
-	@Override
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_news, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        switch (item.getItemId()) {
+
+            case R.id.menu_item_sources_news:
+
+
+//                FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                PrefsActivity.PrefsFragment prefs = new PrefsActivity.PrefsFragment();
+//
+////                getFragmentManager().beginTransaction().add(android.R.id.content, new PrefsActivity.PrefsFragment()).addToBackStack(null).commit();
+//                ft.add(android.R.id.content,prefs);
+//
+//                ft.hide(this);
+//                ft.addToBackStack(null);
+//                ft.commit();
+
+                // Display the fragment as the main content.
+                Intent i = new Intent(getActivity(), PrefsActivity.class);
+
+                getActivity().startActivity(i);
+
+                return true;
+        }
+
+
+
+
+
+
+
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
 	public void onRequestFailure(SpiceException e) {
 
 	}

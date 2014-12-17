@@ -20,6 +20,8 @@ public class Nouvelle {
     String id;
     String icon_link;
 
+    int imageResource;
+
     public Nouvelle() {}
 
     public Nouvelle(String from, String image, String title, String created_time, String facebook_link, String updated_time, String message, String id, String icon_link) {
@@ -69,6 +71,16 @@ public class Nouvelle {
     public String getIcon_link() {
         return icon_link;
     }
+
+    public int getImageResource() {
+        return imageResource;
+    }
+
+    public void setImageResource(int imageResource) {
+        this.imageResource = imageResource;
+    }
+
+
 }
 
 
