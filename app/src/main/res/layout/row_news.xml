@@ -9,12 +9,17 @@
         android:id="@+id/iv_news_source"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher" />
+        android:adjustViewBounds="true"
+        android:maxWidth="42dp"
+        android:maxHeight="42dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_ets" />
 
     <TextView
         android:id="@+id/tv_row_news_titre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"
         android:layout_toRightOf="@+id/iv_news_source"
         tools:text="Forces Avenir vient tout juste de publier les vidéos des lauréats" />
 
