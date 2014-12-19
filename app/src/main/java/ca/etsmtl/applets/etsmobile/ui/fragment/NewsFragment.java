@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -28,6 +29,7 @@ import java.util.Set;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiNewsRequest;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
+import ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -102,17 +104,6 @@ public class NewsFragment extends HttpFragment {
 
             case R.id.menu_item_sources_news:
 
-
-//                FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                PrefsActivity.PrefsFragment prefs = new PrefsActivity.PrefsFragment();
-//
-////                getFragmentManager().beginTransaction().add(android.R.id.content, new PrefsActivity.PrefsFragment()).addToBackStack(null).commit();
-//                ft.add(android.R.id.content,prefs);
-//
-//                ft.hide(this);
-//                ft.addToBackStack(null);
-//                ft.commit();
-
                 // Display the fragment as the main content.
                 Intent i = new Intent(getActivity(), PrefsActivity.class);
 
@@ -168,6 +159,28 @@ public class NewsFragment extends HttpFragment {
             adapter = new NewsAdapter(getActivity(),R.layout.row_news, nouvelles,this);
             newsListView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
+
+            newsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    Nouvelle nouvelle = (Nouvelle) parent.getItemAtPosition(position);
+                    Intent i = new Intent(getActivity(), NewsDetailsActivity.class);
+
+                    i.putExtra("from", nouvelle.getFrom());
+                    i.putExtra("image", nouvelle.getImage());
+                    i.putExtra("title", nouvelle.getTitle());
+                    i.putExtra("created_time", nouvelle.getCreated_time());
+                    i.putExtra("facebook_link", nouvelle.getFacebook_link());
+                    i.putExtra("updated_time", nouvelle.getUpdated_time());
+                    i.putExtra("message", nouvelle.getMessage());
+                    i.putExtra("id", nouvelle.getId());
+                    i.putExtra("icon_link", nouvelle.getIcon_link());
+
+                    getActivity().startActivity(i);
+
+                }
+            });
         }
 
 	}
@@ -178,3 +191,4 @@ public class NewsFragment extends HttpFragment {
 
 	}
 }
+

@@ -125,6 +125,7 @@ Enfin, ApplETS participe à des compétitions internationales annuelles dans le 
     <string name="menu_botin_search_title">search</string>
     <string name="categories">Catégories</string>
     <string name="title_activity_moodle_course">MoodleCourseActivity</string>
+    <string name="title_activity_news_details">NewsDetailsActivity</string>
 
     <!--Today  -->
     <string name="today_course">Mes cours</string>
