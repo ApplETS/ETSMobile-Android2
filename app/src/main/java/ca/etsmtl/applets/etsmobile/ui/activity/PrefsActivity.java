@@ -27,6 +27,7 @@ public class PrefsActivity extends PreferenceActivity {
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment(),PrefsFragment.class.getName()).addToBackStack(null).commit();
 
+        setTitle("Préférences");
 
     }
 
@@ -59,7 +60,7 @@ public class PrefsActivity extends PreferenceActivity {
 
             MultiSelectListPreference multiSelectPref = new MultiSelectListPreference(getActivity());
             multiSelectPref.setKey("multi_pref");
-            multiSelectPref.setTitle("Multi Select List  Preference");
+            multiSelectPref.setTitle("Choix des sources");
             multiSelectPref.setEntries(R.array.sources_news);
             multiSelectPref.setEntryValues(R.array.sources_news_values);
             multiSelectPref.setDefaultValue(selectionSet);

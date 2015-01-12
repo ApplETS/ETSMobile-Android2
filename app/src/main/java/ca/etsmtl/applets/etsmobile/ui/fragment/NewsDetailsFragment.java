@@ -1,10 +1,22 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -33,7 +45,13 @@ public class NewsDetailsFragment extends HttpFragment {
     private String id;
     private String icon_link;
 
-    private TextView tvTest;
+    private TextView tvFrom;
+    private ImageView ivImage;
+    private TextView tvTitle;
+    private TextView tvFacebook_link;
+    private TextView tvUpdatedTime;
+    private TextView tvMessage;
+
     
     
     public static NewsDetailsFragment newInstance(String from, String image, String title, String created_time, String facebook_link, String updated_time, String message, String id, String icon_link) {
@@ -81,11 +99,21 @@ public class NewsDetailsFragment extends HttpFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news_details, container, false);
 
-        tvTest = (TextView) v.findViewById(R.id.tv_news_test);
+        tvFrom = (TextView) v.findViewById(R.id.tv_news_details_from);
+        ivImage = (ImageView) v.findViewById(R.id.iv_news_details_image);
+        tvTitle = (TextView) v.findViewById(R.id.tv_news_details_title);
+        tvFacebook_link = (TextView) v.findViewById(R.id.tv_news_details_fb_link);
+        tvUpdatedTime = (TextView) v.findViewById(R.id.tv_news_details_updated_time);
+        tvMessage = (TextView) v.findViewById(R.id.tv_news_details_message);
 
-        tvTest.setText(message);
+        tvFrom.setText(from);
+        tvTitle.setText(title);
+        tvFacebook_link.setText(facebook_link);
+        tvUpdatedTime.setText(updated_time);
+        tvMessage.setText(message);
 
 
+        new DownloadImage().execute(image);
 
         return v;
     }
@@ -96,6 +124,79 @@ public class NewsDetailsFragment extends HttpFragment {
         // TODO Auto-generated method stub
 
     }
+
+
+    /**
+     * Simple functin to set a Drawable to the image View
+     * @param drawable
+     */
+    private void setImage(Drawable drawable)
+    {
+        ivImage.setImageDrawable(drawable);
+    }
+
+
+    public class DownloadImage extends AsyncTask<String, Integer, Drawable> {
+
+        @Override
+        protected Drawable doInBackground(String... arg0) {
+            // This is done in a background thread
+            return downloadImage(arg0[0]);
+        }
+
+        /**
+         * Called after the image has been downloaded
+         * -> this calls a function on the main thread again
+         */
+        protected void onPostExecute(Drawable image)
+        {
+            setImage(image);
+        }
+
+
+        /**
+         * Actually download the Image from the _url
+         * @param _url
+         * @return
+         */
+        private Drawable downloadImage(String _url)
+        {
+            //Prepare to download image
+            URL url;
+            BufferedOutputStream out;
+            InputStream in;
+            BufferedInputStream buf;
+
+            //BufferedInputStream buf;
+            try {
+                url = new URL(_url);
+                in = url.openStream();
+
+
+
+                // Read the inputstream
+                buf = new BufferedInputStream(in);
+
+                // Convert the BufferedInputStream to a Bitmap
+                Bitmap bMap = BitmapFactory.decodeStream(buf);
+                if (in != null) {
+                    in.close();
+                }
+                if (buf != null) {
+                    buf.close();
+                }
+
+                return new BitmapDrawable(getResources(),bMap);
+
+            } catch (Exception e) {
+                Log.e("Error reading file", e.toString());
+            }
+
+            return null;
+        }
+
+    }
+
 
 
 }

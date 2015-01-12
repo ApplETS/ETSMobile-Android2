@@ -9,9 +9,18 @@ import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Iterator;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
@@ -38,12 +47,44 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
     @Override
     public Nouvelles loadDataFromNetwork() throws Exception {
 
-        String url = context.getString(R.string.applets_api_news, source, startDate, endDate);
+        String address = context.getString(R.string.applets_api_news, source, startDate, endDate);
 
-        HttpURLConnection urlConnection = (HttpURLConnection) new URL(url).openConnection();
+        TrustManager[] trustAllCerts = new TrustManager[] {
+                new X509TrustManager() {
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 
-        String result = IOUtils.toString(urlConnection.getInputStream());
-        urlConnection.disconnect();
+                    }
+
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+                    }
+
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+                }
+        };
+
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+        URL url = new URL(address);
+        URLConnection con = url.openConnection();
+
+        String result = IOUtils.toString(con.getInputStream());
+
+//        urlConnection.disconnect();
 
         JSONObject root = new JSONObject(result);
         JSONObject data = root.getJSONObject("data");

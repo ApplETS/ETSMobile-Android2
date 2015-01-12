@@ -3,6 +3,7 @@ package ca.etsmtl.applets.etsmobile.ui.activity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsDetailsFragment;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -24,9 +25,7 @@ public class NewsDetailsActivity extends Activity {
                 return;
             }
 
-            int idCours =  extras.getInt("idCours");
-            String nameCours =  extras.getString("nameCours");
-
+            setTitle("Détails");
 
             String from = extras.getString("from");
             String image = extras.getString("image");
@@ -43,6 +42,21 @@ public class NewsDetailsActivity extends Activity {
             
 
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

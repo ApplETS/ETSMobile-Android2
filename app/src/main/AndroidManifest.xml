@@ -83,7 +83,7 @@
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity"
-            android:label="prefs_activity"
+            android:label="PrefsActivity"
             android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
