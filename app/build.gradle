@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '20.0.0'
+    compileSdkVersion 21
+    buildToolsVersion '21.1.0'
 
     packagingOptions {
         exclude 'LICENSE.txt'
@@ -17,23 +17,25 @@ android {
 
     defaultConfig {
         applicationId "ca.etsmtl.applets.etsmobile2"
+
         minSdkVersion 14
-        targetSdkVersion 19
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
+//    compile 'com.android.support:multidex:1.0.+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     //Google play service
-    compile 'com.google.android.gms:play-services:6.1.11'
+    compile 'com.google.android.gms:play-services-maps:6.5.+'
 
     // Robospice
     compile 'com.octo.android.robospice:robospice-spring-android:1.4.12'
@@ -53,4 +55,3 @@ dependencies {
     //To parse html
     //compile 'org.jsoup:jsoup:1.8.1'
 }
-
