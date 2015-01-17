@@ -8,11 +8,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.List;
+
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.Programme;
 import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
+import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -23,6 +28,7 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 	private static final String TAG = "ProfilFragment";
 	private Etudiant etudiant;
 	private listeDesProgrammes mlisteDesProgrammes;
+    private ProfilManager profilManager;
 
 	RelativeLayout profileLayout;
 
@@ -36,7 +42,10 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_profil, container,  false);
         super.onCreateView(inflater, v, savedInstanceState);
 		profileLayout = (RelativeLayout) v.findViewById(R.id.profil_layout_info);
-		((Button) v.findViewById(R.id.profil_button_logout)).setOnClickListener(this);
+        v.findViewById(R.id.profil_button_logout).setOnClickListener(this);
+
+        profilManager = new ProfilManager(getActivity().getApplicationContext());
+
 		return v;
 	}
 
@@ -63,7 +72,10 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 				if (etudiant.erreur != null) {
 					Log.d(TAG, ": onRequestSuccess: etudiant error" + etudiant.erreur);
 					etudiant = null;
-				}
+				} else {
+                    // Save Etudiant class in DB
+                    profilManager.updateProfil(etudiant);
+                }
 			} else if (o instanceof listeDesProgrammes) {
 				mlisteDesProgrammes = (listeDesProgrammes) o;
 				if (mlisteDesProgrammes.erreur != null) {
@@ -77,14 +89,45 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 	}
 
 	private void refreshUi() {
-		if (etudiant != null && mlisteDesProgrammes != null) {
-			getActivity().runOnUiThread(new Runnable() {
 
+        Programme tempProgram = null;
+        
+        // Local query if no Network Access
+        if(etudiant == null)
+            etudiant = profilManager.getEtudiant();
+        
+        
+        if(mlisteDesProgrammes == null) {
+            DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
+            try {
+                List<Programme> programmeList = dbHelper.getDao(Programme.class).queryForAll();
+                if(!programmeList.isEmpty())
+                    tempProgram = programmeList.get(0);
+            } catch(Exception e) {
+                Log.e("SQL Exception", e.getMessage());
+            }
+        } else {
+            for (Programme p : mlisteDesProgrammes.liste) {
+
+                if (p.statut.equals("actif") || p.statut.equals("tutuelle")) {
+                    DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
+                    try {
+                        dbHelper.getDao(Programme.class).createOrUpdate(p);
+                        tempProgram = p;
+                    } catch(Exception e) {
+                        Log.e("SQL Exception", e.getMessage());
+                    }
+                }
+            }
+        }
+
+        final Programme program = tempProgram;
+        
+		if (etudiant != null && program != null) {
+			getActivity().runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-
 					profileLayout.startLayoutAnimation();
-
 					View v = getView();
 					if (v != null) {
 						String nom = etudiant.nom.trim();
@@ -94,12 +137,6 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 						((TextView) v.findViewById(R.id.profil_code_permanent_item)).setText(etudiant.codePerm);
 						((TextView) v.findViewById(R.id.profil_solde_item)).setText(etudiant.soldeTotal);
 
-						Programme program = null;
-						for (Programme p : mlisteDesProgrammes.liste) {
-							if (p.statut.equals("actif") || p.statut.equals("tutuelle")) {
-								program = p;
-							}
-						}
 
 						((TextView) v.findViewById(R.id.profil_programme_item)).setText(program.libelle);
 						((TextView) v.findViewById(R.id.profil_credit_reussis_item))
@@ -112,7 +149,6 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 								.setText(program.nbCreditsPotentiels);
 						((TextView) v.findViewById(R.id.profil_moyenne_item)).setText(program.moyenne);
 					}
-
 				}
 			});
 		}
