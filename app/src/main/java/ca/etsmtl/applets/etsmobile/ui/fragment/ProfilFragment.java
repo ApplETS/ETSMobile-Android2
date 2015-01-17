@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -74,7 +73,7 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 					etudiant = null;
 				} else {
                     // Save Etudiant class in DB
-                    profilManager.updateProfil(etudiant);
+                    profilManager.updateEtudiant(etudiant);
                 }
 			} else if (o instanceof listeDesProgrammes) {
 				mlisteDesProgrammes = (listeDesProgrammes) o;
@@ -98,25 +97,12 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
         
         
         if(mlisteDesProgrammes == null) {
-            DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
-            try {
-                List<Programme> programmeList = dbHelper.getDao(Programme.class).queryForAll();
-                if(!programmeList.isEmpty())
-                    tempProgram = programmeList.get(0);
-            } catch(Exception e) {
-                Log.e("SQL Exception", e.getMessage());
-            }
+            tempProgram = profilManager.getProgramme();
         } else {
             for (Programme p : mlisteDesProgrammes.liste) {
-
                 if (p.statut.equals("actif") || p.statut.equals("tutuelle")) {
-                    DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
-                    try {
-                        dbHelper.getDao(Programme.class).createOrUpdate(p);
-                        tempProgram = p;
-                    } catch(Exception e) {
-                        Log.e("SQL Exception", e.getMessage());
-                    }
+                    profilManager.updateProgramme(p);
+                    tempProgram = p;
                 }
             }
         }

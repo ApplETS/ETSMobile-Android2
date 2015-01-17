@@ -21,10 +21,19 @@ public class ProfilManager {
         this.context = context;
     }
 
-    public void updateProfil(Etudiant etudiant) {
+    public void updateEtudiant(Etudiant etudiant) {
         DatabaseHelper dbHelper = new DatabaseHelper(context);
         try {
             dbHelper.getDao(Etudiant.class).createOrUpdate(etudiant);
+        } catch(SQLException e) {
+            Log.e("SQL Exception", e.getMessage());
+        }
+    }
+
+    public void updateProgramme(Programme programme) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+        try {
+            dbHelper.getDao(Programme.class).createOrUpdate(programme);
         } catch(SQLException e) {
             Log.e("SQL Exception", e.getMessage());
         }
@@ -42,6 +51,20 @@ public class ProfilManager {
             Log.e("SQL Exception", e.getMessage());
         }
         return etudiant;
+    }
+
+    public Programme getProgramme() {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+        Programme programme = null;
+        try {
+            List<Programme> programmeList = dbHelper.getDao(Programme.class).queryForAll();
+            if(!programmeList.isEmpty())
+                // Get Program if exists
+                programme = programmeList.get(0);
+        } catch (SQLException e) {
+            Log.e("SQL Exception", e.getMessage());
+        }
+        return programme;
     }
 
     // Called when a user disconnects
