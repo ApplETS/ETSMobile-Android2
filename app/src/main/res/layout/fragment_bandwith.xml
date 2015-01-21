@@ -52,27 +52,28 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:orientation="horizontal" >
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="fill_parent"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:text="@string/_0"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black"
+                        android:gravity="bottom" />
 
                     <TextView
                         android:id="@+id/bandwith_used_lbl"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="fill_parent"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:gravity="center"
+                        android:layout_weight="2.19"
+                        android:gravity="center|bottom|left"
                         android:text="@string/utilise"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/black" />
@@ -80,34 +81,26 @@
                     <TextView
                         android:id="@+id/bandwith_max"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="right"
+                        android:gravity="bottom|right"
                         android:text="@string/gigaoctetx"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black"
+                        android:layout_gravity="center" />
                 </LinearLayout>
 
-                <ProgressBar
+                <ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar
                     android:id="@+id/bandwith_progress"
-                    style="?android:attr/progressBarStyleHorizontal"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:progress="1" />
      </LinearLayout>
-     <LinearLayout 
-         android:id="@+id/chart" 
-         android:orientation="horizontal"
-         android:layout_width="fill_parent" 
-         android:layout_height="300dp" 
-         android:paddingLeft="20dp"
-         android:paddingRight="20dp"
-         android:layout_below="@+id/bandwith_progress_layout"/>
      <GridView 
          android:id="@+id/bandwith_grid"
-         android:layout_below="@+id/chart"
+         android:layout_below="@+id/bandwith_progress_layout"
          android:layout_width="fill_parent"
          android:layout_height="fill_parent"
          android:columnWidth="150dp"

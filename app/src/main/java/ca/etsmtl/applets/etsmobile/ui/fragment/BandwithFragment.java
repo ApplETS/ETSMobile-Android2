@@ -1,25 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -42,8 +22,30 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar;
+import ca.etsmtl.applets.etsmobile.views.ProgressItem;
 import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
-import ca.etsmtl.applets.etsmobile.views.PieChart;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -56,12 +58,15 @@ public class BandwithFragment extends Fragment {
 	private String urlSuite2 = "%26cmd%3DVisualiser%22%20and%20xpath%3D'%2F%2Ftable%5B%40border%3D%221%22%5D'&format=json&diagnostics=true&callback=";
 	private double[] values;
 	private String[] rooms;
-	private LinearLayout chartLayout;
-	private ProgressBar progressBar;
-
+	private MultiColorProgressBar progressBar;
 	private EditText editTextApp;
 	private EditText editTextPhase;
 	private GridView grid;
+	final int redColor = Color.parseColor("#F44336");
+	final int blueColor = Color.parseColor("#2196F3");
+	final int greenColor = Color.parseColor("#4CAF50");
+	final int purpleColor = Color.parseColor("#9C27B0");
+	final int grayColor = Color.parseColor("#9E9E9E");
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,14 +76,10 @@ public class BandwithFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_bandwith, container, false);
-		chartLayout = (LinearLayout) v.findViewById(R.id.chart);
-		progressBar = (ProgressBar) v.findViewById(R.id.bandwith_progress);
+		progressBar = (MultiColorProgressBar) v.findViewById(R.id.bandwith_progress);
 		editTextApp = (EditText) v.findViewById(R.id.bandwith_editText_app);
 		editTextPhase = (EditText) v.findViewById(R.id.bandwith_editText_phase);
 		grid = (GridView) v.findViewById(R.id.bandwith_grid);
-
-		// Change progressBar color to red
-		progressBar.getProgressDrawable().setColorFilter(Color.RED, Mode.SRC_IN);
 
 		SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String phase = defaultSharedPreferences.getString("Phase", "");
@@ -204,27 +205,42 @@ public class BandwithFragment extends Fragment {
 
 	}
 
-	private void drawChart() {
+	private void updateProgressBarColorItems(double bandwidthQuota) {
+        final int[] colorChoice = new int[] {redColor, blueColor, greenColor, purpleColor};
+        int[] legendColors = new int[values.length];
+        final Activity activity = getActivity();
 
-		final Activity activity = getActivity();
-		if (activity != null) {
-			activity.runOnUiThread(new Runnable() {
+        progressBar.clearProgressItems();
 
-				@Override
-				public void run() {
-					int[] colorChoice = new int[] { Color.RED, Color.DKGRAY, Color.GRAY,
-							getResources().getColor(R.color.red), Color.BLACK, };
-					int size = values.length;
-					int[] colors = new int[size];
-					for (int i = 0; i < size; i++) {
-						colors[i] = colorChoice[i];
-					}
-					LegendAdapter legendAdapter = new LegendAdapter(activity, rooms, colors);
-					grid.setAdapter(legendAdapter);
-					new PieChart(getActivity(), values, colors, chartLayout);
-				}
-			});
-		}
+        for (int i = 0, color = 0; i < values.length - 1; ++i) {
+            ProgressItem progressItem = new ProgressItem(colorChoice[color], (values[i] / bandwidthQuota) * 100);
+
+            progressBar.addProgressItem(progressItem);
+            legendColors[i] = colorChoice[color];
+            color++;
+
+            if (color == colorChoice.length)
+                color = 0;
+        }
+
+        if (values.length > 0) {
+            int lastValue = values.length - 1;
+            ProgressItem progressItem = new ProgressItem(grayColor, (values[lastValue] / bandwidthQuota) * 100);
+            legendColors[lastValue] = grayColor;
+            progressBar.addProgressItem(progressItem);
+        }
+
+
+        if (activity != null) {
+            final int[] colors = legendColors;
+
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    grid.setAdapter(new LegendAdapter(activity, rooms, colors));
+                }
+            });
+        }
 
 	}
 
@@ -251,7 +267,6 @@ public class BandwithFragment extends Fragment {
 	private void reset() {
 		View v = getView();
 		if (v != null) {
-			chartLayout.removeAllViews();
 			progressBar.setProgress(0);
 			String gb = getString(R.string.gigaoctetx);
 			((TextView) v.findViewById(R.id.bandwith_used_lbl)).setText("");
@@ -317,7 +332,7 @@ public class BandwithFragment extends Fragment {
 							values[size - 1] = rest;
 							rooms[size - 1] = "■ Restant " + rest + " Go";
 							setProgressBar(total, quotaValue);
-							drawChart();
+							updateProgressBarColorItems(quotaValue);
 						} else {
 							setError(editTextApp, getString(R.string.error_invalid_app));
 						}
