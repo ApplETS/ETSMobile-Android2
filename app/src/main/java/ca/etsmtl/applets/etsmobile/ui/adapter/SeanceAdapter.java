@@ -1,106 +1,148 @@
 package ca.etsmtl.applets.etsmobile.ui.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile2.R;
 
-public class SeanceAdapter extends ArrayAdapter<Seances> {
+public class SeanceAdapter extends BaseAdapter {
 
-    private LayoutInflater inflater;
-    private List<Seances> listSeances;
+    private List<TodayDataRowItem> listSeances;
 
-    public SeanceAdapter(Context context, ArrayList<Seances> list) {
-        super(context, R.layout.list_item_value, list);
-        this.inflater = LayoutInflater.from(context);
+    private Context context;
 
-        listSeances = list;
+    public SeanceAdapter(Context context) {
+        this.context = context;
+        listSeances = new ArrayList<>();
     }
-    public int getCount() {
-        if (listSeances != null)
-            return listSeances.size();
-        return 0;
-    }
-
-
-    public Seances getItem(int position) {
-        if (listSeances != null)
-            return listSeances.get(position);
-        return null;
-    }
-
-    public long getItemId(int position) {
-        if (listSeances != null)
-            return listSeances.get(position).hashCode();
-        return 0;
-    }
-
-    @SuppressLint("DefaultLocale")
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public int getCount() {
+        return listSeances.size();
+    }
 
-        ViewHolder holder;
-        if (view != null) {
-            holder = (ViewHolder) view.getTag();
-        } else {
-            view = inflater.inflate(R.layout.row_today_courses, parent, false);
-            holder = new ViewHolder();
+    @Override
+    public Object getItem(int position) {
+        return listSeances.get(position).data;
+    }
 
-            holder.tvHeureDebut = (TextView) view.findViewById(R.id.tv_today_heure_debut);
-            holder.tvHeureFin = (TextView) view.findViewById(R.id.tv_today_heure_fin);
-            holder.tvNomActivite = (TextView) view.findViewById(R.id.tv_today_nom_activite);
-            holder.tvCoursGroupe = (TextView) view.findViewById(R.id.tv_today_cours_groupe);
-            holder.tvLocal = (TextView) view.findViewById(R.id.tv_today_local);
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
 
-            view.setTag(holder);
+    @Override
+    public int getItemViewType(int position) {
+        return listSeances.get(position).type;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return TodayDataRowItem.viewType.values().length;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        int viewType = getItemViewType(position);
+
+        if (convertView == null) {
+
+            if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE.getValue()) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.row_today_title, parent,false);
+                ViewSeacesTitleHolder titleHolder = new ViewSeacesTitleHolder();
+                titleHolder.tvTitle = (TextView) convertView.findViewById(R.id.todays_title);
+                convertView.setTag(titleHolder);
+
+            } else if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_SEANCE.getValue()) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.row_today_courses, parent, false );
+                ViewSeancesHolder seancesHolder = new ViewSeancesHolder();
+                seancesHolder.tvHeureDebut = (TextView) convertView.findViewById(R.id.tv_today_heure_debut);
+                seancesHolder.tvHeureFin = (TextView) convertView.findViewById(R.id.tv_today_heure_fin);
+                seancesHolder.tvCoursGroupe = (TextView) convertView.findViewById(R.id.tv_today_cours_groupe);
+                seancesHolder.tvNomActivite = (TextView) convertView.findViewById(R.id.tv_today_nom_activite);
+                seancesHolder.tvLocal = (TextView) convertView.findViewById(R.id.tv_today_local);
+                convertView.setTag(seancesHolder);
+            }
         }
 
-        Seances item = getItem(position);
+        if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_SEANCE.getValue()) {
+            Seances seance = (Seances) getItem(position);
+            ViewSeancesHolder viewSeancesHolder = (ViewSeancesHolder) convertView.getTag();
+            viewSeancesHolder.tvNomActivite.setText(seance.nomActivite);
+            viewSeancesHolder.tvCoursGroupe.setText(seance.coursGroupe);
+            viewSeancesHolder.tvLocal.setText(seance.local);
 
-        holder.tvNomActivite.setText(item.nomActivite);
+            DateTime mDateDebut = DateTime.parse(seance.dateDebut);
+            DateTime mDateFin = DateTime.parse(seance.dateFin);
 
-        DateTime mDateDebut = DateTime.parse(item.dateDebut);
-        DateTime mDateFin = DateTime.parse(item.dateFin);
-        String dateDebut = String.format("%dh%02d", mDateDebut.getHourOfDay(), mDateDebut.getMinuteOfHour());
-        String dateFin = String.format("%dh%02d", mDateFin.getHourOfDay(), mDateFin.getMinuteOfHour());
+            String dateDebut = String.format("%dh%02d", mDateDebut.getHourOfDay(), mDateDebut.getMinuteOfHour());
+            String dateFin = String.format("%dh%02d", mDateFin.getHourOfDay(), mDateFin.getMinuteOfHour());
 
-
-        holder.tvHeureDebut.setText(dateDebut);
-        holder.tvHeureFin.setText(dateFin);
-
-        holder.tvCoursGroupe.setText(item.coursGroupe);
-        holder.tvLocal.setText(item.local);
-
-        return view;
+            viewSeancesHolder.tvHeureDebut.setText(dateDebut);
+            viewSeancesHolder.tvHeureFin.setText(dateFin);
+        } else if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE.getValue()) {
+            ViewSeacesTitleHolder titleHolder = (ViewSeacesTitleHolder) convertView.getTag();
+            titleHolder.tvTitle.setText((String) getItem(position));
+        }
+        return convertView;
     }
 
-
-    public List<Seances> getItemList() {
+    public List<TodayDataRowItem> getItemList() {
         return listSeances;
     }
 
     public void setItemList(List<Seances> itemList) {
-        this.listSeances = itemList;
+
+        listSeances = new ArrayList<>();
+        String tempDate = "";
+        DateTime today = new DateTime();
+
+        for(Seances seances : itemList) {
+
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+            DateTime seanceDay = formatter.parseDateTime(seances.dateDebut.substring(0,10));
+
+            if(today.isAfter(seanceDay) && !DateUtils.isToday(seanceDay.getMillis()) ) {
+                continue;
+            }
+
+            if(!seances.dateDebut.substring(0,10).equals(tempDate)) {
+
+                tempDate = seances.dateDebut.substring(0,10);
+
+                DateTime.Property pDoW = seanceDay.dayOfWeek();
+                DateTime.Property pDoM = seanceDay.dayOfMonth();
+                DateTime.Property pMoY = seanceDay.monthOfYear();
+
+                this.listSeances.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE, context.getString(R.string.date_text, pDoW.getAsText(Locale.FRENCH), pDoM.get(), pMoY.getAsText(Locale.FRENCH))));
+            }
+            this.listSeances.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_SEANCE, seances));
+        }
+
     }
 
-    static class ViewHolder {
+    static class ViewSeancesHolder {
         TextView tvHeureDebut;
         TextView tvHeureFin;
         TextView tvNomActivite;
         TextView tvCoursGroupe;
         TextView tvLocal;
-        
-        
+    }
+
+    static class ViewSeacesTitleHolder {
+        TextView tvTitle;
     }
 }

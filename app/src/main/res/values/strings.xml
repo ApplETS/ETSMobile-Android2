@@ -131,6 +131,7 @@ Enfin, ApplETS participe à des compétitions internationales annuelles dans le 
     <string name="today_course">Mes cours</string>
     <string name="today_event">Événement</string>
     <string name="horaire">Horaire du %1$s %2$s %3$s</string>
+    <string name="date_text">%1$s %2$s %3$s</string>
 
     <!-- Nouvelles -->
     <string-array name="sources_news_values">
