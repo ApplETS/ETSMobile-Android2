@@ -69,7 +69,14 @@ public class NewsFragment extends HttpFragment {
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         Set<String> selection = sharedPrefs.getStringSet("multi_pref", null);
-        String[] selectedItems = selection.toArray(new String[] {});
+
+        String[] selectedItems = {"ets"};
+
+        if(selection != null) {
+            selectedItems = selection.toArray(new String[] {});
+        }
+
+
         String sources = "";
 
         for(int i = 0 ; i < selectedItems.length; i++) {

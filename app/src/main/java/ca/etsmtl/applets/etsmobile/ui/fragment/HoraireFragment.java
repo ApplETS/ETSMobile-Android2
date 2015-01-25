@@ -6,22 +6,33 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
+import org.joda.time.DateTime;
+
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
+import ca.etsmtl.applets.etsmobile.model.Seances;
+import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
@@ -34,6 +45,13 @@ public class HoraireFragment extends HttpFragment implements Observer {
 
     private HoraireManager horaireManager;
     private CustomProgressDialog customProgressDialog;
+    private ListView horaireListView;
+    private ArrayList<Seances> listSeances;
+    private SeanceAdapter seanceAdapter;
+    private DateTime dateTime = new DateTime();
+    private DatabaseHelper databaseHelper;
+
+    private  SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA_FRENCH);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,16 +63,45 @@ public class HoraireFragment extends HttpFragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_calendar, container, false);
+        new AsyncListViewLoader().execute();
+
+
+
+
+
+
+
+
+        horaireListView = (ListView) v.findViewById(R.id.listView_horaire);
 
         horaireManager = new HoraireManager(this, getActivity());
         horaireManager.addObserver(this);
 
+
+//
+//        final HoraireFragment activity = this;
+//
+//        new AsyncTask<Void, Void, Void>() {
+//
+//            @Override
+//            protected Void doInBackground( Void... voids ) {
+//
+//                return null;
+//            }
+//        }.execute();
+
         customProgressDialog = new CustomProgressDialog(getActivity(), R.drawable.loading_spinner, "Synchronisation en cours");
         customProgressDialog.show();
+
+
+
 
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+
+
+
 
         return v;
     }
@@ -66,7 +113,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
     }
 
     @Override
-    public void onRequestSuccess(Object o) {
+    public void onRequestSuccess(final Object o) {
         if (o instanceof ListeDeSessions) {
 
             ListeDeSessions listeDeSessions = (ListeDeSessions) o;
@@ -84,12 +131,89 @@ public class HoraireFragment extends HttpFragment implements Observer {
                 }
             }
         }
+
         horaireManager.onRequestSuccess(o);
+
 
     }
 
     @Override
     void updateUI() {
+
+
+        dateTime = new DateTime();
+
+        DateTime.Property pDoW = dateTime.dayOfWeek();
+        DateTime.Property pDoM = dateTime.dayOfMonth();
+        DateTime.Property pMoY = dateTime.monthOfYear();
+
+
+        databaseHelper = new DatabaseHelper(getActivity());
+        listSeances = new ArrayList<Seances>();
+
+        seanceAdapter = new SeanceAdapter(getActivity(), listSeances);
+
+
+
+
+        if (listSeances.isEmpty()) {
+//            tvNoCourses.setVisibility(View.VISIBLE);
+        } else {
+//            for (Seances seances : listSeances) {
+//                dataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_SEANCE, seances));
+//            }
+//            tvNoCourses.setVisibility(View.GONE);
+        }
+//        seanceAdapter = new SeanceAdapter(getActivity(), listSeances);
+
+        horaireListView.setAdapter(seanceAdapter);
+
+
+
+    }
+
+    private class AsyncListViewLoader extends AsyncTask<String,Void,ArrayList<Seances>> {
+
+        @Override
+        protected void onPostExecute(ArrayList<Seances> result) {
+            super.onPostExecute(result);
+
+            seanceAdapter.setItemList(result);
+            seanceAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected ArrayList<Seances> doInBackground(String... params) {
+            ArrayList<Seances> result = new ArrayList<Seances>();
+
+            try {
+                try {
+                    Log.e("TEST",new DateTime().toString());
+
+//                    SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA_FRENCH);
+//                    result = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
+                    result = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll();
+
+//                    result = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().query();
+                    Log.e("TEST",new DateTime().toString());
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                return result;
+            }
+            catch(Throwable t) {
+                t.printStackTrace();
+            }
+            return null;
+        }
+
 
     }
 

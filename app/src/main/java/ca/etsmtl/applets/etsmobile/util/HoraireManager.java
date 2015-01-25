@@ -1,6 +1,7 @@
 package ca.etsmtl.applets.etsmobile.util;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
@@ -38,6 +39,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
 
     public HoraireManager(final RequestListener<Object> listener, Activity activity) {
         this.activity = activity;
+
     }
 
     @Override
@@ -46,46 +48,66 @@ public class HoraireManager extends Observable implements RequestListener<Object
     }
 
     @Override
-    public void onRequestSuccess(Object o) {
+    public void onRequestSuccess(final Object o) {
 
-        //listeHoraireEtProf
-        if (o instanceof listeDesActivitesEtProf) {
-            listeDesActivitesEtProf listeDesActivitesEtProf = (listeDesActivitesEtProf) o;
+        new AsyncTask<Void, Void, Void>() {
 
-            deleteExpiredHoraireActivite(listeDesActivitesEtProf);
-            createOrUpdateHoraireActiviteInDB(listeDesActivitesEtProf);
-        }
+            @Override
+            protected Void doInBackground( Void... voids ) {
+                //listeHoraireEtProf
+                if (o instanceof listeDesActivitesEtProf) {
+                    listeDesActivitesEtProf listeDesActivitesEtProf = (listeDesActivitesEtProf) o;
 
-        //lireJoursRemplaces
-        if (o instanceof listeJoursRemplaces) {
-            listeJoursRemplaces listeJoursRemplaces = (listeJoursRemplaces) o;
+                    deleteExpiredHoraireActivite(listeDesActivitesEtProf);
+                    createOrUpdateHoraireActiviteInDB(listeDesActivitesEtProf);
+                }
 
-            deleteExpiredJoursRemplaces(listeJoursRemplaces);
-            createOrUpdateJoursRemplacesInDB(listeJoursRemplaces);
-            syncJoursRemplacesEnded = true;
-        }
+                //lireJoursRemplaces
+                if (o instanceof listeJoursRemplaces) {
+                    listeJoursRemplaces listeJoursRemplaces = (listeJoursRemplaces) o;
 
-        //listeSeances
-        if (o instanceof listeSeances) {
-            listeSeances listeSeancesObj = (listeSeances) o;
+                    deleteExpiredJoursRemplaces(listeJoursRemplaces);
+                    createOrUpdateJoursRemplacesInDB(listeJoursRemplaces);
+                    syncJoursRemplacesEnded = true;
+                }
 
-            deleteExpiredSeances(listeSeancesObj);
-            createOrUpdateSeancesInDB(listeSeancesObj);
-            syncSeancesEnded = true;
-        }
+                //listeSeances
+                if (o instanceof listeSeances) {
+                    listeSeances listeSeancesObj = (listeSeances) o;
 
-        //Calendar ApplETS API with ETS
-        if (o instanceof EventList) {
-            EventList eventList = (EventList) o;
-            deleteExpiredEvent(eventList);
-            createOrUpdateEventListInBD(eventList);
-            syncEventListEnded = true;
-        }
+                    deleteExpiredSeances(listeSeancesObj);
+                    createOrUpdateSeancesInDB(listeSeancesObj);
+                    syncSeancesEnded = true;
+                }
 
-        if (syncJoursRemplacesEnded && syncSeancesEnded && syncEventListEnded) {
-            this.setChanged();
-            this.notifyObservers();
-        }
+                //Calendar ApplETS API with ETS
+                if (o instanceof EventList) {
+                    EventList eventList = (EventList) o;
+                    deleteExpiredEvent(eventList);
+                    createOrUpdateEventListInBD(eventList);
+                    syncEventListEnded = true;
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                if (syncJoursRemplacesEnded && syncSeancesEnded && syncEventListEnded) {
+                    HoraireManager.this.setChanged();
+                    HoraireManager.this.notifyObservers();
+                }
+            }
+
+
+
+        }.execute();
+
+
+
+
 
     }
 
