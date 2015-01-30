@@ -84,6 +84,7 @@ public class TodayAdapter extends BaseAdapter {
                 seancesHolder.tvHeureFin = (TextView) convertView.findViewById(R.id.tv_today_heure_fin);
                 seancesHolder.tvCoursGroupe = (TextView) convertView.findViewById(R.id.tv_today_cours_groupe);
                 seancesHolder.tvNomActivite = (TextView) convertView.findViewById(R.id.tv_today_nom_activite);
+                seancesHolder.tvLibelleCours = (TextView) convertView.findViewById(R.id.tv_today_libelle_cours);
                 seancesHolder.tvLocal = (TextView) convertView.findViewById(R.id.tv_today_local);
                 convertView.setTag(seancesHolder);
             }
@@ -99,6 +100,7 @@ public class TodayAdapter extends BaseAdapter {
             ViewSeancesHolder viewSeancesHolder = (ViewSeancesHolder) convertView.getTag();
             viewSeancesHolder.tvNomActivite.setText(seance.nomActivite);
             viewSeancesHolder.tvCoursGroupe.setText(seance.coursGroupe);
+            viewSeancesHolder.tvLibelleCours.setText(seance.libelleCours);
             viewSeancesHolder.tvLocal.setText(seance.local);
 
             DateTime mDateDebut = DateTime.parse(seance.dateDebut);
@@ -123,6 +125,7 @@ public class TodayAdapter extends BaseAdapter {
         TextView tvHeureFin;
         TextView tvNomActivite;
         TextView tvCoursGroupe;
+        TextView tvLibelleCours;
         TextView tvLocal;
     }
 }

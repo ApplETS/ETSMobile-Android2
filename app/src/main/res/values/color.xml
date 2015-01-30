@@ -6,6 +6,8 @@
     <color name="black_gray">#ff464646</color>
     <color name="red">#f23c3b</color>
     <color name="ets_red">#E70033</color>
+    <color name="ets_red_fonce">#ffe70033</color>
+    <color name="ets_red_pale">#3de70033</color>
 	<color name="blue_ets">#4E88BE</color>
     <color name="holoLight">#fff3f3f3</color>
     <color name="transparent">#00000000</color>

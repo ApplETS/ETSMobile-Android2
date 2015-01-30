@@ -73,6 +73,7 @@ public class SeanceAdapter extends BaseAdapter {
                 seancesHolder.tvHeureFin = (TextView) convertView.findViewById(R.id.tv_today_heure_fin);
                 seancesHolder.tvCoursGroupe = (TextView) convertView.findViewById(R.id.tv_today_cours_groupe);
                 seancesHolder.tvNomActivite = (TextView) convertView.findViewById(R.id.tv_today_nom_activite);
+                seancesHolder.tvLibelleCours = (TextView) convertView.findViewById(R.id.tv_today_libelle_cours);
                 seancesHolder.tvLocal = (TextView) convertView.findViewById(R.id.tv_today_local);
                 convertView.setTag(seancesHolder);
             }
@@ -82,6 +83,7 @@ public class SeanceAdapter extends BaseAdapter {
             Seances seance = (Seances) getItem(position);
             ViewSeancesHolder viewSeancesHolder = (ViewSeancesHolder) convertView.getTag();
             viewSeancesHolder.tvNomActivite.setText(seance.nomActivite);
+            viewSeancesHolder.tvLibelleCours.setText(seance.libelleCours);
             viewSeancesHolder.tvCoursGroupe.setText(seance.coursGroupe);
             viewSeancesHolder.tvLocal.setText(seance.local);
 
@@ -139,6 +141,7 @@ public class SeanceAdapter extends BaseAdapter {
         TextView tvHeureFin;
         TextView tvNomActivite;
         TextView tvCoursGroupe;
+        TextView tvLibelleCours;
         TextView tvLocal;
     }
 

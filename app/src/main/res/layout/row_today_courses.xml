@@ -2,72 +2,93 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/white"
-    android:layout_height="150px">
+    android:layout_height="75dp"
+    android:background="@color/gray"
+    android:padding="2dp">
 
     <RelativeLayout
         android:id="@+id/rl_heures_deb_fin"
-        android:layout_width="90px"
+        android:layout_width="45dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="3px">
+        android:layout_marginLeft="1dp"
+        android:layout_marginStart="1dp">
 
         <TextView
             android:id="@+id/tv_today_heure_debut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:text="10h30" />
+            android:text="10h30"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_today_heure_fin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="12h30" />
+            android:text="12h30"
+            android:textSize="14sp" />
 
     </RelativeLayout>
 
 
     <TextView
         android:id="@+id/tv_vertical_separator"
-        android:layout_width="7px"
+        android:layout_width="4dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="13px"
+        android:layout_marginLeft="6dp"
+        android:layout_marginStart="6dp"
+        android:layout_toEndOf="@+id/rl_heures_deb_fin"
         android:layout_toRightOf="@+id/rl_heures_deb_fin"
-        android:background="@color/black" />
+        android:background="@color/ets_red_fonce" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_toEndOf="@+id/tv_vertical_separator"
         android:layout_toRightOf="@+id/tv_vertical_separator"
-        android:background="@color/ets_red">
+        android:background="@color/ets_red_pale">
 
         <TextView
-            android:id="@+id/tv_today_nom_activite"
+            android:id="@+id/tv_today_libelle_cours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10px"
-            android:layout_marginTop="10px"
-            android:text="Cours"
-            android:textColor="@color/white" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Nom du cours complet"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_today_cours_groupe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="COM110-03"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:layout_alignLeft="@+id/tv_today_libelle_cours"
+            android:layout_below="@+id/tv_today_libelle_cours"
+            android:text="COM110-01"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_today_nom_activite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_today_local"
+            android:layout_toRightOf="@+id/tv_today_local"
+            android:text="Cours"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/tv_today_local"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="10px"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="5dp"
             android:text="A-1240"
-            android:textColor="@color/white" />
+            android:textColor="@color/black" />
 
     </RelativeLayout>
 
