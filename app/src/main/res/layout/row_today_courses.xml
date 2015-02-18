@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="75dp"
     android:background="@color/gray"
-    android:padding="2dp">
+    android:padding="1dp">
 
     <RelativeLayout
         android:id="@+id/rl_heures_deb_fin"

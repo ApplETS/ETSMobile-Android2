@@ -1,50 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical" >
+    android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:src="@drawable/aeets" />
+        android:id="@+id/imageView_bell"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/bell_canada"
+        android:layout_centerHorizontal="true"/>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView_bell"
+        android:id="@+id/rl_sponsors1"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/imageView_google"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+
+            android:layout_marginTop="60dp"
+            android:src="@drawable/google" />
+
+        <ImageView
+            android:id="@+id/imageView_summit"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/imageView_google"
+            android:src="@drawable/summit_logo_black" />
+
+        <ImageView
+            android:id="@+id/imageView_ets"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/imageView_summit"
+            android:src="@drawable/ets_transparent_background" />
+
+    </RelativeLayout>
+
+
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/imageView_bell"
+    android:id="@+id/rl_sponsors2"
+    android:layout_marginTop="130dp"
+    android:layout_centerHorizontal="true">
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:id="@+id/imageView_atlassian"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="60dp"
         android:src="@drawable/atlassian" />
 
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:src="@drawable/ets" />
+        android:id="@+id/imageView_aeets"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/imageView_atlassian"
+        android:src="@drawable/aeets" />
 
     <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:src="@drawable/bell" />
+        android:id="@+id/imageView_github"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="60dp"
+        android:layout_toRightOf="@+id/imageView_aeets"
+        android:src="@drawable/github" />
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/imageView_aeets"
         android:src="@drawable/bugsense" />
+    </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:src="@drawable/github" />
-
-</LinearLayout>
+</RelativeLayout>
