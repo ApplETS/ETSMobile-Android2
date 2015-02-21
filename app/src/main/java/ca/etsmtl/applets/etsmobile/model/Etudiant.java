@@ -40,6 +40,9 @@ public class Etudiant extends DonneesRetournees implements KvmSerializable {
 	@DatabaseField
 	public String soldeTotal;
 
+    @DatabaseField
+    public String status;
+
 	public Etudiant() {
 	}
 
@@ -100,7 +103,7 @@ public class Etudiant extends DonneesRetournees implements KvmSerializable {
 	@Override
 	public Object getProperty(int propertyIndex) {
 		int count = super.getPropertyCount();
-		if (propertyIndex == count + 0) {
+		if (propertyIndex == count) {
 			return nom;
 		}
 		if (propertyIndex == count + 1) {
@@ -123,7 +126,7 @@ public class Etudiant extends DonneesRetournees implements KvmSerializable {
 	@Override
 	public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
 		int count = super.getPropertyCount();
-		if (propertyIndex == count + 0) {
+		if (propertyIndex == count) {
 			info.type = PropertyInfo.STRING_CLASS;
 			info.name = "nom";
 			info.namespace = "http://etsmtl.ca/";

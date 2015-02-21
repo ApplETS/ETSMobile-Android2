@@ -55,4 +55,3 @@ dependencies {
     //To parse html
     //compile 'org.jsoup:jsoup:1.8.1'
 }
-
