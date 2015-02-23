@@ -49,13 +49,13 @@ public class ApplicationManager extends Application {
 		mMenu.put(title, new MyMenuItem(title, null));
 
 		title = getString(R.string.menu_section_1_ajd);
-		mMenu.put(title, new MyMenuItem(title, TodayFragment.class, R.drawable.ic_ico_aujourdhui));
+		mMenu.put(TodayFragment.class.getName(), new MyMenuItem(title, TodayFragment.class, R.drawable.ic_ico_aujourdhui));
 
 		title = getString(R.string.menu_section_1_horaire);
-		mMenu.put(title, new MyMenuItem(title, HoraireFragment.class, R.drawable.ic_ico_schedule));
+		mMenu.put(HoraireFragment.class.getName(), new MyMenuItem(title, HoraireFragment.class, R.drawable.ic_ico_schedule));
 
 		title = getString(R.string.menu_section_1_notes);
-		mMenu.put(title, new MyMenuItem(title, NotesFragment.class, R.drawable.ic_ico_notes));
+		mMenu.put(NotesFragment.class.getName(), new MyMenuItem(title, NotesFragment.class, R.drawable.ic_ico_notes));
 
 		// title = getString(R.string.menu_section_1_stages);
 		// mMenu.put(title, new MyMenuItem(title, StagesFragment.class,
@@ -63,13 +63,13 @@ public class ApplicationManager extends Application {
 
 
 		title = getString(R.string.menu_section_2_moodle);
-		mMenu.put(title, new MyMenuItem(title, MoodleFragment.class, R.drawable.ic_moodle_icon_smal));
+		mMenu.put(MoodleFragment.class.getName(), new MyMenuItem(title, MoodleFragment.class, R.drawable.ic_moodle_icon_smal));
 
 		title = getString(R.string.menu_section_1_profil);
-		mMenu.put(title, new MyMenuItem(title, ProfilFragment.class, R.drawable.ic_ico_profil));
+		mMenu.put(ProfilFragment.class.getName(), new MyMenuItem(title, ProfilFragment.class, R.drawable.ic_ico_profil));
 
 		title = getString(R.string.menu_section_1_bandwith);
-		mMenu.put(title, new MyMenuItem(title, BandwithFragment.class, R.drawable.ic_ico_internet));
+		mMenu.put(BandwithFragment.class.getName(), new MyMenuItem(title, BandwithFragment.class, R.drawable.ic_ico_internet));
 		
 		
 
@@ -78,32 +78,32 @@ public class ApplicationManager extends Application {
 		mMenu.put(title, new MyMenuItem(title, null));
 
 		title = getString(R.string.menu_section_2_news);
-		mMenu.put(title, new MyMenuItem(title, NewsFragment.class, R.drawable.ic_ico_news));
+		mMenu.put(NewsFragment.class.getName(), new MyMenuItem(title, NewsFragment.class, R.drawable.ic_ico_news));
 
 		title = getString(R.string.menu_section_2_bottin);
-		mMenu.put(title, new MyMenuItem(title, BottinFragment.class, R.drawable.ic_ico_bottin));
+		mMenu.put(BottinFragment.class.getName(), new MyMenuItem(title, BottinFragment.class, R.drawable.ic_ico_bottin));
 
 		title = getString(R.string.menu_section_2_biblio);
-		mMenu.put(title, new MyMenuItem(title, BiblioFragment.class, R.drawable.ic_ico_library));
+		mMenu.put(BiblioFragment.class.getName(), new MyMenuItem(title, BiblioFragment.class, R.drawable.ic_ico_library));
 
 		title = getString(R.string.menu_section_2_radio);
-		mMenu.put(title, new MyMenuItem(title, RadioFragment.class, R.drawable.ic_ico_radio));
+		mMenu.put(RadioFragment.class.getName(), new MyMenuItem(title, RadioFragment.class, R.drawable.ic_ico_radio));
 
 		title = getString(R.string.menu_section_2_securite);
-		mMenu.put(title, new MyMenuItem(title, SecuriteFragment.class, R.drawable.ic_ico_security));
+		mMenu.put(SecuriteFragment.class.getName(), new MyMenuItem(title, SecuriteFragment.class, R.drawable.ic_ico_security));
 
 		// Section 3 - ApplETS
 		title = getString(R.string.menu_section_3_applets);
 		mMenu.put(title, new MyMenuItem(title, null));
 
 		title = getString(R.string.menu_section_3_about);
-		mMenu.put(title, new MyMenuItem(title, AboutFragment.class, R.drawable.ic_logo_icon_final));
+		mMenu.put(AboutFragment.class.getName(), new MyMenuItem(title, AboutFragment.class, R.drawable.ic_logo_icon_final));
 
 		title = getString(R.string.menu_section_3_comms);
-		mMenu.put(title, new MyMenuItem(title, CommentairesFragment.class, R.drawable.ic_ico_comment));
+		mMenu.put(CommentairesFragment.class.getName(), new MyMenuItem(title, CommentairesFragment.class, R.drawable.ic_ico_comment));
 
 		title = getString(R.string.menu_section_3_sponsors);
-		mMenu.put(title, new MyMenuItem(title, SponsorsFragment.class, R.drawable.ic_ico_partners));
+		mMenu.put(SponsorsFragment.class.getName(), new MyMenuItem(title, SponsorsFragment.class, R.drawable.ic_ico_partners));
 
 		// DataManager instance = DataManager.getInstance(this);
 		// Etudiant registeredEtudiant = instance.getRegisteredEtudiant();

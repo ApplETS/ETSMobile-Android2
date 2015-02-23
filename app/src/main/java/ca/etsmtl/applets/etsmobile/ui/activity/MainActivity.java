@@ -21,6 +21,8 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
+import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -116,12 +118,12 @@ public class MainActivity extends Activity {
 //			Intent intent = new Intent(this, LoginActivity.class);
 //			startActivityForResult(intent, 0);
 
-            MyMenuItem news = ApplicationManager.mMenu.get(getString(R.string.menu_section_2_news));
-            selectItem(news.title, 8);
+            MyMenuItem news = ApplicationManager.mMenu.get(NewsFragment.class.getName());
+            selectItem(news.mClass.getName(), 8);
         } else {
             if (fragment == null) {
-                MyMenuItem ajdItem = ApplicationManager.mMenu.get(getString(R.string.menu_section_1_ajd));
-                selectItem(ajdItem.title, 1);
+                MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
+                selectItem(ajdItem.mClass.getName(), 1);
             }
         }
     }
@@ -142,7 +144,7 @@ public class MainActivity extends Activity {
     }
 
     private void instantiateFragments(Bundle savedInstanceState) {
-        MyMenuItem ajdItem = ApplicationManager.mMenu.get(getString(R.string.menu_section_1_ajd));
+        MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
 
         // Select Aujourd'Hui
         if (savedInstanceState != null) {
@@ -151,7 +153,7 @@ public class MainActivity extends Activity {
             fragment = fragmentManager.getFragment(savedInstanceState, tag);
 
         } else {
-            selectItem(ajdItem.title, 1);
+            selectItem(ajdItem.mClass.getName(), 1);
         }
 
     }
@@ -167,8 +169,8 @@ public class MainActivity extends Activity {
                 ApplicationManager.userCredentials = new UserCredentials(new SecurePreferences(this));
 
 
-                MyMenuItem ajdItem = ApplicationManager.mMenu.get(getString(R.string.menu_section_1_ajd));
-                selectItem(ajdItem.title, 1);
+                MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
+                selectItem(ajdItem.mClass.getName(), 1);
 
             }
         }
@@ -212,7 +214,7 @@ public class MainActivity extends Activity {
                 intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.default_comment));
                 startActivity(intent);
             } else {
-                selectItem(myMenuItem.title, position);
+                selectItem(myMenuItem.mClass.getName(), position);
             }
         }
     }
@@ -247,7 +249,7 @@ public class MainActivity extends Activity {
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle(key);
+        setTitle(ApplicationManager.mMenu.get(key).title);
         mDrawerLayout.closeDrawer(mDrawerList);
 
     }
@@ -258,4 +260,23 @@ public class MainActivity extends Activity {
         getActionBar().setTitle(mTitle);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        FragmentManager manager = getFragmentManager();
+
+
+        if(manager.getBackStackEntryCount() > 0) {
+            FragmentManager.BackStackEntry bsEntry = manager.getBackStackEntryAt(manager.getBackStackEntryCount() - 1);
+
+            Fragment frag = getFragmentManager().findFragmentByTag(bsEntry.getName());
+
+            MyMenuItem item = ApplicationManager.mMenu.get(frag.getTag());
+
+            setTitle(item.title);
+
+
+        }
+
+    }
 }

@@ -14,14 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -48,24 +42,24 @@ public class SecuriteFragment extends BaseFragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.security, container, false);
 		
-		mapView = (MapView) v.findViewById(R.id.map);
-	    mapView.onCreate(savedInstanceState);
-	    map = mapView.getMap();
-	    map.getUiSettings().setMyLocationButtonEnabled(false);
-        map.setMyLocationEnabled(true);
- 
-        MapsInitializer.initialize(this.getActivity());
+//		mapView = (MapView) v.findViewById(R.id.map);
+//	    mapView.onCreate(savedInstanceState);
+//	    map = mapView.getMap();
+//	    map.getUiSettings().setMyLocationButtonEnabled(false);
+//        map.setMyLocationEnabled(true);
+//
+//        MapsInitializer.initialize(this.getActivity());
 // 
         // Updates the location and zoom of the MapView 
        
-        CameraUpdate cameraUpdate =  CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 17);
-        map.animateCamera(cameraUpdate);
-        
-        final MarkerOptions etsMarker = new MarkerOptions();
-		etsMarker.position(new LatLng(lat, lng));
-		etsMarker.icon(BitmapDescriptorFactory
-				.fromResource(R.drawable.ets));
-		map.addMarker(etsMarker);
+//        CameraUpdate cameraUpdate =  CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 17);
+//        map.animateCamera(cameraUpdate);
+//
+//        final MarkerOptions etsMarker = new MarkerOptions();
+//		etsMarker.position(new LatLng(lat, lng));
+//		etsMarker.icon(BitmapDescriptorFactory
+//				.fromResource(R.drawable.ets));
+//		map.addMarker(etsMarker);
 
 		final Activity activity = getActivity();
 

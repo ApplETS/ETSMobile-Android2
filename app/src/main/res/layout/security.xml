@@ -26,10 +26,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/map"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"/>
+        <!--<com.google.android.gms.maps.MapView-->
+            <!--android:id="@+id/map"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="150dp"/>-->
 
         <ListView
             android:id="@android:id/list"
