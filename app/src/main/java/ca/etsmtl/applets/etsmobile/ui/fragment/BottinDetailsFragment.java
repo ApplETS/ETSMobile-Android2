@@ -1,10 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -15,19 +10,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.TextView;
-import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
-import ca.etsmtl.applets.etsmobile.model.ArrayOfFicheEmploye;
-import ca.etsmtl.applets.etsmobile.model.ArrayOfService;
-import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
-import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
-import ca.etsmtl.applets.etsmobile2.R;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
+
+import ca.etsmtl.applets.etsmobile2.R;
 
 public class BottinDetailsFragment extends HttpFragment {
 
@@ -55,16 +42,17 @@ public class BottinDetailsFragment extends HttpFragment {
 	private TextView tv_courriel;
 	private Button btn_ajout_contact;
 	
-	public static BottinDetailsFragment newInstance(FicheEmploye ficheEmploye){
+	public static BottinDetailsFragment newInstance(String nom, String prenom, String telBureau, String emplacement, String courriel, String service, String titre){
 		BottinDetailsFragment fragment = new BottinDetailsFragment();
 		Bundle args = new Bundle();
-		args.putString(NOM, ficheEmploye.Nom);
-		args.putString(PRENOM, ficheEmploye.Prenom);
-		args.putString(TITRE, ficheEmploye.Titre);
-		args.putString(SERVICE, ficheEmploye.Service);
-		args.putString(EMPLACEMENT, ficheEmploye.Emplacement);
-		args.putString(TELBUREAU, ficheEmploye.TelBureau);
-		args.putString(COURRIEL, ficheEmploye.Courriel);
+
+		args.putString(NOM, nom);
+		args.putString(PRENOM, prenom);
+		args.putString(TITRE, titre);
+		args.putString(SERVICE, service);
+		args.putString(EMPLACEMENT, emplacement);
+		args.putString(TELBUREAU, telBureau);
+		args.putString(COURRIEL, courriel);
 		fragment.setArguments(args);
 		return fragment;
 		

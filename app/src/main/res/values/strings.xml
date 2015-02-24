@@ -122,6 +122,7 @@
     <string name="categories">Catégories</string>
     <string name="title_activity_moodle_course">MoodleCourseActivity</string>
     <string name="title_activity_news_details">NewsDetailsActivity</string>
+    <string name="title_activity_bottin_details">BottinDetailsActivity</string>
 
     <!--Today  -->
     <string name="today_course">Mes cours</string>

@@ -8,6 +8,7 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,6 +41,7 @@ import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
+import ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -148,10 +150,30 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 					int groupPosition, int childPosition, long id) {
 				
 				FicheEmploye ficheEmploye = (FicheEmploye) listAdapter.getChild(groupPosition, childPosition);
-				
-				Fragment fragment = BottinDetailsFragment.newInstance(ficheEmploye);
-				
-				showFragment(fragment);
+
+
+
+
+
+                Intent i = new Intent(getActivity(), BottinDetailsActivity.class);
+
+                i.putExtra("nom", ficheEmploye.Nom);
+                i.putExtra("prenom", ficheEmploye.Prenom);
+                i.putExtra("telBureau", ficheEmploye.TelBureau);
+                i.putExtra("emplacement", ficheEmploye.Emplacement);
+                i.putExtra("courriel", ficheEmploye.Courriel);
+                i.putExtra("service", ficheEmploye.Service);
+                i.putExtra("titre", ficheEmploye.Titre);
+
+
+                getActivity().startActivity(i);
+
+
+
+
+//                Fragment fragment = BottinDetailsFragment.newInstance(ficheEmploye);
+//
+//				showFragment(fragment);
 				
 				return true;
 			}
