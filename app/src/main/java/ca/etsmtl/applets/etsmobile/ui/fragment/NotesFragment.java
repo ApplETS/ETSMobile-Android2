@@ -1,31 +1,26 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Vector;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import com.octo.android.robospice.persistence.exception.SpiceException;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
-import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotesSessionItem;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteItem;
 import ca.etsmtl.applets.etsmobile2.R;
-
-import com.octo.android.robospice.persistence.exception.SpiceException;
 
 /**
  * Created by Laurence
@@ -77,7 +72,7 @@ public class NotesFragment extends HttpFragment {
     public void onRequestSuccess(Object o) {
         super.onRequestSuccess(o);
 
-        if (o != null)
+        if (o != null && getActivity() != null)
             if (o instanceof ListeDeCours) {
                 listeDeCours = (ListeDeCours) o;
                 refreshList();

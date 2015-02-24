@@ -8,9 +8,10 @@ import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceReques
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.kobjects.base64.Base64;
 
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Iterator;
@@ -47,7 +48,8 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
     @Override
     public Nouvelles loadDataFromNetwork() throws Exception {
 
-        String address = context.getString(R.string.applets_api_news, source, startDate, endDate);
+//        String address = context.getString(R.string.applets_api_news, source, startDate, endDate);
+        String address = context.getString(R.string.applets_api_news_all);
 
         TrustManager[] trustAllCerts = new TrustManager[] {
                 new X509TrustManager() {
@@ -80,7 +82,20 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
 
         URL url = new URL(address);
-        URLConnection con = url.openConnection();
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+
+
+
+        String userCredentials = context.getString(R.string.credentials_api);
+        String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
+        con.setRequestProperty ("Authorization", basicAuth);
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
+
+        con.setUseCaches(false);
+        con.setDoInput(true);
+        con.setDoOutput(true);
 
         String result = IOUtils.toString(con.getInputStream());
 

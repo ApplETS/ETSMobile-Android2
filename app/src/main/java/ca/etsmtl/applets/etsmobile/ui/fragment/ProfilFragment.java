@@ -8,10 +8,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.List;
-
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.Programme;
@@ -109,7 +106,7 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 
         final Programme program = tempProgram;
         
-		if (etudiant != null && program != null) {
+		if (etudiant != null && program != null && getActivity() != null) {
 			getActivity().runOnUiThread(new Runnable() {
 				@Override
 				public void run() {

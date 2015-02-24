@@ -164,7 +164,8 @@ public class HoraireFragment extends HttpFragment implements Observer {
     public void onRequestFailure(SpiceException arg0) {
         progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 //        customProgressDialog.dismiss();
-        Toast.makeText(getActivity(), "La synchronisation a échoué.", Toast.LENGTH_SHORT).show();
+        if(getActivity() != null)
+            Toast.makeText(getActivity(), "La synchronisation a échoué.", Toast.LENGTH_SHORT).show();
     }
 
     @Override

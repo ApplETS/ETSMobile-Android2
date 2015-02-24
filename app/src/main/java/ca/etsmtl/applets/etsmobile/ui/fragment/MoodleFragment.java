@@ -60,7 +60,8 @@ public class MoodleFragment extends HttpFragment {
 
     @Override
     public void onRequestFailure(SpiceException e) {
-        Toast.makeText(getActivity(),"Impossible de charger les données",Toast.LENGTH_LONG).show();
+        if(getActivity() != null)
+            Toast.makeText(getActivity(),"Impossible de charger les données",Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -110,7 +111,8 @@ public class MoodleFragment extends HttpFragment {
 
             }
         }catch (Exception e) {
-            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            if(getActivity()!=null)
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
 
@@ -159,17 +161,19 @@ public class MoodleFragment extends HttpFragment {
      * Query for Moodle token
      */
     private void queryMoodleToken() {
-        SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
+        if(getActivity()!=null) {
+            SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
 
-            @Override
-            public MoodleToken loadDataFromNetwork() throws Exception {
-                String url = getActivity().getString(R.string.moodle_api_get_token, ApplicationManager.userCredentials.getUsername(), ApplicationManager.userCredentials.getPassword());
+                @Override
+                public MoodleToken loadDataFromNetwork() throws Exception {
+                    String url = getActivity().getString(R.string.moodle_api_get_token, ApplicationManager.userCredentials.getUsername(), ApplicationManager.userCredentials.getPassword());
 
-                return getRestTemplate().getForObject(url, MoodleToken.class);
-            }
-        };
+                    return getRestTemplate().getForObject(url, MoodleToken.class);
+                }
+            };
 
-        dataManager.sendRequest(request, MoodleFragment.this);
+            dataManager.sendRequest(request, MoodleFragment.this);
+        }
 
     }
 

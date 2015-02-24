@@ -5,12 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
-
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
 /**
  * Base implementation for fragments that use the network
@@ -53,7 +53,7 @@ public abstract class HttpFragment extends BaseFragment implements RequestListen
 
 	@Override
 	public void onRequestSuccess(Object o) {
-		if(loadingView !=null){
+		if(loadingView !=null && getActivity() != null){
             getActivity().runOnUiThread( new Runnable() {
                 @Override
                 public void run() {

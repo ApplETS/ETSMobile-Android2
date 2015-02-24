@@ -168,10 +168,8 @@ public class MainActivity extends Activity {
                 String codeP = extras.getString(UserCredentials.CODE_P);
                 ApplicationManager.userCredentials = new UserCredentials(new SecurePreferences(this));
 
-
                 MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
                 selectItem(ajdItem.mClass.getName(), 1);
-
             }
         }
     }
