@@ -14,5 +14,10 @@
         tools:listitem="@layout/list_group"
         android:layout_weight="1"></ExpandableListView>
 
+    <ca.etsmtl.applets.etsmobile.views.LoadingView
+        android:id="@+id/loadingView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </LinearLayout>
 

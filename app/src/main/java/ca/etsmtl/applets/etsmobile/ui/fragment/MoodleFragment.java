@@ -43,9 +43,12 @@ public class MoodleFragment extends HttpFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_moodle, container, false);
+        ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_moodle, container, false);
 
+        super.onCreateView(inflater, v, savedInstanceState);
         moodleCoursesListView = (ListView) v.findViewById(R.id.listView_moodle_courses);
+
+
         queryMoodleToken();
 
 		return v;
@@ -55,7 +58,7 @@ public class MoodleFragment extends HttpFragment {
 
     @Override
     void updateUI() {
-
+        loadingView.showLoadingView();
     }
 
     @Override
@@ -108,6 +111,9 @@ public class MoodleFragment extends HttpFragment {
 
                     }
                 });
+
+                super.onRequestSuccess(null);
+
 
             }
         }catch (Exception e) {

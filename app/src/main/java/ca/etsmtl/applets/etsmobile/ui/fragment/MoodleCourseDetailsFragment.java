@@ -120,10 +120,10 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_moodle_details, container, false);
+        ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_moodle_details, container, false);
+        super.onCreateView(inflater, v, savedInstanceState);
 
         expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_moodle_courses_details);
-
         queryMoodleCoreCourses(moodleCourseId);
         return v;
     }
@@ -240,6 +240,8 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                 }
             });
 
+            super.onRequestSuccess(null);
+
 
         }
 
@@ -268,8 +270,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
     @Override
     void updateUI() {
-        // TODO Auto-generated method stub
-
+       loadingView.showLoadingView();
     }
 
     /**
