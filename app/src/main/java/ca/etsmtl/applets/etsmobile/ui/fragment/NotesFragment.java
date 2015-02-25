@@ -59,7 +59,6 @@ public class NotesFragment extends HttpFragment {
         DataManager datamanager = DataManager.getInstance(getActivity());
         datamanager.getDataFromSignet(SignetMethods.LIST_COURS, ApplicationManager.userCredentials, this, "");
         datamanager.getDataFromSignet(SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this, "");
-
     }
 
 
@@ -80,8 +79,6 @@ public class NotesFragment extends HttpFragment {
                 listeDeSessions = (ListeDeSessions) o;
                 refreshList();
             }
-
-
     }
 
     @Override

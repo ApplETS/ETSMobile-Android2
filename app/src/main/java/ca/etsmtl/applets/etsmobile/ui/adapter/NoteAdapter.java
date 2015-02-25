@@ -1,9 +1,7 @@
 package ca.etsmtl.applets.etsmobile.ui.adapter;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
-import ca.etsmtl.applets.etsmobile.ui.fragment.NotesDetailsFragment;
+
+import ca.etsmtl.applets.etsmobile.ui.activity.NotesDetailsActivity;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class NoteAdapter extends ArrayAdapter<NotesSessionItem> {
@@ -40,11 +39,24 @@ public class NoteAdapter extends ArrayAdapter<NotesSessionItem> {
 				if (sessionCote.cote != null) {
 					cote = sessionCote.cote;
 				}
-				Fragment fragment = NotesDetailsFragment.newInstance(sessionCote.sigle, notesSession.sessionName, cote,
-						sessionCote.groupe,sessionCote.titreCours);
-				FragmentManager fragmentManager = ((Activity) context).getFragmentManager();
-				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "NotesDetailsFragment")
-						.addToBackStack(null).commit();
+
+
+                Intent i = new Intent(context, NotesDetailsActivity.class);
+                i.putExtra("sigle", sessionCote.sigle);
+                i.putExtra("sessionName", notesSession.sessionName);
+                i.putExtra("cote", cote);
+                i.putExtra("groupe", sessionCote.groupe);
+                i.putExtra("titreCours", sessionCote.titreCours);
+
+                context.startActivity(i);
+
+
+
+//				Fragment fragment = NotesDetailsFragment.newInstance(sessionCote.sigle, notesSession.sessionName, cote,
+//						sessionCote.groupe,sessionCote.titreCours);
+//				FragmentManager fragmentManager = ((Activity) context).getFragmentManager();
+//				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "NotesDetailsFragment")
+//						.addToBackStack(null).commit();
 			}
 		});
 		return v;
