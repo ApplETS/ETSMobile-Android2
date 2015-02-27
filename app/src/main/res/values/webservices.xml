@@ -18,5 +18,6 @@
     <string name="applets_api_news">https://api.clubapplets.ca/news/%1$s?post_date_min=%2$s&amp;post_date_max=%3$s</string>
     <string name="applets_api_news_all">https://api.clubapplets.ca/news/all</string>
     <string name="credentials_api">***REMOVED***</string>
+    <string name="bandwith_query">http://query.yahooapis.com/v1/public/yql?q=select%%20*%%20from%%20html%%20where%%20url%%3D%%22http%%3A%%2F%%2Fets-res%1$s-%2$s%%3Aets%2$s%%40www2.cooptel.qc.ca%%2Fservices%%2Ftemps%%2F%%3Fmois%%3D%3$s%%26cmd%%3DVisualiser%%22%%20and%%20xpath%%3D\'%%2F%%2Ftable%%5B%%40border%%3D%%221%%22%%5D\'&amp;format=json&amp;diagnostics=true&amp;callback=</string>
 
 </resources>

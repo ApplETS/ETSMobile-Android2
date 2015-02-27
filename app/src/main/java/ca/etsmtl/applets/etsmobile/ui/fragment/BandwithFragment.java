@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -53,9 +54,6 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class BandwithFragment extends Fragment {
 
-	private String urlStart = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22http%3A%2F%2Fets-res";
-	private String urlSuite = "%40www2.cooptel.qc.ca%2Fservices%2Ftemps%2F%3F";
-	private String urlSuite2 = "%26cmd%3DVisualiser%22%20and%20xpath%3D'%2F%2Ftable%5B%40border%3D%221%22%5D'&format=json&diagnostics=true&callback=";
 	private double[] values;
 	private String[] rooms;
 	private MultiColorProgressBar progressBar;
@@ -87,8 +85,9 @@ public class BandwithFragment extends Fragment {
 			Calendar calendar = Calendar.getInstance();
 			int month = calendar.get(Calendar.MONTH);
 			month += 1;
-			String url = urlStart + phase + "-" + app + "%3Aets" + app + urlSuite + "mois%3D" + month + urlSuite2;
-			new BandwithAsyncTask().execute(url);
+            String url = getActivity().getString(R.string.bandwith_query,phase,app,month);
+
+            new BandwithAsyncTask().execute(url);
 		}
 		editTextPhase.addTextChangedListener(new TextWatcher() {
 
@@ -186,7 +185,9 @@ public class BandwithFragment extends Fragment {
 		Calendar calendar = Calendar.getInstance();
 		int month = calendar.get(Calendar.MONTH);
 		month += 1;
-		String url = urlStart + phase + "-" + app + "%3Aets" + app + urlSuite + "mois%3D" + month + urlSuite2;
+
+        String url = getActivity().getString(R.string.bandwith_query,phase,app,month);
+
 		savePhaseAppPreferences(phase, app);
 		new BandwithAsyncTask().execute(url);
 	}

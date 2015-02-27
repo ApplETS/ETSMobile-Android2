@@ -50,7 +50,7 @@ public class MultiColorProgressBar extends ProgressBar  {
             Paint progressPaint = new Paint();
             Rect progressRect = new Rect();
 
-            progressPaint.setColor(progressItem.color);
+            progressPaint.setColor(getResources().getColor(progressItem.color));
             progressItemWidth = (int) (progressItem.percentage
                     * progressBarWidth / 100);
 
