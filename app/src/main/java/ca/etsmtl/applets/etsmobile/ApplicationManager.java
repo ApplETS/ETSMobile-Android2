@@ -77,8 +77,10 @@ public class ApplicationManager extends Application {
 		title = getString(R.string.menu_section_2_ets);
 		mMenu.put(title, new MyMenuItem(title, null));
 
+        /*todo
 		title = getString(R.string.menu_section_2_news);
 		mMenu.put(NewsFragment.class.getName(), new MyMenuItem(title, NewsFragment.class, R.drawable.ic_ico_news));
+        //*/
 
 		title = getString(R.string.menu_section_2_bottin);
 		mMenu.put(BottinFragment.class.getName(), new MyMenuItem(title, BottinFragment.class, R.drawable.ic_ico_bottin));

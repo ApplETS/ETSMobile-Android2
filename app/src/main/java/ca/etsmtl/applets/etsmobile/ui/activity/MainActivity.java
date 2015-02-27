@@ -260,7 +260,12 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+//        super.onBackPressed();
+
+        this.finish();
+
+        /*
+
         FragmentManager manager = getFragmentManager();
 
 
@@ -276,5 +281,6 @@ public class MainActivity extends Activity {
 
         }
 
+        //*/
     }
 }

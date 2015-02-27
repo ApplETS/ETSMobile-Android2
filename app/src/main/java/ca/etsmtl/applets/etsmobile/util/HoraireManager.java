@@ -81,12 +81,15 @@ public class HoraireManager extends Observable implements RequestListener<Object
                 }
 
                 //Calendar ApplETS API with ETS
+                syncEventListEnded = true;
+                /*todo
                 if (o instanceof EventList) {
                     EventList eventList = (EventList) o;
                     deleteExpiredEvent(eventList);
                     createOrUpdateEventListInBD(eventList);
                     syncEventListEnded = true;
                 }
+                //*/
 
                 return null;
             }

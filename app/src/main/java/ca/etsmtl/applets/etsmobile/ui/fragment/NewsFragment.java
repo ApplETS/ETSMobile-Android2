@@ -83,7 +83,7 @@ public class NewsFragment extends HttpFragment {
             sources += selectedItems[i] + (i == (selectedItems.length-1)?"":",");
         }
 
-        dataManager.sendRequest( new AppletsApiNewsRequest(getActivity(),sources,dateDebut,dateFin), NewsFragment.this);
+        //todo dataManager.sendRequest( new AppletsApiNewsRequest(getActivity(),sources,dateDebut,dateFin), NewsFragment.this);
 
 
 

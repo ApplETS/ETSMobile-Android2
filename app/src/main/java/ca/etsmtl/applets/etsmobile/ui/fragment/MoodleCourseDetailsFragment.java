@@ -60,6 +60,8 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     private ArrayList<MoodleCoreModule> listMoodleLinkModules;
     private ArrayList<MoodleModuleContent> listMoodleResourceContents;
 
+    private BroadcastReceiver receiver = null;
+
 
     public static MoodleCourseDetailsFragment newInstance(int moodleCourseId) {
         MoodleCourseDetailsFragment fragment = new MoodleCourseDetailsFragment();
@@ -78,7 +80,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
             moodleCourseId = bundle.getString(COURSE_ID);
         }
 
-        BroadcastReceiver receiver = new BroadcastReceiver() {
+        receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
@@ -116,6 +118,12 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        getActivity().unregisterReceiver(receiver);
+        super.onDestroy();
     }
 
     @Override
