@@ -12,4 +12,9 @@
     <color name="holoLight">#fff3f3f3</color>
     <color name="transparent">#00000000</color>
 	<color name="white">#FFF</color>
+    <color name="red_bandwith">#F44336</color>
+    <color name="blue_bandwith">#2196F3</color>
+    <color name="green_bandwith">#4CAF50</color>
+    <color name="purple_bandwith">#9C27B0</color>
+    <color name="grey_bandwith">#9E9E9E</color>
 </resources>

@@ -62,11 +62,6 @@ public class BandwithFragment extends Fragment {
 	private EditText editTextApp;
 	private EditText editTextPhase;
 	private GridView grid;
-	final int redColor = Color.parseColor("#F44336");
-	final int blueColor = Color.parseColor("#2196F3");
-	final int greenColor = Color.parseColor("#4CAF50");
-	final int purpleColor = Color.parseColor("#9C27B0");
-	final int grayColor = Color.parseColor("#9E9E9E");
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -206,7 +201,7 @@ public class BandwithFragment extends Fragment {
 	}
 
 	private void updateProgressBarColorItems(double bandwidthQuota) {
-        final int[] colorChoice = new int[] {redColor, blueColor, greenColor, purpleColor};
+        final int[] colorChoice = new int[] {R.color.red_bandwith, R.color.blue_bandwith, R.color.green_bandwith, R.color.grey_bandwith};
         int[] legendColors = new int[values.length];
         final Activity activity = getActivity();
 
@@ -225,8 +220,8 @@ public class BandwithFragment extends Fragment {
 
         if (values.length > 0) {
             int lastValue = values.length - 1;
-            ProgressItem progressItem = new ProgressItem(grayColor, (values[lastValue] / bandwidthQuota) * 100);
-            legendColors[lastValue] = grayColor;
+            ProgressItem progressItem = new ProgressItem(R.color.grey_bandwith, (values[lastValue] / bandwidthQuota) * 100);
+            legendColors[lastValue] = R.color.grey_bandwith;
             progressBar.addProgressItem(progressItem);
         }
 
