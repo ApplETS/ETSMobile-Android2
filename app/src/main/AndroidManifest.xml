@@ -44,6 +44,7 @@
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,10 +55,12 @@
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
-        <activity android:name="ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity" />
+        <activity android:name="ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name="ca.etsmtl.applets.etsmobile.http.MyJackSpringAndroidSpiceService"
@@ -65,6 +68,7 @@
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_moodle_course"
             android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" >
             <meta-data
@@ -74,6 +78,7 @@
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_news_details"
             android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" >
             <meta-data
@@ -83,6 +88,7 @@
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_bottin_details"
             android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" >
             <meta-data
@@ -92,6 +98,7 @@
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.NotesDetailsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_notes_details"
             android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" >
             <meta-data
@@ -101,6 +108,7 @@
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity"
+            android:screenOrientation="portrait"
             android:label="PrefsActivity"
             android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" >
             <meta-data
