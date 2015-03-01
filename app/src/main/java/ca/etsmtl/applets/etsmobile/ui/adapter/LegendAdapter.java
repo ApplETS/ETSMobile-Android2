@@ -51,7 +51,7 @@ public class LegendAdapter extends BaseAdapter {
 
 		TextView text = (TextView) v.findViewById(R.id.legend_text);
 		text.setText(elem[position]);
-		text.setTextColor(color[position]);
+		text.setTextColor(ctx.getResources().getColor(color[position]));
 
 		return v;
 	}

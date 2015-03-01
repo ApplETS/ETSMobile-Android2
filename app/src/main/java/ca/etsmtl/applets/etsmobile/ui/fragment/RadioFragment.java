@@ -55,7 +55,7 @@ public class RadioFragment extends WebFragment {
             // or let them choose an app?
             intent = new Intent(Intent.ACTION_VIEW);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setData(Uri.parse("market://details?id=" + getString(R.string.moodle)));
+            intent.setData(Uri.parse("market://details?id=" + getString(R.string.radio_piranha)));
             startActivity(intent);
         }
     }
