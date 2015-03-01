@@ -142,8 +142,8 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     }
 
     @Override
-    public void onRequestFailure(SpiceException arg0) {
-
+    public void onRequestFailure(SpiceException e) {
+        super.onRequestFailure(e);
     }
 
     @Override

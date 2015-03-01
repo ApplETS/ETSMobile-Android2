@@ -25,7 +25,7 @@ public class PrefsActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment(),PrefsFragment.class.getName()).addToBackStack(null).commit();
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment(),PrefsFragment.class.getName()).commit();//.addToBackStack(null).commit();
 
         setTitle("Préférences");
 

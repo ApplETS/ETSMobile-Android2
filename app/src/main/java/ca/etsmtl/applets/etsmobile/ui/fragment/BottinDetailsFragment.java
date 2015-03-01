@@ -145,14 +145,15 @@ public class BottinDetailsFragment extends HttpFragment {
 		// We can also animate the changing of fragment.
 //		ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 		// Replace current fragment by the new one.
-		ft.replace(R.id.content_frame, fragment);
+		ft.replace(R.id.container, fragment);
 		// Null on the back stack to return on the previous fragment when user
 		// press on back button.
-		ft.addToBackStack(null);
+//		ft.addToBackStack(null);
 
 		// Commit changes.
 		ft.commit();
 	}
+
 	
 	@Override
 	public void onRequestFailure(SpiceException arg0) {

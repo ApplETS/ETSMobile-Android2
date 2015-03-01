@@ -308,7 +308,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 		final FragmentManager fm = getActivity().getFragmentManager();
 		final FragmentTransaction ft = fm.beginTransaction();
 		ft.replace(R.id.content_frame, fragment);
-		ft.addToBackStack(null);
+//		ft.addToBackStack(null);
 		ft.commit();
 	}
 

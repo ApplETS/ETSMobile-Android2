@@ -65,6 +65,7 @@ public class NotesFragment extends HttpFragment {
     @Override
     public void onRequestFailure(SpiceException e) {
 
+        super.onRequestFailure(e);
     }
 
     @Override

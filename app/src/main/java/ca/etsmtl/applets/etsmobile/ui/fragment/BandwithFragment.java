@@ -44,6 +44,7 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar;
 import ca.etsmtl.applets.etsmobile.views.ProgressItem;
 import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
@@ -87,7 +88,8 @@ public class BandwithFragment extends Fragment {
             month += 1;
             String url = getActivity().getString(R.string.bandwith_query, phase, app, month);
 
-            new BandwithAsyncTask().execute(url);
+            if(Utility.isNetworkAvailable(getActivity()))
+                new BandwithAsyncTask().execute(url);
         }
         editTextPhase.addTextChangedListener(new TextWatcher() {
 
@@ -189,7 +191,8 @@ public class BandwithFragment extends Fragment {
         String url = getActivity().getString(R.string.bandwith_query, phase, app, month);
 
         savePhaseAppPreferences(phase, app);
-        new BandwithAsyncTask().execute(url);
+        if(Utility.isNetworkAvailable(getActivity()))
+            new BandwithAsyncTask().execute(url);
     }
 
     private void savePhaseAppPreferences(String phase, String app) {

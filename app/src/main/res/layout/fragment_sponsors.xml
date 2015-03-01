@@ -1,93 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView_bell"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/bell_canada"
-        android:layout_centerHorizontal="true"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView_bell"
-        android:id="@+id/rl_sponsors1"
-        android:layout_centerHorizontal="true">
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView_bell"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:src="@drawable/bell_canada" />
+
 
         <ImageView
             android:id="@+id/imageView_google"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-
-            android:layout_marginTop="60dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
             android:src="@drawable/google" />
 
         <ImageView
             android:id="@+id/imageView_summit"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@+id/imageView_google"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
             android:src="@drawable/summit_logo_black" />
 
         <ImageView
             android:id="@+id/imageView_ets"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@+id/imageView_summit"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
             android:src="@drawable/ets_transparent_background" />
 
-    </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/imageView_aeets"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/aeets" />
 
 
+    </LinearLayout>
 
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/imageView_bell"
-    android:id="@+id/rl_sponsors2"
-    android:layout_marginTop="130dp"
-    android:layout_centerHorizontal="true">
-
-    <ImageView
-        android:id="@+id/imageView_atlassian"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="60dp"
-        android:src="@drawable/atlassian" />
-
-    <ImageView
-        android:id="@+id/imageView_aeets"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/imageView_atlassian"
-        android:src="@drawable/aeets" />
-
-    <ImageView
-        android:id="@+id/imageView_github"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="60dp"
-        android:layout_toRightOf="@+id/imageView_aeets"
-        android:src="@drawable/github" />
-
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/imageView_aeets"
-        android:src="@drawable/bugsense" />
-    </RelativeLayout>
-
-</RelativeLayout>
+</ScrollView>

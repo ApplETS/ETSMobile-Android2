@@ -63,8 +63,7 @@ public class MoodleFragment extends HttpFragment {
 
     @Override
     public void onRequestFailure(SpiceException e) {
-        if(getActivity() != null)
-            Toast.makeText(getActivity(),"Impossible de charger les données",Toast.LENGTH_LONG).show();
+        super.onRequestFailure(e);
     }
 
     @Override
