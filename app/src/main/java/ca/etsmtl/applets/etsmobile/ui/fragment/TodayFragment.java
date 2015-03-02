@@ -98,45 +98,46 @@ public class TodayFragment extends HttpFragment implements Observer {
 
     @Override
     void updateUI() {
+        if (isAdded()) {
+            dateTime = new DateTime();
 
-        dateTime = new DateTime();
+            DateTime.Property pDoW = dateTime.dayOfWeek();
+            DateTime.Property pDoM = dateTime.dayOfMonth();
+            DateTime.Property pMoY = dateTime.monthOfYear();
 
-        DateTime.Property pDoW = dateTime.dayOfWeek();
-        DateTime.Property pDoM = dateTime.dayOfMonth();
-        DateTime.Property pMoY = dateTime.monthOfYear();
+            todaysTv.setText(getActivity().getString(R.string.horaire, pDoW.getAsText(Locale.FRENCH), pDoM.get(), pMoY.getAsText(Locale.FRENCH)));
+            databaseHelper = new DatabaseHelper(getActivity());
+            listSeances = new ArrayList<Seances>();
+            events = new ArrayList<Event>();
+            try {
+                SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA_FRENCH);
+                listSeances = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
+                events = (ArrayList<Event>) databaseHelper.getDao(Event.class).queryBuilder().where().like("startDate", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
 
-        todaysTv.setText(getActivity().getString(R.string.horaire, pDoW.getAsText(Locale.FRENCH), pDoM.get(), pMoY.getAsText(Locale.FRENCH)));
-        databaseHelper = new DatabaseHelper(getActivity());
-        listSeances = new ArrayList<Seances>();
-        events = new ArrayList<Event>();
-        try {
-            SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA_FRENCH);
-            listSeances = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
-            events = (ArrayList<Event>) databaseHelper.getDao(Event.class).queryBuilder().where().like("startDate", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        ArrayList<TodayDataRowItem> dataRowItems = new ArrayList<TodayDataRowItem>();
-        if (!events.isEmpty()) {
-            dataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_TITLE_EVENT));
-            for (Event event : events) {
-                dataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_EVENT, event));
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        }
 
-        dataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE));
-        if (listSeances.isEmpty()) {
-            tvNoCourses.setVisibility(View.VISIBLE);
-        } else {
-            for (Seances seances : listSeances) {
-                dataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_SEANCE, seances));
+            ArrayList<TodayDataRowItem> dataRowItems = new ArrayList<TodayDataRowItem>();
+            if (!events.isEmpty()) {
+                dataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_TITLE_EVENT));
+                for (Event event : events) {
+                    dataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_EVENT, event));
+                }
             }
-            tvNoCourses.setVisibility(View.GONE);
+
+            dataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE));
+            if (listSeances.isEmpty()) {
+                tvNoCourses.setVisibility(View.VISIBLE);
+            } else {
+                for (Seances seances : listSeances) {
+                    dataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_SEANCE, seances));
+                }
+                tvNoCourses.setVisibility(View.GONE);
+            }
+            adapter = new TodayAdapter(getActivity(), dataRowItems);
+            todaysList.setAdapter(adapter);
         }
-        adapter = new TodayAdapter(getActivity(), dataRowItems);
-        todaysList.setAdapter(adapter);
     }
 
     @Override
