@@ -23,6 +23,7 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
+import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
@@ -122,8 +123,8 @@ public class MainActivity extends Activity {
 //			Intent intent = new Intent(this, LoginActivity.class);
 //			startActivityForResult(intent, 0);
 
-            MyMenuItem news = ApplicationManager.mMenu.get(NewsFragment.class.getName());
-            selectItem(news.mClass.getName(), 8);
+            MyMenuItem about = ApplicationManager.mMenu.get(AboutFragment.class.getName());
+            selectItem(about.mClass.getName(), 13);
         } else {
             if (fragment == null) {
                 MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
@@ -238,7 +239,7 @@ public class MainActivity extends Activity {
             e.printStackTrace();
         }
 
-        if (position < 5 && ApplicationManager.userCredentials == null) {
+        if (position < 6 && ApplicationManager.userCredentials == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent, 0);
         }

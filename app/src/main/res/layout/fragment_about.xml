@@ -21,6 +21,7 @@
             android:layout_height="match_parent"
             android:layout_margin="16dp"
             android:autoLink="all"
+            
             android:text="@string/applets_about" />
 
     </LinearLayout>
