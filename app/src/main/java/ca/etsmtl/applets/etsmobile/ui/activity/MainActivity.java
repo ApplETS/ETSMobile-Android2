@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.splunk.mint.Mint;
+
 import java.util.Collection;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
@@ -44,6 +46,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Mint.initAndStartSession(MainActivity.this, "API_KEY_TO_CHANGE");
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);

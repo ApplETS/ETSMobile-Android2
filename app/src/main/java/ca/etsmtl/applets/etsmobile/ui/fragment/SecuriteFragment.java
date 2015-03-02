@@ -14,8 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
+//import com.google.android.gms.maps.GoogleMap;
+//import com.google.android.gms.maps.MapView;
 
 import ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -24,8 +24,8 @@ public class SecuriteFragment extends BaseFragment {
 	
 	
 	private ListView listView;
-	private MapView mapView;
-	GoogleMap map;
+//	private MapView mapView;
+//	GoogleMap map;
 	
 	double lat = 45.494498;
 	double lng = -73.563124;

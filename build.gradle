@@ -3,6 +3,9 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url "https://mint.splunk.com/gradle/"
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.0.0'
@@ -14,6 +17,9 @@ buildscript {
 allprojects {
     repositories {
         mavenCentral()
+        maven {
+            url "https://mint.splunk.com/gradle/"
+        }
     }
 }
 
