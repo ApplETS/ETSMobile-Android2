@@ -165,7 +165,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                 for(MoodleCoreModule coreModule : coreCourse.getModules()) {
 
                     if(coreModule.getModname().equals("folder")) {
-                        listDataChild.put(new HeaderText(coreModule.getName(),position), coreModule.getContents().toArray());
+                        listDataChild.put(new HeaderText(coreModule.getName(),position), coreModule.getContents() != null ? coreModule.getContents().toArray(): null);
                     } else if (coreModule.getModname().equals("url") || coreModule.getModname().equals("forum")) {
                         listMoodleLinkModules.add(coreModule);
                     } else if (coreModule.getModname().equals("resource")) {
