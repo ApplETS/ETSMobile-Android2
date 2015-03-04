@@ -17,10 +17,10 @@ android {
     }
 
     defaultConfig {
-        applicationId "ca.etsmtl.applets.etsmobile2"
+        applicationId "ca.etsmtl.applets.etsmobile"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 2
+        versionCode 11
         versionName "2.0"
     }
 
