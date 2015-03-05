@@ -104,6 +104,7 @@ public class MoodleFragment extends HttpFragment {
                 List<String> semesterList = new ArrayList<>();
                 for(MoodleCourse moodleCourse : new ArrayList<>(moodleCourses)) {
                     semesterString = moodleCourse.getFullname().replace("(", "{").split("\\{")[1].replace(")", "");
+                    semesterString = convertSemesterString(semesterString);
                     if(!semesterList.contains(semesterString)) {
                         semesterList.add(semesterString);
                         MoodleCourse courseSemesterSeparator = new MoodleCourse();
@@ -221,5 +222,20 @@ public class MoodleFragment extends HttpFragment {
 			startActivity(intent);
 		}
 	}
+
+    private String convertSemesterString(String semester) {
+        switch(semester.charAt(0)) {
+            case 'A':
+                return "Automne " + semester.replace("A", "");
+
+            case 'E':
+                return "Été " + semester.replace("E", "");
+
+            case 'H':
+                return "Hiver " + semester.replace("H", "");
+
+        }
+        return null;
+    }
 
 }
