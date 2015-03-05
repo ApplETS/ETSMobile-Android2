@@ -22,11 +22,10 @@ import ca.etsmtl.applets.etsmobile2.R;
 public class ProfilFragment extends HttpFragment implements View.OnClickListener {
 
 	private static final String TAG = "ProfilFragment";
+	RelativeLayout profileLayout;
 	private Etudiant etudiant;
 	private listeDesProgrammes mlisteDesProgrammes;
     private ProfilManager profilManager;
-
-	RelativeLayout profileLayout;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -113,8 +112,8 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 					profileLayout.startLayoutAnimation();
 					View v = getView();
 					if (v != null) {
-						String nom = etudiant.nom.trim();
-						String prenom = etudiant.prenom.trim();
+						String nom = etudiant.nom != null ? etudiant.nom.trim() : "";
+						String prenom = etudiant.prenom != null ? etudiant.prenom.trim() : "";
 
 						((TextView) v.findViewById(R.id.profil_nom_prenom_item)).setText(nom + ", " + prenom);
 						((TextView) v.findViewById(R.id.profil_code_permanent_item)).setText(etudiant.codePerm);
