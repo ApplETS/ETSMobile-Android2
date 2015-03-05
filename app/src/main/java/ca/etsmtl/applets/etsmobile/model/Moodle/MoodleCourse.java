@@ -9,12 +9,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MoodleCourse {
 
+    public static final int IS_SEMESTER = -1;
+
     private int id;
     private String shortname;
     private String fullname;
     private int enrolledUserCount;
     private String idNumber;
     private int visible;
+
+    public void setCourseSemester(String semester) {
+        this.id = IS_SEMESTER;
+        this.fullname = semester;
+    }
 
     public int getId() {
         return id;

@@ -13,6 +13,10 @@ import android.widget.Toast;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
@@ -94,8 +98,23 @@ public class MoodleFragment extends HttpFragment {
 
             if (o instanceof MoodleCourses) {
                 MoodleCourses moodleCourses = (MoodleCourses) o;
+                moodleCoursesAdapter = new MoodleCoursesAdapter(getActivity(), R.layout.row_moodle_course, this);
+                Collections.reverse(moodleCourses); // To get the most current semester first
+                String semesterString;
+                List<String> semesterList = new ArrayList<>();
+                for(MoodleCourse moodleCourse : new ArrayList<>(moodleCourses)) {
+                    semesterString = moodleCourse.getFullname().replace("(", "{").split("\\{")[1].replace(")", "");
+                    if(!semesterList.contains(semesterString)) {
+                        semesterList.add(semesterString);
+                        MoodleCourse courseSemesterSeparator = new MoodleCourse();
+                        courseSemesterSeparator.setCourseSemester(semesterString);
+                        moodleCoursesAdapter.addSectionHeader(courseSemesterSeparator);
+                        moodleCoursesAdapter.addCourse(moodleCourse);
+                    }
+                    else
+                        moodleCoursesAdapter.addCourse(moodleCourse);
+                }
 
-                moodleCoursesAdapter = new MoodleCoursesAdapter(getActivity(), R.layout.row_moodle_course, moodleCourses, this);
                 moodleCoursesListView.setAdapter(moodleCoursesAdapter);
 
 
@@ -103,10 +122,12 @@ public class MoodleFragment extends HttpFragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         MoodleCourse moodleCourse = (MoodleCourse) parent.getItemAtPosition(position);
-                        Intent i = new Intent(getActivity(), MoodleCourseActivity.class);
-                        i.putExtra("idCours", moodleCourse.getId());
-                        i.putExtra("nameCours", moodleCourse.getShortname());
-                        getActivity().startActivity(i);
+                        if(moodleCourse.getId() != MoodleCourse.IS_SEMESTER) {
+                            Intent i = new Intent(getActivity(), MoodleCourseActivity.class);
+                            i.putExtra("idCours", moodleCourse.getId());
+                            i.putExtra("nameCours", moodleCourse.getShortname());
+                            getActivity().startActivity(i);
+                        }
 
                     }
                 });
