@@ -97,6 +97,11 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
                     Matcher matcher = pattern.matcher(item.getFullname());
                     if(matcher.find())
                         holder.tvCourseSigle.setText(matcher.group(1));
+                    else {
+                        holder.tvCourseSigle.setText(item.getFullname());
+                        view.setTag(holder);
+                        break;
+                    }
 
                     //Extracts course's full name and session
                     pattern = Pattern.compile("(?:[^ ]* )(.*)");
