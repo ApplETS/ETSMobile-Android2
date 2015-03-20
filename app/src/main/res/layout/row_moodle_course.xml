@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_moodle_course_sigle"
         android:layout_marginLeft="20dp"
-        android:textSize="18sp"
-        tools:text="Environnement, technologie et société)" />
+        android:textSize="17sp"
+        tools:text="Structure de données et algorithmes" />
 
 </RelativeLayout>

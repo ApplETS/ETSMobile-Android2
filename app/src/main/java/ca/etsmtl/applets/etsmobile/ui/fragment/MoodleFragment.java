@@ -102,8 +102,12 @@ public class MoodleFragment extends HttpFragment {
                 Collections.reverse(moodleCourses); // To get the most current semester first
                 String semesterString;
                 List<String> semesterList = new ArrayList<>();
-                for(MoodleCourse moodleCourse : new ArrayList<>(moodleCourses)) {
-                    semesterString = moodleCourse.getFullname().replace("(", "{").split("\\{")[1].replace(")", "");
+                for(MoodleCourse moodleCourse : moodleCourses) {
+
+                    if(moodleCourse.getFullname().matches("(.*)([AÉH](\\d){4})(.*)"))
+                        semesterString = moodleCourse.getFullname().replace("(", "{").split("\\{")[1].replace(")", "");
+                    else
+                        semesterString = null;
                     semesterString = convertSemesterString(semesterString);
                     if(!semesterList.contains(semesterString)) {
                         semesterList.add(semesterString);
@@ -223,19 +227,32 @@ public class MoodleFragment extends HttpFragment {
 		}
 	}
 
+    private String lastInserted;
     private String convertSemesterString(String semester) {
-        switch(semester.charAt(0)) {
-            case 'A':
-                return "Automne " + semester.replace("A", "");
 
-            case 'E':
-                return "Été " + semester.replace("E", "");
+        if(semester == null)
+            return lastInserted;
+        else
+            switch(semester.charAt(0)) {
+                case 'A':
+                    lastInserted = "Automne " + semester.replace("A", "");
+                    return "Automne " + semester.replace("A", "");
 
-            case 'H':
-                return "Hiver " + semester.replace("H", "");
+                case 'E':
+                case 'É':
+                    lastInserted = "Été " + semester.replace("É", "");
+                    return "Été " + semester.replace("É", "");
 
-        }
-        return null;
+                case 'H':
+                    lastInserted = "Hiver " + semester.replace("H", "");
+                    return "Hiver " + semester.replace("H", "");
+
+                default:
+                    return lastInserted;
+
+            }
+
+
     }
 
 }
