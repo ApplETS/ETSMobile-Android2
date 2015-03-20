@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
-import android.graphics.PorterDuff.Mode;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,8 +18,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
@@ -37,17 +34,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar;
 import ca.etsmtl.applets.etsmobile.views.ProgressItem;
-import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -55,10 +51,102 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class BandwithFragment extends Fragment {
 
+    /** Constantes basées sur la requête qu'on reçoit en JSON de Cooptel */
+    private final int DETAILED_BANDWITH_INDEX = 0;
+    private final int QUOTA_INDEX = 1;
+    private final int PORT = 0;
+    private final int UPLOAD = 2;
+    private final int DOWNLOAD = 3;
+    private final String CONTENT = "content";
+
+
+    /**
+     * En date du 20 mars 2015
+     * Voici un exemple du JSON qui est traité dans cette classe.
+     *
+    "results":{
+        "table":[
+            {
+                "border":"1",
+                "tbody":{
+                    "tr":[
+                        {
+                            "td":[
+                                "Port..",
+                                "Date",
+                                "Upload (Mo)",
+                                "Download (Mo)"
+                            ]
+                        },
+                        {
+                            "td":[
+                                "10033",
+                                    "2015-03-01",
+                                    {
+                                        "align":"RIGHT",
+                                        "content":"    354.39"
+                                    },
+                                    {
+                                        "align":"RIGHT",
+                                        "content":"  11204.47"
+                                    }
+                             ]
+                        },
+                        {...}, (X nombre de jour)
+                        {
+                            "td":[
+                                {
+                                    "colspan":"3",
+                                    "b":"Total combiné:"
+                                },
+                                {
+                                    "align":"RIGHT",
+                                    "content":" 103794.37"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "border":"1",
+                "width":"50%",
+                "tbody":{
+                    "tr":[
+                        {
+                            "td":[
+                                " ",
+                                "Quota (MO)"
+                            ]
+                        },
+                        {
+                            "td":[
+                                "Quota permis pour la période",
+                                {
+                                    "align":"RIGHT",
+                                    "content":"128000"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+     */
     private double[] values;
     private String[] rooms;
     private MultiColorProgressBar progressBar;
     private EditText editTextApp;
+    public OnFocusChangeListener onFocusChangeColorEditText = new OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (v == editTextApp) {
+                editTextApp.setTextColor(Color.RED);
+            }
+
+        }
+    };
     private EditText editTextPhase;
     private GridView grid;
 
@@ -152,16 +240,6 @@ public class BandwithFragment extends Fragment {
 
         return v;
     }
-
-    public OnFocusChangeListener onFocusChangeColorEditText = new OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            if (v == editTextApp) {
-                editTextApp.setTextColor(Color.RED);
-            }
-
-        }
-    };
 
     private void setError(final EditText edit, final String messageError) {
 
@@ -312,24 +390,21 @@ public class BandwithFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-
             if (isAdded()) {
                 try {
-
-
                     if (!query.getString("results").equals("null")) {
                         JSONObject results = (JSONObject) query.get("results");
                         JSONArray arrayTable = results.getJSONArray("table");
-                        JSONObject tableauElem = (JSONObject) arrayTable.get(0);
-                        JSONObject quota = (JSONObject) arrayTable.get(1);
+                        JSONObject tableauElem = arrayTable.getJSONObject(DETAILED_BANDWITH_INDEX).getJSONObject("tbody");
+                        JSONObject quota = arrayTable.getJSONObject(QUOTA_INDEX).getJSONObject("tbody");
                         JSONArray arrayElem = tableauElem.getJSONArray("tr");
                         HashMap<String, Double> map = getBandwithUserFromPort(arrayElem);
-
                         int size = map.size();
                         values = new double[size];
                         rooms = new String[size];
                         Iterator<String> iter = map.keySet().iterator();
                         int i = 0;
+
                         while (iter.hasNext()) {
                             String entry = iter.next();
                             if (!entry.equals("total")) {
@@ -346,11 +421,10 @@ public class BandwithFragment extends Fragment {
                             }
                         }
 
-                        JSONArray quotaJson = (JSONArray) quota.getJSONArray("tr");
+                        JSONArray quotaJson = quota.getJSONArray("tr");
                         JSONObject objectQuota = (JSONObject) quotaJson.get(1);
-                        JSONArray arrayQuota = (JSONArray) objectQuota.getJSONArray("td");
-
-                        double quotaValue = ((JSONObject) arrayQuota.get(1)).getDouble("p");
+                        JSONArray arrayQuota = objectQuota.getJSONArray("td");
+                        double quotaValue = ((JSONObject) arrayQuota.get(1)).getDouble(CONTENT);
                         quotaValue = Math.round(quotaValue / 1024 * 100) / 100.0;
                         double total = map.get("total");
                         total = Math.round(total / 1024 * 100) / 100.0;
@@ -384,30 +458,30 @@ public class BandwithFragment extends Fragment {
         }
 
         private HashMap<String, Double> getBandwithUserFromPort(JSONArray array) {
-            HashMap<String, Double> map = new HashMap<String, Double>();
+            HashMap<String, Double> map = new HashMap<>();
             try {
                 for (int i = 1; i < array.length(); i++) {
-                    JSONObject obj;
-                    obj = (JSONObject) array.get(i);
+                    JSONObject obj = (JSONObject) array.get(i);
                     JSONArray elem = obj.getJSONArray("td");
+                    final boolean IS_NOT_LAST_ELEMENT = i < array.length() - 2;
+                    final boolean IS_LAST_ELEMENT = i == array.length() - 1;
 
-                    if (i < array.length() - 2) {
-                        JSONObject port = (JSONObject) elem.get(0);
-                        String portElem = port.getString("p");
-                        if (containtPort(portElem, map) != null) {
+                    if (IS_NOT_LAST_ELEMENT) {
+                        String portElem = elem.getString(PORT);
+                        if (containtPort(portElem, map) != null)
                             portElem = containtPort(portElem, map);
-                        }
-                        JSONObject upload = (JSONObject) elem.get(2);
-                        JSONObject downLoad = (JSONObject) elem.get(3);
-                        double downUpLoad = upload.getDouble("p") + downLoad.getDouble("p");
+
+                        JSONObject upload = elem.getJSONObject(UPLOAD);
+                        JSONObject downLoad = elem.getJSONObject(DOWNLOAD);
+                        double downUpLoad = upload.getDouble(CONTENT) + downLoad.getDouble(CONTENT);
                         if (map.containsKey(portElem)) {
                             double downUpLoadValue = map.get(portElem);
                             downUpLoad += downUpLoadValue;
                         }
                         map.put(portElem, downUpLoad);
-                    } else if (i == array.length() - 1) {
+                    } else if (IS_LAST_ELEMENT) {
                         JSONObject totalObject = (JSONObject) elem.get(1);
-                        double total = totalObject.getDouble("p");
+                        double total = totalObject.getDouble(CONTENT);
                         map.put("total", total);
                     }
                 }
