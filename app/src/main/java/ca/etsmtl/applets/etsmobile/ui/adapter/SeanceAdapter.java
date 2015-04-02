@@ -13,6 +13,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -22,12 +23,17 @@ import ca.etsmtl.applets.etsmobile2.R;
 public class SeanceAdapter extends BaseAdapter {
 
     private List<TodayDataRowItem> listSeances;
+    private HashMap<String,Integer> colors;
+    private int indexColor = 0;
+    private int[] rainbow;
 
     private Context context;
 
     public SeanceAdapter(Context context) {
         this.context = context;
         listSeances = new ArrayList<>();
+        colors = new HashMap<>();
+        rainbow = context.getResources().getIntArray(R.array.rainbow);
     }
     @Override
     public int getCount() {
@@ -75,6 +81,7 @@ public class SeanceAdapter extends BaseAdapter {
                 seancesHolder.tvNomActivite = (TextView) convertView.findViewById(R.id.tv_today_nom_activite);
                 seancesHolder.tvLibelleCours = (TextView) convertView.findViewById(R.id.tv_today_libelle_cours);
                 seancesHolder.tvLocal = (TextView) convertView.findViewById(R.id.tv_today_local);
+                seancesHolder.tvSeparator = (TextView) convertView.findViewById(R.id.tv_vertical_separator);
                 convertView.setTag(seancesHolder);
             }
         }
@@ -86,6 +93,16 @@ public class SeanceAdapter extends BaseAdapter {
             viewSeancesHolder.tvLibelleCours.setText(seance.libelleCours);
             viewSeancesHolder.tvCoursGroupe.setText(seance.coursGroupe);
             viewSeancesHolder.tvLocal.setText(seance.local);
+
+            if(colors.containsKey(seance.nomActivite)) {
+                viewSeancesHolder.tvSeparator.setBackgroundColor(colors.get(seance.nomActivite));
+            } else {
+
+                colors.put(seance.nomActivite,rainbow[indexColor%rainbow.length]);
+                viewSeancesHolder.tvSeparator.setBackgroundColor(rainbow[indexColor%rainbow.length]);
+                indexColor++;
+
+            }
 
             DateTime mDateDebut = DateTime.parse(seance.dateDebut);
             DateTime mDateFin = DateTime.parse(seance.dateFin);
@@ -143,6 +160,7 @@ public class SeanceAdapter extends BaseAdapter {
         TextView tvCoursGroupe;
         TextView tvLibelleCours;
         TextView tvLocal;
+        TextView tvSeparator;
     }
 
     static class ViewSeacesTitleHolder {

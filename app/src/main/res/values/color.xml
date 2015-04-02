@@ -17,4 +17,34 @@
     <color name="green_bandwith">#4CAF50</color>
     <color name="purple_bandwith">#9C27B0</color>
     <color name="grey_bandwith">#9E9E9E</color>
+
+
+    <color name="bright_pink">#FF007F</color>
+    <color name="red2">#FF0000</color>
+    <color name="orange">#FF7F00</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="chartreuse">#7FFF00</color>
+    <color name="green">#00FF00</color>
+    <color name="spring_green">#00FF7F</color>
+    <color name="cyan">#00FFFF</color>
+    <color name="azure">#007FFF</color>
+    <color name="blue">#0000FF</color>
+    <color name="violet">#7F00FF</color>
+    <color name="magenta">#FF00FF</color>
+
+    <array name="rainbow">
+        <item>@color/bright_pink</item>
+        <item>@color/red2</item>
+        <item>@color/orange</item>
+        <item>@color/yellow</item>
+        <item>@color/chartreuse</item>
+        <item>@color/green</item>
+        <item>@color/spring_green</item>
+        <item>@color/cyan</item>
+        <item>@color/azure</item>
+        <item>@color/blue</item>
+        <item>@color/violet</item>
+        <item>@color/magenta</item>
+    </array>
+
 </resources>
