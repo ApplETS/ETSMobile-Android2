@@ -35,6 +35,11 @@ public class SeanceAdapter extends BaseAdapter {
         colors = new HashMap<>();
         rainbow = context.getResources().getIntArray(R.array.rainbow);
     }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return false;
+    }
     @Override
     public int getCount() {
         return listSeances.size();
