@@ -3,7 +3,10 @@
 
     <item
         android:id="@+id/menu_item_save_in_calendar"
-        android:title="Exporter dans le calendrier">
+        android:showAsAction="collapseActionView|ifRoom"
+        android:title="@string/export_calendar">
     </item>
+
+
 
 </menu>
