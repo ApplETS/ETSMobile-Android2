@@ -21,12 +21,14 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourse;
@@ -34,6 +36,7 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourses;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreModule;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleModuleContent;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAdapter;
+import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleSectionAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -50,10 +53,11 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
     private String moodleCourseId;
 
-    private ExpandableListMoodleAdapter expandableListMoodleAdapter;
+    private ExpandableListMoodleSectionAdapter expandableListMoodleAdapter;
 
     private ExpandableListView expListView;
 
+    private HashMap<HeaderText, Object[]> listDataSectionName; // Pour gérer les ressources/liens par section
     private List<HeaderText> listDataHeader;
     private HashMap<HeaderText, Object[]> listDataChild;
 
@@ -154,14 +158,20 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
             MoodleCoreCourses moodleCoreCourses = (MoodleCoreCourses) o;
 
             // create empty data
-            listDataChild = new HashMap<HeaderText, Object[]>();
+            listDataSectionName = new HashMap<HeaderText, Object[]>(); // Pour gérer les sections
             listDataHeader = new ArrayList<HeaderText>();
-            listMoodleLinkModules = new ArrayList<MoodleCoreModule>();
-            listMoodleResourceContents = new ArrayList<MoodleModuleContent>();
 
-            int position = 2;
+            int positionSection = 0;
+            int position;
 
             for(MoodleCoreCourse coreCourse : moodleCoreCourses) {
+
+                position = 2;
+
+                listDataChild = new HashMap<HeaderText, Object[]>();
+                listMoodleLinkModules = new ArrayList<MoodleCoreModule>();
+                listMoodleResourceContents = new ArrayList<MoodleModuleContent>();
+
                 for(MoodleCoreModule coreModule : coreCourse.getModules()) {
 
                     if(coreModule.getModname().equals("folder")) {
@@ -174,14 +184,31 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
                     position++;
                 }
+
+                listDataChild.put(new HeaderText("Liens",0),listMoodleLinkModules.toArray());
+                listDataChild.put(new HeaderText("Ressources",1),listMoodleResourceContents.toArray());
+
+                List<Object> finalArrayObject = new ArrayList<Object>();
+
+                for(HeaderText folder : listDataChild.keySet())
+                {
+                    finalArrayObject.add(folder);
+
+                    if(listDataChild.get(folder).length == 0)
+                        finalArrayObject.add(new String("Pas de liens ou de ressources."));
+                    else
+                        for(Object object : listDataChild.get(folder))
+                            finalArrayObject.add(object);
+                }
+
+                listDataSectionName.put(new HeaderText(coreCourse.getName(), positionSection), finalArrayObject.toArray());
+
+                positionSection++;
             }
 
 
-            listDataChild.put(new HeaderText("Liens",0),listMoodleLinkModules.toArray());
-            listDataChild.put(new HeaderText("Ressources",1),listMoodleResourceContents.toArray());
 
-
-            listDataHeader.addAll(listDataChild.keySet());
+            listDataHeader.addAll(listDataSectionName.keySet());
 
             Collections.sort(listDataHeader, new Comparator<HeaderText>() {
                 @Override
@@ -199,7 +226,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
             });
 
 
-            expandableListMoodleAdapter = new ExpandableListMoodleAdapter(getActivity(), listDataHeader, listDataChild);
+            expandableListMoodleAdapter = new ExpandableListMoodleSectionAdapter(getActivity(), listDataHeader, listDataSectionName);
             expListView.setAdapter(expandableListMoodleAdapter);
             expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                 @Override
@@ -243,6 +270,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                         i.setData(Uri.parse(url));
                         startActivity(i);
                     }
+
 
                     return true;
                 }
