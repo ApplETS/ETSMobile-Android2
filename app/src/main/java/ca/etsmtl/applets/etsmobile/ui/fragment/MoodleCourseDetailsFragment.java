@@ -59,7 +59,6 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
     private HashMap<HeaderText, Object[]> listDataSectionName; // Pour gérer les ressources/liens par section
     private List<HeaderText> listDataHeader;
-    private HashMap<HeaderText, Object[]> listDataChild;
 
     private ArrayList<MoodleCoreModule> listMoodleLinkModules;
     private ArrayList<MoodleModuleContent> listMoodleResourceContents;
@@ -158,50 +157,32 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
             MoodleCoreCourses moodleCoreCourses = (MoodleCoreCourses) o;
 
             // create empty data
-            listDataSectionName = new HashMap<HeaderText, Object[]>(); // Pour gérer les sections
+            listDataSectionName = new HashMap<HeaderText, Object[]>();
             listDataHeader = new ArrayList<HeaderText>();
 
             int positionSection = 0;
-            int position;
 
             for(MoodleCoreCourse coreCourse : moodleCoreCourses) {
 
-                position = 2;
 
-                listDataChild = new HashMap<HeaderText, Object[]>();
                 listMoodleLinkModules = new ArrayList<MoodleCoreModule>();
                 listMoodleResourceContents = new ArrayList<MoodleModuleContent>();
 
                 for(MoodleCoreModule coreModule : coreCourse.getModules()) {
 
                     if(coreModule.getModname().equals("folder")) {
-                        listDataChild.put(new HeaderText(coreModule.getName(),position), coreModule.getContents() != null ? coreModule.getContents().toArray(): null);
+                        if(coreModule.getContents() != null)
+                            listMoodleResourceContents.addAll(coreModule.getContents());
                     } else if (coreModule.getModname().equals("url") || coreModule.getModname().equals("forum")) {
                         listMoodleLinkModules.add(coreModule);
                     } else if (coreModule.getModname().equals("resource")) {
                         listMoodleResourceContents.addAll(coreModule.getContents());
                     }
-
-                    position++;
                 }
 
-                listDataChild.put(new HeaderText("Liens",0),listMoodleLinkModules.toArray());
-                listDataChild.put(new HeaderText("Ressources",1),listMoodleResourceContents.toArray());
-
-                List<Object> finalArrayObject = new ArrayList<Object>();
-
-                for(HeaderText folder : listDataChild.keySet())
-                {
-                    finalArrayObject.add(folder);
-
-                    if(listDataChild.get(folder).length == 0)
-                        finalArrayObject.add(new String("Pas de liens ou de ressources."));
-                    else
-                        for(Object object : listDataChild.get(folder))
-                            finalArrayObject.add(object);
-                }
-
-                listDataSectionName.put(new HeaderText(coreCourse.getName(), positionSection), finalArrayObject.toArray());
+                Object[] finalArray = ArrayUtils.addAll(listMoodleLinkModules.toArray(), listMoodleResourceContents.toArray());
+                if(finalArray.length != 0)
+                    listDataSectionName.put(new HeaderText(coreCourse.getName(), positionSection), finalArray);
 
                 positionSection++;
             }

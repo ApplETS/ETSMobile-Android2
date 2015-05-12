@@ -57,54 +57,28 @@ public class ExpandableListMoodleSectionAdapter extends BaseExpandableListAdapte
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-
         Object object = getChild(groupPosition, childPosition);
 
-        if(object instanceof MoodleCourseDetailsFragment.HeaderText)
-        {
-
-            convertView = this.__infalInflater.inflate(R.layout.list_item_title, null);
-
-
-            String childText = "";
-
-            // If that's a category
-            MoodleCourseDetailsFragment.HeaderText category = (MoodleCourseDetailsFragment.HeaderText) object;
-            childText = category.getHeaderName();
-
-            TextView text = (TextView) convertView.findViewById(R.id.lblListItemSeparator);
-            text.setText(childText);
-
-            return convertView;
-        }
-        else {
-
+        if(convertView == null) {
             convertView = this.__infalInflater.inflate(R.layout.list_item, null);
-
-
-            String childText = "";
-
-            if(object instanceof MoodleModuleContent ) {
-                MoodleModuleContent moodleModuleContent = (MoodleModuleContent) object;
-                childText = moodleModuleContent.getFilename();
-            }
-
-            if(object instanceof MoodleCoreModule){
-                MoodleCoreModule moodleCoreModule = (MoodleCoreModule) object;
-                childText = moodleCoreModule.getName();
-            }
-
-            //If that's a message
-            if(object instanceof String) {
-                String msg = (String) object;
-                childText = msg;
-            }
-
-            TextView text = (TextView) convertView.findViewById(R.id.lblListItem);
-            text.setText(childText);
-
-            return convertView;
         }
+
+        String childText = "";
+
+        if(object instanceof MoodleModuleContent ) {
+            MoodleModuleContent moodleModuleContent = (MoodleModuleContent) object;
+            childText = moodleModuleContent.getFilename();
+        }
+
+        if(object instanceof MoodleCoreModule){
+            MoodleCoreModule moodleCoreModule = (MoodleCoreModule) object;
+            childText = moodleCoreModule.getName();
+        }
+
+        TextView text = (TextView) convertView.findViewById(R.id.lblListItem);
+        text.setText(childText);
+
+        return convertView;
 
     }
 
@@ -155,12 +129,7 @@ public class ExpandableListMoodleSectionAdapter extends BaseExpandableListAdapte
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        Object object = getChild(groupPosition, childPosition);
-
-        if(object instanceof MoodleCourseDetailsFragment.HeaderText || object instanceof String)
-            return false;
-        else
-            return true;
+        return true;
     }
 
 }
