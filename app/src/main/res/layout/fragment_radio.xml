@@ -20,7 +20,7 @@
         android:layout_height="200dp"
         android:layout_below="@id/tv_desc_radio"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/piranha_black"
+        android:src="@drawable/ic_radio_piranha"
         />
 
     <Button

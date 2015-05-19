@@ -32,6 +32,7 @@
     <string name="menu_section_3_comms">Problème ou Commentaire ?</string>
     <string name="menu_section_3_about">À Propos d\'ÉTSMobile</string>
     <string name="menu_section_3_sponsors">Nos Partenaires</string>
+    <string name="menu_section_3_apps">Nos autres applications</string>
    
 
     <!-- Moodle Page -->
@@ -229,4 +230,7 @@
     </string-array>
 
 
+    <!--Other Apps-->
+    <string name="radio_piranha_title">Radio Piranha</string>
+    <string name="etsmap_title">ÉTSmap</string>
 </resources>

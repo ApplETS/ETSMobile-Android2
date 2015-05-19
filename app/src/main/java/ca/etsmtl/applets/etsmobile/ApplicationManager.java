@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
+import ca.etsmtl.applets.etsmobile.ui.adapter.OtherAppsAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
@@ -20,6 +21,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.OtherAppsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.ProfilFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.RadioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
@@ -97,6 +99,9 @@ public class ApplicationManager extends Application {
 		// Section 3 - ApplETS
 		title = getString(R.string.menu_section_3_applets);
 		mMenu.put(title, new MyMenuItem(title, null));
+
+		title = getString(R.string.menu_section_3_apps);
+		mMenu.put(OtherAppsFragment.class.getName(), new MyMenuItem(title, OtherAppsFragment.class, R.drawable.ic_logo_icon_final));
 
 		title = getString(R.string.menu_section_3_about);
 		mMenu.put(AboutFragment.class.getName(), new MyMenuItem(title, AboutFragment.class, R.drawable.ic_logo_icon_final));

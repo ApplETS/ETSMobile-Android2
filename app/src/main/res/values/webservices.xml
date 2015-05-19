@@ -7,7 +7,15 @@
     <string name="url_email_ets">https://etscourriel.etsmtl.ca/OWA/auth/logon.aspx</string>
     <string name="map_key">***REMOVED***</string>
     <string name="moodle">com.moodle.moodlemobile</string>
+
     <string name="radio_piranha">ca.etsmtl.applets.radio</string>
+
+    <string-array name="other_apps">
+        <item>ca.etsmtl.applets.radio;ic_radio_piranha;radio_piranha_title</item>
+        <item>ca.applets.etsmap;ic_etsmap;etsmap_title</item>
+    </string-array>
+
+
     <string name="moodle_url">https://ena.etsmlt.ca</string>
     <string name="bugsense">***REMOVED***</string>
     <string name="applets_api_calendar">https://api.clubapplets.ca/calendar/%1$s/%2$s/%3$s</string>
