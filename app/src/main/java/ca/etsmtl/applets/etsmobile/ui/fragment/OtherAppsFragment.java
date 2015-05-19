@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -56,6 +57,13 @@ public class OtherAppsFragment extends WebFragment {
 
 
 
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Apps app = otherAppsAdapter.getItem(position);
+                openApp(app);
+            }
+        });
 
 
 
@@ -66,18 +74,18 @@ public class OtherAppsFragment extends WebFragment {
 	}
 
 
-    public void openRadio(){
-        Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(getString(R.string.radio_piranha));
+    public void openApp(Apps app){
+        Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(app.getPackageName());
         if (intent != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
-            // bring user to the market
-            // or let them choose an app?
+            // bring user to the market or let them choose an app
             intent = new Intent(Intent.ACTION_VIEW);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setData(Uri.parse("market://details?id=" + getString(R.string.radio_piranha)));
+            intent.setData(Uri.parse("market://details?id=" + app.getPackageName()));
             startActivity(intent);
         }
     }
+
 }

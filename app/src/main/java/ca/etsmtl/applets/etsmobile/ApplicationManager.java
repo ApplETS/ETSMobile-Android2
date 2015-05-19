@@ -90,8 +90,8 @@ public class ApplicationManager extends Application {
 		title = getString(R.string.menu_section_2_biblio);
 		mMenu.put(BiblioFragment.class.getName(), new MyMenuItem(title, BiblioFragment.class, R.drawable.ic_ico_library));
 
-		title = getString(R.string.menu_section_2_radio);
-		mMenu.put(RadioFragment.class.getName(), new MyMenuItem(title, RadioFragment.class, R.drawable.ic_ico_radio));
+//		title = getString(R.string.menu_section_2_radio);
+//		mMenu.put(RadioFragment.class.getName(), new MyMenuItem(title, RadioFragment.class, R.drawable.ic_ico_radio));
 
 		title = getString(R.string.menu_section_2_securite);
 		mMenu.put(SecuriteFragment.class.getName(), new MyMenuItem(title, SecuriteFragment.class, R.drawable.ic_ico_security));
@@ -101,16 +101,18 @@ public class ApplicationManager extends Application {
 		mMenu.put(title, new MyMenuItem(title, null));
 
 		title = getString(R.string.menu_section_3_apps);
-		mMenu.put(OtherAppsFragment.class.getName(), new MyMenuItem(title, OtherAppsFragment.class, R.drawable.ic_logo_icon_final));
+		mMenu.put(OtherAppsFragment.class.getName(), new MyMenuItem(title, OtherAppsFragment.class, R.drawable.ic_star_60x60));
 
-		title = getString(R.string.menu_section_3_about);
-		mMenu.put(AboutFragment.class.getName(), new MyMenuItem(title, AboutFragment.class, R.drawable.ic_logo_icon_final));
+		title = getString(R.string.menu_section_3_sponsors);
+		mMenu.put(SponsorsFragment.class.getName(), new MyMenuItem(title, SponsorsFragment.class, R.drawable.ic_ico_partners));
 
 		title = getString(R.string.menu_section_3_comms);
 		mMenu.put(CommentairesFragment.class.getName(), new MyMenuItem(title, CommentairesFragment.class, R.drawable.ic_ico_comment));
 
-		title = getString(R.string.menu_section_3_sponsors);
-		mMenu.put(SponsorsFragment.class.getName(), new MyMenuItem(title, SponsorsFragment.class, R.drawable.ic_ico_partners));
+		title = getString(R.string.menu_section_3_about);
+		mMenu.put(AboutFragment.class.getName(), new MyMenuItem(title, AboutFragment.class, R.drawable.ic_logo_icon_final));
+
+
 
 		// DataManager instance = DataManager.getInstance(this);
 		// Etudiant registeredEtudiant = instance.getRegisteredEtudiant();
