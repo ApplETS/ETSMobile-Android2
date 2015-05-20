@@ -33,7 +33,7 @@
                 android:layout_alignParentBottom="true"
                 android:paddingTop="2dp"
                 android:paddingBottom="2dp"
-                android:background="@color/blue_ets"
+                android:background="@color/red_bandwith"
                 android:orientation="vertical">
 
                 <TextView
