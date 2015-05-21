@@ -103,14 +103,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
                     HoraireManager.this.notifyObservers();
                 }
             }
-
-
-
         }.execute();
-
-
-
-
 
     }
 

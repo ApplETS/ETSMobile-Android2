@@ -115,17 +115,9 @@ public class DataManager {
 
 						final Map<String, Object> args = new HashMap<String, Object>();
 						args.put("username", username);
-						// get from db
-						List<Etudiant> queryResult = dbHelper.getDao(Etudiant.class).queryForFieldValues(args);
-						if (queryResult.size() > 0) {
-							result = queryResult.get(0);
-						} else {
-							result = signetsMobileSoap.infoEtudiant(username, password);
 
-							((Etudiant) result).username = username;
-
-							dbHelper.getDao(Etudiant.class).createOrUpdate((Etudiant) result);
-						}
+						result = signetsMobileSoap.infoEtudiant(username, password);
+						dbHelper.getDao(Etudiant.class).createOrUpdate((Etudiant) result);
 
 						break;
 					case SignetMethods.LIST_COURS:

@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
@@ -23,9 +25,20 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 
 	private static final String TAG = "ProfilFragment";
 	RelativeLayout profileLayout;
-	private Etudiant etudiant;
+	private Etudiant etudiant = null;
 	private listeDesProgrammes mlisteDesProgrammes;
     private ProfilManager profilManager;
+	private TextView tvNomPrenom;
+	private TextView tvMoyenne;
+	private TextView tvCodePermanent;
+	private TextView tvSolde;
+	private TextView tvProgramme;
+	private TextView tvCreditReussis;
+	private TextView tvCreditEchoue;
+	private TextView tvCoursReussis;
+	private TextView tvCreditInscrit;
+	private TextView tvCoursEquivalent;
+	private TextView tvCreditPotentiel;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,16 +52,32 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 		profileLayout = (RelativeLayout) v.findViewById(R.id.profil_layout_info);
         v.findViewById(R.id.profil_button_logout).setOnClickListener(this);
 
-        profilManager = new ProfilManager(getActivity().getApplicationContext());
 
+		tvNomPrenom = (TextView) v.findViewById(R.id.profil_nom_prenom_item);
+		tvCodePermanent = (TextView) v.findViewById(R.id.profil_code_permanent_item);
+		tvSolde = (TextView) v.findViewById(R.id.profil_solde_item);
+		tvProgramme = (TextView) v.findViewById(R.id.profil_programme_item);
+		tvCreditReussis = (TextView) v.findViewById(R.id.profil_credit_reussis_item);
+		tvCoursReussis = (TextView) v.findViewById(R.id.profil_cours_reussis_item);
+		tvCreditEchoue = (TextView) v.findViewById(R.id.profil_credit_echoue_item);
+		tvCreditInscrit = (TextView) v.findViewById(R.id.profil_credit_inscrit_item);
+		tvCoursEquivalent = (TextView) v.findViewById(R.id.profil_cours_equivalent_item);
+        tvCreditPotentiel = (TextView) v.findViewById(R.id.profil_credit_potentiel_item);
+		tvMoyenne = (TextView) v.findViewById(R.id.profil_moyenne_item);
+
+		profilManager = new ProfilManager(getActivity());
+
+		refreshUi();
+		
+		loadingView.showLoadingView();
+		dataManager.getDataFromSignet(SignetMethods.INFO_ETUDIANT, ApplicationManager.userCredentials, this, "");
+		dataManager.getDataFromSignet(SignetMethods.LIST_PROGRAM, ApplicationManager.userCredentials, this, "");
 		return v;
 	}
 
 	@Override
 	void updateUI() {
-        loadingView.showLoadingView();
-		dataManager.getDataFromSignet(SignetMethods.INFO_ETUDIANT, ApplicationManager.userCredentials, this, "");
-		dataManager.getDataFromSignet(SignetMethods.LIST_PROGRAM, ApplicationManager.userCredentials, this, "");
+
 	}
 
 	@Override
@@ -83,6 +112,11 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
 
 	}
 
+	@Override
+	public void onRequestFailure(SpiceException e) {
+		loadingView.hideProgessBar();
+	}
+
 	private void refreshUi() {
 
         Programme tempProgram = null;
@@ -96,9 +130,9 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
             tempProgram = profilManager.getProgramme();
         } else {
             for (Programme p : mlisteDesProgrammes.liste) {
-                if (p.statut.equals("actif") || p.statut.equals("tutuelle")) {
+                if (p.statut.equals("actif") || p.statut.equals("tutelle")) {
                     profilManager.updateProgramme(p);
-                    tempProgram = p;
+                    tempProgram = profilManager.getProgramme();
                 }
             }
         }
@@ -106,33 +140,25 @@ public class ProfilFragment extends HttpFragment implements View.OnClickListener
         final Programme program = tempProgram;
         
 		if (etudiant != null && program != null && getActivity() != null) {
-			getActivity().runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					profileLayout.startLayoutAnimation();
-					View v = getView();
-					if (v != null) {
-						String nom = etudiant.nom != null ? etudiant.nom.trim() : "";
-						String prenom = etudiant.prenom != null ? etudiant.prenom.trim() : "";
 
-						((TextView) v.findViewById(R.id.profil_nom_prenom_item)).setText(nom + ", " + prenom);
-						((TextView) v.findViewById(R.id.profil_code_permanent_item)).setText(etudiant.codePerm);
-						((TextView) v.findViewById(R.id.profil_solde_item)).setText(etudiant.soldeTotal);
+			profileLayout.startLayoutAnimation();
+			String nom = etudiant.nom != null ? etudiant.nom.trim() : "";
+			String prenom = etudiant.prenom != null ? etudiant.prenom.trim() : "";
 
-
-						((TextView) v.findViewById(R.id.profil_programme_item)).setText(program.libelle);
-						((TextView) v.findViewById(R.id.profil_credit_reussis_item))
-								.setText(program.nbCreditsCompletes);
-						((TextView) v.findViewById(R.id.profil_cours_reussis_item)).setText(program.nbCrsReussis);
-						((TextView) v.findViewById(R.id.profil_credit_echoue_item)).setText(program.nbCrsEchoues);
-						((TextView) v.findViewById(R.id.profil_credit_inscrit_item)).setText(program.nbCreditsInscrits);
-						((TextView) v.findViewById(R.id.profil_cours_equivalent_item)).setText(program.nbEquivalences);
-						((TextView) v.findViewById(R.id.profil_credit_potentiel_item))
-								.setText(program.nbCreditsPotentiels);
-						((TextView) v.findViewById(R.id.profil_moyenne_item)).setText(program.moyenne);
-					}
-				}
-			});
+			tvNomPrenom.setText(nom + ", " + prenom);
+			tvCodePermanent.setText(etudiant.codePerm);
+			tvSolde.setText(etudiant.soldeTotal);
+			tvProgramme.setText(program.libelle);
+			tvCreditReussis.setText(program.nbCreditsCompletes);
+			tvCoursReussis.setText(program.nbCrsReussis);
+			tvCreditEchoue.setText(program.nbCrsEchoues);
+			tvCreditInscrit.setText(program.nbCreditsInscrits);
+			tvCoursEquivalent.setText(program.nbEquivalences);
+			tvCreditPotentiel.setText(program.nbCreditsPotentiels);
+			tvMoyenne.setText(program.moyenne);
 		}
+
+
+
 	}
 }
