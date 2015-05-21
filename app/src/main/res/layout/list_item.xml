@@ -10,6 +10,6 @@
         android:paddingBottom="5dp"
         android:paddingLeft="80dp"
         android:paddingTop="5dp"
-        android:text="@null" />
+        android:text="@null"/>
 
 </RelativeLayout>

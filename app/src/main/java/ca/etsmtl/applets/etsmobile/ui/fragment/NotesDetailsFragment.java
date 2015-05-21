@@ -7,17 +7,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
+import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
 import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MyCourseDetailAdapter;
+import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
-public class NotesDetailsFragment extends HttpFragment {
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
+public class NotesDetailsFragment extends HttpFragment implements Observer {
 
 	public static String SIGLE = "SIGLE";
 	public static String SESSION = "SESSION";
@@ -32,6 +42,13 @@ public class NotesDetailsFragment extends HttpFragment {
 	private String session;
 	private String groupe;
     private String titreCours;
+    private String id;
+
+    private ListeDesElementsEvaluation mlisteDesElementsEvaluation;
+
+    private NoteManager mNoteManager;
+
+    private ProgressBar progressBarDetailsNotes;
 
 	public static NotesDetailsFragment newInstance(String sigle, String session, String cote, String groupe,String titreCours) {
 		NotesDetailsFragment fragment = new NotesDetailsFragment();
@@ -55,7 +72,11 @@ public class NotesDetailsFragment extends HttpFragment {
 			session = bundle.getString(SESSION);
 			groupe = bundle.getString(GROUPE);
             titreCours = bundle.getString(TITLECOURS);
+            id = sigle + session;
             System.out.print(titreCours);
+
+            mNoteManager = new NoteManager(getActivity());
+            mNoteManager.addObserver(this);
 		}
 
 	}
@@ -63,49 +84,70 @@ public class NotesDetailsFragment extends HttpFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.notes_details_fragment, container, false);
-     	((TextView) v.findViewById(R.id.notes_fragment_sigle)).setText(sigle+ "\n" + titreCours);
+     	((TextView) v.findViewById(R.id.notes_fragment_sigle)).setText(sigle + "\n" + titreCours);
 		mlistView = (ListView) v.findViewById(android.R.id.list);
+
+        progressBarDetailsNotes = (ProgressBar) v.findViewById(R.id.progressBar_notes_details);
+        progressBarDetailsNotes.setVisibility(ProgressBar.VISIBLE);
+        refresh();
+
 		return v;
 	}
 
 	@Override
 	public void onStart() {
 		Log.v("NotesDetailsFragment", "Note detailsFragement pwd = " + ApplicationManager.userCredentials.getPassword());
-		DataManager.getInstance(getActivity()).getDataFromSignet(SignetMethods.LIST_EVAL,
-				ApplicationManager.userCredentials, this, session, groupe, sigle);
+
+		dataManager.getDataFromSignet(SignetMethods.LIST_EVAL, ApplicationManager.userCredentials, this, session, groupe, sigle);
+
 		super.onStart();
 	}
 
 	@Override
 	public void onRequestFailure(SpiceException arg0) {
-		// TODO Auto-generated method stub
+
+        progressBarDetailsNotes.setVisibility(ProgressBar.GONE);
+        if(getActivity() != null)
+            Toast.makeText(getActivity(), "La synchronisation a échoué.", Toast.LENGTH_SHORT).show();
 
 	}
 
 	@Override
 	public void onRequestSuccess(Object o) {
-		if (o instanceof ListeDesElementsEvaluation) {
-			ListeDesElementsEvaluation courseEvaluation = (ListeDesElementsEvaluation) o;
-			Log.v("NotesDetailsFragment", "NotesDetailsFragment: list =" + courseEvaluation.liste.size() + " cote="
-					+ cote);
-			refresh(courseEvaluation, cote);
 
-            /// need to add for tittle
+		if (o instanceof ListeDesElementsEvaluation) {
+			mlisteDesElementsEvaluation = (ListeDesElementsEvaluation) o;
+			Log.v("NotesDetailsFragment", "NotesDetailsFragment: list =" + mlisteDesElementsEvaluation.liste.size() + " cote="
+					+ cote);
+
+            mlisteDesElementsEvaluation.id = id;
+
+			mNoteManager.onRequestSuccess(mlisteDesElementsEvaluation);
 		}
 
 	}
 
-	private void refresh(ListeDesElementsEvaluation courseEvaluation, String cote) {
-		final MyCourseDetailAdapter myCourseDetailAdapter = new MyCourseDetailAdapter(getActivity(), courseEvaluation,
-				cote);
-		Activity activity = getActivity();
-		if (activity != null) {
-			getActivity().runOnUiThread(new Runnable() {
-				public void run() {
-					mlistView.setAdapter(myCourseDetailAdapter);
-				}
-			});
-		}
+	private void refresh() {
+
+        mlisteDesElementsEvaluation = mNoteManager.getListElementsEvaluation(id);
+
+        //we are gonna try to get data from database
+        if (mlisteDesElementsEvaluation != null) {
+            List<ElementEvaluation> elementsEvaluationList = mNoteManager.getElementsEvaluation(mlisteDesElementsEvaluation);
+            mlisteDesElementsEvaluation.liste.addAll(elementsEvaluationList);
+
+            Activity activity = getActivity();
+            if (activity != null) {
+                final MyCourseDetailAdapter myCourseDetailAdapter = new MyCourseDetailAdapter(getActivity(), mlisteDesElementsEvaluation,
+                        cote);
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        mlistView.setAdapter(myCourseDetailAdapter);
+                    }
+                });
+            }
+        }
+
 	}
 
 	@Override
@@ -114,4 +156,13 @@ public class NotesDetailsFragment extends HttpFragment {
 
 	}
 
+    @Override
+    public void update(Observable observable, Object data) {
+        if(data instanceof String)
+            if(((String)data).equals(this.getClass().getName()))
+            {
+                progressBarDetailsNotes.setVisibility(ProgressBar.GONE);
+                refresh();
+            }
+    }
 }

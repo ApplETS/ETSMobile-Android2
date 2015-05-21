@@ -27,6 +27,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.RadioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
+import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -137,6 +138,7 @@ public class ApplicationManager extends Application {
 
         // Enlever le profil de la DB SQLite
         new ProfilManager(activity).removeProfil();
+        new NoteManager(activity).remove();
 
 		ApplicationManager.userCredentials = null;
 		Intent intent = new Intent(activity, MainActivity.class);

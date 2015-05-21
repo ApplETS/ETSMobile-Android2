@@ -67,6 +67,12 @@ public class ElementEvaluation extends AttributeContainer implements KvmSerializ
 	@DatabaseField
 	public String ignoreDuCalcul;
 
+    @DatabaseField(id = true)
+    public String id;
+
+    @DatabaseField(foreign=true)
+    public ListeDesElementsEvaluation listeDesElementsEvaluation;
+
 	public ElementEvaluation() {
 	}
 
