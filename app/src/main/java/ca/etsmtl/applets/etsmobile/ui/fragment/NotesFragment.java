@@ -109,8 +109,10 @@ public class NotesFragment extends HttpFragment implements Observer {
         listeDeCours.liste.clear();
         listeDeSessions.liste.clear();
 
-        listeDeCours.liste.addAll(mNoteManager.getCours());
-        listeDeSessions.liste.addAll(mNoteManager.getTrimestres());
+        try {
+            listeDeCours.liste.addAll(mNoteManager.getCours());
+            listeDeSessions.liste.addAll(mNoteManager.getTrimestres());
+        } catch(Exception e) { e.printStackTrace(); }
 
         if (listeDeCours.liste.size() != 0) {
 

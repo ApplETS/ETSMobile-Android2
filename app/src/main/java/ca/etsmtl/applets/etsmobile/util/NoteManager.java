@@ -145,6 +145,9 @@ public class NoteManager extends Observable implements RequestListener<Object> {
         try {
             // Delete all rows that contains an Etudiant and listeDesProgrammes classes
             dbHelper.getDao(Cours.class).deleteBuilder().delete();
+            dbHelper.getDao(Trimestre.class).deleteBuilder().delete();
+            dbHelper.getDao(ListeDesElementsEvaluation.class).deleteBuilder().delete();
+            dbHelper.getDao(ElementEvaluation.class).deleteBuilder().delete();
           //  dbHelper.getDao(Programme.class).deleteBuilder().delete();
         } catch (SQLException e) {
             Log.e("SQL Exception", e.getMessage());

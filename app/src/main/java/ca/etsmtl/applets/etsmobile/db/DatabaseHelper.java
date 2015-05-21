@@ -37,7 +37,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	private static final String DATABASE_NAME = "etsmobile2.db";
 	// any time you make changes to your database objects, you may have to
 	// increase the database version
-	private static final int DATABASE_VERSION = 10;
+	private static final int DATABASE_VERSION = 1;
 
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -85,7 +85,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.dropTable(connectionSource, Etudiant.class, true);
             TableUtils.dropTable(connectionSource, Cours.class, true);
             TableUtils.dropTable(connectionSource, JoursRemplaces.class, true);
-
             TableUtils.dropTable(connectionSource, ListeDesElementsEvaluation.class, true);
             TableUtils.dropTable(connectionSource, ElementEvaluation.class, true);
             TableUtils.dropTable(connectionSource, Enseignant.class, true);

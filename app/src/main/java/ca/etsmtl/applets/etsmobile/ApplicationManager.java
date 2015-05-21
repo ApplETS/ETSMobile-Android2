@@ -131,6 +131,7 @@ public class ApplicationManager extends Application {
 
         // Enlever le profil de la DB SQLite
         new ProfilManager(activity).removeProfil();
+        new NoteManager(activity).remove();
 
 		ApplicationManager.userCredentials = null;
 		Intent intent = new Intent(activity, MainActivity.class);
