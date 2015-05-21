@@ -27,5 +27,13 @@
         android:layout_below="@id/notes_framgent_sigle_layout"
         android:padding="10dp"
         android:dividerHeight="1dp"
-        android:divider="@color/black_gray"/>   
+        android:divider="@color/black_gray"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar_notes_details"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
 </RelativeLayout>

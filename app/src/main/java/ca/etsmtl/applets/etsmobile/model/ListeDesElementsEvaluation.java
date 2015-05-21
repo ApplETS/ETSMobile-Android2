@@ -9,6 +9,10 @@ package ca.etsmtl.applets.etsmobile.model;
 //
 //---------------------------------------------------
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.util.Hashtable;
 
 import org.ksoap2.serialization.AttributeContainer;
@@ -19,23 +23,35 @@ import org.ksoap2.serialization.SoapPrimitive;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
+@DatabaseTable(tableName = "listedeselementsevaluation")
 public class ListeDesElementsEvaluation extends DonneesRetournees implements KvmSerializable {
 
+    @DatabaseField
 	public String noteACeJour;
 
+    @DatabaseField
 	public String scoreFinalSur100;
 
+    @DatabaseField
 	public String moyenneClasse;
 
+    @DatabaseField
 	public String ecartTypeClasse;
 
+    @DatabaseField
 	public String medianeClasse;
 
+    @DatabaseField
 	public String rangCentileClasse;
 
+    @DatabaseField
 	public String noteACeJourElementsIndividuels;
 
+    @DatabaseField
 	public String noteSur100PourElementsIndividuels;
+
+    @DatabaseField(id = true)
+    public String id;
 
 	public ArrayOfElementEvaluation liste = new ArrayOfElementEvaluation();
 

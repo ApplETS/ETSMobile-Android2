@@ -14,6 +14,7 @@ import ca.etsmtl.applets.etsmobile.model.EventList;
 import ca.etsmtl.applets.etsmobile.model.HoraireActivite;
 import ca.etsmtl.applets.etsmobile.model.HoraireExamenFinal;
 import ca.etsmtl.applets.etsmobile.model.JoursRemplaces;
+import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
 import ca.etsmtl.applets.etsmobile.model.Personne;
 import ca.etsmtl.applets.etsmobile.model.Programme;
 import ca.etsmtl.applets.etsmobile.model.Seances;
@@ -36,7 +37,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	private static final String DATABASE_NAME = "etsmobile2.db";
 	// any time you make changes to your database objects, you may have to
 	// increase the database version
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 10;
 
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -54,6 +55,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, Etudiant.class);
 			TableUtils.createTable(connectionSource, Cours.class);
 			TableUtils.createTable(connectionSource, JoursRemplaces.class);
+            TableUtils.createTable(connectionSource, ListeDesElementsEvaluation.class);
 			TableUtils.createTable(connectionSource, ElementEvaluation.class);
 			TableUtils.createTable(connectionSource, Enseignant.class);
 			TableUtils.createTable(connectionSource, HoraireActivite.class);
@@ -81,6 +83,22 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		try {
 			Log.i(DatabaseHelper.class.getName(), "onUpgrade");
 			TableUtils.dropTable(connectionSource, Etudiant.class, true);
+            TableUtils.dropTable(connectionSource, Cours.class, true);
+            TableUtils.dropTable(connectionSource, JoursRemplaces.class, true);
+
+            TableUtils.dropTable(connectionSource, ListeDesElementsEvaluation.class, true);
+            TableUtils.dropTable(connectionSource, ElementEvaluation.class, true);
+            TableUtils.dropTable(connectionSource, Enseignant.class, true);
+            TableUtils.dropTable(connectionSource, HoraireActivite.class, true);
+            TableUtils.dropTable(connectionSource, Personne.class, true);
+            TableUtils.dropTable(connectionSource, Programme.class, true);
+            TableUtils.dropTable(connectionSource, Trimestre.class, true);
+            TableUtils.dropTable(connectionSource, Event.class, true);
+            TableUtils.dropTable(connectionSource, TodaysCourses.class, true);
+            TableUtils.dropTable(connectionSource, TodaysCourses.Seance.class, true);
+            TableUtils.dropTable(connectionSource, HoraireExamenFinal.class, true);
+            TableUtils.dropTable(connectionSource, Seances.class, true);
+
 			// after we drop the old databases, we create the new ones
 			onCreate(db, connectionSource);
 		} catch (SQLException e) {

@@ -24,7 +24,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "trimestre")
 public class Trimestre extends AttributeContainer implements KvmSerializable {
-	@DatabaseField
+	@DatabaseField(id = true)
 	public String abrege;
 	@DatabaseField
 	public String auLong;
@@ -50,8 +50,6 @@ public class Trimestre extends AttributeContainer implements KvmSerializable {
 	public String dateFinAnnulationSansRemboursementNouveauxEtudiants;
 	@DatabaseField
 	public String dateLimitePourAnnulerASEQ;
-	@DatabaseField(id = true)
-	public int id;
 
 	public Trimestre() {
 	}
