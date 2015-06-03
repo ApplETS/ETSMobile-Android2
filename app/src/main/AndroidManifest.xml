@@ -115,6 +115,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="***REMOVED***" />
     </application>
 
 </manifest>

@@ -14,8 +14,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.splunk.mint.Mint;
+import com.crashlytics.android.Crashlytics;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.Collection;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
@@ -46,9 +47,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
-
-        Mint.initAndStartSession(MainActivity.this, getString(R.string.bugsense));
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -85,7 +85,6 @@ public class MainActivity extends Activity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
-
     }
 
     @Override
