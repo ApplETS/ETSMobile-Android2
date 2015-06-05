@@ -44,6 +44,7 @@ public class NoteAdapter extends ArrayAdapter<NotesSessionItem> {
                 Intent i = new Intent(context, NotesDetailsActivity.class);
                 i.putExtra("sigle", sessionCote.sigle);
                 i.putExtra("sessionName", notesSession.sessionName);
+				i.putExtra("abrege", notesSession.abrege);
                 i.putExtra("cote", cote);
                 i.putExtra("groupe", sessionCote.groupe);
                 i.putExtra("titreCours", sessionCote.titreCours);

@@ -27,13 +27,14 @@ public class NotesDetailsActivity extends Activity {
 
             String sigle = extras.getString("sigle");
             String sessionName = extras.getString("sessionName");
+            String abrege = extras.getString("abrege");
             String cote = extras.getString("cote");
             String groupe = extras.getString("groupe");
             String titreCours = extras.getString("titreCours");
 
             setTitle(sigle);
 
-            Fragment fragment = NotesDetailsFragment.newInstance(sigle, sessionName, cote, groupe, titreCours);
+            Fragment fragment = NotesDetailsFragment.newInstance(sigle, sessionName, abrege, cote, groupe, titreCours);
             getFragmentManager().beginTransaction().add(R.id.container, fragment, NotesDetailsFragment.class.getName()).commit();
         }
     }
