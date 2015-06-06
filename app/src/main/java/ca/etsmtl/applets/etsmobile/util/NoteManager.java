@@ -172,10 +172,9 @@ public class NoteManager extends Observable implements RequestListener<Object> {
         }
 
         ArrayList<Cours> dbCours = new ArrayList<Cours>();
-        ArrayList<ElementEvaluation> dbListe = new ArrayList<ElementEvaluation>();
         try {
             dbCours = (ArrayList<Cours>) dbHelper.getDao(Cours.class).queryForAll();
-            dbListe = (ArrayList<ElementEvaluation>) dbHelper.getDao(ElementEvaluation.class).queryForAll();
+            ArrayList<ListeDesElementsEvaluation> dbliste = (ArrayList<ListeDesElementsEvaluation>) dbHelper.getDao(ListeDesElementsEvaluation.class).queryForAll();
             for (Cours coursNew : dbCours) {
 
                 if (!coursHashMap.containsKey(coursNew.id)) {
@@ -256,6 +255,44 @@ public class NoteManager extends Observable implements RequestListener<Object> {
         }
     }
 
+    /**
+     * Deletes marks in DB that doesn't exist on API
+     *
+     * @param
+     */
+    public void deleteExpiredElementsEvaluation(ListeDesElementsEvaluation listeDesElementsEvaluation) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+
+        HashMap<String, ElementEvaluation> elementEvaluationHashMap = new HashMap<String, ElementEvaluation>();
+        for(ElementEvaluation elem : listeDesElementsEvaluation.liste)
+        {
+            String id = listeDesElementsEvaluation.id + elem.nom;
+            elementEvaluationHashMap.put(id, elem);
+        }
+
+        List<ElementEvaluation> elementEvaluationList = null;
+        try {
+            Dao<ElementEvaluation, String> elementsEvaluationDao = dbHelper.getDao(ElementEvaluation.class);
+            QueryBuilder<ElementEvaluation, String> builder = elementsEvaluationDao.queryBuilder();
+
+            Where where = builder.where();
+            where.eq("listeDesElementsEvaluation_id", listeDesElementsEvaluation);
+            where.and();
+
+            elementEvaluationList = builder.query();
+            for(ElementEvaluation element : elementEvaluationList)
+            {
+                if(!elementEvaluationHashMap.containsKey(element.id))
+                    elementsEvaluationDao.deleteById(element.id);
+
+                Log.v("Supression",element.id + " supprimé");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void onRequestFailure(SpiceException spiceException) { spiceException.printStackTrace(); }
@@ -290,6 +327,7 @@ public class NoteManager extends Observable implements RequestListener<Object> {
                 if (o instanceof ListeDesElementsEvaluation) {
                     ListeDesElementsEvaluation listeDesElementsEvaluation = (ListeDesElementsEvaluation) o;
 
+                    deleteExpiredElementsEvaluation(listeDesElementsEvaluation);
                     updateElementsEvaluation(listeDesElementsEvaluation);
 
                     synchListeDesElementsEvaluation = true;
