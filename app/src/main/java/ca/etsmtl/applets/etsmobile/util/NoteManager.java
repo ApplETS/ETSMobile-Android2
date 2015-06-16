@@ -6,6 +6,7 @@ import android.support.v4.util.LogWriter;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -15,6 +16,7 @@ import org.w3c.dom.Element;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 
@@ -22,6 +24,7 @@ import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.model.Cours;
 import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
+import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
@@ -154,6 +157,143 @@ public class NoteManager extends Observable implements RequestListener<Object> {
         }
     }
 
+    /**
+     * Deletes courses in DB that doesn't exist on API
+     *
+     * @param
+     */
+    public void deleteExpiredCours(ListeDeCours listeDeCours) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+
+        HashMap<String, Cours> coursHashMap = new HashMap<String, Cours>();
+        for (Cours cours : listeDeCours.liste) {
+            cours.id = cours.sigle + cours.session;
+            coursHashMap.put(cours.id, cours);
+        }
+
+        ArrayList<Cours> dbCours = new ArrayList<Cours>();
+        try {
+            dbCours = (ArrayList<Cours>) dbHelper.getDao(Cours.class).queryForAll();
+            ArrayList<ListeDesElementsEvaluation> dbliste = (ArrayList<ListeDesElementsEvaluation>) dbHelper.getDao(ListeDesElementsEvaluation.class).queryForAll();
+            for (Cours coursNew : dbCours) {
+
+                if (!coursHashMap.containsKey(coursNew.id)) {
+                    Dao<Cours, String> coursDao = dbHelper.getDao(Cours.class);
+                    coursDao.deleteById(coursNew.id);
+
+                    deleteExpiredListeDesElementsEvaluation(coursNew.id);
+                    Log.v("Supression", coursNew.id + " supprimé");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Deletes trimestres in DB that doesn't exist on API
+     *
+     * @param
+     */
+    public void deleteExpiredTrimestres(ListeDeSessions listeDeSessions) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+
+        HashMap<String, Trimestre> trimestresHashMap = new HashMap<String, Trimestre>();
+        for (Trimestre trimestre : listeDeSessions.liste) {
+            trimestresHashMap.put(trimestre.abrege, trimestre);
+        }
+
+        ArrayList<Trimestre> dbTrimestres = new ArrayList<Trimestre>();
+        try {
+            dbTrimestres = (ArrayList<Trimestre>) dbHelper.getDao(Trimestre.class).queryForAll();
+            for (Trimestre trimestreNew : dbTrimestres) {
+
+                if (!trimestresHashMap.containsKey(trimestreNew.abrege)) {
+                    Dao<Trimestre, String> trimestreDao = dbHelper.getDao(Trimestre.class);
+                    trimestreDao.deleteById(trimestreNew.abrege);
+
+                    Log.v("Supression", trimestreNew.abrege + " supprimé");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Deletes marks in DB that doesn't exist on API
+     *
+     * @param
+     */
+    private void deleteExpiredListeDesElementsEvaluation(String id) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+
+        try {
+
+            Dao<ListeDesElementsEvaluation, String> listeDesElementsEvaluationDao = dbHelper.getDao(ListeDesElementsEvaluation.class);
+            ListeDesElementsEvaluation listeDesElementsEvaluation = listeDesElementsEvaluationDao.queryForId(id);
+
+            if(listeDesElementsEvaluation != null) {
+                Dao<ElementEvaluation, String> elementsEvaluationDao = dbHelper.getDao(ElementEvaluation.class);
+                DeleteBuilder<ElementEvaluation, String> deleteBuilder = elementsEvaluationDao.deleteBuilder();
+
+                Where where = deleteBuilder.where();
+                where.eq("listeDesElementsEvaluation_id", listeDesElementsEvaluation);
+                where.and();
+
+                deleteBuilder.delete();
+            }
+
+            listeDesElementsEvaluationDao.deleteById(id);
+
+            Log.v("Supression", id + " supprimé");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Deletes marks in DB that doesn't exist on API
+     *
+     * @param
+     */
+    public void deleteExpiredElementsEvaluation(ListeDesElementsEvaluation listeDesElementsEvaluation) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+
+        HashMap<String, ElementEvaluation> elementEvaluationHashMap = new HashMap<String, ElementEvaluation>();
+        for(ElementEvaluation elem : listeDesElementsEvaluation.liste)
+        {
+            String id = listeDesElementsEvaluation.id + elem.nom;
+            elementEvaluationHashMap.put(id, elem);
+        }
+
+        List<ElementEvaluation> elementEvaluationList = null;
+        try {
+            Dao<ElementEvaluation, String> elementsEvaluationDao = dbHelper.getDao(ElementEvaluation.class);
+            QueryBuilder<ElementEvaluation, String> builder = elementsEvaluationDao.queryBuilder();
+
+            Where where = builder.where();
+            where.eq("listeDesElementsEvaluation_id", listeDesElementsEvaluation);
+            where.and();
+
+            elementEvaluationList = builder.query();
+            for(ElementEvaluation element : elementEvaluationList)
+            {
+                if(!elementEvaluationHashMap.containsKey(element.id))
+                    elementsEvaluationDao.deleteById(element.id);
+
+                Log.v("Supression",element.id + " supprimé");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Override
     public void onRequestFailure(SpiceException spiceException) { spiceException.printStackTrace(); }
 
@@ -166,6 +306,8 @@ public class NoteManager extends Observable implements RequestListener<Object> {
                 //ListeDeCours
                 if (o instanceof ListeDeCours) {
                     ListeDeCours listeDeCours = (ListeDeCours) o;
+
+                    deleteExpiredCours(listeDeCours);
                     updateCours(listeDeCours.liste);
 
                     synchListeDeCours = true;
@@ -174,6 +316,8 @@ public class NoteManager extends Observable implements RequestListener<Object> {
                 //ListeDeSessions
                 if (o instanceof ListeDeSessions) {
                     ListeDeSessions listeDeSessions = (ListeDeSessions) o;
+
+                    deleteExpiredTrimestres(listeDeSessions);
                     updateTrimestres(listeDeSessions.liste);
 
                     synchListeDeSessions = true;
@@ -182,6 +326,8 @@ public class NoteManager extends Observable implements RequestListener<Object> {
                 //ListeDesElementsEvaluation
                 if (o instanceof ListeDesElementsEvaluation) {
                     ListeDesElementsEvaluation listeDesElementsEvaluation = (ListeDesElementsEvaluation) o;
+
+                    deleteExpiredElementsEvaluation(listeDesElementsEvaluation);
                     updateElementsEvaluation(listeDesElementsEvaluation);
 
                     synchListeDesElementsEvaluation = true;

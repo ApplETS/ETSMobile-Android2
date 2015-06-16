@@ -31,6 +31,7 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 
 	public static String SIGLE = "SIGLE";
 	public static String SESSION = "SESSION";
+	public static String SESSIONABREGE = "SESSIONABREGE";
 	public static String COTE = "COTE";
 	public static String GROUPE = "GROUPE";
     public static String TITLECOURS = "TITLECOURS";
@@ -40,6 +41,7 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 	private String cote;
 	private String sigle;
 	private String session;
+	private String sessionAbrege;
 	private String groupe;
     private String titreCours;
     private String id;
@@ -50,11 +52,12 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 
     private ProgressBar progressBarDetailsNotes;
 
-	public static NotesDetailsFragment newInstance(String sigle, String session, String cote, String groupe,String titreCours) {
+	public static NotesDetailsFragment newInstance(String sigle, String session, String sessionAbrege, String cote, String groupe,String titreCours) {
 		NotesDetailsFragment fragment = new NotesDetailsFragment();
 		Bundle args = new Bundle();
 		args.putString(SIGLE, sigle);
 		args.putString(SESSION, session);
+		args.putString(SESSIONABREGE, sessionAbrege);
 		args.putString(COTE, cote);
 		args.putString(GROUPE, groupe);
         args.putString(TITLECOURS, titreCours);
@@ -70,9 +73,10 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 			sigle = bundle.getString(SIGLE);
 			cote = bundle.getString(COTE);
 			session = bundle.getString(SESSION);
+			sessionAbrege = bundle.getString(SESSIONABREGE);
 			groupe = bundle.getString(GROUPE);
             titreCours = bundle.getString(TITLECOURS);
-            id = sigle + session;
+            id = sigle + sessionAbrege;
             System.out.print(titreCours);
 
             mNoteManager = new NoteManager(getActivity());
@@ -131,7 +135,6 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 
         mlisteDesElementsEvaluation = mNoteManager.getListElementsEvaluation(id);
 
-        //we are gonna try to get data from database
         if (mlisteDesElementsEvaluation != null) {
             List<ElementEvaluation> elementsEvaluationList = mNoteManager.getElementsEvaluation(mlisteDesElementsEvaluation);
             mlisteDesElementsEvaluation.liste.addAll(elementsEvaluationList);

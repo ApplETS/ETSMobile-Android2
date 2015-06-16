@@ -148,7 +148,7 @@ public class NotesFragment extends HttpFragment implements Observer {
                         sessionCoteItems[k] = sessionCote;
                         k++;
                     }
-                    notesSession[l] = new NotesSessionItem(listeDeSessions.liste.get(j).auLong, new SessionCoteAdapter(getActivity(), sessionCoteItems));
+                    notesSession[l] = new NotesSessionItem(listeDeSessions.liste.get(j).auLong, listeDeSessions.liste.get(j).abrege, new SessionCoteAdapter(getActivity(), sessionCoteItems));
                     l++;
                 }
 
