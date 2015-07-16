@@ -11,6 +11,7 @@ import ca.etsmtl.applets.etsmobile.model.Enseignant;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.EventList;
+import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.model.HoraireActivite;
 import ca.etsmtl.applets.etsmobile.model.HoraireExamenFinal;
 import ca.etsmtl.applets.etsmobile.model.JoursRemplaces;
@@ -37,7 +38,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	private static final String DATABASE_NAME = "etsmobile2.db";
 	// any time you make changes to your database objects, you may have to
 	// increase the database version
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -67,6 +68,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, TodaysCourses.Seance.class);
 			TableUtils.createTable(connectionSource, HoraireExamenFinal.class);
 			TableUtils.createTable(connectionSource, Seances.class);
+			TableUtils.createTable(connectionSource, FicheEmploye.class);
 		} catch (SQLException e) {
 			Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
 			throw new RuntimeException(e);
@@ -97,6 +99,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, TodaysCourses.Seance.class, true);
             TableUtils.dropTable(connectionSource, HoraireExamenFinal.class, true);
             TableUtils.dropTable(connectionSource, Seances.class, true);
+			TableUtils.dropTable(connectionSource, FicheEmploye.class, true);
 
 			// after we drop the old databases, we create the new ones
 			onCreate(db, connectionSource);
