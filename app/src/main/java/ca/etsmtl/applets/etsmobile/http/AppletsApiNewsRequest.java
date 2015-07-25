@@ -6,13 +6,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.kobjects.base64.Base64;
 
-import java.net.HttpURLConnection;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.security.cert.CertificateException;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Iterator;
 
@@ -20,11 +31,11 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
+import ca.etsmtl.applets.etsmobile.util.HTTPSRequest;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -45,13 +56,36 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
         this.endDate = endDate;
     }
 
+    public String convertStreamToString(InputStream inputStream) {
+        BufferedReader buffReader = new BufferedReader(new InputStreamReader(
+                inputStream));
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String line = null;
+        try {
+            while ((line = buffReader.readLine()) != null) {
+                stringBuilder.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return stringBuilder.toString();
+    }
+
     @Override
     public Nouvelles loadDataFromNetwork() throws Exception {
 
 //        String address = context.getString(R.string.applets_api_news, source, startDate, endDate);
         String address = context.getString(R.string.applets_api_news_all);
+        address = "https://api.clubapplets.ca/news/all";
 
-        TrustManager[] trustAllCerts = new TrustManager[] {
+        /*TrustManager[] trustAllCerts = new TrustManager[] {
                 new X509TrustManager() {
                     @Override
                     public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -82,25 +116,93 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
 
         URL url = new URL(address);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();*/
+
+        // Load CAs from an InputStream
+    // (could be from a resource or ByteArrayInputStream or ...)
+        try {
+
+            // Instantiate the custom HttpClient
+           /* DefaultHttpClient client = new HTTPSRequest(context);
+            HttpGet get = new HttpGet("https://api.clubapplets.ca/news/all");
+
+            String userCredentials = context.getString(R.string.credentials_api);
+            String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
+            get.setHeader("Authorization", basicAuth);
+            get.setHeader("Content-Type", "application/json; charset=utf-8");
+            String method = get.getMethod();
+
+            HttpResponse getResponse = client.execute(get);
+            HttpEntity responseEntity = getResponse.getEntity();*/
+
+            ///////////////////////////////
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+
+            InputStream caInput = new BufferedInputStream(context.getResources().openRawResource(R.raw.applets_https_certificate));
+            Certificate ca;
+            try {
+                ca = cf.generateCertificate(caInput);
+                System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
+            } finally {
+                caInput.close();
+            }
+
+            // Create a KeyStore containing our trusted CAs
+            String keyStoreType = KeyStore.getDefaultType();
+            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+            keyStore.load(null, null);
+            keyStore.setCertificateEntry("ca", ca);
+
+            // Create a TrustManager that trusts the CAs in our KeyStore
+            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+            tmf.init(keyStore);
+
+            // Create an SSLContext that uses our TrustManager
+            SSLContext contextt = SSLContext.getInstance("TLS");
+            contextt.init(null, tmf.getTrustManagers(), null);
+
+            // Tell the URLConnection to use a SocketFactory from our SSLContext
+            URL url = new URL(address);
+            HttpsURLConnection con =
+                    (HttpsURLConnection) url.openConnection();
+            con.setHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String s, SSLSession sslSession) {
+                    return true;
+                }
+            });
+            con.setSSLSocketFactory(contextt.getSocketFactory());
 
 
+            String userCredentials = context.getString(R.string.credentials_api);
+            String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
+            con.setRequestProperty("Authorization", basicAuth);
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 
+            con.setUseCaches(false);
 
-        String userCredentials = context.getString(R.string.credentials_api);
-        String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
-        con.setRequestProperty ("Authorization", basicAuth);
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
+            // Get the response code
+            int statusCode = con.getResponseCode();
 
-        con.setUseCaches(false);
-        con.setDoInput(true);
-        con.setDoOutput(true);
+            InputStream is = null;
 
-        String result = IOUtils.toString(con.getInputStream());
+            if (statusCode >= 200 && statusCode < 400) {
+                // Create an InputStream in order to extract the response object
+                is = con.getInputStream();
+            }
+            else {
+                is = con.getErrorStream();
+            }
 
+            String response = convertStreamToString(is);
+        }
+        catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
 //        urlConnection.disconnect();
-
+String result = "";
         JSONObject root = new JSONObject(result);
         JSONObject data = root.getJSONObject("data");
         ObjectMapper mapper = new ObjectMapper();
