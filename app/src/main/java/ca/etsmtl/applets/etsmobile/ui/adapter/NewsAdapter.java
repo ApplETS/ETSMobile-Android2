@@ -55,11 +55,16 @@ public class NewsAdapter extends ArrayAdapter<Nouvelle> {
         holder.tvTitre.setText(item.getTitle());
         String updatedTime = item.getUpdated_time();
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        DateTime date = dateTimeFormatter.parseDateTime(updatedTime);
-        DateTimeFormatter dateToDisplay = DateTimeFormat.forPattern("dd MMM yyyy");
+        String pattern = "yyyy-MM-dd'T'HH:mm:ssZ";
+        DateTimeFormatter dtf = DateTimeFormat.forPattern(pattern);
 
-        holder.tvDate.setText(dateToDisplay.print(date));
+        DateTime date = dtf.parseDateTime(updatedTime);
+
+        /*DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        DateTime date = dateTimeFormatter.parseDateTime(updatedTime);
+        DateTimeFormatter dateToDisplay = DateTimeFormat.forPattern("dd MMM yyyy");*/
+
+        holder.tvDate.setText(date.toString(DateTimeFormat.forPattern("dd MMM yyyy")));
         holder.tvTitre.setText(item.getTitle());
         holder.imageSource.setImageResource(item.getImageResource());
 

@@ -19,7 +19,10 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -85,14 +88,6 @@ public class NewsFragment extends HttpFragment {
 
         dataManager.sendRequest( new AppletsApiNewsRequest(getActivity(),sources,dateDebut,dateFin), NewsFragment.this);
 
-
-
-
-
-
-
-
-
 		return v;
 	}
 
@@ -140,19 +135,24 @@ public class NewsFragment extends HttpFragment {
 	public void onRequestSuccess(Object o) {
 
         if(o instanceof Nouvelles) {
-            Nouvelles nouvelles = (Nouvelles)o;
+
+            Nouvelles nouvelles = (Nouvelles) o;
 
             Collections.sort(nouvelles, new Comparator<Nouvelle>() {
-                DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+                String pattern = "yyyy-MM-dd'T'HH:mm:ssZ";
+                DateTimeFormatter dtf = DateTimeFormat.forPattern(pattern);
 
                 @Override
                 public int compare(Nouvelle nouvelle1, Nouvelle nouvelle2) {
 
-                    DateTime date1 = dateTimeFormatter.parseDateTime(nouvelle1.getUpdated_time());
-                    DateTime date2 = dateTimeFormatter.parseDateTime(nouvelle2.getUpdated_time());
+                    String updatetime = nouvelle1.getUpdated_time();
 
+                    DateTime date1 = dtf.parseDateTime(nouvelle1.getUpdated_time());
 
-                    if(date1.isAfter(date2)){
+                    //DateTime date2 = dateTimeFormatter.parseDateTime(nouvelle2.getUpdated_time());
+                    DateTime date2 = dtf.parseDateTime(nouvelle2.getUpdated_time());
+
+                    if (date1.isAfter(date2)) {
                         return -1;
                     } else if (date1.isBefore(date2)) {
                         return 1;

@@ -46,7 +46,7 @@ public class HTTPSRequest extends DefaultHttpClient {
             try {
                 // Initialize the keystore with the provided trusted certificates
                 // Also provide the password of the keystore
-                trusted.load(in, "mysecret".toCharArray());
+                trusted.load(in, "Appletsapete".toCharArray());
             } finally {
                 in.close();
             }
