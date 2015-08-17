@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.etsmtl.applets.etsmobile2"
     android:versionCode="2"
-    android:versionName="2.0" >
+    android:versionName="2.0">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -33,44 +33,42 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <!--<meta-data-->
-            <!--android:name="com.google.android.gms.version"-->
-            <!--android:value="@integer/google_play_services_version" />-->
-<!--   -->
+        <!--android:name="com.google.android.gms.version"-->
+        <!--android:value="@integer/google_play_services_version" />-->
+        <!--   -->
         <!--<meta-data-->
-            <!--android:name="com.google.android.maps.v2.API_KEY"-->
-            <!--android:value="@string/map_key" />-->
+        <!--android:name="com.google.android.maps.v2.API_KEY"-->
+        <!--android:value="@string/map_key" />-->
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
-        </activity>
-        <activity android:name="ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateVisible" />
 
-        <service
-            android:name="ca.etsmtl.applets.etsmobile.http.MyJackSpringAndroidSpiceService"
-            android:exported="false" />
+        <activity
+            android:name="ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_moodle_course"
-            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" >
+            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
@@ -78,9 +76,9 @@
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_news_details"
-            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" >
+            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
@@ -88,9 +86,9 @@
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_bottin_details"
-            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" >
+            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
@@ -98,9 +96,9 @@
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.NotesDetailsActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_notes_details"
-            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" >
+            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
@@ -108,13 +106,41 @@
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity"
-            android:screenOrientation="portrait"
             android:label="PrefsActivity"
-            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" >
+            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
+
+        <service
+            android:name="ca.etsmtl.applets.etsmobile.http.MyJackSpringAndroidSpiceService"
+            android:exported="false" />
+
+        <service android:name="io.supportkit.core.service.SupportKitService" />
+
+        <service
+            android:name="io.supportkit.core.GcmInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="io.supportkit.core.GcmRegistrationIntentService"
+            android:exported="false" />
+
+        <service
+            android:name="io.supportkit.core.GcmService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="***REMOVED***" />
