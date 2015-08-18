@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.LinkedHashMap;
 
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
@@ -31,6 +33,8 @@ import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
+import io.fabric.sdk.android.Fabric;
+import io.supportkit.core.SupportKit;
 
 /**
  * Created by Phil on 17/11/13.
@@ -44,6 +48,8 @@ public class ApplicationManager extends Application {
 	public void onCreate() {
 		super.onCreate();
 
+		SupportKit.init(this, getString(R.string.credentials_supportkit));
+		Fabric.with(this, new Crashlytics());
         //BugSenseHandler.initAndStartSession(this, getString(R.string.bugsense));
 
 
