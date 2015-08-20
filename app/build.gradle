@@ -33,7 +33,7 @@ android {
 
     defaultConfig {
         applicationId "ca.etsmtl.applets.etsmobile"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 21
         versionCode 14
         versionName "2.03"
@@ -75,4 +75,11 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
         transitive = true;
     }
+
+    compile 'com.google.android.gms:play-services-gcm:7.5.0'
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'io.supportkit:core:latest.release'
+    compile 'io.supportkit:ui:latest.release'
+
 }
