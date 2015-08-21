@@ -13,11 +13,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Date;
+import java.util.Locale;
 
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -90,9 +95,6 @@ public class NewsDetailsFragment extends HttpFragment {
 
         }
 
-
-
-
     }
 
     @Override
@@ -109,9 +111,11 @@ public class NewsDetailsFragment extends HttpFragment {
         tvFrom.setText(from);
         tvTitle.setText(title);
         tvFacebook_link.setText(facebook_link);
-        tvUpdatedTime.setText(updated_time);
-        tvMessage.setText(message);
 
+        Date date = Utility.getDateFromString(updated_time);
+        String dateText = DateFormatUtils.format(date, "dd MMM yyyy", Locale.CANADA_FRENCH);
+        tvUpdatedTime.setText(dateText);
+        tvMessage.setText(message);
 
         new DownloadImage().execute(image);
 
