@@ -33,6 +33,7 @@ import ca.etsmtl.applets.etsmobile.http.AppletsApiNewsRequest;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
 import ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity;
+import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -49,7 +50,7 @@ public class NewsFragment extends HttpFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         //Sélection des sources
-//        setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
 	}
 
 	
@@ -94,7 +95,7 @@ public class NewsFragment extends HttpFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //Sélection des sources
-//        inflater.inflate(R.menu.menu_news, menu);
+        inflater.inflate(R.menu.menu_news, menu);
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -102,26 +103,18 @@ public class NewsFragment extends HttpFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-//Sélection des sources
-//        switch (item.getItemId()) {
-//
-//            case R.id.menu_item_sources_news:
-//
-//                // Display the fragment as the main content.
-//                Intent i = new Intent(getActivity(), PrefsActivity.class);
-//
-//                getActivity().startActivity(i);
-//
-//                return true;
-//        }
+        //Sélection des sources
+        switch (item.getItemId()) {
 
+            case R.id.menu_item_sources_news:
 
+                // Display the fragment as the main content.
+                Intent i = new Intent(getActivity(), PrefsActivity.class);
 
+                getActivity().startActivity(i);
 
-
-
-
-
+                return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

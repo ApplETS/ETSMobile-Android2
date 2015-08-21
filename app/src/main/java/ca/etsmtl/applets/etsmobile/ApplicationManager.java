@@ -35,114 +35,179 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class ApplicationManager extends Application {
 
-	public static LinkedHashMap<String, MyMenuItem> mMenu = new LinkedHashMap<String, MyMenuItem>(17);
-	public static UserCredentials userCredentials;
+    public static LinkedHashMap<String, MyMenuItem> mMenu = new LinkedHashMap<String, MyMenuItem>(17);
+    public static UserCredentials userCredentials;
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-
-        //BugSenseHandler.initAndStartSession(this, getString(R.string.bugsense));
-
+    @Override
+    public void onCreate() {
+        super.onCreate();
 
         // Section 1 - Moi
-		String title = getString(R.string.menu_section_1_moi);
-		mMenu.put(title, new MyMenuItem(title, null));
+        mMenu.put(getString(R.string.menu_section_1_moi),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_moi),
+                        null
+                ));
 
-		title = getString(R.string.menu_section_1_ajd);
-		mMenu.put(TodayFragment.class.getName(), new MyMenuItem(title, TodayFragment.class, R.drawable.ic_ico_aujourdhui));
+        mMenu.put(TodayFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_ajd),
+                        TodayFragment.class,
+                        R.drawable.ic_ico_aujourdhui,
+                        true
+                ));
 
-		title = getString(R.string.menu_section_1_horaire);
-		mMenu.put(HoraireFragment.class.getName(), new MyMenuItem(title, HoraireFragment.class, R.drawable.ic_ico_schedule));
+        mMenu.put(HoraireFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_horaire),
+                        HoraireFragment.class,
+                        R.drawable.ic_ico_schedule,
+                        true
+                ));
 
-		title = getString(R.string.menu_section_1_notes);
-		mMenu.put(NotesFragment.class.getName(), new MyMenuItem(title, NotesFragment.class, R.drawable.ic_ico_notes));
+        mMenu.put(NotesFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_notes),
+                        NotesFragment.class,
+                        R.drawable.ic_ico_notes,
+                        true
+                ));
 
-		// title = getString(R.string.menu_section_1_stages);
-		// mMenu.put(title, new MyMenuItem(title, StagesFragment.class,
-		// R.drawable.ic_ico_stage));
+        mMenu.put(MoodleFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_moodle),
+                        MoodleFragment.class,
+                        R.drawable.ic_moodle_icon_small,
+                        true
+                ));
+
+        mMenu.put(ProfilFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_profil),
+                        ProfilFragment.class,
+                        R.drawable.ic_ico_profil,
+                        true
+                ));
+
+        mMenu.put(BandwithFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_bandwith),
+                        BandwithFragment.class,
+                        R.drawable.ic_ico_internet,
+                        false
+                ));
 
 
-		title = getString(R.string.menu_section_2_moodle);
-		mMenu.put(MoodleFragment.class.getName(), new MyMenuItem(title, MoodleFragment.class, R.drawable.ic_moodle_icon_smal));
+        // Section 2 - ÉTS
+        mMenu.put(getString(R.string.menu_section_2_ets),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_ets),
+                        null
+                ));
 
-		title = getString(R.string.menu_section_1_profil);
-		mMenu.put(ProfilFragment.class.getName(), new MyMenuItem(title, ProfilFragment.class, R.drawable.ic_ico_profil));
-
-		title = getString(R.string.menu_section_1_bandwith);
-		mMenu.put(BandwithFragment.class.getName(), new MyMenuItem(title, BandwithFragment.class, R.drawable.ic_ico_internet));
-		
-		
-
-		// Section 2 - �TS
-		title = getString(R.string.menu_section_2_ets);
-		mMenu.put(title, new MyMenuItem(title, null));
-
-		title = getString(R.string.menu_section_2_news);
-		mMenu.put(NewsFragment.class.getName(), new MyMenuItem(title, NewsFragment.class, R.drawable.ic_ico_news));
+        mMenu.put(NewsFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_news),
+                        NewsFragment.class,
+                        R.drawable.ic_ico_news,
+                        false
+                ));
 
 
-		title = getString(R.string.menu_section_2_bottin);
-		mMenu.put(BottinFragment.class.getName(), new MyMenuItem(title, BottinFragment.class, R.drawable.ic_ico_bottin));
+        mMenu.put(BottinFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_bottin),
+                        BottinFragment.class,
+                        R.drawable.ic_ico_bottin,
+                        false
+                ));
 
-		title = getString(R.string.menu_section_2_biblio);
-		mMenu.put(BiblioFragment.class.getName(), new MyMenuItem(title, BiblioFragment.class, R.drawable.ic_ico_library));
+        mMenu.put(BiblioFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_biblio),
+                        BiblioFragment.class,
+                        R.drawable.ic_ico_library,
+                        false
+                ));
 
-		title = getString(R.string.menu_section_2_radio);
-		mMenu.put(RadioFragment.class.getName(), new MyMenuItem(title, RadioFragment.class, R.drawable.ic_ico_radio));
+        mMenu.put(RadioFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_radio),
+                        RadioFragment.class,
+                        R.drawable.ic_ico_radio,
+                        false
+                ));
 
-		title = getString(R.string.menu_section_2_securite);
-		mMenu.put(SecuriteFragment.class.getName(), new MyMenuItem(title, SecuriteFragment.class, R.drawable.ic_ico_security));
+        mMenu.put(SecuriteFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_securite),
+                        SecuriteFragment.class,
+                        R.drawable.ic_ico_security,
+                        false
+                ));
 
-		// Section 3 - ApplETS
-		title = getString(R.string.menu_section_3_applets);
-		mMenu.put(title, new MyMenuItem(title, null));
+        // Section 3 - ApplETS
+        mMenu.put(getString(R.string.menu_section_3_applets),
+                new MyMenuItem(
+                        getString(R.string.menu_section_3_applets),
+                        null
+                ));
 
-		title = getString(R.string.menu_section_3_about);
-		mMenu.put(AboutFragment.class.getName(), new MyMenuItem(title, AboutFragment.class, R.drawable.ic_logo_icon_final));
+        mMenu.put(AboutFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_3_about),
+                        AboutFragment.class,
+                        R.drawable.ic_logo_icon_final,
+                        false
+                ));
 
-		title = getString(R.string.menu_section_3_comms);
-		mMenu.put(CommentairesFragment.class.getName(), new MyMenuItem(title, CommentairesFragment.class, R.drawable.ic_ico_comment));
+        mMenu.put(CommentairesFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_3_comms),
+                        CommentairesFragment.class,
+                        R.drawable.ic_ico_comment,
+                        false
+                ));
 
-		title = getString(R.string.menu_section_3_sponsors);
-		mMenu.put(SponsorsFragment.class.getName(), new MyMenuItem(title, SponsorsFragment.class, R.drawable.ic_ico_partners));
+        mMenu.put(SponsorsFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_3_sponsors),
+                        SponsorsFragment.class,
+                        R.drawable.ic_ico_partners,
+                        false
+                ));
 
-		// DataManager instance = DataManager.getInstance(this);
-		// Etudiant registeredEtudiant = instance.getRegisteredEtudiant();
-		// if (registeredEtudiant != null) {
-		// userCredentials = new UserCredentials("", "");
-		// }
         SecurePreferences securePreferences = new SecurePreferences(this);
-		String u = securePreferences.getString(UserCredentials.CODE_U, "");
-		String p = securePreferences.getString(UserCredentials.CODE_P, "");
+        String u = securePreferences.getString(UserCredentials.CODE_U, "");
+        String p = securePreferences.getString(UserCredentials.CODE_P, "");
 
-		if (u.length() > 0 && p.length() > 0) {
-			userCredentials = new UserCredentials(u, p);
-		}
-	}
+        if (u.length() > 0 && p.length() > 0) {
+            userCredentials = new UserCredentials(u, p);
+        }
+    }
 
-	public static void deconnexion(final Activity activity) {
+    public static void deconnexion(final Activity activity) {
 
 
-		final Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
-		editor.clear();
-		editor.commit();
+        final Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
+        editor.clear();
+        editor.commit();
 
         // Enlever le profil de la DB SQLite
         new ProfilManager(activity).removeProfil();
         new NoteManager(activity).remove();
 
-		ApplicationManager.userCredentials = null;
-		Intent intent = new Intent(activity, MainActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		activity.startActivity(intent);
-		new Thread(new Runnable() {
+        ApplicationManager.userCredentials = null;
+        Intent intent = new Intent(activity, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
+        new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				activity.finish();
-			}
-		}).start();
+            @Override
+            public void run() {
+                activity.finish();
+            }
+        }).start();
 
-	}
+    }
 }

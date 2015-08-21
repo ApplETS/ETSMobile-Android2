@@ -24,7 +24,6 @@ import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -118,17 +117,20 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
         if (ApplicationManager.userCredentials == null) {
-
-//			Intent intent = new Intent(this, LoginActivity.class);
-//			startActivityForResult(intent, 0);
-
-            MyMenuItem about = ApplicationManager.mMenu.get(AboutFragment.class.getName());
-            selectItem(about.mClass.getName(), 13);
+            if (fragment == null) {
+                selectItem(AboutFragment.class.getName());
+            } else {
+                MyMenuItem myMenuItem = ApplicationManager.mMenu.get(fragment.getTag());
+                if(myMenuItem.hasToBeLoggedOn()) {
+                    selectItem(AboutFragment.class.getName());
+                }
+                selectItem(fragment.getTag());
+            }
         } else {
             if (fragment == null) {
-                MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
-                selectItem(ajdItem.mClass.getName(), 1);
+                selectItem(TodayFragment.class.getName());
             }
         }
     }
@@ -158,7 +160,7 @@ public class MainActivity extends Activity {
             fragment = fragmentManager.getFragment(savedInstanceState, tag);
 
         } else {
-            selectItem(ajdItem.mClass.getName(), 1);
+            selectItem(ajdItem.mClass.getName());
         }
 
     }
@@ -174,7 +176,7 @@ public class MainActivity extends Activity {
                 ApplicationManager.userCredentials = new UserCredentials(new SecurePreferences(this));
 
                 MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
-                selectItem(ajdItem.mClass.getName(), 1);
+                selectItem(ajdItem.mClass.getName());
             }
         }
     }
@@ -204,8 +206,7 @@ public class MainActivity extends Activity {
         @SuppressWarnings("rawtypes")
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
-            final Object itemAtPosition = parent.getItemAtPosition(position);
-            MyMenuItem myMenuItem = (MyMenuItem) itemAtPosition;
+            MyMenuItem myMenuItem = (MyMenuItem) parent.getItemAtPosition(position);
 
             if (myMenuItem.resId == R.drawable.ic_ico_comment) {
                 // contact; Ask to open email app; prefill email info
@@ -217,7 +218,7 @@ public class MainActivity extends Activity {
                 intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.default_comment));
                 startActivity(intent);
             } else {
-                selectItem(myMenuItem.mClass.getName(), position);
+                selectItem(myMenuItem.mClass.getName());
             }
         }
     }
@@ -226,34 +227,34 @@ public class MainActivity extends Activity {
      * Swaps fragments in the main content view
      */
     @SuppressWarnings("rawtypes")
-    private void selectItem(String key, int position) {
-        // Create a new fragment and specify the planet to show based on
-        // position
+    private void selectItem(String key) {
+        // Create a new fragment and specify the planet to show based on position
         fragment = null;
-        Class aClass = ApplicationManager.mMenu.get(key).mClass;
-        try {
-            fragment = (Fragment) aClass.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        MyMenuItem myMenuItem = ApplicationManager.mMenu.get(key);
 
-        if (position < 6 && ApplicationManager.userCredentials == null) {
+
+        if (myMenuItem.hasToBeLoggedOn() && ApplicationManager.userCredentials == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent, 0);
+        } else {
+            Class aClass = myMenuItem.mClass;
+            try {
+                fragment = (Fragment) aClass.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            // Insert the fragment by replacing any existing fragment
+            final FragmentManager fragmentManager = getFragmentManager();
+
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
+                    .addToBackStack(aClass.getName()).commit();
+
+            // Update the title, and close the drawer
+            setTitle(ApplicationManager.mMenu.get(key).title);
+            mDrawerLayout.closeDrawer(mDrawerList);
         }
-
-        // Insert the fragment by replacing any existing fragment
-        final FragmentManager fragmentManager = getFragmentManager();
-
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
-                .addToBackStack(aClass.getName()).commit();
-
-        // Highlight the selected item, update the title, and close the drawer
-        mDrawerList.setItemChecked(position, true);
-        setTitle(ApplicationManager.mMenu.get(key).title);
-        mDrawerLayout.closeDrawer(mDrawerList);
 
     }
 
@@ -265,27 +266,6 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
-
         this.finish();
-
-        /*
-
-        FragmentManager manager = getFragmentManager();
-
-
-        if(manager.getBackStackEntryCount() > 0) {
-            FragmentManager.BackStackEntry bsEntry = manager.getBackStackEntryAt(manager.getBackStackEntryCount() - 1);
-
-            Fragment frag = getFragmentManager().findFragmentByTag(bsEntry.getName());
-
-            MyMenuItem item = ApplicationManager.mMenu.get(frag.getTag());
-
-            setTitle(item.title);
-
-
-        }
-
-        //*/
     }
 }
