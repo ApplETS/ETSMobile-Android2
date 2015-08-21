@@ -6,6 +6,7 @@ buildscript {
         maven {
             url "https://mint.splunk.com/gradle/"
         }
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.0.0'
@@ -20,6 +21,7 @@ allprojects {
         maven {
             url "https://mint.splunk.com/gradle/"
         }
+        jcenter()
     }
 }
 

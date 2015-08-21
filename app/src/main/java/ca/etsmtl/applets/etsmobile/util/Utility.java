@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,5 +48,6 @@ public class Utility {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyy");
         return simpleDateFormat.format(date);
     }
+
 
 }

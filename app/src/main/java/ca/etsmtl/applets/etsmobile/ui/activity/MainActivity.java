@@ -1,5 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -14,7 +15,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.splunk.mint.Mint;
+import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.AccountPicker;
 
 import java.util.Collection;
 
@@ -27,6 +30,10 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
+import io.fabric.sdk.android.Fabric;
+import io.supportkit.core.SupportKit;
+import io.supportkit.core.User;
+import io.supportkit.ui.ConversationActivity;
 
 /**
  * Main Activity for �TSMobile, handles the login and the menu
@@ -34,6 +41,8 @@ import ca.etsmtl.applets.etsmobile2.R;
  * @author Philippe David
  */
 public class MainActivity extends Activity {
+
+    private static final int REQUEST_CODE_EMAIL = 1;
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -45,9 +54,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        Mint.initAndStartSession(MainActivity.this, getString(R.string.bugsense));
+        setContentView(R.layout.activity_main);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -84,7 +92,6 @@ public class MainActivity extends Activity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
-
     }
 
     @Override
@@ -168,16 +175,24 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0) {
-            if (resultCode > 0) {
-                Bundle extras = data.getExtras();
-                String codeU = extras.getString(UserCredentials.CODE_U);
-                String codeP = extras.getString(UserCredentials.CODE_P);
-                ApplicationManager.userCredentials = new UserCredentials(new SecurePreferences(this));
+        if (requestCode == 0 && resultCode > 0) {
+            Bundle extras = data.getExtras();
+            String codeU = extras.getString(UserCredentials.CODE_U);
+            String codeP = extras.getString(UserCredentials.CODE_P);
+            ApplicationManager.userCredentials = new UserCredentials(new SecurePreferences(this));
 
-                MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
-                selectItem(ajdItem.mClass.getName());
-            }
+            MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
+            selectItem(ajdItem.mClass.getName());
+        }
+
+        if(requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
+            String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+
+            User user = User.getCurrentUser();
+            user.setEmail(accountName);
+
+            ConversationActivity.show(this);
+
         }
     }
 
@@ -209,14 +224,8 @@ public class MainActivity extends Activity {
             MyMenuItem myMenuItem = (MyMenuItem) parent.getItemAtPosition(position);
 
             if (myMenuItem.resId == R.drawable.ic_ico_comment) {
-                // contact; Ask to open email app; prefill email info
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("plain/text");
-                intent.putExtra(Intent.EXTRA_EMAIL,
-                        new String[]{getString(R.string.applets_ens_etsmtl_ca)});
-                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.etsmobile_android_commentaire));
-                intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.default_comment));
-                startActivity(intent);
+                // Opens SupportKit with selected user account
+                selectAccount();
             } else {
                 selectItem(myMenuItem.mClass.getName());
             }
@@ -256,6 +265,12 @@ public class MainActivity extends Activity {
             mDrawerLayout.closeDrawer(mDrawerList);
         }
 
+    }
+
+    private void selectAccount() {
+        Intent intent = AccountPicker.newChooseAccountIntent(null, null,
+                new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
+        startActivityForResult(intent, REQUEST_CODE_EMAIL);
     }
 
     @Override

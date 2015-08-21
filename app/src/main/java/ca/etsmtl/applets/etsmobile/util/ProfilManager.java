@@ -3,7 +3,11 @@ package ca.etsmtl.applets.etsmobile.util;
 import android.content.Context;
 import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
@@ -53,18 +57,18 @@ public class ProfilManager {
         return etudiant;
     }
 
-    public Programme getProgramme() {
+    public List<Programme> getProgrammes() {
         DatabaseHelper dbHelper = new DatabaseHelper(context);
-        Programme programme = null;
+        List<Programme> programmeList = null;
         try {
-            List<Programme> programmeList = dbHelper.getDao(Programme.class).queryForAll();
-            if(!programmeList.isEmpty())
-                // Get Program if exists
-                programme = programmeList.get(0);
+            programmeList = dbHelper.getDao(Programme.class).queryForAll();
+
+            Collections.sort(programmeList, new ProgrammeComparator());
+
         } catch (SQLException e) {
             Log.e("SQL Exception", e.getMessage());
         }
-        return programme;
+        return programmeList;
     }
 
     // Called when a user disconnects

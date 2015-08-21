@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.LinkedHashMap;
 
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
+import ca.etsmtl.applets.etsmobile.ui.adapter.OtherAppsAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
@@ -20,6 +23,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.OtherAppsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.ProfilFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.RadioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
@@ -29,18 +33,24 @@ import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
+import io.fabric.sdk.android.Fabric;
+import io.supportkit.core.SupportKit;
 
 /**
  * Created by Phil on 17/11/13.
  */
 public class ApplicationManager extends Application {
 
-    public static LinkedHashMap<String, MyMenuItem> mMenu = new LinkedHashMap<String, MyMenuItem>(17);
-    public static UserCredentials userCredentials;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+	public static LinkedHashMap<String, MyMenuItem> mMenu = new LinkedHashMap<String, MyMenuItem>(17);
+	public static UserCredentials userCredentials;
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+
+		SupportKit.init(this, getString(R.string.credentials_supportkit));
+		Fabric.with(this, new Crashlytics());
 
         // Section 1 - Moi
         mMenu.put(getString(R.string.menu_section_1_moi),
