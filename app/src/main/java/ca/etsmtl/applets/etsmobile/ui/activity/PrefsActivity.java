@@ -54,7 +54,7 @@ public class PrefsActivity extends PreferenceActivity {
 
             addPreferencesFromResource(R.xml.preferences);
 
-            String[] selections = {"ets"};
+            String[] selections = {"ets","applets"};
             Set<String> selectionSet = new HashSet<String>();
             selectionSet.addAll(Arrays.asList(selections));
 

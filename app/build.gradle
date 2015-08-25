@@ -35,8 +35,8 @@ android {
         applicationId "ca.etsmtl.applets.etsmobile"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 14
-        versionName "2.03"
+        versionCode 15
+        versionName "2.04"
     }
 
     buildTypes {
