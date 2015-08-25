@@ -62,6 +62,15 @@ public class NewsFragment extends HttpFragment {
 
         newsListView = (ListView) v.findViewById(R.id.listView_news);
 
+
+
+		return v;
+	}
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         Date currentDate = new Date();
         Date dateStart = new Date(currentDate.getTime() - (14 * DAY_IN_MS));
 
@@ -89,8 +98,7 @@ public class NewsFragment extends HttpFragment {
 
         dataManager.sendRequest( new AppletsApiNewsRequest(getActivity(),sources,dateDebut,dateFin), NewsFragment.this);
 
-		return v;
-	}
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
