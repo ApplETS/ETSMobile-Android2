@@ -3,7 +3,8 @@
 
     <item
         android:id="@+id/menu_item_sources_news"
-        android:title="Définir les sources">
+        android:showAsAction="collapseActionView|ifRoom"
+        android:title="@string/sources">
     </item>
 
 </menu>

@@ -108,8 +108,14 @@ public class DataManager {
 					
 
 					final SignetsMobileSoap signetsMobileSoap = new SignetsMobileSoap();
-					String username = creds.getUsername();
-					String password = creds.getPassword();
+
+					String username = "";
+					String password = "";
+
+					if(methodID < SignetMethods.BOTTIN_LIST_DEPT || methodID > SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP ) {
+						username = creds.getUsername();
+						password = creds.getPassword();
+					}
 					switch (methodID) {
 					case SignetMethods.INFO_ETUDIANT:
 

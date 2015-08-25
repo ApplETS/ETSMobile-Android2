@@ -6,13 +6,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.kobjects.base64.Base64;
 
-import java.net.HttpURLConnection;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.security.cert.CertificateException;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Iterator;
 
@@ -20,11 +32,11 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
+import ca.etsmtl.applets.etsmobile.util.HTTPSRequest;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -48,79 +60,52 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
     @Override
     public Nouvelles loadDataFromNetwork() throws Exception {
 
-//        String address = context.getString(R.string.applets_api_news, source, startDate, endDate);
-        String address = context.getString(R.string.applets_api_news_all);
+        String address = context.getString(R.string.applets_api_news, source, startDate, endDate);
 
-        TrustManager[] trustAllCerts = new TrustManager[] {
-                new X509TrustManager() {
-                    @Override
-                    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        Nouvelles nouvelles = null;
 
-                    }
+        try {
 
-                    @Override
-                    public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            // Instantiate the custom HttpClient to call Https request
+            DefaultHttpClient client = new HTTPSRequest(context);
+            HttpGet get = new HttpGet(address);
 
-                    }
+            String userCredentials = context.getString(R.string.credentials_api);
+            String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
+            get.setHeader("Authorization", basicAuth);
+            get.setHeader("Content-Type", "application/json; charset=utf-8");
+            String method = get.getMethod();
 
-                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                        return null;
-                    }
+            HttpResponse getResponse = client.execute(get);
+            HttpEntity responseEntity = getResponse.getEntity();
+
+
+            String result = EntityUtils.toString(responseEntity, "UTF-8");;
+            JSONObject root = new JSONObject(result);
+            JSONObject data = root.getJSONObject("data");
+            ObjectMapper mapper = new ObjectMapper();
+            nouvelles = new Nouvelles();
+
+                Iterator keys = data.keys();
+                while (keys.hasNext()) {
+
+                int imageResource = 0;
+                String currentDynamicKey = (String) keys.next();
+
+                imageResource = assignResource(currentDynamicKey);
+
+                JSONArray arrayNews = data.getJSONArray(currentDynamicKey);
+
+                for (int i = 0; i < arrayNews.length(); i++) {
+                    Nouvelle nouvelle = mapper.readValue(arrayNews.getJSONObject(i).toString(), Nouvelle.class);
+                    nouvelle.setImageResource(imageResource);
+                    nouvelles.add(nouvelle);
                 }
-        };
-
-        SSLContext sc = SSLContext.getInstance("SSL");
-        sc.init(null, trustAllCerts, new java.security.SecureRandom());
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-
-        HostnameVerifier allHostsValid = new HostnameVerifier() {
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
             }
-        };
 
-        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-
-        URL url = new URL(address);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-
-
-
-        String userCredentials = context.getString(R.string.credentials_api);
-        String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
-        con.setRequestProperty ("Authorization", basicAuth);
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
-
-        con.setUseCaches(false);
-        con.setDoInput(true);
-        con.setDoOutput(true);
-
-        String result = IOUtils.toString(con.getInputStream());
-
-//        urlConnection.disconnect();
-
-        JSONObject root = new JSONObject(result);
-        JSONObject data = root.getJSONObject("data");
-        ObjectMapper mapper = new ObjectMapper();
-        Nouvelles nouvelles = new Nouvelles();
-
-        Iterator keys = data.keys();
-        while (keys.hasNext()) {
-
-            int imageResource = 0;
-            String currentDynamicKey = (String) keys.next();
-
-            imageResource = assignResource(currentDynamicKey);
-
-            JSONArray arrayNews = data.getJSONArray(currentDynamicKey);
-
-            for (int i = 0; i < arrayNews.length(); i++) {
-                Nouvelle nouvelle = mapper.readValue(arrayNews.getJSONObject(i).toString(), Nouvelle.class);
-                nouvelle.setImageResource(imageResource);
-                nouvelles.add(nouvelle);
-            }
+        }
+        catch(Exception e) {
+            System.out.println(e.getMessage());
         }
 
         return nouvelles;

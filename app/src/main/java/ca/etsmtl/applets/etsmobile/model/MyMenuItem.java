@@ -7,6 +7,7 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class MyMenuItem {
 
+	private boolean requiresLogin;
 	public String title = "";
 	public int resId = R.drawable.ic_launcher;
 	public Class mClass = null;
@@ -16,9 +17,14 @@ public class MyMenuItem {
 		this.mClass = mClass;
 	}
 
-	public MyMenuItem(String title, Class mClass, int resId) {
+	public MyMenuItem(String title, Class mClass, int resId, boolean requiresLogin) {
 		this.title = title;
 		this.mClass = mClass;
 		this.resId = resId;
+		this.requiresLogin = requiresLogin;
+	}
+
+	public boolean hasToBeLoggedOn() {
+		return requiresLogin;
 	}
 }

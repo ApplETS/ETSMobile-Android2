@@ -19,7 +19,10 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,6 +33,7 @@ import ca.etsmtl.applets.etsmobile.http.AppletsApiNewsRequest;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
 import ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity;
+import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -46,7 +50,7 @@ public class NewsFragment extends HttpFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         //Sélection des sources
-//        setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
 	}
 
 	
@@ -57,6 +61,15 @@ public class NewsFragment extends HttpFragment {
 		View v = inflater.inflate(R.layout.fragment_news, container, false);
 
         newsListView = (ListView) v.findViewById(R.id.listView_news);
+
+
+
+		return v;
+	}
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         Date currentDate = new Date();
         Date dateStart = new Date(currentDate.getTime() - (14 * DAY_IN_MS));
@@ -83,23 +96,14 @@ public class NewsFragment extends HttpFragment {
             sources += selectedItems[i] + (i == (selectedItems.length-1)?"":",");
         }
 
-        //todo dataManager.sendRequest( new AppletsApiNewsRequest(getActivity(),sources,dateDebut,dateFin), NewsFragment.this);
+        dataManager.sendRequest( new AppletsApiNewsRequest(getActivity(),sources,dateDebut,dateFin), NewsFragment.this);
 
-
-
-
-
-
-
-
-
-		return v;
-	}
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //Sélection des sources
-//        inflater.inflate(R.menu.menu_news, menu);
+        inflater.inflate(R.menu.menu_news, menu);
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -107,26 +111,18 @@ public class NewsFragment extends HttpFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-//Sélection des sources
-//        switch (item.getItemId()) {
-//
-//            case R.id.menu_item_sources_news:
-//
-//                // Display the fragment as the main content.
-//                Intent i = new Intent(getActivity(), PrefsActivity.class);
-//
-//                getActivity().startActivity(i);
-//
-//                return true;
-//        }
+        //Sélection des sources
+        switch (item.getItemId()) {
 
+            case R.id.menu_item_sources_news:
 
+                // Display the fragment as the main content.
+                Intent i = new Intent(getActivity(), PrefsActivity.class);
 
+                getActivity().startActivity(i);
 
-
-
-
-
+                return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -140,19 +136,24 @@ public class NewsFragment extends HttpFragment {
 	public void onRequestSuccess(Object o) {
 
         if(o instanceof Nouvelles) {
-            Nouvelles nouvelles = (Nouvelles)o;
+
+            Nouvelles nouvelles = (Nouvelles) o;
 
             Collections.sort(nouvelles, new Comparator<Nouvelle>() {
-                DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+                String pattern = "yyyy-MM-dd'T'HH:mm:ssZ";
+                DateTimeFormatter dtf = DateTimeFormat.forPattern(pattern);
 
                 @Override
                 public int compare(Nouvelle nouvelle1, Nouvelle nouvelle2) {
 
-                    DateTime date1 = dateTimeFormatter.parseDateTime(nouvelle1.getUpdated_time());
-                    DateTime date2 = dateTimeFormatter.parseDateTime(nouvelle2.getUpdated_time());
+                    String updatetime = nouvelle1.getUpdated_time();
 
+                    DateTime date1 = dtf.parseDateTime(nouvelle1.getUpdated_time());
 
-                    if(date1.isAfter(date2)){
+                    //DateTime date2 = dateTimeFormatter.parseDateTime(nouvelle2.getUpdated_time());
+                    DateTime date2 = dtf.parseDateTime(nouvelle2.getUpdated_time());
+
+                    if (date1.isAfter(date2)) {
                         return -1;
                     } else if (date1.isBefore(date2)) {
                         return 1;

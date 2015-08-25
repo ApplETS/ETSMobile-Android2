@@ -229,6 +229,8 @@
         <item>GéniALE</item>
     </string-array>
 
+    <string name="sources">Sources</string>
+
 
     <!--Other Apps-->
     <string name="radio_piranha_title">Radio Piranha</string>

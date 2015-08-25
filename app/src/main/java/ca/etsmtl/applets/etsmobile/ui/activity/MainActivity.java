@@ -124,17 +124,20 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
         if (ApplicationManager.userCredentials == null) {
-
-//			Intent intent = new Intent(this, LoginActivity.class);
-//			startActivityForResult(intent, 0);
-
-            MyMenuItem about = ApplicationManager.mMenu.get(AboutFragment.class.getName());
-            selectItem(about.mClass.getName(), 13);
+            if (fragment == null) {
+                selectItem(AboutFragment.class.getName());
+            } else {
+                MyMenuItem myMenuItem = ApplicationManager.mMenu.get(fragment.getTag());
+                if(myMenuItem.hasToBeLoggedOn()) {
+                    selectItem(AboutFragment.class.getName());
+                }
+                selectItem(fragment.getTag());
+            }
         } else {
             if (fragment == null) {
-                MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
-                selectItem(ajdItem.mClass.getName(), 1);
+                selectItem(TodayFragment.class.getName());
             }
         }
     }
@@ -164,7 +167,7 @@ public class MainActivity extends Activity {
             fragment = fragmentManager.getFragment(savedInstanceState, tag);
 
         } else {
-            selectItem(ajdItem.mClass.getName(), 1);
+            selectItem(ajdItem.mClass.getName());
         }
 
     }
@@ -179,8 +182,7 @@ public class MainActivity extends Activity {
             ApplicationManager.userCredentials = new UserCredentials(new SecurePreferences(this));
 
             MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
-            selectItem(ajdItem.mClass.getName(), 1);
-
+            selectItem(ajdItem.mClass.getName());
         }
 
         if(requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
@@ -219,14 +221,13 @@ public class MainActivity extends Activity {
         @SuppressWarnings("rawtypes")
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
-            final Object itemAtPosition = parent.getItemAtPosition(position);
-            MyMenuItem myMenuItem = (MyMenuItem) itemAtPosition;
+            MyMenuItem myMenuItem = (MyMenuItem) parent.getItemAtPosition(position);
 
             if (myMenuItem.resId == R.drawable.ic_ico_comment) {
                 // Opens SupportKit with selected user account
                 selectAccount();
             } else {
-                selectItem(myMenuItem.mClass.getName(), position);
+                selectItem(myMenuItem.mClass.getName());
             }
         }
     }
@@ -235,37 +236,37 @@ public class MainActivity extends Activity {
      * Swaps fragments in the main content view
      */
     @SuppressWarnings("rawtypes")
-    private void selectItem(String key, int position) {
-        // Create a new fragment and specify the planet to show based on
-        // position
+    private void selectItem(String key) {
+        // Create a new fragment and specify the planet to show based on position
         fragment = null;
-        Class aClass = ApplicationManager.mMenu.get(key).mClass;
-        try {
-            fragment = (Fragment) aClass.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        MyMenuItem myMenuItem = ApplicationManager.mMenu.get(key);
 
-        if (position < 6 && ApplicationManager.userCredentials == null) {
+
+        if (myMenuItem.hasToBeLoggedOn() && ApplicationManager.userCredentials == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent, 0);
+        } else {
+            Class aClass = myMenuItem.mClass;
+            try {
+                fragment = (Fragment) aClass.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            // Insert the fragment by replacing any existing fragment
+            final FragmentManager fragmentManager = getFragmentManager();
+
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
+                    .addToBackStack(aClass.getName()).commit();
+
+            // Update the title, and close the drawer
+            setTitle(ApplicationManager.mMenu.get(key).title);
+            mDrawerLayout.closeDrawer(mDrawerList);
         }
 
-        // Insert the fragment by replacing any existing fragment
-        final FragmentManager fragmentManager = getFragmentManager();
-
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
-                .addToBackStack(aClass.getName()).commit();
-
-        // Highlight the selected item, update the title, and close the drawer
-        mDrawerList.setItemChecked(position, true);
-        setTitle(ApplicationManager.mMenu.get(key).title);
-        mDrawerLayout.closeDrawer(mDrawerList);
-
     }
-    
+
     private void selectAccount() {
         Intent intent = AccountPicker.newChooseAccountIntent(null, null,
                 new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
