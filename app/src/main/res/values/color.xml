@@ -7,6 +7,8 @@
     <color name="red">#f23c3b</color>
     <color name="ets_red">#E70033</color>
     <color name="ets_red_fonce">#ffe70033</color>
+    <color name="red_light">#fc7673</color>
+    <color name="ets_red_darker">#af002d</color>
     <color name="ets_red_pale">#3de70033</color>
 	<color name="blue_ets">#4E88BE</color>
     <color name="holoLight">#fff3f3f3</color>
@@ -46,5 +48,29 @@
         <item>@color/violet</item>
         <item>@color/magenta</item>
     </array>
+
+    <color name="SupportKit_accent">@color/ets_red</color>
+    <color name="SupportKit_accentDark">@color/ets_red_darker</color>
+    <color name="SupportKit_accentLight">@color/red_light</color>
+
+    <color name="SupportKit_backgroundInput">#ffffff</color>
+
+    <color name="SupportKit_btnSendHollow">#c0c0c0</color>
+    <color name="SupportKit_btnSendHollowBorder">#303030</color>
+
+    <color name="SupportKit_header">#989898</color>
+
+    <color name="SupportKit_messageDate">@color/SupportKit_header</color>
+    <color name="SupportKit_messageShadow">#7f999999</color>
+
+    <color name="SupportKit_remoteMessageAuthor">@color/SupportKit_header</color>
+    <color name="SupportKit_remoteMessageBackground">#ffffff</color>
+    <color name="SupportKit_remoteMessageBorder">#d9d9d9</color>
+    <color name="SupportKit_remoteMessageText">#000000</color>
+
+    <color name="SupportKit_userMessageBackground">@color/ets_red</color>
+    <color name="SupportKit_userMessageBorder">@color/ets_red_darker</color>
+    <color name="SupportKit_userMessageFailedBackground">@color/red_light</color>
+    <color name="SupportKit_userMessageText">#ffffff</color>
 
 </resources>
