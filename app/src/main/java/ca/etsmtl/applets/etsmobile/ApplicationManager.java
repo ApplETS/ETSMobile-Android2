@@ -42,15 +42,15 @@ import io.supportkit.core.SupportKit;
 public class ApplicationManager extends Application {
 
 
-	public static LinkedHashMap<String, MyMenuItem> mMenu = new LinkedHashMap<String, MyMenuItem>(17);
-	public static UserCredentials userCredentials;
+    public static LinkedHashMap<String, MyMenuItem> mMenu = new LinkedHashMap<String, MyMenuItem>(17);
+    public static UserCredentials userCredentials;
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
+    @Override
+    public void onCreate() {
+        super.onCreate();
 
-		SupportKit.init(this, getString(R.string.credentials_supportkit));
-		Fabric.with(this, new Crashlytics());
+        SupportKit.init(this, getString(R.string.credentials_supportkit));
+        Fabric.with(this, new Crashlytics());
 
         // Section 1 - Moi
         mMenu.put(getString(R.string.menu_section_1_moi),
@@ -161,6 +161,14 @@ public class ApplicationManager extends Application {
                 new MyMenuItem(
                         getString(R.string.menu_section_3_applets),
                         null
+                ));
+
+        mMenu.put(OtherAppsFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_3_apps),
+                        OtherAppsFragment.class,
+                        R.drawable.ic_star_60x60,
+                        false
                 ));
 
         mMenu.put(AboutFragment.class.getName(),
