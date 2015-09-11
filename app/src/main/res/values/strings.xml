@@ -235,4 +235,15 @@
     <!--Other Apps-->
     <string name="radio_piranha_title">Radio Piranha</string>
     <string name="etsmap_title">ÉTSmap</string>
+
+    <!-- Commentaire & contact | SupportKit -->
+    <string name="SupportKit_activityConversation">Messages</string>
+    <string name="SupportKit_startOfConversation">Ce formulaire vous permet d\'échanger avec nous. N\'hésitez donc pas à nous écrire pour tout commentaire ou problèmes rencontrés.</string>
+    <string name="SupportKit_welcome">Nous y donnerons suite dès que possible et nous serons ravis de vous répondre ! =)</string>
+    <string name="SupportKit_messageHint">Saisir un message&#8230;</string>
+    <string name="SupportKit_btnSend">Envoyer</string>
+    <string name="SupportKit_errorSendingMessage">Problème lors de l\'envoi du message. Essayez à nouveau.</string>
+    <string name="SupportKit_errorCouldNotConnect">Connexion au serveur échouée.</string>
+    <string name="SupportKit_errorInvalidToken">Le token de votre application est invalide.</string>
+    <string name="SupportKit_errorUserOffline">Hors ligne. En attente d\'une connexion...</string>
 </resources>
