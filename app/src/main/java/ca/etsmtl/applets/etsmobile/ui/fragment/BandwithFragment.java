@@ -18,7 +18,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -137,6 +139,7 @@ public class BandwithFragment extends Fragment {
     private double[] values;
     private String[] rooms;
     private MultiColorProgressBar progressBar;
+    private ProgressBar loadProgressBar;
     private EditText editTextApp;
     public OnFocusChangeListener onFocusChangeColorEditText = new OnFocusChangeListener() {
         @Override
@@ -162,6 +165,7 @@ public class BandwithFragment extends Fragment {
         editTextApp = (EditText) v.findViewById(R.id.bandwith_editText_app);
         editTextPhase = (EditText) v.findViewById(R.id.bandwith_editText_phase);
         grid = (GridView) v.findViewById(R.id.bandwith_grid);
+        loadProgressBar = (ProgressBar)v.findViewById(R.id.progressBarLoad);
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String phase = defaultSharedPreferences.getString("Phase", "");
@@ -176,8 +180,12 @@ public class BandwithFragment extends Fragment {
             month += 1;
             String url = getActivity().getString(R.string.bandwith_query, phase, app, month);
 
-            if(Utility.isNetworkAvailable(getActivity()))
+            if(Utility.isNetworkAvailable(getActivity())){
+                loadProgressBar.setVisibility(View.VISIBLE);
                 new BandwithAsyncTask().execute(url);
+
+            }
+
         }
         editTextPhase.addTextChangedListener(new TextWatcher() {
 
@@ -269,8 +277,12 @@ public class BandwithFragment extends Fragment {
         String url = getActivity().getString(R.string.bandwith_query, phase, app, month);
 
         savePhaseAppPreferences(phase, app);
-        if(Utility.isNetworkAvailable(getActivity()))
+        if(Utility.isNetworkAvailable(getActivity())){
+            loadProgressBar.setVisibility(View.VISIBLE);
             new BandwithAsyncTask().execute(url);
+
+        }
+
     }
 
     private void savePhaseAppPreferences(String phase, String app) {
@@ -358,6 +370,7 @@ public class BandwithFragment extends Fragment {
         @Override
         protected String doInBackground(String... param) {
             try {
+
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
                 URI uriWeb = new URI(param[0]);
@@ -392,6 +405,7 @@ public class BandwithFragment extends Fragment {
         protected void onPostExecute(String s) {
             if (isAdded()) {
                 try {
+
                     if (!query.getString("results").equals("null")) {
                         JSONObject results = (JSONObject) query.get("results");
                         JSONArray arrayTable = results.getJSONArray("table");
@@ -415,7 +429,7 @@ public class BandwithFragment extends Fragment {
                                     rooms[i] = "■ " + stringArray[1].toString() + " " + values[i] + " Go";
                                 } else {
                                     int j = i + 1;
-                                    rooms[i] = "■ Chambre" + j + " " + values[i] + " Go";
+                                    rooms[i] =  "■ Chambre" + j + " " + values[i] + " Go";
                                 }
                                 i++;
                             }
@@ -436,11 +450,12 @@ public class BandwithFragment extends Fragment {
                     } else {
                         setError(editTextApp, getString(R.string.error_invalid_app));
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
+            loadProgressBar.setVisibility(View.GONE);
 
             super.onPostExecute(s);
 
