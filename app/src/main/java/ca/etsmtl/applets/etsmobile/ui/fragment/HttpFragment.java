@@ -1,6 +1,7 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +48,12 @@ public abstract class HttpFragment extends BaseFragment implements RequestListen
 
 	@Override
 	public void onRequestFailure(SpiceException e) {
-        loadingView.hideProgessBar();
-	    loadingView.setMessageError(getString(R.string.error_JSON_PARSING));
+		Log.w("onRequestFailure httpfr", e);
+		loadingView.hideProgessBar();
+		if (loadingView.isShown()) {
+			loadingView.setMessageError(getString(R.string.error_JSON_PARSING));
+		}
+
 	}
 
 	@Override
