@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="wrap_content"
     android:background="@color/gray"
     android:padding="1dp">
 
     <RelativeLayout
         android:id="@+id/rl_heures_deb_fin"
         android:layout_width="45dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="1dp"
         android:layout_marginStart="1dp">
 
@@ -18,19 +19,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:text="10h30"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="10h30" />
 
         <TextView
             android:id="@+id/tv_today_heure_fin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="12h30"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="12h30" />
 
     </RelativeLayout>
-
 
     <TextView
         android:id="@+id/tv_vertical_separator"
@@ -38,59 +38,59 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="6dp"
         android:layout_marginStart="6dp"
-        android:layout_toEndOf="@+id/rl_heures_deb_fin"
-        android:layout_toRightOf="@+id/rl_heures_deb_fin"
         android:background="@color/ets_red_fonce" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toEndOf="@+id/tv_vertical_separator"
-        android:layout_toRightOf="@+id/tv_vertical_separator"
-        android:background="@color/ets_red_pale">
+        android:background="@color/ets_red_pale"
+        android:orientation="vertical"
+        android:paddingEnd="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingStart="5dp">
 
         <TextView
             android:id="@+id/tv_today_libelle_cours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
-            android:text="Nom du cours complet"
             android:textColor="@color/black"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="Nom du cours complet" />
 
         <TextView
             android:id="@+id/tv_today_cours_groupe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/tv_today_libelle_cours"
-            android:layout_below="@+id/tv_today_libelle_cours"
-            android:text="COM110-01"
             android:textColor="@color/black"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="COM110-01 sauf si le premier jour du mois est un jour impair et que le nom de l'étudiant commence par un P" />
 
-        <TextView
-            android:id="@+id/tv_today_nom_activite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/tv_today_local"
-            android:layout_toRightOf="@+id/tv_today_local"
-            android:text="Cours"
-            android:textColor="@color/black" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_today_local"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginStart="5dp"
-            android:text="A-1240"
-            android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/tv_today_local"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                tools:text="A-1240" />
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_today_nom_activite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/black"
+                tools:text="Cours" />
+
+        </LinearLayout>
 
 
-</RelativeLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

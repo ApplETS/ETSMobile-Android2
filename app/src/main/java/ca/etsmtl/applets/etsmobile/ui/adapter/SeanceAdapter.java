@@ -13,11 +13,13 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.model.Seances;
+import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class SeanceAdapter extends BaseAdapter {
@@ -133,6 +135,8 @@ public class SeanceAdapter extends BaseAdapter {
         listSeances = new ArrayList<>();
         String tempDate = "";
         DateTime today = new DateTime();
+
+        Collections.sort(itemList,new SeanceComparator());
 
         for(Seances seances : itemList) {
 
