@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.Programme;
-import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -85,6 +85,7 @@ public class ProfileAdapter extends BaseAdapter {
                 infoEtudiantViewHolder.tvNomPrenom = (TextView) convertView.findViewById(R.id.profil_nom_prenom_item);
                 infoEtudiantViewHolder.tvCodePermanent = (TextView) convertView.findViewById(R.id.profil_code_permanent_item);
                 infoEtudiantViewHolder.tvSolde = (TextView) convertView.findViewById(R.id.profil_solde_item);
+                infoEtudiantViewHolder.tvCodeUniversel = (TextView) convertView.findViewById(R.id.profil_code_universel_item);
 
                 convertView.setTag(infoEtudiantViewHolder);
 
@@ -114,7 +115,7 @@ public class ProfileAdapter extends BaseAdapter {
 
             infoEtudiantViewHolder.tvCodePermanent.setText(etudiant.codePerm);
             infoEtudiantViewHolder.tvSolde.setText(etudiant.soldeTotal);
-
+            infoEtudiantViewHolder.tvCodeUniversel.setText(ApplicationManager.userCredentials.getUsername());
 
         } else if (position == 1) {
 
@@ -168,6 +169,7 @@ public class ProfileAdapter extends BaseAdapter {
         TextView tvNomPrenom;
         TextView tvCodePermanent;
         TextView tvSolde;
+        TextView tvCodeUniversel;
     }
 
     static class ListProgramViewHolder {
