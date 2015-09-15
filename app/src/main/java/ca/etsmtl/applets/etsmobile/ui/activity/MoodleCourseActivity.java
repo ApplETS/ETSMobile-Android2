@@ -3,6 +3,7 @@ package ca.etsmtl.applets.etsmobile.ui.activity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,36 +20,61 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class MoodleCourseActivity extends Activity {
 
+    int idCours;
+    String nameCours;
+    Fragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("MoodleActivity", "entered onCreate");
         setContentView(R.layout.activity_moodle_course);
 
         if (savedInstanceState == null) {
-
+            Log.w("MoodleActivity", "savedInstance is null");
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
                 return;
             }
 
-            int idCours =  extras.getInt("idCours");
-            String nameCours =  extras.getString("nameCours");
-            if (idCours != 0) {
+            idCours = extras.getInt("idCours");
+            nameCours = extras.getString("nameCours");
 
-                Pattern pattern = Pattern.compile("([A-Z]{3,3}\\d{3,3})");
+            fragment = MoodleCourseDetailsFragment.newInstance(idCours);
+            Log.d("MoodleActivity", "fragment created when saved instance = null with idCours :" + idCours);
 
-                Matcher matcher = pattern.matcher(nameCours);
-                if(matcher.find()) {
-                    setTitle(matcher.group());
-                } else {
-                    setTitle(nameCours);
-                }
-
-                Fragment fragment = MoodleCourseDetailsFragment.newInstance(idCours);
-                getFragmentManager().beginTransaction().add(R.id.container, fragment, "MoodleCourseDetailsFragment").commit();
-            }
-
+            getFragmentManager().beginTransaction().add(R.id.container, fragment, "MoodleCourseDetailsFragment").commit();
+            Log.d("moodleActivity", "fragment shown and created");
+        } else {
+            idCours = savedInstanceState.getInt("idCours");
+            nameCours = savedInstanceState.getString("nameCours");
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("moodleActivity", "entered onResume");
+        if (idCours != 0) {
+
+            Pattern pattern = Pattern.compile("([A-Z]{3,3}\\d{3,3})");
+
+            Matcher matcher = pattern.matcher(nameCours);
+            if (matcher.find()) {
+                setTitle(matcher.group());
+            } else {
+                setTitle(nameCours);
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("idCours", idCours);
+        Log.d("onSaveInstanceState", "registering idCours value = " + idCours);
+        outState.putString("nameCours", nameCours);
+        Log.d("onSaveInstanceState", "registering nameCours = " + nameCours);
     }
 
     @Override
