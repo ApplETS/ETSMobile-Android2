@@ -246,4 +246,5 @@
     <string name="SupportKit_errorCouldNotConnect">Connexion au serveur échouée.</string>
     <string name="SupportKit_errorInvalidToken">Le token de votre application est invalide.</string>
     <string name="SupportKit_errorUserOffline">Hors ligne. En attente d\'une connexion...</string>
+    <string name="profil_code_universel">Code universel</string>
 </resources>
