@@ -115,7 +115,7 @@ public class ProfileAdapter extends BaseAdapter {
 
             infoEtudiantViewHolder.tvCodePermanent.setText(etudiant.codePerm);
             infoEtudiantViewHolder.tvSolde.setText(etudiant.soldeTotal);
-            infoEtudiantViewHolder.tvCodeUniversel.setText(ApplicationManager.userCredentials.getUsername());
+            infoEtudiantViewHolder.tvCodeUniversel.setText((ApplicationManager.userCredentials.getUsername()).toUpperCase());
 
         } else if (position == 1) {
 
