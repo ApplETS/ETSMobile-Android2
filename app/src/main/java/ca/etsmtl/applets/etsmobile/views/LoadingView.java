@@ -30,6 +30,13 @@ public class LoadingView extends RelativeLayout {
         init(context);
     }
 
+    public static void hideLoadingView(LoadingView loadingView) {
+        if (loadingView != null) {
+            loadingView.hideProgessBar();
+            loadingView.setVisibility(View.GONE);
+        }
+    }
+
     public void init(Context context){
         LayoutInflater.from(context).inflate(R.layout.base_layout, this, true);
         progressBar = (ProgressBar) findViewById(R.id.base_layout_loading_pb);
@@ -40,6 +47,7 @@ public class LoadingView extends RelativeLayout {
     public void showLoadingView(){
         this.setVisibility(View.VISIBLE);
     }
+
     public void setMessageError(String text){
         textView.setVisibility(View.VISIBLE);
         textView.setText(text);
@@ -47,12 +55,6 @@ public class LoadingView extends RelativeLayout {
 
     public void hideMessageError(){
         textView.setVisibility(View.GONE);
-    }
-    public static void hideLoadingView(LoadingView loadingView){
-        if(loadingView!=null) {
-            loadingView.hideProgessBar();
-            loadingView.setVisibility(View.GONE);
-        }
     }
 
     public void hideProgessBar(){

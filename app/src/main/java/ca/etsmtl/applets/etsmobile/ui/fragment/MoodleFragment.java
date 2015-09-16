@@ -3,6 +3,7 @@ package ca.etsmtl.applets.etsmobile.ui.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class MoodleFragment extends HttpFragment {
 
     ListView moodleCoursesListView;
     private MoodleCoursesAdapter moodleCoursesAdapter;
+    private String lastInserted;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,14 +53,13 @@ public class MoodleFragment extends HttpFragment {
 
         super.onCreateView(inflater, v, savedInstanceState);
         moodleCoursesListView = (ListView) v.findViewById(R.id.listView_moodle_courses);
+        Log.d("MoodleFragment", "Moodle course list fragment is instantiated");
 
 
         queryMoodleToken();
 
 		return v;
 	}
-
-
 
     @Override
     void updateUI() {
@@ -142,6 +143,7 @@ public class MoodleFragment extends HttpFragment {
 
             }
         }catch (Exception e) {
+            Log.w("MoodleFragment", "Exception caught in onRequestSuccess: " + e);
             if(getActivity()!=null)
                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -160,7 +162,7 @@ public class MoodleFragment extends HttpFragment {
             @Override
             public MoodleCourses loadDataFromNetwork() throws Exception {
                 String url = getActivity().getString(R.string.moodle_api_enrol_get_users_courses, ApplicationManager.userCredentials.getMoodleToken(),moodleProfile.getUserId());
-
+                Log.d("loadDataFromNetwork", "getting url for moodle server class list");
                 return getRestTemplate().getForObject(url, MoodleCourses.class);
             }
         };
@@ -208,7 +210,6 @@ public class MoodleFragment extends HttpFragment {
 
     }
 
-
     /**
      * @deprecated Opens Moodle's official application
      */
@@ -227,7 +228,6 @@ public class MoodleFragment extends HttpFragment {
 		}
 	}
 
-    private String lastInserted;
     private String convertSemesterString(String semester) {
 
         if(semester == null)
