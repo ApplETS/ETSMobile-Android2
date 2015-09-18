@@ -65,6 +65,7 @@ public class TodayAdapter extends BaseAdapter {
         int viewType = getItemViewType(position);
         Object data = getItem(position);
 
+
         if (convertView == null) {
 
             if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_TITLE_EVENT.getValue()) {
