@@ -30,7 +30,6 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
     private static final int TYPE_SEPARATOR = 1;
 
     private LayoutInflater inflater;
-    private RequestListener<Object> listener;
 
     private ArrayList<MoodleCourse> mData = new ArrayList<>();
     private TreeSet<Integer> sectionHeader = new TreeSet<>();
@@ -38,7 +37,6 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
     public MoodleCoursesAdapter(Context context, int rowLayoutResourceId, RequestListener<Object> listener) {
         super(context, rowLayoutResourceId);
         this.inflater = LayoutInflater.from(context);
-        this.listener = listener;
     }
     public void addCourse(final MoodleCourse course) {
         mData.add(course);
@@ -85,7 +83,8 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
             holder = (ViewHolder) view.getTag();
         } else {
             holder = new ViewHolder();
-            switch(getItemViewType(position)) {
+        }
+        switch (getItemViewType(position)) {
                 case TYPE_COURSE:
                     view = inflater.inflate(R.layout.row_moodle_course, parent, false);
                     final MoodleCourse item = getItem(position);
@@ -95,42 +94,38 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
                     // Extracts course and group
                     Pattern pattern = Pattern.compile("([A-Z]{3,3}\\d{3,3}(-.[^ ]*)?)");
                     Matcher matcher = pattern.matcher(item.getFullname());
-                    if(matcher.find())
+                    if (matcher.find())
                         holder.tvCourseSigle.setText(matcher.group(1));
                     else {
                         holder.tvCourseSigle.setText(item.getFullname());
                         view.setTag(holder);
                         break;
                     }
-
+                    
                     //Extracts course's full name and session
                     pattern = Pattern.compile("(?:[^ ]* )(.*)");
                     matcher = pattern.matcher(item.getFullname());
-                    if(matcher.find())
+                    if (matcher.find())
                         holder.tvCourseName.setText(matcher.group(1).replace("(", "{").split("\\{")[0]);
-
+                    else {
+                        holder.tvCourseName.setText(item.getFullname());
+                    }
                     view.setTag(holder);
                     break;
 
                 case TYPE_SEPARATOR:
                     view = inflater.inflate(R.layout.list_separator_moodle, parent, false);
-                    holder.tvCourseSigle = (TextView) view.findViewById(R.id.textViewSeparator);
-                    holder.tvCourseSigle.setText(getItem(position).getFullname());
+                    holder.tvCourseSeperator = (TextView) view.findViewById(R.id.textViewSeparator);
+                    holder.tvCourseSeperator.setText(getItem(position).getFullname());
                     view.setTag(holder);
                     break;
             }
-
-        }
-
         return view;
     }
-
-
 
     static class ViewHolder {
         TextView tvCourseSigle;
         TextView tvCourseName;
-
+        TextView tvCourseSeperator;
     }
-
 }

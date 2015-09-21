@@ -139,8 +139,6 @@ public class MoodleFragment extends HttpFragment {
                 });
 
                 super.onRequestSuccess(null);
-
-
             }
         }catch (Exception e) {
             Log.w("MoodleFragment", "Exception caught in onRequestSuccess: " + e);
