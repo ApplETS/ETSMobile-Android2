@@ -11,9 +11,9 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import org.joda.time.DateTime;
 
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Observable;
@@ -21,7 +21,6 @@ import java.util.Observer;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
@@ -29,6 +28,7 @@ import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
+import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -112,9 +112,10 @@ public class TodayFragment extends HttpFragment implements Observer {
             try {
                 SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA_FRENCH);
                 listSeances = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
+                Collections.sort(listSeances, new SeanceComparator());
                 events = (ArrayList<Event>) databaseHelper.getDao(Event.class).queryBuilder().where().like("startDate", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
 
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
