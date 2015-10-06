@@ -19,6 +19,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.CommentairesFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
@@ -191,6 +192,14 @@ public class ApplicationManager extends Application {
                 new MyMenuItem(
                         getString(R.string.menu_section_3_sponsors),
                         SponsorsFragment.class,
+                        R.drawable.ic_ico_partners,
+                        false
+                ));
+
+        mMenu.put(FAQFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_3_faq),
+                        FAQFragment.class,
                         R.drawable.ic_ico_partners,
                         false
                 ));
