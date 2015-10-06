@@ -1,7 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,8 +51,6 @@ public class SponsorsFragment extends HttpFragment {
 
 	@Override
 	public void onRequestFailure(SpiceException e) {
-		super.onRequestFailure(e);
-		Log.d("SponsorFragFail", "FAAAAAIIIILLL");
 	}
 
 	@Override
