@@ -200,7 +200,7 @@ public class ApplicationManager extends Application {
                 new MyMenuItem(
                         getString(R.string.menu_section_3_faq),
                         FAQFragment.class,
-                        R.drawable.ic_ico_partners,
+                        R.drawable.ic_ico_faq,
                         false
                 ));
 
