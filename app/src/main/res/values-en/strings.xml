@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ÉTSMobile</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+    <string name="drawer_title">Menu</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+
+    <!-- MENU -->
+    <!-- Section 1 Moi-->
+    <string name="menu_section_1_moi">Me</string>
+    <string name="menu_section_1_ajd">Today</string>
+    <string name="menu_section_1_horaire">Schedule</string>
+    <string name="menu_section_1_notes">Grades</string>
+    <string name="menu_section_1_stages">Internships</string>
+    <string name="menu_section_1_profil">Profile</string>
+    <string name="menu_section_1_bandwith">Bandwidth</string>
+
+    <!--Section 2 ÉTS-->
+    <string name="menu_section_2_ets">ÉTS</string>
+    <string name="menu_section_2_news">News</string>
+    <string name="menu_section_2_bottin">Directory</string>
+    <string name="menu_section_2_biblio">Library</string>
+    <string name="menu_section_2_moodle">Moodle</string>
+    <string name="menu_section_2_radio">Radio</string>
+    <string name="menu_section_2_securite">Security</string>
+    <!-- Section 3 ApplETS-->
+    <string name="menu_section_3_applets">ApplETS</string>
+    <string name="menu_section_3_comms">Problem or comments ?</string>
+    <string name="menu_section_3_about">About ÉTSMobile</string>
+    <string name="menu_section_3_sponsors">Our partners</string>
+    <string name="menu_section_3_apps">Our achievements</string>
+    <string name="menu_section_3_faq">FAQ</string>
+
+
+    <!-- Moodle Page -->
+    <string name="activity_moodle_titre">Moodle instructions</string>
+    <string name="activity_moodle_url_text">Website url to use:</string>
+    <string name="activity_moodle_nom">Username:</string>
+    <string name="activity_moodle_code_universelle">Your universal code</string>
+    <string name="activity_moodle_pwd">Password</string>
+    <string name="activity_moodle_pwd_instruc">University password</string>
+    <string name="activity_moodle_app">Moodle App</string>
+    <string name="applets_about">ÉTSMobile was conceived by the ApplETS scientific club from the École de technologie supérieure.\n\nApplets is, most importantly, a gathering of students who share a typical enthusiasm for the field of telecommunications and mobile applications.
+        The mission of ApplETS is to train students in mobile development and promote the production of mobile applications within the student community.\n\nFor more information, please consult our website : \n\nhttp://clubapplets.ca</string>
+    <string name="applets_ens_etsmtl_ca">applets@ens.etsmtl.ca</string>
+    <string name="etsmobile_android_commentaire">ETSMobile-Android : Comments</string>
+    <string name="default_comment"></string>
+
+    <!-- Radio Page -->
+    <string name="desc_radio">Radio Piranha, ÉTS student radio</string>
+    <string name="listing">Listen</string>
+
+    <!-- Note detail Page -->
+    <string name="mesCours">My classes</string>
+    <string name="sommaire">Summary</string>
+    <string name="mesNotes">My grades</string>
+    <string name="cote">Performance rating</string>
+    <string name="noteACejour">Current grade</string>
+    <string name="moyenne">Average</string>s
+    <string name="ecartType">Standard deviation</string>
+    <string name="mediane">Median</string>
+    <string name="rangCentile">Percentile rank</string>
+    <string name="ponderation">Weighting</string>
+    <string name="noteOnPourcent">%1$s/%2$s (%3$s%%)</string>
+
+    <!-- Profil Page -->
+    <string name="profil_nom_prenom">Name, First name</string>
+    <string name="profil_code_permanent">Permanent code</string>
+    <string name="profil_solde">Balance</string>
+    <string name="profil_programme">Program</string>
+    <string name="profil_credit_reussis">Accumulated credits</string>
+    <string name="profil_cours_reussis">Completed courses</string>
+    <string name="profil_cours_echoue">Failed courses</string>
+    <string name="profil_credit_inscrit">Credits registered for</string>
+    <string name="profil_moyenne">Average</string>
+    <string name="profil_logout">logout</string>
+    <string name="profil_credit_potentiel">Potential credits</string>
+    <string name="profil_cours_equivalent">Equivalent courses</string>
+
+    <!-- wifi bandwith -->
+    <string name="bandwith_phase">Phase</string>
+    <string name="bandwith_app">Apt</string>
+    <string name="_0">0</string>
+    <string name="utilise">Remaining:</string>
+    <string name="gigaoctetx">GB</string>
+    <string name="error_invalid_app">Error invalid apartment number</string>
+    <string name="error_invalid_phase">Error invalid phase</string>
+
+    <!-- Securite -->
+    <string name="secu_title1">Reach security</string>
+    <string name="secu_phone_lbl">514–396–8900</string>
+    <string name="secu_title2">Emergency procedures</string>
+    <string name="secu_appel_lbl">Emergency call</string>
+    <string name="secu_ext_lbl">Ext.</string>
+    <string name="secu_ext">From inside campus</string>
+    <string name="secu_title">Security</string>
+    <string name="welcome">Welcome!</string>
+    <string name="Aujourdhui">Today</string>
+    <string name="voirPDF">See PDF</string>
+
+    <string-array name="secu_urgence">
+        <item>Bomb threat</item>
+        <item>Suspicious package</item>
+        <item>Fire</item>
+        <item>Suspicious smell</item>
+        <item>Elevator malfunction</item>
+        <item>Power outage</item>
+        <item>Armed person</item>
+        <item>Medical emergency</item>
+    </string-array>
+
+    <!-- Urgence -->
+    <string name="appel_d_apos_urgence">Emergency call</string>
+    <string name="default_error_message">Error Message</string>
+    <string name="error_JSON_PARSING">Error retrieving data.</string>
+    <string name="today_url_format">http://api.clubapplets.ca/signets/card/login?id=1</string>
+    <string name="error_loading_profile">Error loading profile</string>
+    <string name="lundi_le_26_avril">Monday, April 26</string>
+    <string name="menu_botin_search_title">search</string>
+    <string name="categories">Categories</string>
+    <string name="title_activity_moodle_course">MoodleCourseActivity</string>
+    <string name="title_activity_news_details">NewsDetailsActivity</string>
+    <string name="title_activity_bottin_details">BottinDetailsActivity</string>
+    <string name="title_activity_notes_details">NotesDetailsActivity</string>
+
+
+    <!--Today  -->
+    <string name="today_course">My classes</string>
+    <string name="today_event">Events</string>
+    <string name="horaire">Horaire du %1$s %3$s %2$s</string>
+    <string name="date_text">%1$s %3$s %2$s</string>
+    <string name="export_calendar">Export</string>
+
+    <!-- Nouvelles -->
+    <string-array name="sources_news_values">
+        <item>ets</item>
+        <item>substance</item>
+        <item>centresportif</item>
+        <item>applets</item>
+        <item>esports</item>
+        <item>rafale</item>
+        <item>rockanddance</item>
+        <item>conjure</item>
+        <item>rockets</item>
+        <item>phoenix</item>
+        <item>avioncargo</item>
+        <item>clubcycliste</item>
+        <item>football</item>
+        <item>ingenieuses</item>
+        <item>debatpiranha</item>
+        <item>radiopiranha</item>
+        <item>walkingmachine</item>
+        <item>atlhetsiques</item>
+        <item>aeets</item>
+        <item>rugby</item>
+        <item>bibliotheque</item>
+        <item>capra</item>
+        <item>ieee</item>
+        <item>pontpop</item>
+        <item>omer</item>
+        <item>baja</item>
+        <item>canoedebeton</item>
+        <item>chinook</item>
+        <item>sonia</item>
+        <item>lanets</item>
+        <item>formuleets</item>
+        <item>eclipse</item>
+        <item>turbulence</item>
+        <item>preci</item>
+        <item>reflets</item>
+        <item>crabeets</item>
+        <item>decliq</item>
+        <item>quiets</item>
+        <item>dronolab</item>
+        <item>liets</item>
+        <item>radiosansgenie</item>
+        <item>coopets</item>
+        <item>integrale</item>
+        <item>geniale</item>
+    </string-array>
+
+    <string-array name="sources_news">
+        <item>ÉTS</item>
+        <item>Substance</item>
+        <item>Centre Sportif</item>
+        <item>ApplETS</item>
+        <item>EsporTS</item>
+        <item>Rafale</item>
+        <item>Rock &amp; Dance</item>
+        <item>Conjure</item>
+        <item>RockETS</item>
+        <item>Phoenix</item>
+        <item>Avion Cargo</item>
+        <item>Club Cycliste</item>
+        <item>Football</item>
+        <item>Ingénieuses</item>
+        <item>Débat Piranha</item>
+        <item>Radio Piranha</item>
+        <item>Walking Machine</item>
+        <item>Atlhétsiques</item>
+        <item>AÉÉTS</item>
+        <item>Rugby</item>
+        <item>Bibliothèque</item>
+        <item>Capra</item>
+        <item>IEEE</item>
+        <item>Pontpop</item>
+        <item>Omer</item>
+        <item>Baja</item>
+        <item>Canoë de béton</item>
+        <item>Chinook</item>
+        <item>Sonia</item>
+        <item>LanETS</item>
+        <item>Formule ETS</item>
+        <item>Eclipse</item>
+        <item>Turbulence</item>
+        <item>PRÉCI</item>
+        <item>Reflets</item>
+        <item>Crabe ÉTS</item>
+        <item>DécliQ</item>
+        <item>QuiETS</item>
+        <item>Dronolab</item>
+        <item>LiÉTS</item>
+        <item>Radio Sans Génie</item>
+        <item>Coop ÉTS</item>
+        <item>Intégrale</item>
+        <item>GéniALE</item>
+    </string-array>
+
+    <string name="sources">Sources</string>
+
+    <!--Other Apps-->
+    <string name="radio_piranha_title">Radio Piranha</string>
+    <string name="etsmap_title">ÉTSmap</string>
+
+    <!-- Commentaire & contact | SupportKit -->
+    <string name="SupportKit_activityConversation">Messages</string>
+    <string name="SupportKit_startOfConversation">This form allows you to communicate with us. Do not hesitate to contact us for any comments or problems.</string>
+    <string name="SupportKit_welcome">We will respond as soon as possible and will be happy to answer you! =)</string>
+    <string name="SupportKit_messageHint">Enter message&#8230;</string>
+    <string name="SupportKit_btnSend">Send</string>
+    <string name="SupportKit_errorSendingMessage">An error occurred while sending your message. Please try again.</string>
+    <string name="SupportKit_errorCouldNotConnect">Failed to connect to server</string>
+    <string name="SupportKit_errorInvalidToken">Your application token is not valid</string>
+    <string name="SupportKit_errorUserOffline">Offline. Awaiting connection...</string>
+    <string name="profil_code_universel">Universal code</string>
+
+</resources>
