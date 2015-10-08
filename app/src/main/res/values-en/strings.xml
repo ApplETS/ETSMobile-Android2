@@ -95,8 +95,8 @@
     <string name="secu_phone_lbl">514–396–8900</string>
     <string name="secu_title2">Emergency procedures</string>
     <string name="secu_appel_lbl">Emergency call</string>
-    <string name="secu_ext_lbl">Ext.</string>
-    <string name="secu_ext">From inside campus</string>
+    <string name="secu_ext_lbl">From inside campus</string>
+    <string name="secu_ext">Ext. 55</string>
     <string name="secu_title">Security</string>
     <string name="welcome">Welcome!</string>
     <string name="Aujourdhui">Today</string>
