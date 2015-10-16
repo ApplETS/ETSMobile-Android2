@@ -97,7 +97,12 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 		return v;
 	}
 
-	@Override
+    @Override
+    void updateUI() {
+        
+    }
+
+    @Override
 	public void onStart() {
 		dataManager.getDataFromSignet(SignetMethods.LIST_EVAL, ApplicationManager.userCredentials, this, session, groupe, sigle);
 		super.onStart();
