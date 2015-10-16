@@ -1,6 +1,8 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -28,6 +30,8 @@ import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
+import ca.etsmtl.applets.etsmobile.util.Constants;
+import ca.etsmtl.applets.etsmobile.util.ETSMobileAuthenticator;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.fabric.sdk.android.Fabric;
@@ -50,6 +54,7 @@ public class MainActivity extends Activity {
     private ActionBarDrawerToggle mDrawerToggle;
     private Fragment fragment;
     private String TAG = "FRAGMENTTAG";
+    private AccountManager mAccountManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,8 @@ public class MainActivity extends Activity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        mAccountManager = AccountManager.get(this);
 
         // Set the adapter for the list view
         int stringSet = ApplicationManager.mMenu.keySet().size();
@@ -175,15 +182,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0 && resultCode > 0) {
-            Bundle extras = data.getExtras();
-            String codeU = extras.getString(UserCredentials.CODE_U);
-            String codeP = extras.getString(UserCredentials.CODE_P);
-            ApplicationManager.userCredentials = new UserCredentials(new SecurePreferences(this));
-
-            MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
-            selectItem(ajdItem.mClass.getName());
-        }
 
         if(requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
             String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
@@ -243,8 +241,14 @@ public class MainActivity extends Activity {
 
 
         if (myMenuItem.hasToBeLoggedOn() && ApplicationManager.userCredentials == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivityForResult(intent, 0);
+
+            final AccountManagerFuture<Bundle> future = mAccountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
+                @Override
+                public void run(AccountManagerFuture<Bundle> future) {
+                    //Login successful
+                }
+            }, null);
+
         } else {
             Class aClass = myMenuItem.mClass;
             try {
