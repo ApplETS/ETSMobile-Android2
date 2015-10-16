@@ -1,5 +1,7 @@
 package ca.etsmtl.applets.etsmobile;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
@@ -30,6 +32,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.RadioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
+import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
@@ -204,12 +207,18 @@ public class ApplicationManager extends Application {
                         false
                 ));
 
-        SecurePreferences securePreferences = new SecurePreferences(this);
-        String u = securePreferences.getString(UserCredentials.CODE_U, "");
-        String p = securePreferences.getString(UserCredentials.CODE_P, "");
 
-        if (u.length() > 0 && p.length() > 0) {
-            userCredentials = new UserCredentials(u, p);
+        AccountManager accountManager = AccountManager.get(this);
+        Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
+        String username = "", password = "";
+
+        if (accounts.length > 0) {
+            username = accounts[0].name;
+            password = accountManager.getPassword(accounts[0]);
+        }
+
+        if (username.length() > 0 && password.length() > 0) {
+            userCredentials = new UserCredentials(username, password);
         }
     }
 
@@ -223,6 +232,13 @@ public class ApplicationManager extends Application {
         // Enlever le profil de la DB SQLite
         new ProfilManager(activity).removeProfil();
         new NoteManager(activity).remove();
+
+        AccountManager accountManager = AccountManager.get(activity);
+
+        Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
+        for (int index = 0; index < accounts.length; index++) {
+            accountManager.removeAccount(accounts[index], null, null);
+        }
 
         ApplicationManager.userCredentials = null;
         Intent intent = new Intent(activity, MainActivity.class);

@@ -216,10 +216,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 Log.v("LoginActivity", "LoginActivity: o=" + o);
                 ApplicationManager.userCredentials = userCredentials;
 
-                SecurePreferences securePreferences = new SecurePreferences(this);
-                securePreferences.edit().putString(userCredentials.CODE_U, userCredentials.getUsername()).commit();
-                securePreferences.edit().putString(userCredentials.CODE_P, userCredentials.getPassword()).commit();
-
                 new AuthentificationPortailTask().execute(
                         getString(R.string.portail_api_authentification_url),
                         ApplicationManager.userCredentials.getUsername(),
