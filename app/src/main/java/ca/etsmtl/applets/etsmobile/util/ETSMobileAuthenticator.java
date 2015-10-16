@@ -10,7 +10,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
+
 import ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity;
+import ca.etsmtl.applets.etsmobile2.R;
 
 import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
 
@@ -58,6 +67,35 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
         final AccountManager am = AccountManager.get(mContext);
 
         String authToken = am.peekAuthToken(account, authTokenType);
+
+        // Lets give another try to authenticate the user
+        if (TextUtils.isEmpty(authToken)) {
+            final String password = am.getPassword(account);
+            final String username = account.name;
+
+            if (password != null) {
+
+                OkHttpClient client = new OkHttpClient();
+
+                MediaType mediaType = MediaType.parse("application/json");
+                RequestBody body = RequestBody.create(mediaType, "{\n  \"Username\": \"" + username + "\",\n  \"Password\": \"" + password + "\"\n}");
+                Request request = new Request.Builder()
+                        .url(mContext.getString(R.string.portail_api_authentification_url))
+                        .post(body)
+                        .addHeader("content-type", "application/json")
+                        .addHeader("cache-control", "no-cache")
+                        .build();
+
+                Response httpResponse = null;
+
+                try {
+                    httpResponse = client.newCall(request).execute();
+                    authToken = httpResponse.header("Set-Cookie");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
 
         // If we get an authToken - we return it
