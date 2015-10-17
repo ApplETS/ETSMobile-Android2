@@ -12,6 +12,8 @@ public class Constants {
     public static final String PARAM_USER_PASS = "USER_PASS";
     public static final String AUTH_TOKEN_TYPE = "BASIC";
     public static final String ACCOUNT_TYPE = "ca.etsmtl.applets.etsmobile";
+    public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
 
 
 }

@@ -99,7 +99,7 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 
     @Override
     void updateUI() {
-        
+
     }
 
     @Override
