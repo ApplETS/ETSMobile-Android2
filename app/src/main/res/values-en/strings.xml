@@ -35,6 +35,11 @@
     <string name="menu_section_3_apps">Our achievements</string>
     <string name="menu_section_3_faq">FAQ</string>
 
+    <!-- Bottin -->
+    <string name="toast_Connection_Required">An internet connection is required to load the directory</string>
+    <string name="dialog_Loading_Directory">Loading directory</string>
+    <string name="menu_bottin_refresh">Refresh directory</string>
+
 
     <!-- Moodle Page -->
     <string name="activity_moodle_titre">Moodle instructions</string>
@@ -59,13 +64,14 @@
     <string name="sommaire">Summary</string>
     <string name="mesNotes">My grades</string>
     <string name="cote">Performance rating</string>
+    <string name="moyenne">Average</string>
     <string name="noteACejour">Current grade</string>
-    <string name="moyenne">Average</string>s
     <string name="ecartType">Standard deviation</string>
     <string name="mediane">Median</string>
     <string name="rangCentile">Percentile rank</string>
-    <string name="ponderation">Weighting</string>
+    <string name="ponderation">Relative weight</string>
     <string name="noteOnPourcent">%1$s/%2$s (%3$s%%)</string>
+    <string name="toast_Sync_Fail">Syncronization failed</string>
 
     <!-- Profil Page -->
     <string name="profil_nom_prenom">Name, First name</string>
@@ -131,9 +137,13 @@
     <!--Today  -->
     <string name="today_course">My classes</string>
     <string name="today_event">Events</string>
-    <string name="horaire">Horaire du %1$s %3$s %2$s</string>
+    <string name="horaire">Schedule for %1$s %3$s %2$s</string>
     <string name="date_text">%1$s %3$s %2$s</string>
     <string name="export_calendar">Export</string>
+
+    <!-- Horaire -->
+    <string name="toast_Calendar_Update_Error">An error occurred while updating the calendar.</string>
+    <string name="dialog_Updating_Calendar">Updating calendar...</string>
 
     <!-- Nouvelles -->
     <string-array name="sources_news_values">

@@ -249,7 +249,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
                 // Si l'appareil est connecté sur internet, télécharger le bottin en ligne
                 if (Utility.isNetworkAvailable(getActivity())) {
                     try {
-                        mProgressDialog = ProgressDialog.show(getActivity(), null,"Chargement du bottin en cours", true);
+                        mProgressDialog = ProgressDialog.show(getActivity(), null, getString(R.string.dialog_Loading_Directory), true);
                         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                         DataManager datamanager = DataManager.getInstance(getActivity());
                         datamanager.getDataFromSignet(
@@ -260,7 +260,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
                     }
                     // Si l'appareil n'est pas connecté sur internet, envoyer un message
                 } else {
-                    Toast.makeText(getActivity(), "Une connexion internet est requise pour télécharger le bottin", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.toast_Connection_Required), Toast.LENGTH_LONG).show();
                 }
             }
         } catch (Exception e) {

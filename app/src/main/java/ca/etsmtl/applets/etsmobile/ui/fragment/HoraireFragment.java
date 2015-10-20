@@ -55,7 +55,8 @@ public class HoraireFragment extends HttpFragment implements Observer {
     private DateTime dateTime = new DateTime();
     private DatabaseHelper databaseHelper;
     private ProgressBar progressBarSyncHoraire;
-    private SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA_FRENCH);
+//    private SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA_FRENCH);
+//    private SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -75,7 +76,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
                     private Exception exception = null;
 
                     protected void onPreExecute() {
-                        customProgressDialog = new CustomProgressDialog(getActivity(), R.drawable.loading_spinner, "Mise à jour du calendrier en cours");
+                        customProgressDialog = new CustomProgressDialog(getActivity(), R.drawable.loading_spinner, getString(R.string.dialog_Updating_Calendar));
                         customProgressDialog.show();
                     }
 
@@ -93,7 +94,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
 
                         customProgressDialog.dismiss();
                         if (exception != null) {
-                            Toast.makeText(getActivity(), "Une erreur est survenue lors de la mise à jour du calendrier.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), getString(R.string.toast_Calendar_Update_Error), Toast.LENGTH_SHORT).show();
                         } else {
 
                             //Launch native calendar app
@@ -165,7 +166,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
         progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 //        customProgressDialog.dismiss();
         if(getActivity() != null)
-            Toast.makeText(getActivity(), "La synchronisation a échoué.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT).show();
     }
 
     @Override

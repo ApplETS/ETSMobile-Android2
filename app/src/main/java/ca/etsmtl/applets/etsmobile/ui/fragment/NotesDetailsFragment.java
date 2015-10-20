@@ -112,7 +112,7 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 
         progressBarDetailsNotes.setVisibility(ProgressBar.GONE);
         if(getActivity() != null)
-            Toast.makeText(getActivity(), "La synchronisation a échoué.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT).show();
 
 	}
 
