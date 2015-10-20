@@ -18,11 +18,6 @@ import java.util.LinkedList;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.supportkit.core.GcmService;
-import io.supportkit.core.Message;
-import io.supportkit.core.facade.d;
-import io.supportkit.core.facade.k;
-import io.supportkit.core.model.h;
-import io.supportkit.core.utils.f;
 
 /**
  * Created by gnut3ll4 on 16/10/15.

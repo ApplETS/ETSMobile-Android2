@@ -268,7 +268,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
 
             final Intent res = new Intent();
             res.putExtra(AccountManager.KEY_ACCOUNT_NAME, username);
-            res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, "ca.etsmtl.applets.etsmobile");
+            res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
             res.putExtra(AccountManager.KEY_AUTHTOKEN, authCookie);
 
             res.putExtra(Constants.PARAM_USER_PASS, password);
