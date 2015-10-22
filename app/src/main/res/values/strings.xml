@@ -7,6 +7,8 @@
     <string name="drawer_title">Menu</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="contact_creation_failed">Echec de la création du contact</string>
+    <string name="cannot_open_file">Aucune application ne peut ouvrir ce fichier</string>
   
 
     <!-- MENU -->
