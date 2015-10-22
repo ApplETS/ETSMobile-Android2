@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 
 public class RegistrationIntentService extends IntentService {
@@ -97,7 +99,7 @@ public class RegistrationIntentService extends IntentService {
         CreateEndpointJob worker = new CreateEndpointJob(getApplicationContext());
 
         //TODO put application ARN in a property file
-        worker.setThreadProperties(token, "TestETSMobile", "***REMOVED***");
+        worker.setThreadProperties(token, ApplicationManager.domaine+"\\"+ApplicationManager.userCredentials.getUsername(), "***REMOVED***");
         executor.execute(worker);
     }
 

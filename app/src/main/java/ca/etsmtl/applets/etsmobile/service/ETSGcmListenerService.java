@@ -40,9 +40,7 @@ public class ETSGcmListenerService extends GcmService {
         if (TextUtils.equals(data.getString("origin"), "SupportKit")) {
             super.onMessageReceived(from, data);
         } else {
-            String message = data.getString("message");
-            Log.d(TAG, "From: " + from);
-            Log.d(TAG, "Message: " + message);
+
 
             /**
              * Production applications would usually process the message here.
@@ -55,7 +53,7 @@ public class ETSGcmListenerService extends GcmService {
              * In some cases it may be useful to show a notification indicating to the user
              * that a message was received.
              */
-            sendNotification(message);
+            sendNotification(data);
         }
     }
     // [END receive_message]
@@ -63,19 +61,32 @@ public class ETSGcmListenerService extends GcmService {
     /**
      * Create and show a simple notification containing the received GCM message.
      *
-     * @param message GCM message received.
+     * @param data GCM message received.
      */
-    private void sendNotification(String message) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+    private void sendNotification(Bundle data) {
+
+        String notificationTexte = data.getString("NotificationTexte");
+        String notificationApplicationNom = data.getString("NotificationApplicationNom");
+        String notificationSigleCours = data.getString("NotificationSigleCours");
+        String url = data.getString("Url");
+        String notificationDateDebutAffichage = data.getString("NotificationDateDebutAffichage");
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
+
+
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+//                PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_ets)
-                .setContentTitle("GCM Message")
-                .setContentText(message)
+                .setContentTitle(notificationApplicationNom)
+                .setContentText(notificationTexte)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
