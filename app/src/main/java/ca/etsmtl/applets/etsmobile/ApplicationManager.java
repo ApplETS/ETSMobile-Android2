@@ -10,12 +10,14 @@ import android.preference.PreferenceManager;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
+import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
+import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
-import ca.etsmtl.applets.etsmobile.ui.adapter.OtherAppsAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
@@ -35,7 +37,6 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
-import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.fabric.sdk.android.Fabric;
 import io.supportkit.core.SupportKit;
@@ -52,6 +53,8 @@ public class ApplicationManager extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        createDatabaseTables();
 
         SupportKit.init(this, getString(R.string.credentials_supportkit));
         Fabric.with(this, new Crashlytics());
@@ -252,5 +255,17 @@ public class ApplicationManager extends Application {
             }
         }).start();
 
+    }
+
+    /**
+     * Creates database tables in advance to avoid heavy processing during login
+     */
+    private void createDatabaseTables() {
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        try {
+            databaseHelper.getDao(Etudiant.class).queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
