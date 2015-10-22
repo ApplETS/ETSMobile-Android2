@@ -21,16 +21,13 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
