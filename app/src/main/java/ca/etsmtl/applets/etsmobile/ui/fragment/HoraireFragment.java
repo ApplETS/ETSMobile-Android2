@@ -55,8 +55,6 @@ public class HoraireFragment extends HttpFragment implements Observer {
     private DateTime dateTime = new DateTime();
     private DatabaseHelper databaseHelper;
     private ProgressBar progressBarSyncHoraire;
-//    private SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA_FRENCH);
-//    private SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
