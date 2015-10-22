@@ -136,6 +136,7 @@
 
     <!--Today  -->
     <string name="today_course">My classes</string>
+    <string name="today_no_classes">No classes today.</string>
     <string name="today_event">Events</string>
     <string name="horaire">Schedule for %1$s %3$s %2$s</string>
     <string name="date_text">%1$s %3$s %2$s</string>
