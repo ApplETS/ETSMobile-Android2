@@ -14,6 +14,9 @@ public class Constants {
     public static final String ACCOUNT_TYPE = "ca.etsmtl.applets.etsmobile";
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
+    public static final String TYPE_USAGER_ID = "TypeUsagerId";
+    public static final String DOMAINE = "Domaine";
+
 
 
 }

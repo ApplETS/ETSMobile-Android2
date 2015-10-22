@@ -37,6 +37,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
+import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.fabric.sdk.android.Fabric;
 import io.supportkit.core.SupportKit;
@@ -49,6 +50,8 @@ public class ApplicationManager extends Application {
 
     public static LinkedHashMap<String, MyMenuItem> mMenu = new LinkedHashMap<String, MyMenuItem>(17);
     public static UserCredentials userCredentials;
+    public static String domaine;
+    public static int typeUsagerId;
 
     @Override
     public void onCreate() {
@@ -223,6 +226,16 @@ public class ApplicationManager extends Application {
         if (username.length() > 0 && password.length() > 0) {
             userCredentials = new UserCredentials(username, password);
         }
+
+        SecurePreferences securePreferences = new SecurePreferences(this);
+        int typeUsagerId = securePreferences.getInt(Constants.TYPE_USAGER_ID, -1);
+        String domaine = securePreferences.getString(Constants.DOMAINE, "");
+
+        if(typeUsagerId != -1 && !domaine.equals("")) {
+            ApplicationManager.typeUsagerId = typeUsagerId;
+            ApplicationManager.domaine = domaine;
+        }
+
     }
 
     public static void deconnexion(final Activity activity) {
