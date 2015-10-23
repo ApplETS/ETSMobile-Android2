@@ -323,7 +323,7 @@ public class ContactAdderFragment extends HttpFragment implements
 		} catch (final Exception e) {
 			// Display warning
 			final Context ctx = getActivity();
-			final CharSequence txt = "Echec de la création du contact";
+			final CharSequence txt = getString(R.string.contact_creation_failed);
 			final int duration = Toast.LENGTH_SHORT;
 			final Toast toast = Toast.makeText(ctx, txt, duration);
 			toast.show();
