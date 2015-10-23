@@ -116,7 +116,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                             try {
                                 startActivity(openFile);
                             } catch(ActivityNotFoundException e) {
-                                Toast.makeText(getActivity(), "Aucune application ne peut ouvrir ce fichier", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), getString(R.string.cannot_open_file), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_login">Connection</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Universal code</string>
+    <string name="prompt_password">Password</string>
+
+    <string name="action_sign_in_register">Connection</string>
+    <string name="action_sign_in_short">Connection</string>
+
+    <string name="login_progress_signing_in">Connection &#8230;</string>
+
+    <string name="error_invalid_email">Invalid universal code</string>
+    <string name="error_invalid_pwd">Invalid password</string>
+    <string name="error_field_required">This field is required</string>
+</resources>
