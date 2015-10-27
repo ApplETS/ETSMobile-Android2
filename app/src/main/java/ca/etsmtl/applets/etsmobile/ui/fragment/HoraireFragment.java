@@ -129,6 +129,8 @@ public class HoraireFragment extends HttpFragment implements Observer {
         databaseHelper = new DatabaseHelper(getActivity());
 
         horaireListView = (ListView) v.findViewById(R.id.listView_horaire);
+        horaireListView.setEmptyView(v.findViewById(R.id.listView_horaire));
+
         seanceAdapter = new SeanceAdapter(getActivity());
         horaireListView.setAdapter(seanceAdapter);
         listSeances = new ArrayList<TodayDataRowItem>();
