@@ -199,8 +199,16 @@ public class HoraireFragment extends HttpFragment implements Observer {
         progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 
         try{
-            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll());
-            seanceAdapter.notifyDataSetChanged();
+            ArrayList<Seances> seancesArrayList = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll();
+            if(seancesArrayList.size()>0) {
+                seanceAdapter.setItemList(seancesArrayList);
+                seanceAdapter.notifyDataSetChanged();
+            } else {
+                // remplacer la Arraylist par un message a afficher?
+                // CHECK THIS OUT :
+                //  http://developer.android.com/reference/android/widget/AdapterView.html#setEmptyView(android.view.View
+                //  http://stackoverflow.com/questions/12483508/setemptyview-on-listview-not-showing-its-view-in-a-android-app
+            }
         } catch(SQLException e) {
             e.printStackTrace();
         }
