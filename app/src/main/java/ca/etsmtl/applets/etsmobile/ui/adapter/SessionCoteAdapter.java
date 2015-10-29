@@ -12,10 +12,12 @@ public class SessionCoteAdapter extends BaseAdapter {
 
 	private Context context;
 	private SessionCoteItem[] sessionCote;
+	private String sessionAbrege;
 
-	public SessionCoteAdapter(Context context, SessionCoteItem[] sessionCoteItem) {
+	public SessionCoteAdapter(Context context, SessionCoteItem[] sessionCoteItem, String sessionAbrege) {
 		this.context = context;
 		this.sessionCote = sessionCoteItem;
+		this.sessionAbrege = sessionAbrege;
 	}
 
 	@Override
@@ -47,6 +49,7 @@ public class SessionCoteAdapter extends BaseAdapter {
 		}
 
 		SessionCoteItem notesSession = sessionCote[position];
+
 		((TextView) v.findViewById(R.id.square_note_course_name)).setText(notesSession.sigle);
 		if (notesSession.cote !=null)
 			((TextView) v.findViewById(R.id.square_note_course_cote)).setText(notesSession.cote);
