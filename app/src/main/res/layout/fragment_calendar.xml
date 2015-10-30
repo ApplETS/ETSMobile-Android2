@@ -11,8 +11,11 @@
     <TextView
         android:id="@+id/txt_empty_calendar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:visibility="gone"
+        android:paddingTop="50dp"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
         android:text="@string/empty_calendar" >
     </TextView>
 

@@ -129,7 +129,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
         databaseHelper = new DatabaseHelper(getActivity());
 
         horaireListView = (ListView) v.findViewById(R.id.listView_horaire);
-        horaireListView.setEmptyView(v.findViewById(R.id.listView_horaire));
+        horaireListView.setEmptyView(v.findViewById(R.id.txt_empty_calendar));
 
         seanceAdapter = new SeanceAdapter(getActivity());
         horaireListView.setAdapter(seanceAdapter);
@@ -201,16 +201,8 @@ public class HoraireFragment extends HttpFragment implements Observer {
         progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 
         try{
-            ArrayList<Seances> seancesArrayList = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll();
-            if(seancesArrayList.size()>0) {
-                seanceAdapter.setItemList(seancesArrayList);
-                seanceAdapter.notifyDataSetChanged();
-            } else {
-                // remplacer la Arraylist par un message a afficher?
-                // CHECK THIS OUT :
-                //  http://developer.android.com/reference/android/widget/AdapterView.html#setEmptyView(android.view.View
-                //  http://stackoverflow.com/questions/12483508/setemptyview-on-listview-not-showing-its-view-in-a-android-app
-            }
+            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll());
+            seanceAdapter.notifyDataSetChanged();
         } catch(SQLException e) {
             e.printStackTrace();
         }
