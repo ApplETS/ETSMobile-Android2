@@ -54,7 +54,7 @@ public class SessionCoteAdapter extends BaseAdapter {
 		if (notesSession.cote !=null)
 			((TextView) v.findViewById(R.id.square_note_course_cote)).setText(notesSession.cote);
 		else
-			((TextView) v.findViewById(R.id.square_note_course_cote)).setText("79%");
+			((TextView) v.findViewById(R.id.square_note_course_cote)).setText("--");
 
 		return v;
 	}
