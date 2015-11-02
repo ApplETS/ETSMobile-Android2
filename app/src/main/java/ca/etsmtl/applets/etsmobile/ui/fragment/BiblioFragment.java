@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -45,14 +47,24 @@ public class BiblioFragment extends WebFragment {
 				return false;
 			}
 
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				// super.onPageFinished(view, url);
+				LoadingView.hideLoadingView(loadingView);
+			}
+
             @Override
-            public void onPageFinished(WebView view, String url) {
-               // super.onPageFinished(view, url);
-                LoadingView.hideLoadingView(loadingView);
-            }
-        });
-		
-		webView.loadUrl(getActivity().getString(R.string.url_biblio));
+			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+				view.loadUrl("file:///android_asset/webview_error_page.html");
+			}
+		});
+
+		//if(Utility.isNetworkAvailable(getActivity())){
+			webView.loadUrl(getActivity().getString(R.string.url_biblio));
+		/*} else {
+			Toast.makeText(getActivity(), "Une connexion internet est requise pour télécharger la page Bibliothèque", Toast.LENGTH_LONG).show();
+		}*/
+
 		return v;
 	}
 

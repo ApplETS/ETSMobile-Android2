@@ -27,18 +27,19 @@ public class FAQFragment extends WebFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_faq, container, false);
-        WebView faqWebView = (WebView) v.findViewById(R.id.faq_webview);
+        final WebView faqWebView = (WebView) v.findViewById(R.id.faq_webview);
         faqWebView.getSettings().setJavaScriptEnabled(true);
         faqWebView.getSettings().setAppCachePath(getActivity().getCacheDir().getAbsolutePath());
-        faqWebView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        faqWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 
-        if(Utility.isNetworkAvailable(getActivity())){
-            //faqWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);
-            faqWebView.loadUrl("http://www.clubapplets.ca/faq/");
-        } else {
-            //faqWebView.getSettings().get
-            Toast.makeText(getActivity(), "Une connexion internet est requise pour télécharger la page FAQ", Toast.LENGTH_LONG).show();
-        }
+        faqWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                faqWebView.loadUrl("file:///android_asset/webview_error_page.html");
+            }
+        });
+
+        faqWebView.loadUrl("http://www.clubapplets.ca/faq/");
 
         return v;
     }
