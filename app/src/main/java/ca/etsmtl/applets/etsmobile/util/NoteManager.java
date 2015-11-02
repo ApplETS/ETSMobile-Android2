@@ -126,26 +126,6 @@ public class NoteManager extends Observable implements RequestListener<Object> {
         return listElementsEvaluation;
     }
 
-    public HashMap<String, String> getNotesACeJourEvaluation() {
-        HashMap<String, String> mapNotesACejour = new HashMap<>();
-        DatabaseHelper dbHelper = new DatabaseHelper(context);
-        List<ListeDesElementsEvaluation> notesACeJoursList = null;
-
-        try {
-            Dao<ListeDesElementsEvaluation, String> dao = dbHelper.getDao(ListeDesElementsEvaluation.class);
-            QueryBuilder<ListeDesElementsEvaluation, String> builder  = dao.queryBuilder().selectColumns("noteACeJour");
-            notesACeJoursList = builder.query();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        /*for (Cours cours : listeCours) {
-            mapNotesACejour.put(cours.id,getListElementsEvaluation(cours.id).noteACeJour);
-        }*/
-
-
-        return mapNotesACejour;
-    }
-
     public List<ElementEvaluation> getElementsEvaluation(ListeDesElementsEvaluation listeDesElementsEvaluation) {
         DatabaseHelper dbHelper = new DatabaseHelper(context);
         List<ElementEvaluation> elementEvaluationList = null;

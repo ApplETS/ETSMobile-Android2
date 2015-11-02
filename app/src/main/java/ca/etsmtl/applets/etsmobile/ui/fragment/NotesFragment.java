@@ -126,8 +126,6 @@ public class NotesFragment extends HttpFragment implements Observer {
             regrouperCoursParSession(mapSession);
             notesSession = new NotesSessionItem[listeDeSessions.liste.size()];
             genererSessionCote(mapSession);
-            mNoteManager.getNotesACeJourEvaluation();
-//FIXME: regler le lag qui se produit lorsque l'on va sur la liste des notes
 
             getActivity().runOnUiThread(new Runnable() {
 
