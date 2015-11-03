@@ -59,11 +59,7 @@ public class BiblioFragment extends WebFragment {
 			}
 		});
 
-		//if(Utility.isNetworkAvailable(getActivity())){
-			webView.loadUrl(getActivity().getString(R.string.url_biblio));
-		/*} else {
-			Toast.makeText(getActivity(), "Une connexion internet est requise pour télécharger la page Bibliothèque", Toast.LENGTH_LONG).show();
-		}*/
+		webView.loadUrl(getActivity().getString(R.string.url_biblio));
 
 		return v;
 	}
