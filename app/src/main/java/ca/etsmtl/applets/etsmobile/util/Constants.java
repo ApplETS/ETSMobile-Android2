@@ -19,4 +19,5 @@ public class Constants {
 
 
     public static final String GCM_REGISTRATION_TOKEN = "GCM_REGISTRATION_TOKEN";
+    public static final String GROUP_KEY_NOTIFICATIONS = "GROUP_KEY_NOTIFICATIONS";
 }

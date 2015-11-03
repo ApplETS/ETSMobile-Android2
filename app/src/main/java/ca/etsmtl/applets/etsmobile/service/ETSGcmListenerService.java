@@ -16,8 +16,11 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
+import ca.etsmtl.applets.etsmobile.util.Constants;
+import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.supportkit.core.GcmService;
 
@@ -76,7 +79,11 @@ public class ETSGcmListenerService extends GcmService {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
+        SecurePreferences securePreferences = new SecurePreferences(this);
+        int id = securePreferences.getInt("notifid", 1);
+
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_ets);
@@ -87,11 +94,15 @@ public class ETSGcmListenerService extends GcmService {
                 .setContentTitle(notificationApplicationNom)
                 .setContentText(notificationTexte)
                 .setAutoCancel(true)
+                .setGroup(Constants.GROUP_KEY_NOTIFICATIONS)
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0, notificationBuilder.build());
+
+        notificationManager.notify(id, notificationBuilder.build());
+        id++;
+        securePreferences.edit().putInt("notifid", id).commit();
     }
 
 }
