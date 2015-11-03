@@ -100,6 +100,7 @@ public class RegistrationIntentService extends IntentService {
 
         //TODO put application ARN in a property file
         worker.setThreadProperties(token, ApplicationManager.domaine+"\\"+ApplicationManager.userCredentials.getUsername(), "***REMOVED***");
+        worker.run();
         executor.execute(worker);
     }
 

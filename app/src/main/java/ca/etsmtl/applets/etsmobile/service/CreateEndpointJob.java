@@ -110,6 +110,7 @@ public class CreateEndpointJob implements Runnable {
 
     @Override
     public void run() {
+
         verifyPlatformApplication(this.client);
         try {
             CreatePlatformEndpointResult createResult =

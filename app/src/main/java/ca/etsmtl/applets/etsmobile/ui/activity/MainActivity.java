@@ -120,6 +120,13 @@ public class MainActivity extends Activity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+
     }
 
     @Override
@@ -161,7 +168,7 @@ public class MainActivity extends Activity {
                 selectItem(AboutFragment.class.getName());
             } else {
                 MyMenuItem myMenuItem = ApplicationManager.mMenu.get(fragment.getTag());
-                if(myMenuItem.hasToBeLoggedOn()) {
+                if (myMenuItem.hasToBeLoggedOn()) {
                     selectItem(AboutFragment.class.getName());
                 }
                 selectItem(fragment.getTag());
@@ -169,12 +176,6 @@ public class MainActivity extends Activity {
         } else {
             if (fragment == null) {
                 selectItem(TodayFragment.class.getName());
-            }
-
-            if (checkPlayServices()) {
-                // Start IntentService to register this application with GCM.
-                Intent intent = new Intent(this, RegistrationIntentService.class);
-                startService(intent);
             }
 
         }
@@ -192,6 +193,7 @@ public class MainActivity extends Activity {
      * the Google Play Store or enable it in the device's system settings.
      */
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
@@ -241,7 +243,7 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
             String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 
             User user = User.getCurrentUser();
