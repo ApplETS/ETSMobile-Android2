@@ -1,8 +1,11 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
+import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -17,6 +20,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,28 +28,24 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
-import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
-import ca.etsmtl.applets.etsmobile.util.ETSMobileAuthenticator;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
-import io.fabric.sdk.android.Fabric;
-import io.supportkit.core.SupportKit;
 import io.supportkit.core.User;
 import io.supportkit.ui.ConversationActivity;
 
@@ -64,8 +64,10 @@ public class MainActivity extends Activity {
     private ActionBarDrawerToggle mDrawerToggle;
     private Fragment fragment;
     private String TAG = "FRAGMENTTAG";
-    private AccountManager mAccountManager;
+    private AccountManager accountManager;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private String registrationToken = "";
+    private SecurePreferences securePreferences;
 
 
     @Override
@@ -73,11 +75,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
+        checkPlayServices();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        mAccountManager = AccountManager.get(this);
+        accountManager = AccountManager.get(this);
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -121,10 +123,23 @@ public class MainActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-        if (checkPlayServices()) {
+
+        Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
+        if (accounts.length > 0) {
+            String authToken = accountManager.peekAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE);
+            // validate the token, invalidate and generate a new one if required
+            accountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authToken);
+            accountManager.getAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, null, this, null, null);
+        }
+
+        securePreferences = new SecurePreferences(this);
+
+        registrationToken = securePreferences.getString(Constants.GCM_REGISTRATION_TOKEN,"");
+        if (TextUtils.isEmpty(registrationToken) && !TextUtils.isEmpty(ApplicationManager.domaine)) {
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
+
         }
 
     }
@@ -179,6 +194,8 @@ public class MainActivity extends Activity {
             }
 
         }
+
+
     }
 
     @Override
@@ -302,7 +319,7 @@ public class MainActivity extends Activity {
 
         if (myMenuItem.hasToBeLoggedOn() && ApplicationManager.userCredentials == null) {
 
-            final AccountManagerFuture<Bundle> future = mAccountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
+            final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
                 @Override
                 public void run(AccountManagerFuture<Bundle> future) {
                     //Login successful

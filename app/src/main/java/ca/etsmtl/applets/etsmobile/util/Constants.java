@@ -18,5 +18,5 @@ public class Constants {
     public static final String DOMAINE = "Domaine";
 
 
-
+    public static final String GCM_REGISTRATION_TOKEN = "GCM_REGISTRATION_TOKEN";
 }

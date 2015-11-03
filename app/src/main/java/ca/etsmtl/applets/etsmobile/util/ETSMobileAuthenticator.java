@@ -16,8 +16,13 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
+import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -91,7 +96,29 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
                 try {
                     httpResponse = client.newCall(request).execute();
                     authToken = httpResponse.header("Set-Cookie");
+
+                    JSONObject jsonResponse = new JSONObject(httpResponse.body().string());
+
+                    int typeUsagerId = jsonResponse.getInt("TypeUsagerId");
+                    String domaine = jsonResponse.getString("Domaine");
+
+                    SecurePreferences securePreferences = new SecurePreferences(mContext);
+                    securePreferences.edit().putInt(Constants.TYPE_USAGER_ID, typeUsagerId).commit();
+                    securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
+                    ApplicationManager.domaine = domaine;
+                    ApplicationManager.typeUsagerId = typeUsagerId;
+
+                    String registrationToken = securePreferences.getString(Constants.GCM_REGISTRATION_TOKEN, "");
+                    if (TextUtils.isEmpty(registrationToken) && !TextUtils.isEmpty(ApplicationManager.domaine)) {
+                        // Start IntentService to register this application with GCM.
+                        Intent intent = new Intent(mContext, RegistrationIntentService.class);
+                        mContext.startService(intent);
+
+                    }
+
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -105,12 +132,19 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
             result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
             result.putString(AccountManager.KEY_AUTHTOKEN, authToken);
             return result;
+        } else {
+            final Bundle result = new Bundle();
+            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+            result.putString(AccountManager.KEY_AUTHTOKEN, null);
+            return result;
         }
 
 
         // If we get here, then we couldn't access the user's password - so we
         // need to re-prompt them for their credentials. We do that by creating
         // an intent to display our AuthenticatorActivity.
+        /*
         final Intent intent = new Intent(mContext, LoginActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, account.type);
@@ -118,6 +152,7 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
         return bundle;
+        */
     }
 
     @Override

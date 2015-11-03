@@ -217,11 +217,14 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 mPasswordView.requestFocus();
             } else {
                 ApplicationManager.userCredentials = userCredentials;
-
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 new AuthentificationPortailTask().execute(
                         getString(R.string.portail_api_authentification_url),
                         ApplicationManager.userCredentials.getUsername(),
                         ApplicationManager.userCredentials.getPassword());
+
+                finishActivity(1);
+
 
             }
 
@@ -262,18 +265,23 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
             String authCookie = "", domaine = "";
             int typeUsagerId = 0;
 
+            final Intent res = new Intent();
+
             try {
                 response = client.newCall(request).execute();
 
-                if (response.code() != 200) {
-                    return null;
+                if (response.code() == 200) {
+
+                    authCookie = response.header("Set-Cookie");
+                    JSONObject jsonResponse = new JSONObject(response.body().string());
+
+                    typeUsagerId = jsonResponse.getInt("TypeUsagerId");
+                    domaine = jsonResponse.getString("Domaine");
+
+                    res.putExtra(AccountManager.KEY_AUTHTOKEN, authCookie);
+                    res.putExtra(Constants.TYPE_USAGER_ID, typeUsagerId);
+                    res.putExtra(Constants.DOMAINE, domaine);
                 }
-
-                authCookie = response.header("Set-Cookie");
-                JSONObject jsonResponse = new JSONObject(response.body().string());
-
-                typeUsagerId = jsonResponse.getInt("TypeUsagerId");
-                domaine = jsonResponse.getString("Domaine");
 
 
             } catch (IOException e) {
@@ -282,51 +290,58 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 e.printStackTrace();
             }
 
-            final Intent res = new Intent();
+
             res.putExtra(AccountManager.KEY_ACCOUNT_NAME, username);
             res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
-            res.putExtra(AccountManager.KEY_AUTHTOKEN, authCookie);
+
             res.putExtra(Constants.PARAM_USER_PASS, password);
 
-            res.putExtra(Constants.TYPE_USAGER_ID, typeUsagerId);
-            res.putExtra(Constants.DOMAINE, domaine);
+
             return res;
         }
 
         protected void onPostExecute(Intent intent) {
 
             if (intent != null) {
-
-                int typeUsagerId = intent.getIntExtra(Constants.TYPE_USAGER_ID,-1);
-                String domaine = intent.getStringExtra(Constants.DOMAINE);
-
-                SecurePreferences securePreferences = new SecurePreferences(LoginActivity.this);
-                securePreferences.edit().putInt(Constants.TYPE_USAGER_ID, typeUsagerId).commit();
-                securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
-                ApplicationManager.domaine = domaine;
-                ApplicationManager.typeUsagerId = typeUsagerId;
+                String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
 
                 String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 
                 String accountPassword = intent.getStringExtra(Constants.PARAM_USER_PASS);
                 final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
+
                 if (getIntent().getBooleanExtra(Constants.KEY_IS_ADDING_NEW_ACCOUNT, false)) {
-                    String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
 
                     // Creating the account on the device and setting the auth token we got
                     // (Not setting the auth token will cause another call to the server to authenticate the user)
                     accountManager.addAccountExplicitly(account, accountPassword, null);
-                    accountManager.setAuthToken(account, Constants.AUTH_TOKEN_TYPE, authtoken);
+
                 } else {
                     accountManager.setPassword(account, accountPassword);
                 }
+
+                if(!TextUtils.isEmpty(authtoken)) {
+                    int typeUsagerId = intent.getIntExtra(Constants.TYPE_USAGER_ID,-1);
+                    String domaine = intent.getStringExtra(Constants.DOMAINE);
+
+                    SecurePreferences securePreferences = new SecurePreferences(LoginActivity.this);
+                    securePreferences.edit().putInt(Constants.TYPE_USAGER_ID, typeUsagerId).commit();
+                    securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
+                    ApplicationManager.domaine = domaine;
+                    ApplicationManager.typeUsagerId = typeUsagerId;
+                    accountManager.setAuthToken(account, Constants.AUTH_TOKEN_TYPE, authtoken);
+                }
+
+
+
+
+
 
                 setAccountAuthenticatorResult(intent.getExtras());
                 setResult(RESULT_OK, intent);
                 finish();
 
-                finishActivity(1);
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
             }
 
         }

@@ -7,6 +7,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -231,7 +232,7 @@ public class ApplicationManager extends Application {
         int typeUsagerId = securePreferences.getInt(Constants.TYPE_USAGER_ID, -1);
         String domaine = securePreferences.getString(Constants.DOMAINE, "");
 
-        if(typeUsagerId != -1 && !domaine.equals("")) {
+        if(typeUsagerId != -1 && !TextUtils.isEmpty(domaine)) {
             ApplicationManager.typeUsagerId = typeUsagerId;
             ApplicationManager.domaine = domaine;
         }
