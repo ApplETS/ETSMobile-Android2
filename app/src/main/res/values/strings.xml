@@ -7,6 +7,8 @@
     <string name="drawer_title">Menu</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="contact_creation_failed">Echec de la création du contact</string>
+    <string name="cannot_open_file">Aucune application ne peut ouvrir ce fichier</string>
   
 
     <!-- MENU -->
@@ -34,6 +36,11 @@
     <string name="menu_section_3_sponsors">Nos Partenaires</string>
     <string name="menu_section_3_apps">Nos réalisations</string>
     <string name="menu_section_3_faq">FAQ</string>
+
+    <!-- Bottin -->
+    <string name="toast_Connection_Required">Une connexion internet est requise pour télécharger le bottin</string>
+    <string name="dialog_Loading_Directory">Chargement du bottin en cours</string>
+    <string name="menu_bottin_refresh">Recharger le bottin</string>
    
 
     <!-- Moodle Page -->
@@ -66,6 +73,7 @@
     <string name="rangCentile">Rang centile</string>
     <string name="ponderation">Pondération</string>
     <string name="noteOnPourcent">%1$s/%2$s (%3$s%%)</string>
+    <string name="toast_Sync_Fail">La synchronisation a échoué.</string>
 
     <!-- Profil Page -->
     <string name="profil_nom_prenom">Nom, Prénom</string>
@@ -130,10 +138,16 @@
 
     <!--Today  -->
     <string name="today_course">Mes cours</string>
+    <string name="today_no_classes">Pas de cours aujourd\'hui.</string>
     <string name="today_event">Événement</string>
     <string name="horaire">Horaire du %1$s %2$s %3$s</string>
     <string name="date_text">%1$s %2$s %3$s</string>
     <string name="export_calendar">Exporter</string>
+    
+    <!-- Horaire -->
+    <string name="toast_Calendar_Update_Error">Une erreur est survenue lors de la mise à jour du calendrier.</string>
+    <string name="dialog_Updating_Calendar">Mise à jour du calendrier en cours</string>
+    <string name="empty_calendar">Aucun cours à afficher</string>
 
     <!-- Nouvelles -->
     <string-array name="sources_news_values">

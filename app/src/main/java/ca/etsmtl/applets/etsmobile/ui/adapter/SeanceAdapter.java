@@ -155,7 +155,7 @@ public class SeanceAdapter extends BaseAdapter {
                 DateTime.Property pDoM = seanceDay.dayOfMonth();
                 DateTime.Property pMoY = seanceDay.monthOfYear();
 
-                this.listSeances.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE, context.getString(R.string.date_text, pDoW.getAsText(Locale.FRENCH), pDoM.get(), pMoY.getAsText(Locale.FRENCH))));
+                this.listSeances.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE, context.getString(R.string.date_text, pDoW.getAsText(Locale.getDefault()), pDoM.get(), pMoY.getAsText(Locale.getDefault()))));
             }
             this.listSeances.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_SEANCE, seances));
         }

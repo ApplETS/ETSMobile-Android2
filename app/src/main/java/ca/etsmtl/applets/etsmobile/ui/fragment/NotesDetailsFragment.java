@@ -36,6 +36,7 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 	public static String GROUPE = "GROUPE";
     public static String TITLECOURS = "TITLECOURS";
 
+
 	private ListView mlistView;
 	private String cote;
 	private String sigle;
@@ -97,32 +98,37 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 		return v;
 	}
 
-    @Override
-    void updateUI() {
-
-    }
-
-    @Override
+	@Override
 	public void onStart() {
+		Log.v("NotesDetailsFragment", "Note detailsFragement pwd = " + ApplicationManager.userCredentials.getPassword());
+
 		dataManager.getDataFromSignet(SignetMethods.LIST_EVAL, ApplicationManager.userCredentials, this, session, groupe, sigle);
+
 		super.onStart();
 	}
 
 	@Override
 	public void onRequestFailure(SpiceException arg0) {
+
         progressBarDetailsNotes.setVisibility(ProgressBar.GONE);
-        if(getActivity() != null) {
-			Toast.makeText(getActivity(), "La synchronisation a échoué.", Toast.LENGTH_SHORT).show();
-		}
+        if(getActivity() != null)
+            Toast.makeText(getActivity(), getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT).show();
+
 	}
 
 	@Override
 	public void onRequestSuccess(Object o) {
+
 		if (o instanceof ListeDesElementsEvaluation) {
 			mlisteDesElementsEvaluation = (ListeDesElementsEvaluation) o;
+			Log.v("NotesDetailsFragment", "NotesDetailsFragment: list =" + mlisteDesElementsEvaluation.liste.size() + " cote="
+					+ cote);
+
             mlisteDesElementsEvaluation.id = id;
+
 			mNoteManager.onRequestSuccess(mlisteDesElementsEvaluation);
 		}
+
 	}
 
 	private void refresh() {
@@ -144,6 +150,12 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
                 });
             }
         }
+
+	}
+
+	@Override
+	void updateUI() {
+		// TODO Auto-generated method stub
 
 	}
 

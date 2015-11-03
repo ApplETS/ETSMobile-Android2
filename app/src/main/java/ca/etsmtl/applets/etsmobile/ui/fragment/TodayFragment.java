@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -105,12 +104,12 @@ public class TodayFragment extends HttpFragment implements Observer {
             DateTime.Property pDoM = dateTime.dayOfMonth();
             DateTime.Property pMoY = dateTime.monthOfYear();
 
-            todaysTv.setText(getActivity().getString(R.string.horaire, pDoW.getAsText(Locale.FRENCH), pDoM.get(), pMoY.getAsText(Locale.FRENCH)));
+            todaysTv.setText(getActivity().getString(R.string.horaire, pDoW.getAsText(getResources().getConfiguration().locale), pDoM.get(), pMoY.getAsText(getResources().getConfiguration().locale)));
             databaseHelper = new DatabaseHelper(getActivity());
             listSeances = new ArrayList<Seances>();
             events = new ArrayList<Event>();
             try {
-                SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA_FRENCH);
+                SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
                 listSeances = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
                 Collections.sort(listSeances, new SeanceComparator());
                 events = (ArrayList<Event>) databaseHelper.getDao(Event.class).queryBuilder().where().like("startDate", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
