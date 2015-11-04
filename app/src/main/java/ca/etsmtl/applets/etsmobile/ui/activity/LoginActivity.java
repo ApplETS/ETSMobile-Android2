@@ -220,6 +220,33 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 ApplicationManager.userCredentials = userCredentials;
 
 
+                String accountName = userCredentials.getUsername();
+                String accountPassword = userCredentials.getPassword();
+
+                final Account account = new Account(accountName, Constants.ACCOUNT_TYPE);
+
+                if (getIntent().getBooleanExtra(Constants.KEY_IS_ADDING_NEW_ACCOUNT, false)) {
+
+                    // Creating the account on the device and setting the auth token we got
+                    // (Not setting the auth token will cause another call to the server to authenticate the user)
+                    accountManager.addAccountExplicitly(account, accountPassword, null);
+
+                } else {
+                    accountManager.setPassword(account, accountPassword);
+                }
+
+                Intent intent = new Intent();
+                intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName);
+                intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
+
+                setAccountAuthenticatorResult(intent.getExtras());
+                setResult(RESULT_OK, intent);
+
+
+
+
+
+
 
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 new AuthentificationPortailTask().execute(
@@ -307,40 +334,29 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
         protected void onPostExecute(Intent intent) {
 
             if (intent != null) {
-                String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
 
-                String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
+                if (accounts.length > 0) {
 
-                String accountPassword = intent.getStringExtra(Constants.PARAM_USER_PASS);
-                final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
+                    String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
 
-                if (getIntent().getBooleanExtra(Constants.KEY_IS_ADDING_NEW_ACCOUNT, false)) {
+                    if(!TextUtils.isEmpty(authtoken)) {
+                        int typeUsagerId = intent.getIntExtra(Constants.TYPE_USAGER_ID,-1);
+                        String domaine = intent.getStringExtra(Constants.DOMAINE);
 
-                    // Creating the account on the device and setting the auth token we got
-                    // (Not setting the auth token will cause another call to the server to authenticate the user)
-                    accountManager.addAccountExplicitly(account, accountPassword, null);
+                        SecurePreferences securePreferences = new SecurePreferences(LoginActivity.this);
+                        securePreferences.edit().putInt(Constants.TYPE_USAGER_ID, typeUsagerId).commit();
+                        securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
+                        ApplicationManager.domaine = domaine;
+                        ApplicationManager.typeUsagerId = typeUsagerId;
+                        accountManager.setAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, authtoken);
 
-                } else {
-                    accountManager.setPassword(account, accountPassword);
+                        Intent gcmRegistrationIntent = new Intent(LoginActivity.this, RegistrationIntentService.class);
+                        startService(gcmRegistrationIntent);
+                    }
                 }
 
-                if(!TextUtils.isEmpty(authtoken)) {
-                    int typeUsagerId = intent.getIntExtra(Constants.TYPE_USAGER_ID,-1);
-                    String domaine = intent.getStringExtra(Constants.DOMAINE);
 
-                    SecurePreferences securePreferences = new SecurePreferences(LoginActivity.this);
-                    securePreferences.edit().putInt(Constants.TYPE_USAGER_ID, typeUsagerId).commit();
-                    securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
-                    ApplicationManager.domaine = domaine;
-                    ApplicationManager.typeUsagerId = typeUsagerId;
-                    accountManager.setAuthToken(account, Constants.AUTH_TOKEN_TYPE, authtoken);
-
-                    Intent gcmRegistrationIntent = new Intent(LoginActivity.this, RegistrationIntentService.class);
-                    startService(gcmRegistrationIntent);
-                }
-
-                setAccountAuthenticatorResult(intent.getExtras());
-                setResult(RESULT_OK, intent);
                 finish();
 
 
