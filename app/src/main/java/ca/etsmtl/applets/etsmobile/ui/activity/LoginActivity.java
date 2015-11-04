@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.http.AuthentificationPortailTask;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
@@ -249,7 +250,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
 
 
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                new AuthentificationPortailTask().execute(
+                new AuthentificationPortailTask(this).execute(
                         getString(R.string.portail_api_authentification_url),
                         ApplicationManager.userCredentials.getUsername(),
                         ApplicationManager.userCredentials.getPassword());
@@ -277,93 +278,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
         dataManager.stop();
     }
 
-    private class AuthentificationPortailTask extends AsyncTask<String, Void, Intent> {
-        protected Intent doInBackground(String... params) {
-            OkHttpClient client = new OkHttpClient();
 
-            String url = params[0], username = params[1], password = params[2];
-
-            MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(mediaType, "{\n  \"Username\": \"" + username + "\",\n  \"Password\": \"" + password + "\"\n}");
-            Request request = new Request.Builder()
-                    .url(url)
-                    .post(body)
-                    .addHeader("content-type", "application/json")
-                    .addHeader("cache-control", "no-cache")
-                    .build();
-
-            Response response = null;
-            String authCookie = "", domaine = "";
-            int typeUsagerId = 0;
-
-            final Intent res = new Intent();
-
-            try {
-                response = client.newCall(request).execute();
-
-                if (response.code() == 200) {
-
-                    authCookie = response.header("Set-Cookie");
-                    JSONObject jsonResponse = new JSONObject(response.body().string());
-
-                    typeUsagerId = jsonResponse.getInt("TypeUsagerId");
-                    domaine = jsonResponse.getString("Domaine");
-
-                    res.putExtra(AccountManager.KEY_AUTHTOKEN, authCookie);
-                    res.putExtra(Constants.TYPE_USAGER_ID, typeUsagerId);
-                    res.putExtra(Constants.DOMAINE, domaine);
-                }
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-            res.putExtra(AccountManager.KEY_ACCOUNT_NAME, username);
-            res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
-
-            res.putExtra(Constants.PARAM_USER_PASS, password);
-
-
-            return res;
-        }
-
-        protected void onPostExecute(Intent intent) {
-
-            if (intent != null) {
-
-                Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
-                if (accounts.length > 0) {
-
-                    String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
-
-                    if(!TextUtils.isEmpty(authtoken)) {
-                        int typeUsagerId = intent.getIntExtra(Constants.TYPE_USAGER_ID,-1);
-                        String domaine = intent.getStringExtra(Constants.DOMAINE);
-
-                        SecurePreferences securePreferences = new SecurePreferences(LoginActivity.this);
-                        securePreferences.edit().putInt(Constants.TYPE_USAGER_ID, typeUsagerId).commit();
-                        securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
-                        ApplicationManager.domaine = domaine;
-                        ApplicationManager.typeUsagerId = typeUsagerId;
-                        accountManager.setAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, authtoken);
-
-                        Intent gcmRegistrationIntent = new Intent(LoginActivity.this, RegistrationIntentService.class);
-                        startService(gcmRegistrationIntent);
-                    }
-                }
-
-
-                finish();
-
-
-            }
-
-        }
-
-    }
 
 }
