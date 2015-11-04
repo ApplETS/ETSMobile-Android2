@@ -62,8 +62,6 @@ public class RegistrationIntentService extends IntentService {
                 //TODO put authorized entity in a property file
                 String token = instanceID.getToken("***REMOVED***", GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
-                SecurePreferences securePreferences = new SecurePreferences(this);
-                securePreferences.edit().putString(Constants.GCM_REGISTRATION_TOKEN,token);
                 // [END get_token]
                 Log.i(TAG, "GCM Registration Token: " + token);
 

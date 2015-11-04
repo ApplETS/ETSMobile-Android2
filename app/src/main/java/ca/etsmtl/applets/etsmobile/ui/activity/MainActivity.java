@@ -66,8 +66,8 @@ public class MainActivity extends Activity {
     private String TAG = "FRAGMENTTAG";
     private AccountManager accountManager;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private String registrationToken = "";
-    private SecurePreferences securePreferences;
+    private SharedPreferences sharedPreferences;
+    private boolean sentToken;
 
 
     @Override
@@ -79,13 +79,15 @@ public class MainActivity extends Activity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
 
+        sentToken = sharedPreferences.getBoolean(Constants.SENT_TOKEN_TO_SERVER, false);
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                boolean sentToken = sharedPreferences.getBoolean(Constants.SENT_TOKEN_TO_SERVER, false);
+                sentToken = sharedPreferences.getBoolean(Constants.SENT_TOKEN_TO_SERVER, false);
             }
         };
 
@@ -132,15 +134,6 @@ public class MainActivity extends Activity {
             accountManager.getAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, null, this, null, null);
         }
 
-        securePreferences = new SecurePreferences(this);
-
-        registrationToken = securePreferences.getString(Constants.GCM_REGISTRATION_TOKEN,"");
-        if (TextUtils.isEmpty(registrationToken) && !TextUtils.isEmpty(ApplicationManager.domaine)) {
-            // Start IntentService to register this application with GCM.
-            Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);
-
-        }
 
     }
 
@@ -174,6 +167,24 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (ApplicationManager.domaine == null) {
+            Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
+            if (accounts.length > 0) {
+                String authToken = accountManager.peekAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE);
+                // validate the token, invalidate and generate a new one if required
+                accountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authToken);
+                accountManager.getAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, null, this, null, null);
+            }
+        }
+
+        if (!sentToken && ApplicationManager.domaine != null) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+
+
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Constants.REGISTRATION_COMPLETE));

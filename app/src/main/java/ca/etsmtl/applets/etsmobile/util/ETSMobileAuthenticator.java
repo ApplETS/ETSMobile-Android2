@@ -7,7 +7,9 @@ import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.squareup.okhttp.MediaType;
@@ -48,7 +50,7 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
     }
 
     @Override
-    public Bundle addAccount(AccountAuthenticatorResponse response,  String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+    public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
         final Intent intent = new Intent(mContext, loginActivity);
         intent.putExtra(Constants.KEY_ACCOUNT_TYPE, accountType);
         intent.putExtra(Constants.KEY_AUTH_TYPE, authTokenType);
@@ -95,25 +97,26 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
 
                 try {
                     httpResponse = client.newCall(request).execute();
-                    authToken = httpResponse.header("Set-Cookie");
+                    if (httpResponse.code() == 200) {
+                        authToken = httpResponse.header("Set-Cookie");
 
-                    JSONObject jsonResponse = new JSONObject(httpResponse.body().string());
+                        JSONObject jsonResponse = new JSONObject(httpResponse.body().string());
 
-                    int typeUsagerId = jsonResponse.getInt("TypeUsagerId");
-                    String domaine = jsonResponse.getString("Domaine");
+                        int typeUsagerId = jsonResponse.getInt("TypeUsagerId");
+                        String domaine = jsonResponse.getString("Domaine");
 
-                    SecurePreferences securePreferences = new SecurePreferences(mContext);
-                    securePreferences.edit().putInt(Constants.TYPE_USAGER_ID, typeUsagerId).commit();
-                    securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
-                    ApplicationManager.domaine = domaine;
-                    ApplicationManager.typeUsagerId = typeUsagerId;
+                        SecurePreferences securePreferences = new SecurePreferences(mContext);
+                        securePreferences.edit().putInt(Constants.TYPE_USAGER_ID, typeUsagerId).commit();
+                        securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
+                        ApplicationManager.domaine = domaine;
+                        ApplicationManager.typeUsagerId = typeUsagerId;
 
-                    String registrationToken = securePreferences.getString(Constants.GCM_REGISTRATION_TOKEN, "");
-                    if (TextUtils.isEmpty(registrationToken) && !TextUtils.isEmpty(ApplicationManager.domaine)) {
-                        // Start IntentService to register this application with GCM.
-                        Intent intent = new Intent(mContext, RegistrationIntentService.class);
-                        mContext.startService(intent);
-
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+                        boolean isTokenSent = sharedPreferences.getBoolean(Constants.SENT_TOKEN_TO_SERVER, false);
+                        if (!isTokenSent) {
+                            Intent intent = new Intent(mContext, RegistrationIntentService.class);
+                            mContext.startService(intent);
+                        }
                     }
 
                 } catch (IOException e) {

@@ -38,6 +38,7 @@ import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -217,6 +218,9 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 mPasswordView.requestFocus();
             } else {
                 ApplicationManager.userCredentials = userCredentials;
+
+
+
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 new AuthentificationPortailTask().execute(
                         getString(R.string.portail_api_authentification_url),
@@ -330,12 +334,10 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                     ApplicationManager.domaine = domaine;
                     ApplicationManager.typeUsagerId = typeUsagerId;
                     accountManager.setAuthToken(account, Constants.AUTH_TOKEN_TYPE, authtoken);
+
+                    Intent gcmRegistrationIntent = new Intent(LoginActivity.this, RegistrationIntentService.class);
+                    startService(gcmRegistrationIntent);
                 }
-
-
-
-
-
 
                 setAccountAuthenticatorResult(intent.getExtras());
                 setResult(RESULT_OK, intent);
