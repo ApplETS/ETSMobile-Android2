@@ -4,8 +4,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -20,7 +18,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +30,6 @@ import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
-import java.io.IOException;
 import java.util.Collection;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
@@ -44,7 +40,6 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
-import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.supportkit.core.User;
 import io.supportkit.ui.ConversationActivity;
@@ -56,8 +51,6 @@ import io.supportkit.ui.ConversationActivity;
  */
 public class MainActivity extends Activity {
 
-    private static final int REQUEST_CODE_EMAIL = 1;
-
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private CharSequence mTitle;
@@ -66,8 +59,7 @@ public class MainActivity extends Activity {
     private String TAG = "FRAGMENTTAG";
     private AccountManager accountManager;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private SharedPreferences sharedPreferences;
-    private boolean sentToken;
+    private boolean isGCMTokenSent;
 
 
     @Override
@@ -79,15 +71,15 @@ public class MainActivity extends Activity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
 
-        sentToken = sharedPreferences.getBoolean(Constants.SENT_TOKEN_TO_SERVER, false);
+        isGCMTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                sentToken = sharedPreferences.getBoolean(Constants.SENT_TOKEN_TO_SERVER, false);
+                isGCMTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
             }
         };
 
@@ -125,7 +117,14 @@ public class MainActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
+        refreshMonETSAuthToken();
 
+    }
+
+    /**
+     * Refresh MonETS cookie. This function is to call regularly because the cookie expires often
+     */
+    private void refreshMonETSAuthToken() {
         Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
         if (accounts.length > 0) {
             String authToken = accountManager.peekAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE);
@@ -133,8 +132,6 @@ public class MainActivity extends Activity {
             accountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authToken);
             accountManager.getAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, null, this, null, null);
         }
-
-
     }
 
     @Override
@@ -169,22 +166,15 @@ public class MainActivity extends Activity {
         super.onResume();
 
         if (ApplicationManager.domaine == null) {
-            Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
-            if (accounts.length > 0) {
-                String authToken = accountManager.peekAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE);
-                // validate the token, invalidate and generate a new one if required
-                accountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authToken);
-                accountManager.getAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, null, this, null, null);
-            }
+            refreshMonETSAuthToken();
         }
 
-        if (!sentToken && ApplicationManager.domaine != null) {
+        //In case of : retry registering to GCM
+        if (!isGCMTokenSent && ApplicationManager.domaine != null) {
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
-
-
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Constants.REGISTRATION_COMPLETE));
@@ -205,8 +195,6 @@ public class MainActivity extends Activity {
             }
 
         }
-
-
     }
 
     @Override
@@ -220,14 +208,12 @@ public class MainActivity extends Activity {
      * it doesn't, display a dialog that allows users to download the APK from
      * the Google Play Store or enable it in the device's system settings.
      */
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                        Constants.PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
                 Log.i(TAG, "This device is not supported.");
                 finish();
@@ -271,7 +257,7 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
+        if (requestCode == Constants.REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
             String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 
             User user = User.getCurrentUser();
@@ -359,10 +345,14 @@ public class MainActivity extends Activity {
 
     }
 
+    /**
+     * Asks the user to pick a Google account so that we can have his email in slack support with
+     * SupportKit
+     */
     private void selectAccount() {
         Intent intent = AccountPicker.newChooseAccountIntent(null, null,
                 new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
-        startActivityForResult(intent, REQUEST_CODE_EMAIL);
+        startActivityForResult(intent, Constants.REQUEST_CODE_EMAIL);
     }
 
     @Override

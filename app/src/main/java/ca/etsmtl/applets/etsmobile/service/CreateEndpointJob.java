@@ -59,7 +59,7 @@ public class CreateEndpointJob implements Runnable {
     public CreateEndpointJob(Context context) {
 
         try {
-            //TODO find a way to use credentials in AwsCredentials.properties (make that work)
+            //TODO put the credentials in a properties file
             client = new AmazonSNSClient(new BasicAWSCredentials("***REMOVED***", "***REMOVED***"));
 //            client = new AmazonSNSClient(new PropertiesCredentials(
 //                    CreateEndpointJob.class.getClassLoader().getResourceAsStream("/AwsCredentials.properties")

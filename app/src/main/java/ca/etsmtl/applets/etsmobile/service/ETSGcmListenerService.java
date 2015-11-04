@@ -42,6 +42,7 @@ public class ETSGcmListenerService extends GcmService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
 
+        // Calls SupportKit GCM Listener
         if (TextUtils.equals(data.getString("origin"), "SupportKit")) {
             super.onMessageReceived(from, data);
         } else {
@@ -80,11 +81,9 @@ public class ETSGcmListenerService extends GcmService {
         intent.setData(Uri.parse(url));
 
         SecurePreferences securePreferences = new SecurePreferences(this);
-        int id = securePreferences.getInt("notifid", 1);
-
+        int id = securePreferences.getInt(Constants.NOTIFICATION_ID, 1);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_ets);
 
@@ -102,7 +101,7 @@ public class ETSGcmListenerService extends GcmService {
 
         notificationManager.notify(id, notificationBuilder.build());
         id++;
-        securePreferences.edit().putInt("notifid", id).commit();
+        securePreferences.edit().putInt(Constants.NOTIFICATION_ID, id).commit();
     }
 
 }

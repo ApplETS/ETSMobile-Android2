@@ -25,7 +25,6 @@ import java.io.IOException;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
-import ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
@@ -112,7 +111,7 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
                         ApplicationManager.typeUsagerId = typeUsagerId;
 
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-                        boolean isTokenSent = sharedPreferences.getBoolean(Constants.SENT_TOKEN_TO_SERVER, false);
+                        boolean isTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
                         if (!isTokenSent) {
                             Intent intent = new Intent(mContext, RegistrationIntentService.class);
                             mContext.startService(intent);

@@ -224,40 +224,17 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 String accountName = userCredentials.getUsername();
                 String accountPassword = userCredentials.getPassword();
 
-                final Account account = new Account(accountName, Constants.ACCOUNT_TYPE);
-
-                if (getIntent().getBooleanExtra(Constants.KEY_IS_ADDING_NEW_ACCOUNT, false)) {
-
-                    // Creating the account on the device and setting the auth token we got
-                    // (Not setting the auth token will cause another call to the server to authenticate the user)
-                    accountManager.addAccountExplicitly(account, accountPassword, null);
-
-                } else {
-                    accountManager.setPassword(account, accountPassword);
-                }
-
-                Intent intent = new Intent();
-                intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName);
-                intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
-
-                setAccountAuthenticatorResult(intent.getExtras());
-                setResult(RESULT_OK, intent);
-
-
-
-
-
-
+                createETSMobileAccount(accountName, accountPassword);
 
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                //Run authentication to monETS in another thread not to slow app
                 new AuthentificationPortailTask(this).execute(
                         getString(R.string.portail_api_authentification_url),
                         ApplicationManager.userCredentials.getUsername(),
                         ApplicationManager.userCredentials.getPassword());
 
                 finishActivity(1);
-
-
             }
 
         } else {
@@ -278,6 +255,26 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
         dataManager.stop();
     }
 
+    private void createETSMobileAccount(String accountName, String accountPassword) {
+        final Account account = new Account(accountName, Constants.ACCOUNT_TYPE);
+
+        if (getIntent().getBooleanExtra(Constants.KEY_IS_ADDING_NEW_ACCOUNT, false)) {
+
+            // Creating the account on the device and setting the auth token we got
+            // (Not setting the auth token will cause another call to the server to authenticate the user)
+            accountManager.addAccountExplicitly(account, accountPassword, null);
+
+        } else {
+            accountManager.setPassword(account, accountPassword);
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
+
+        setAccountAuthenticatorResult(intent.getExtras());
+        setResult(RESULT_OK, intent);
+    }
 
 
 }
