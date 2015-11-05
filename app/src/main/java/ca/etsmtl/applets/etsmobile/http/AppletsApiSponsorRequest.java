@@ -39,7 +39,7 @@ public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorL
     public SponsorList loadDataFromNetwork() throws Exception {
 
         String address = "***REMOVED***";
-        //String address = context.getString(R.string.applets_api_news);
+        //String address = context.getString(R.string.applets_api_sponsors);
 
         SponsorList sponsorList = null;
 
@@ -50,6 +50,7 @@ public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorL
             HttpGet get = new HttpGet(address);
 
             String userCredentials = context.getString(R.string.credentials_preprod);
+            //String userCredentials = context.getString(R.string.credentials_api);
             String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
             get.setHeader("Authorization", basicAuth);
             get.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -61,12 +62,12 @@ public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorL
 
             String result = EntityUtils.toString(responseEntity, "UTF-8");
             JSONObject data = new JSONObject(result);
-            Log.d("SponsRequest", "json : " + data);
+
             /*JSONObject root = new JSONObject(result);
             JSONObject data = root.getJSONObject("data");*/
             ObjectMapper mapper = new ObjectMapper();
             sponsorList = new SponsorList();
-
+            Log.d("SponsRequest", "json : " + data);
             Iterator keys = data.keys();
             while (keys.hasNext()) {
 

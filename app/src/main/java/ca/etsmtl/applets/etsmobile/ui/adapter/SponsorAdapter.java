@@ -48,14 +48,25 @@ public class SponsorAdapter extends ArrayAdapter<Sponsor> {
 
             view.setTag(holder);
         }
+        int imageSizeH, imageSizeV;
 
         Sponsor item = getItem(position);
-        int imageSize;
-        imageSize = 100 * item.getIndex();
-        Picasso.with(context).load(item.getImageUrl()).resize(imageSize, imageSize).into(holder.imageSource);
-
+        switch (item.getIndex()) {
+            case 6:
+                imageSizeH = 700;
+                imageSizeV = 700;
+                break;
+            case 5 | 4:
+                imageSizeH = 500;
+                imageSizeV = 500;
+                break;
+            default:
+                imageSizeH = 300;
+                imageSizeV = 300;
+                break;
+        }
+        Picasso.with(context).load(item.getImageUrl()).resize(imageSizeH, imageSizeV).into(holder.imageSource);
         holder.tvName.setText(item.getName());
-        //holder.imageSource.setImageResource(item.getImage());
 
         return view;
     }
@@ -64,4 +75,5 @@ public class SponsorAdapter extends ArrayAdapter<Sponsor> {
         TextView tvName;
         ImageView imageSource;
     }
+
 }
