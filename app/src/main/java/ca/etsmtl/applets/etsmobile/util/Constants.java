@@ -20,4 +20,5 @@ public class Constants {
     public static final String GROUP_KEY_NOTIFICATIONS = "GROUP_KEY_NOTIFICATIONS";
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    public static final String EXP_DATE_COOKIE = "EXP_DATE_COOKIE";
 }

@@ -17,11 +17,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.HttpCookie;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 
 /**
  * Created by gnut3ll4 on 04/11/15.
@@ -63,6 +72,7 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
             if (response.code() == 200) {
 
                 authCookie = response.header("Set-Cookie");
+
                 JSONObject jsonResponse = new JSONObject(response.body().string());
 
                 typeUsagerId = jsonResponse.getInt("TypeUsagerId");
@@ -106,9 +116,32 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
                     SecurePreferences securePreferences = new SecurePreferences(launchingActivity);
                     securePreferences.edit().putInt(Constants.TYPE_USAGER_ID, typeUsagerId).commit();
                     securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
+
+                    securePreferences.edit().putString(Constants.EXP_DATE_COOKIE, domaine).commit();
                     ApplicationManager.domaine = domaine;
                     ApplicationManager.typeUsagerId = typeUsagerId;
                     accountManager.setAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, authtoken);
+
+
+
+
+                    Map<String, String> parsedCookie = Utility.parseCookies(authtoken);
+                    String expires = parsedCookie.get("expires");
+
+                    Date expirationDate = new Date();
+                    DateFormat df = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss zzz");
+                    df.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+                    try {
+                        expirationDate = df.parse(expires);
+                        Utility.putDate(securePreferences, Constants.EXP_DATE_COOKIE, expirationDate);
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
+
 
                     Intent gcmRegistrationIntent = new Intent(launchingActivity, RegistrationIntentService.class);
                     launchingActivity.startService(gcmRegistrationIntent);
