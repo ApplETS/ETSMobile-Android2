@@ -99,12 +99,14 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
                     if (httpResponse.code() == 200) {
                         authToken = httpResponse.header("Set-Cookie");
 
+                        SecurePreferences securePreferences = new SecurePreferences(mContext);
+                        Utility.saveCookieExpirationDate(authToken, securePreferences);
+
                         JSONObject jsonResponse = new JSONObject(httpResponse.body().string());
 
                         int typeUsagerId = jsonResponse.getInt("TypeUsagerId");
                         String domaine = jsonResponse.getString("Domaine");
 
-                        SecurePreferences securePreferences = new SecurePreferences(mContext);
                         securePreferences.edit().putInt(Constants.TYPE_USAGER_ID, typeUsagerId).commit();
                         securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
                         ApplicationManager.domaine = domaine;

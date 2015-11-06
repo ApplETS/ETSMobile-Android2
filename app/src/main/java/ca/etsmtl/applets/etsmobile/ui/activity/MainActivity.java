@@ -31,6 +31,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.util.Collection;
+import java.util.Date;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
@@ -40,6 +41,8 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
+import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.supportkit.core.User;
 import io.supportkit.ui.ConversationActivity;
@@ -60,6 +63,7 @@ public class MainActivity extends Activity {
     private AccountManager accountManager;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private boolean isGCMTokenSent;
+    private SecurePreferences securePreferences;
 
 
     @Override
@@ -117,6 +121,7 @@ public class MainActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
+        securePreferences = new SecurePreferences(this);
         refreshMonETSAuthToken();
 
     }
@@ -125,13 +130,17 @@ public class MainActivity extends Activity {
      * Refresh MonETS cookie. This function is to call regularly because the cookie expires often
      */
     private void refreshMonETSAuthToken() {
-        Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
-        if (accounts.length > 0) {
-            String authToken = accountManager.peekAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE);
-            // validate the token, invalidate and generate a new one if required
-            accountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authToken);
-            accountManager.getAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, null, this, null, null);
+        Date expirationDate = Utility.getDate(securePreferences, Constants.EXP_DATE_COOKIE, new Date());
+        if (expirationDate.before(new Date())) {
+            Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
+            if (accounts.length > 0) {
+                String authToken = accountManager.peekAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE);
+                // validate the token, invalidate and generate a new one if required
+                accountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authToken);
+                accountManager.getAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, null, this, null, null);
+            }
         }
+
     }
 
     @Override
@@ -165,9 +174,8 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        if (ApplicationManager.domaine == null) {
-            refreshMonETSAuthToken();
-        }
+        refreshMonETSAuthToken();
+
 
         //In case of : retry registering to GCM
         if (!isGCMTokenSent && ApplicationManager.domaine != null) {

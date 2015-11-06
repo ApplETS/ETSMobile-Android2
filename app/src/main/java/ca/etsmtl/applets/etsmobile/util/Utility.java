@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
 import java.lang.reflect.Field;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -54,18 +55,14 @@ public class Utility {
         return simpleDateFormat.format(date);
     }
 
-    public static Map<String, String> parseCookies(String cookieHeader)
-    {
+    public static Map<String, String> parseCookies(String cookieHeader) {
         Map<String, String> result = new LinkedHashMap<String, String>();
-        if (cookieHeader != null)
-        {
+        if (cookieHeader != null) {
             String[] cookiesRaw = cookieHeader.split("; ");
-            for (int i = 0; i < cookiesRaw.length; i++)
-            {
+            for (int i = 0; i < cookiesRaw.length; i++) {
                 String[] parts = cookiesRaw[i].split("=", 2);
                 String value = parts.length > 1 ? parts[1] : "";
-                if (value.length() >= 2 && value.startsWith("\"") && value.endsWith("\""))
-                {
+                if (value.length() >= 2 && value.startsWith("\"") && value.endsWith("\"")) {
                     value = value.substring(1, value.length() - 1);
                 }
                 result.put(parts[0], value);
@@ -85,6 +82,25 @@ public class Utility {
 
     public static void putDate(final SecurePreferences prefs, final String key, final Date date) {
         prefs.edit().putLong(key + "_value", date.getTime()).commit();
+    }
+
+    public static void saveCookieExpirationDate(String cookie, SecurePreferences securePreferences) {
+
+        Map<String, String> parsedCookie = Utility.parseCookies(cookie);
+        String expires = parsedCookie.get("expires");
+
+        Date expirationDate = new Date();
+        DateFormat df = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss zzz");
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        try {
+            expirationDate = df.parse(expires);
+            Utility.putDate(securePreferences, Constants.EXP_DATE_COOKIE, expirationDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

@@ -122,26 +122,7 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
                     ApplicationManager.typeUsagerId = typeUsagerId;
                     accountManager.setAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, authtoken);
 
-
-
-
-                    Map<String, String> parsedCookie = Utility.parseCookies(authtoken);
-                    String expires = parsedCookie.get("expires");
-
-                    Date expirationDate = new Date();
-                    DateFormat df = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss zzz");
-                    df.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-                    try {
-                        expirationDate = df.parse(expires);
-                        Utility.putDate(securePreferences, Constants.EXP_DATE_COOKIE, expirationDate);
-
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-
-
+                    Utility.saveCookieExpirationDate(authtoken,securePreferences);
 
                     Intent gcmRegistrationIntent = new Intent(launchingActivity, RegistrationIntentService.class);
                     launchingActivity.startService(gcmRegistrationIntent);
