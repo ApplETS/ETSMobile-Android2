@@ -131,7 +131,8 @@ public class MainActivity extends Activity {
      */
     private void refreshMonETSAuthToken() {
         Date expirationDate = Utility.getDate(securePreferences, Constants.EXP_DATE_COOKIE, new Date());
-        if (expirationDate.before(new Date())) {
+        Date now = new Date();
+        if (expirationDate.before(now)) {
             Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
             if (accounts.length > 0) {
                 String authToken = accountManager.peekAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE);
