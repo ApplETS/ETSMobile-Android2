@@ -91,6 +91,7 @@ public class ETSGcmListenerService extends GcmService {
                 .setSmallIcon(R.drawable.school_48)
                 .setLargeIcon(bm)
                 .setContentTitle(notificationApplicationNom)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationTexte))
                 .setContentText(notificationTexte)
                 .setAutoCancel(true)
                 .setGroup(Constants.GROUP_KEY_NOTIFICATIONS)
