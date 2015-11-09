@@ -33,6 +33,7 @@ import java.util.concurrent.Executors;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.util.Constants;
+import ca.etsmtl.applets.etsmobile2.R;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -58,7 +59,10 @@ public class RegistrationIntentService extends IntentService {
                 InstanceID instanceID = InstanceID.getInstance(this);
 
                 //TODO put authorized entity in a property file
-                String token = instanceID.getToken("***REMOVED***", GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                String token = instanceID.getToken(
+                        getString(R.string.google_authorized_entity),
+                        GoogleCloudMessaging.INSTANCE_ID_SCOPE,
+                        null);
 
                 // [END get_token]
                 Log.i(TAG, "GCM Registration Token: " + token);
@@ -99,7 +103,9 @@ public class RegistrationIntentService extends IntentService {
         CreateEndpointJob worker = new CreateEndpointJob(getApplicationContext());
 
         //TODO put application ARN in a property file
-        worker.setThreadProperties(token, ApplicationManager.domaine+"\\"+ApplicationManager.userCredentials.getUsername(), "***REMOVED***");
+        worker.setThreadProperties(token,
+                ApplicationManager.domaine+"\\"+ApplicationManager.userCredentials.getUsername(),
+                getString(R.string.aws_application_arn));
         worker.run();
         executor.execute(worker);
     }

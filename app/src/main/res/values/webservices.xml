@@ -28,4 +28,10 @@
     <string name="bandwith_query">http://query.yahooapis.com/v1/public/yql?q=select%%20*%%20from%%20html%%20where%%20url%%3D%%22http%%3A%%2F%%2Fets-res%1$s-%2$s%%3Aets%2$s%%40www2.cooptel.qc.ca%%2Fservices%%2Ftemps%%2F%%3Fmois%%3D%3$s%%26cmd%%3DVisualiser%%22%%20and%%20xpath%%3D\'%%2F%%2Ftable%%5B%%40border%%3D%%221%%22%%5D\'&amp;format=json&amp;diagnostics=true&amp;callback=</string>
     <string name="credentials_supportkit">***REMOVED***</string>
 
+    <string name="aws_access_key">***REMOVED***</string>
+    <string name="aws_secret_key">***REMOVED***</string>
+    <string name="aws_application_arn">***REMOVED***</string>
+
+    <string name="google_authorized_entity">***REMOVED***</string>
+
 </resources>

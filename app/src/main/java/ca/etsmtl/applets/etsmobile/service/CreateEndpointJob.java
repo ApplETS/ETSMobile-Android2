@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import ca.etsmtl.applets.etsmobile2.R;
+
 /**
  * Created by gnut3ll4 on 16/10/15.
  */
@@ -60,7 +62,10 @@ public class CreateEndpointJob implements Runnable {
 
         try {
             //TODO put the credentials in a properties file
-            client = new AmazonSNSClient(new BasicAWSCredentials("***REMOVED***", "***REMOVED***"));
+            client = new AmazonSNSClient(new BasicAWSCredentials(
+                    context.getString(R.string.aws_access_key),
+                    context.getString(R.string.aws_secret_key)
+            ));
 //            client = new AmazonSNSClient(new PropertiesCredentials(
 //                    CreateEndpointJob.class.getClassLoader().getResourceAsStream("/AwsCredentials.properties")
 //            ));
