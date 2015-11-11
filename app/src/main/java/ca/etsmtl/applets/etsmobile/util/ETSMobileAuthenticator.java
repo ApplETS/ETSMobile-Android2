@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -118,6 +119,8 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
                             Intent intent = new Intent(mContext, RegistrationIntentService.class);
                             mContext.startService(intent);
                         }
+                    } else {
+                        Log.e("Erreur Portail", httpResponse.toString());
                     }
 
                 } catch (IOException e) {

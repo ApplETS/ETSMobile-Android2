@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -81,6 +82,8 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
                 res.putExtra(AccountManager.KEY_AUTHTOKEN, authCookie);
                 res.putExtra(Constants.TYPE_USAGER_ID, typeUsagerId);
                 res.putExtra(Constants.DOMAINE, domaine);
+            } else {
+                Log.e("Erreur Portail", response.toString());
             }
 
 
@@ -122,7 +125,7 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
                     ApplicationManager.typeUsagerId = typeUsagerId;
                     accountManager.setAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, authtoken);
 
-                    Utility.saveCookieExpirationDate(authtoken,securePreferences);
+                    Utility.saveCookieExpirationDate(authtoken, securePreferences);
 
                     Intent gcmRegistrationIntent = new Intent(launchingActivity, RegistrationIntentService.class);
                     launchingActivity.startService(gcmRegistrationIntent);
