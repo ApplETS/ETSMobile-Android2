@@ -1,9 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -112,12 +109,6 @@ public class SponsorsFragment extends HttpFragment implements Observer {
 
 	@Override
 	void updateUI() {
-	}
-
-	private boolean isNetworkAvailable(Context c) {
-		ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo activeNI = cm.getActiveNetworkInfo();
-		return activeNI != null && activeNI.isConnected();
 	}
 
 	@Override
