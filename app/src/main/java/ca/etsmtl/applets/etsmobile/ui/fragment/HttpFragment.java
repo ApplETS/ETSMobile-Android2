@@ -49,8 +49,8 @@ public abstract class HttpFragment extends BaseFragment implements RequestListen
 	@Override
 	public void onRequestFailure(SpiceException e) {
 		Log.w("onRequestFailure httpfr", e);
+		loadingView.hideProgessBar();
 		if (loadingView.isShown()) {
-			loadingView.hideProgessBar();
 			loadingView.setMessageError(getString(R.string.error_JSON_PARSING));
 		}
 

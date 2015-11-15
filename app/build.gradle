@@ -83,4 +83,8 @@ dependencies {
     compile 'io.supportkit:ui:latest.release'
     compile 'com.squareup.picasso:picasso:2.5.2'
 
+    compile 'com.amazonaws:aws-android-sdk-sns:2.2.5'
+    compile 'com.amazonaws:aws-android-sdk-core:2.2.5'
+    compile 'net.sf.opencsv:opencsv:2.3'
+
 }

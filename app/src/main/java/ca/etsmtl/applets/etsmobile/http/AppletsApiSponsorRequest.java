@@ -20,7 +20,6 @@ import java.util.Iterator;
 
 import ca.etsmtl.applets.etsmobile.model.Sponsor;
 import ca.etsmtl.applets.etsmobile.model.SponsorList;
-import ca.etsmtl.applets.etsmobile.util.HTTPSRequest;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorList> {
@@ -54,7 +53,6 @@ public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorL
 
             HttpResponse getResponse = client.execute(get);
             HttpEntity responseEntity = getResponse.getEntity();
-            Log.d("code is", "after client.execute");
 
             String result = EntityUtils.toString(responseEntity, "UTF-8");
             JSONObject data = new JSONObject(result);
@@ -63,7 +61,6 @@ public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorL
             JSONObject data = root.getJSONObject("data");*/
             ObjectMapper mapper = new ObjectMapper();
             sponsorList = new SponsorList();
-            Log.d("SponsRequest", "json : " + data);
             Iterator keys = data.keys();
             while (keys.hasNext()) {
 

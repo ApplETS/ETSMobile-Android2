@@ -8,7 +8,7 @@
         android:showAsAction="collapseActionView|ifRoom"/>
     <item
         android:id="@+id/menu_item_update"
-        android:title="Recharger le bottin">
+        android:title="@string/menu_bottin_refresh">
     </item>
 
 </menu>

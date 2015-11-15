@@ -20,7 +20,6 @@ import java.util.Iterator;
 
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
-import ca.etsmtl.applets.etsmobile.util.HTTPSRequest;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -50,12 +49,11 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
 
         try {
 
-            // Instantiate the custom HttpClient to call Https request
-            DefaultHttpClient client = new HTTPSRequest(context);
+            DefaultHttpClient client = new DefaultHttpClient();
             HttpGet get = new HttpGet(address);
 
-            String userCredentials = context.getString(R.string.credentials_api);
-            String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
+            String apiCredentials = context.getString(R.string.credentials_api);
+            String basicAuth = "Basic " + new String(new Base64().encode(apiCredentials.getBytes()));
             get.setHeader("Authorization", basicAuth);
             get.setHeader("Content-Type", "application/json; charset=utf-8");
             String method = get.getMethod();

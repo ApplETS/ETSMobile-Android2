@@ -8,6 +8,9 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -143,12 +146,20 @@
             android:name="io.supportkit.core.GcmRegistrationIntentService"
             android:exported="false" />
 
-        <service
-            android:name="io.supportkit.core.GcmService"
-            android:exported="false">
+        <!--<service-->
+            <!--android:name="io.supportkit.core.GcmService"-->
+            <!--android:exported="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
+
+        <service android:name="ca.etsmtl.applets.etsmobile.util.ETSAuthenticatorService">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+            <meta-data android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
         </service>
 
         <receiver
@@ -163,6 +174,34 @@
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
             </intent-filter>
         </receiver>
+
+
+        <!-- [START gcm_listener] -->
+        <service
+            android:name="ca.etsmtl.applets.etsmobile.service.ETSGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <!-- [END gcm_listener] -->
+        <!-- [START instanceId_listener] -->
+        <service
+            android:name="ca.etsmtl.applets.etsmobile.service.ETSInstanceIDListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <!-- [END instanceId_listener] -->
+        <service
+            android:name="ca.etsmtl.applets.etsmobile.service.RegistrationIntentService"
+            android:exported="false" >
+        </service>
+
+
+
+
 
         <meta-data
             android:name="io.fabric.ApiKey"

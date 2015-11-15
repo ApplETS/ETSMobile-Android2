@@ -32,7 +32,7 @@
         android:id="@+id/tv_todays_no_courses"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pas de cours aujourd'hui."
+        android:text="@string/today_no_classes"
         android:visibility="gone"
         android:layout_centerInParent="true"
         android:layout_below="@+id/todays_list" />

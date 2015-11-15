@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Observable;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
+import ca.etsmtl.applets.etsmobile.model.ArrayOfCours;
 import ca.etsmtl.applets.etsmobile.model.Cours;
 import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
@@ -45,11 +46,11 @@ public class NoteManager extends Observable implements RequestListener<Object> {
     public void updateCours(List<Cours> coursList) {
         DatabaseHelper dbHelper = new DatabaseHelper(context);
         try {
-            for(Cours cours : coursList) {
+            for (Cours cours : coursList) {
                 cours.id = cours.sigle + cours.session; // Id field upgraded to make difference between upgrading row or creating row
                 dbHelper.getDao(Cours.class).createOrUpdate(cours);
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             Log.e("SQL Exception", e.getMessage());
         }
     }
@@ -57,26 +58,27 @@ public class NoteManager extends Observable implements RequestListener<Object> {
     public void updateTrimestres(List<Trimestre> trimestresList) {
         DatabaseHelper dbHelper = new DatabaseHelper(context);
         try {
-            for(Trimestre trimestre : trimestresList)
+            for (Trimestre trimestre : trimestresList)
                 dbHelper.getDao(Trimestre.class).createOrUpdate(trimestre);
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             Log.e("SQL Exception", e.getMessage());
         }
     }
 
-    /** Rajout de l'id pour identifier les éléments d'évaluation par rapport au cours effectué dans une session */
+    /**
+     * Rajout de l'id pour identifier les éléments d'évaluation par rapport au cours effectué dans une session
+     */
     public void updateElementsEvaluation(ListeDesElementsEvaluation listElementsEvaluation) {
         DatabaseHelper dbHelper = new DatabaseHelper(context);
-        try{
+        try {
             dbHelper.getDao(ListeDesElementsEvaluation.class).createOrUpdate(listElementsEvaluation);
 
-            for(ElementEvaluation elementEvaluation : listElementsEvaluation.liste)
-            {
+            for (ElementEvaluation elementEvaluation : listElementsEvaluation.liste) {
                 elementEvaluation.id = listElementsEvaluation.id + elementEvaluation.nom;
                 elementEvaluation.listeDesElementsEvaluation = listElementsEvaluation;
                 dbHelper.getDao(ElementEvaluation.class).createOrUpdate(elementEvaluation);
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             Log.e("SQL Exception", e.getMessage());
         }
     }
@@ -126,7 +128,7 @@ public class NoteManager extends Observable implements RequestListener<Object> {
             where.eq("listeDesElementsEvaluation_id", listeDesElementsEvaluation);
             where.and();
 
-            elementEvaluationList  = builder.query();
+            elementEvaluationList = builder.query();
 
         } catch (SQLException e) {
             Log.e("SQL Exception", e.getMessage());
@@ -142,7 +144,7 @@ public class NoteManager extends Observable implements RequestListener<Object> {
             dbHelper.getDao(Trimestre.class).deleteBuilder().delete();
             dbHelper.getDao(ListeDesElementsEvaluation.class).deleteBuilder().delete();
             dbHelper.getDao(ElementEvaluation.class).deleteBuilder().delete();
-          //  dbHelper.getDao(Programme.class).deleteBuilder().delete();
+            //  dbHelper.getDao(Programme.class).deleteBuilder().delete();
         } catch (SQLException e) {
             Log.e("SQL Exception", e.getMessage());
         }
@@ -226,7 +228,7 @@ public class NoteManager extends Observable implements RequestListener<Object> {
             Dao<ListeDesElementsEvaluation, String> listeDesElementsEvaluationDao = dbHelper.getDao(ListeDesElementsEvaluation.class);
             ListeDesElementsEvaluation listeDesElementsEvaluation = listeDesElementsEvaluationDao.queryForId(id);
 
-            if(listeDesElementsEvaluation != null) {
+            if (listeDesElementsEvaluation != null) {
                 Dao<ElementEvaluation, String> elementsEvaluationDao = dbHelper.getDao(ElementEvaluation.class);
                 DeleteBuilder<ElementEvaluation, String> deleteBuilder = elementsEvaluationDao.deleteBuilder();
 
@@ -255,8 +257,7 @@ public class NoteManager extends Observable implements RequestListener<Object> {
         DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         HashMap<String, ElementEvaluation> elementEvaluationHashMap = new HashMap<String, ElementEvaluation>();
-        for(ElementEvaluation elem : listeDesElementsEvaluation.liste)
-        {
+        for (ElementEvaluation elem : listeDesElementsEvaluation.liste) {
             String id = listeDesElementsEvaluation.id + elem.nom;
             elementEvaluationHashMap.put(id, elem);
         }
@@ -271,29 +272,29 @@ public class NoteManager extends Observable implements RequestListener<Object> {
             where.and();
 
             elementEvaluationList = builder.query();
-            for(ElementEvaluation element : elementEvaluationList)
-            {
-                if(!elementEvaluationHashMap.containsKey(element.id))
+            for (ElementEvaluation element : elementEvaluationList) {
+                if (!elementEvaluationHashMap.containsKey(element.id))
                     elementsEvaluationDao.deleteById(element.id);
 
-                Log.v("Supression",element.id + " supprimé");
+                Log.v("Supression", element.id + " supprimé");
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
 
     @Override
-    public void onRequestFailure(SpiceException spiceException) { spiceException.printStackTrace(); }
+    public void onRequestFailure(SpiceException spiceException) {
+        spiceException.printStackTrace();
+    }
 
     @Override
     public void onRequestSuccess(final Object o) {
         new AsyncTask<Void, Void, Void>() {
 
             @Override
-            protected Void doInBackground( Void... voids ) {
+            protected Void doInBackground(Void... voids) {
                 //ListeDeCours
                 if (o instanceof ListeDeCours) {
                     ListeDeCours listeDeCours = (ListeDeCours) o;
@@ -342,7 +343,6 @@ public class NoteManager extends Observable implements RequestListener<Object> {
                     NoteManager.this.notifyObservers(NotesDetailsFragment.class.getName());
                 }
             }
-
 
 
         }.execute();
