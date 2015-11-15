@@ -162,8 +162,7 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
     @Override
     public void update(Observable observable, Object data) {
         if(data instanceof String)
-            if(((String)data).equals(this.getClass().getName()))
-            {
+            if(((String)data).equals(this.getClass().getName())) {
                 progressBarDetailsNotes.setVisibility(ProgressBar.GONE);
                 refresh();
             }

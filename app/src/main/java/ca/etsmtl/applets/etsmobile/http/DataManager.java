@@ -119,9 +119,6 @@ public class DataManager {
 					switch (methodID) {
 					case SignetMethods.INFO_ETUDIANT:
 
-						final Map<String, Object> args = new HashMap<String, Object>();
-						args.put("username", username);
-
 						result = signetsMobileSoap.infoEtudiant(username, password);
 						dbHelper.getDao(Etudiant.class).createOrUpdate((Etudiant) result);
 
