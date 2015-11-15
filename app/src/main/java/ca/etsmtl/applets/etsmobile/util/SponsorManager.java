@@ -19,9 +19,6 @@ import ca.etsmtl.applets.etsmobile.model.Sponsor;
 import ca.etsmtl.applets.etsmobile.model.SponsorList;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 
-/**
- * Created by Steven on 2015-11-05.
- */
 public class SponsorManager extends Observable implements RequestListener<Object> {
 
     Context context;

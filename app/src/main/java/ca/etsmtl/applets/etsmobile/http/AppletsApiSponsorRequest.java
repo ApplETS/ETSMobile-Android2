@@ -23,9 +23,6 @@ import ca.etsmtl.applets.etsmobile.model.SponsorList;
 import ca.etsmtl.applets.etsmobile.util.HTTPSRequest;
 import ca.etsmtl.applets.etsmobile2.R;
 
-/**
- * Created by Steven on 2015-09-30.
- */
 public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorList> {
 
     private Context context;
@@ -38,20 +35,19 @@ public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorL
     @Override
     public SponsorList loadDataFromNetwork() throws Exception {
 
-        String address = "***REMOVED***";
-        //String address = context.getString(R.string.applets_api_sponsors);
+        String address = context.getString(R.string.applets_api_sponsors);
 
         SponsorList sponsorList = null;
 
         try {
 
             // Instantiate the custom HttpClient to call Https request
-            DefaultHttpClient client = new HTTPSRequest(context);
+            DefaultHttpClient client = new DefaultHttpClient();
             HttpGet get = new HttpGet(address);
 
-            String userCredentials = context.getString(R.string.credentials_preprod);
-            //String userCredentials = context.getString(R.string.credentials_api);
-            String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
+            String apiCredentials = context.getString(R.string.credentials_api);
+
+            String basicAuth = "Basic " + new String(new Base64().encode(apiCredentials.getBytes()));
             get.setHeader("Authorization", basicAuth);
             get.setHeader("Content-Type", "application/json; charset=utf-8");
             String method = get.getMethod();
@@ -83,7 +79,6 @@ public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorL
                     //sponsor.setImageResource(imageResource);
                     sponsorList.add(sponsor);
                 }
-                Log.d("SponsorList", TextUtils.join(",", sponsorList));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
