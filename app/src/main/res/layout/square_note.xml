@@ -2,38 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	 android:layout_width="wrap_content"
 	 android:layout_height="wrap_content">
-	<LinearLayout 
+	<LinearLayout
+	    android:layout_width="62dp"
+	    android:layout_height="61dp"
+	    android:orientation="vertical"
+	    android:background="#ef3e45"
+	    android:padding="1dp">
+
+	<RelativeLayout
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical"
-	    android:background="#c0c0c0" 
-	    android:padding="1dp">
-	    
-	<LinearLayout 
-	    android:layout_width="73dp"
-	    android:layout_height="73dp"
-	    android:orientation="vertical"
-	    android:background="@color/gray" >
-	    
-	    <TextView 
-	        android:id="@+id/square_note_course_name"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="center_horizontal"
-	        android:layout_marginTop="5dp"
-	        android:textSize="18sp"
-	        android:text="GIA400"/>
-	    
-	    <TextView 
+	    android:background="@color/gray"
+		android:weightSum="1">
+
+		<TextView
 	        android:id="@+id/square_note_course_cote"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="center_horizontal"
-	        android:textSize="30sp"
-	        android:gravity="right"
-	        android:text="A-"/>
-	    
-	
-	 	</LinearLayout>
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_gravity="center"
+	        android:textSize="20sp"
+			android:text="A-"
+			android:gravity="center_vertical|center"
+			android:layout_weight="1.09"
+			android:layout_above="@+id/square_note_course_name" />
+
+		<TextView
+            android:id="@+id/square_note_course_name"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:textSize="12sp"
+            android:text="GIA400"
+			android:gravity="center"
+			android:background="#ef3e45"
+			android:textColor="#ffffff"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentStart="true" />
+
+
+	</RelativeLayout>
 	</LinearLayout>
 </LinearLayout>

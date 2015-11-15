@@ -46,6 +46,7 @@ public class NotesFragment extends HttpFragment implements Observer {
 
     private ListeDeCours listeDeCours;
     private ListeDeSessions listeDeSessions;
+    private HashMap<String, String> mapNoteACeJour;
 
     private NoteManager mNoteManager;
 
@@ -67,6 +68,7 @@ public class NotesFragment extends HttpFragment implements Observer {
         mNoteManager = new NoteManager(getActivity());
         mNoteManager.addObserver(this);
 
+        mapNoteACeJour = new HashMap<>();
         loadingView.showLoadingView();
 
         refreshList();
@@ -80,7 +82,7 @@ public class NotesFragment extends HttpFragment implements Observer {
     @Override
     public void onRequestFailure(SpiceException e) {
 
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -106,70 +108,95 @@ public class NotesFragment extends HttpFragment implements Observer {
 
     private void refreshList() {
 
-        listeDeCours.liste.clear();
-        listeDeSessions.liste.clear();
+        initCollectionsNotes();
 
         try {
             listeDeCours.liste.addAll(mNoteManager.getCours());
             listeDeSessions.liste.addAll(mNoteManager.getTrimestres());
-        } catch(Exception e) { e.printStackTrace(); }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (listeDeCours.liste.size() != 0) {
 
-                sessionCoteItemArray = new SessionCoteItem[listeDeCours.liste.size()];
-                HashMap<String, ArrayList<SessionCoteItem>> mapSession = new HashMap<String, ArrayList<SessionCoteItem>>();
+            sessionCoteItemArray = new SessionCoteItem[listeDeCours.liste.size()];
+            HashMap<String, ArrayList<SessionCoteItem>> mapSession = new HashMap<String, ArrayList<SessionCoteItem>>();
 
-                for (int i = 0; i < listeDeCours.liste.size(); i++) {
+            regrouperCoursParSession(mapSession);
+            notesSession = new NotesSessionItem[listeDeSessions.liste.size()];
+            genererSessionCote(mapSession);
 
-                    // Permet le regroupement par session, on ajoute le vecteur
-                    // des cours dans la session
-                    if (mapSession.containsKey(listeDeCours.liste.get(i).session)) {
-                        ArrayList<SessionCoteItem> arrayList = mapSession.get(listeDeCours.liste.get(i).session);
+            getActivity().runOnUiThread(new Runnable() {
 
-                        arrayList.add(new SessionCoteItem(listeDeCours.liste.get(i).sigle, listeDeCours.liste.get(i).cote,
-                                listeDeCours.liste.get(i).groupe,listeDeCours.liste.get(i).titreCours));
-
-                        mapSession.put(listeDeCours.liste.get(i).session, arrayList);
-                    } else {
-                        ArrayList<SessionCoteItem> arrayList = new ArrayList<SessionCoteItem>();
-                        arrayList.add(new SessionCoteItem(listeDeCours.liste.get(i).sigle, listeDeCours.liste.get(i).cote,
-                                listeDeCours.liste.get(i).groupe,listeDeCours.liste.get(i).titreCours));
-                        mapSession.put(listeDeCours.liste.get(i).session, arrayList);
-                    }
+                @Override
+                public void run() {
+                    adapter = new NoteAdapter(getActivity(), R.layout.row_note_menu, notesSession);
+                    mListView.setAdapter(adapter);
                 }
 
-                notesSession = new NotesSessionItem[listeDeSessions.liste.size()];
-                int l = 0;
-                for (int j = listeDeSessions.liste.size() - 1; j >= 0; j--) {
-                    ArrayList<SessionCoteItem> array = mapSession.get(listeDeSessions.liste.get(j).abrege);
-                    SessionCoteItem[] sessionCoteItems = new SessionCoteItem[array.size()];
-                    int k = 0;
-                    for (SessionCoteItem sessionCote : array) {
-                        sessionCoteItems[k] = sessionCote;
-                        k++;
-                    }
-                    notesSession[l] = new NotesSessionItem(listeDeSessions.liste.get(j).auLong, listeDeSessions.liste.get(j).abrege, new SessionCoteAdapter(getActivity(), sessionCoteItems));
-                    l++;
-                }
+            });
+        }
 
-                getActivity().runOnUiThread(new Runnable() {
+    }
 
-                    @Override
-                    public void run() {
-                        adapter = new NoteAdapter(getActivity(), R.layout.row_note_menu, notesSession);
-                        mListView.setAdapter(adapter);
-                    }
+    private void initCollectionsNotes() {
+        listeDeCours.liste.clear();
+        listeDeSessions.liste.clear();
+        mapNoteACeJour.clear();
+    }
 
-                });
+    private void genererSessionCote(HashMap<String, ArrayList<SessionCoteItem>> mapSession) {
+        int l = 0;
+        for (int j = listeDeSessions.liste.size() - 1; j >= 0; j--) {
+            ArrayList<SessionCoteItem> array = mapSession.get(listeDeSessions.liste.get(j).abrege);
+            SessionCoteItem[] sessionCoteItems = new SessionCoteItem[array.size()];
+            int k = 0;
+            for (SessionCoteItem sessionCote : array) {
+                sessionCoteItems[k] = sessionCote;
+                k++;
             }
+            notesSession[l] = new NotesSessionItem(listeDeSessions.liste.get(j).auLong,
+                    listeDeSessions.liste.get(j).abrege,
+                    new SessionCoteAdapter(getActivity(),
+                            sessionCoteItems, listeDeSessions.liste.get(j).abrege));
+            l++;
+        }
+    }
 
+    private void regrouperCoursParSession(HashMap<String, ArrayList<SessionCoteItem>> mapSession) {
+
+        for (int i = 0; i < listeDeCours.liste.size(); i++) {
+
+            // Permet le regroupement par session, on ajoute le vecteur
+            // des cours dans la session
+            String sigle = listeDeCours.liste.get(i).sigle;
+            String session = listeDeCours.liste.get(i).session;
+            String cote = listeDeCours.liste.get(i).cote;
+            String groupe = listeDeCours.liste.get(i).groupe;
+            String titreCours = listeDeCours.liste.get(i).titreCours;
+            String id = listeDeCours.liste.get(i).id;
+
+            if (mapSession.containsKey(session)) {
+                ArrayList<SessionCoteItem> arrayList = mapSession.get(session);
+
+                arrayList.add(new SessionCoteItem(sigle, cote,
+                        groupe, titreCours));
+
+                mapSession.put(session, arrayList);
+            } else {
+                ArrayList<SessionCoteItem> arrayList = new ArrayList<SessionCoteItem>();
+                arrayList.add(new SessionCoteItem(sigle, cote,
+                        groupe, titreCours));
+                mapSession.put(session, arrayList);
+            }
+        }
     }
 
     @Override
     public void update(Observable observable, Object data) {
-        if(data instanceof String)
-            if(((String)data).equals(this.getClass().getName()))
-            {
+        if (data instanceof String)
+            if ((data).equals(this.getClass().getName())) {
                 refreshList();
             }
     }
