@@ -16,7 +16,7 @@
     </string-array>
 
     <string name="moodle_url">https://ena.etsmlt.ca</string>
-    <string name="portail_api_authentification_url">https://portail-preprod.etsmtl.ca/api/authentification</string>
+    <string name="portail_api_authentification_url">https://portail.etsmtl.ca/api/authentification</string>
     <string name="applets_api_calendar">https://api.clubapplets.ca/calendar/%1$s/%2$s/%3$s</string>
     <string name="moodle_api_get_token">https://ena.etsmtl.ca/login/token.php?username=%1$s&amp;password=%2$s&amp;service=moodle_mobile_app</string>
     <string name="moodle_api_get_siteinfo">https://ena.etsmtl.ca/webservice/rest/server.php?moodlewsrestformat=json&amp;wsfunction=moodle_webservice_get_siteinfo&amp;wstoken=%s</string>
