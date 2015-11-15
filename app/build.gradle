@@ -81,6 +81,7 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'io.supportkit:core:latest.release'
     compile 'io.supportkit:ui:latest.release'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 
     compile 'com.amazonaws:aws-android-sdk-sns:2.2.5'
     compile 'com.amazonaws:aws-android-sdk-core:2.2.5'

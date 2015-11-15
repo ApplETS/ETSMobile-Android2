@@ -1,54 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <LinearLayout
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/gridView_sponsor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:horizontalSpacing="10dp"
+        android:numColumns="auto_fit"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        android:verticalScrollbarPosition="right"
+        android:verticalSpacing="10dp"></GridView>
 
-        android:orientation="vertical">
+    <ca.etsmtl.applets.etsmobile.views.LoadingView
+        android:id="@+id/loadingView_sponsor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/imageView_bell"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:src="@drawable/bell_canada" />
-
-
-        <ImageView
-            android:id="@+id/imageView_google"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:src="@drawable/google" />
-
-        <ImageView
-            android:id="@+id/imageView_summit"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:src="@drawable/summit_logo_black" />
-
-        <ImageView
-            android:id="@+id/imageView_ets"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ets_transparent_background" />
-
-
-        <ImageView
-            android:id="@+id/imageView_aeets"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
-            android:src="@drawable/aeets" />
-
-
-    </LinearLayout>
-
-</ScrollView>
+</RelativeLayout>

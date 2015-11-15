@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +39,6 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 /**
  * Displays downloadable resources for a Moodle course
- *
- * @author Thibaut
  */
 public class MoodleCourseDetailsFragment extends HttpFragment {
 
@@ -77,7 +74,6 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("MoodleDetails", "onCreate is called");
         if (getArguments() != null && savedInstanceState == null) {
             Bundle bundle = getArguments();
             moodleCourseId = bundle.getString(COURSE_ID);
@@ -124,10 +120,8 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
             }
         };
         getActivity().registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-        Log.d("onActivityCreated", "frag entered onActivityCreated");
-
+        
         queryMoodleCoreCourses(moodleCourseId);
-        Log.d("onActivityCreated", "queryMoodleCoreCourses with " + moodleCourseId);
 
     }
 
@@ -135,8 +129,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putString("moodleCourseId", moodleCourseId);
     }
-
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_moodle_details, container, false);
@@ -150,12 +143,10 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     @Override
     public void onRequestFailure(SpiceException e) {
         super.onRequestFailure(e);
-        Log.d("RequestState", "entered requestFailure");
     }
 
     @Override
     public void onRequestSuccess(Object o) {
-        Log.d("RequestState", "entered requestSuccess");
 
         if(o instanceof MoodleCoreCourses) {
 
@@ -277,15 +268,12 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
      * @param idCourse
      */
     private void queryMoodleCoreCourses(final String idCourse) {
-        Log.d("queryMoodleCore", "Frag entered queryMoodleCoreCourses with " + idCourse);
         SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
 
             @Override
             public MoodleCoreCourses loadDataFromNetwork() throws Exception {
-                Log.d("loadDataFromNet", "getActivity is null? : " + getActivity());
-                Log.d("loadDataFromNet", "getMoodleToken is null? : " + ApplicationManager.userCredentials.getMoodleToken());
                 String url = getActivity().getString(R.string.moodle_api_core_course_get_contents, ApplicationManager.userCredentials.getMoodleToken(), idCourse);
-                Log.d("loadDataFromNetwork", "getting string URL " + url);
+
                 return getRestTemplate().getForObject(url, MoodleCoreCourses.class);
             }
         };

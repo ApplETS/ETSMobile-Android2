@@ -76,6 +76,5 @@ public class NewsAdapter extends ArrayAdapter<Nouvelle> {
         TextView tvTitre;
         TextView tvDate;
         ImageView imageSource;
-
     }
 }

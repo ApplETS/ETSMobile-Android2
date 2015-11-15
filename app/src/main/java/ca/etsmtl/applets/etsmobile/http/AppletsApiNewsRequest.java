@@ -1,6 +1,8 @@
 package ca.etsmtl.applets.etsmobile.http;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
@@ -60,7 +62,7 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
             HttpEntity responseEntity = getResponse.getEntity();
 
 
-            String result = EntityUtils.toString(responseEntity, "UTF-8");;
+            String result = EntityUtils.toString(responseEntity, "UTF-8");
             JSONObject root = new JSONObject(result);
             JSONObject data = root.getJSONObject("data");
             ObjectMapper mapper = new ObjectMapper();
@@ -81,6 +83,7 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
                     nouvelle.setImageResource(imageResource);
                     nouvelles.add(nouvelle);
                 }
+                    Log.d("Nouvelles", TextUtils.join(",", nouvelles));
             }
 
         }

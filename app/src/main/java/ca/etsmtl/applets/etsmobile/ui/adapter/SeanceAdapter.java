@@ -75,7 +75,7 @@ public class SeanceAdapter extends BaseAdapter {
 
             if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE.getValue()) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.row_today_title, parent,false);
-                ViewSeacesTitleHolder titleHolder = new ViewSeacesTitleHolder();
+                ViewSeancesTitleHolder titleHolder = new ViewSeancesTitleHolder();
                 titleHolder.tvTitle = (TextView) convertView.findViewById(R.id.todays_title);
                 convertView.setTag(titleHolder);
 
@@ -120,7 +120,7 @@ public class SeanceAdapter extends BaseAdapter {
             viewSeancesHolder.tvHeureDebut.setText(dateDebut);
             viewSeancesHolder.tvHeureFin.setText(dateFin);
         } else if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE.getValue()) {
-            ViewSeacesTitleHolder titleHolder = (ViewSeacesTitleHolder) convertView.getTag();
+            ViewSeancesTitleHolder titleHolder = (ViewSeancesTitleHolder) convertView.getTag();
             titleHolder.tvTitle.setText((String) getItem(position));
         }
         return convertView;
@@ -172,7 +172,7 @@ public class SeanceAdapter extends BaseAdapter {
         TextView tvSeparator;
     }
 
-    static class ViewSeacesTitleHolder {
+    static class ViewSeancesTitleHolder {
         TextView tvTitle;
     }
 }

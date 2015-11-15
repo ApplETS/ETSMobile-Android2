@@ -2,8 +2,6 @@ package ca.etsmtl.applets.etsmobile.http;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-
 
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -32,12 +30,6 @@ import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
 import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.listeSeances;
 
-/**
- * Singleton to get data from HTTP/SOAP request
- * 
- * @author Phil
- * 
- */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class DataManager {
 
@@ -98,7 +90,6 @@ public class DataManager {
 			private Exception exception = null;
 			private Object result;
 			
-
 			@Override
 			protected Object doInBackground(Object... params) {
 				try {

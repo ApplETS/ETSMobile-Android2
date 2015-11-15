@@ -2,7 +2,6 @@ package ca.etsmtl.applets.etsmobile.util;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.util.LogWriter;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
@@ -11,8 +10,6 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-
-import org.w3c.dom.Element;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,16 +21,10 @@ import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.model.ArrayOfCours;
 import ca.etsmtl.applets.etsmobile.model.Cours;
 import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
-import ca.etsmtl.applets.etsmobile.model.Etudiant;
-import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
-import ca.etsmtl.applets.etsmobile.model.Programme;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
-import ca.etsmtl.applets.etsmobile.model.listeDesActivitesEtProf;
-import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
-import ca.etsmtl.applets.etsmobile.model.listeSeances;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesDetailsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
 

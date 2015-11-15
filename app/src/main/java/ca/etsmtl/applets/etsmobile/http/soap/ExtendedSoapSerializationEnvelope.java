@@ -12,15 +12,6 @@ package ca.etsmtl.applets.etsmobile.http.soap;
 //import static org.ksoap2.serialization.SoapSerializationEnvelope.NIL_LABEL;
 //import static org.ksoap2.serialization.SoapSerializationEnvelope.NULL_LABEL;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Vector;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.AttributeContainer;
 import org.ksoap2.serialization.AttributeInfo;
@@ -35,6 +26,15 @@ import org.kxml2.kdom.Element;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Vector;
 
 import ca.etsmtl.applets.etsmobile.model.Enseignant;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
@@ -51,33 +51,30 @@ import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.listeSeances;
 
 public class ExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope {
-	
-	public interface IReferenceObject {
-	}
-	
-	static HashMap<String, Class> classNames = new HashMap<String, Class>();
-    static {
-        classNames.put("http://etsmtl.ca/^^Etudiant",Etudiant.class);
-        classNames.put("http://etsmtl.ca/^^ListeDeCours",ListeDeCours.class);
-        classNames.put("http://etsmtl.ca/^^ListeDeSessions",ListeDeSessions.class);
-        classNames.put("http://etsmtl.ca/^^listeDesProgrammes",listeDesProgrammes.class);
-        classNames.put("http://etsmtl.ca/^^listeDesCoequipiers",listeDesCoequipiers.class);
-        classNames.put("http://etsmtl.ca/^^ListeDesElementsEvaluation",ListeDesElementsEvaluation.class);
-        classNames.put("http://etsmtl.ca/^^listeDesActivitesEtProf",listeDesActivitesEtProf.class);
-        classNames.put("http://etsmtl.ca/^^Enseignant",Enseignant.class);
-        classNames.put("http://etsmtl.ca/^^listeHoraireExamensFinaux",listeHoraireExamensFinaux.class);
-        classNames.put("http://etsmtl.ca/^^listeCoursHoraire",listeCoursHoraire.class);
-        classNames.put("http://etsmtl.ca/^^coursHoraire",coursHoraire.class);
-        classNames.put("http://etsmtl.ca/^^listeJoursRemplaces",listeJoursRemplaces.class);
-        classNames.put("http://etsmtl.ca/^^listeSeances",listeSeances.class);
-    }   
 
-    HashMap<Object, String> reverseReferencesTable = new HashMap<Object, String>();
-	HashMap<String, Object> referencesTable = new HashMap<String, Object>();
-	private final String MsNs = "http://schemas.microsoft.com/2003/10/Serialization/";
 	protected static final int QNAME_NAMESPACE = 0;
 	private static final String TYPE_LABEL = "type";
+	static HashMap<String, Class> classNames = new HashMap<String, Class>();
 
+	static {
+		classNames.put("http://etsmtl.ca/^^Etudiant", Etudiant.class);
+		classNames.put("http://etsmtl.ca/^^ListeDeCours", ListeDeCours.class);
+		classNames.put("http://etsmtl.ca/^^ListeDeSessions", ListeDeSessions.class);
+		classNames.put("http://etsmtl.ca/^^listeDesProgrammes", listeDesProgrammes.class);
+		classNames.put("http://etsmtl.ca/^^listeDesCoequipiers", listeDesCoequipiers.class);
+		classNames.put("http://etsmtl.ca/^^ListeDesElementsEvaluation", ListeDesElementsEvaluation.class);
+		classNames.put("http://etsmtl.ca/^^listeDesActivitesEtProf", listeDesActivitesEtProf.class);
+		classNames.put("http://etsmtl.ca/^^Enseignant", Enseignant.class);
+		classNames.put("http://etsmtl.ca/^^listeHoraireExamensFinaux", listeHoraireExamensFinaux.class);
+		classNames.put("http://etsmtl.ca/^^listeCoursHoraire", listeCoursHoraire.class);
+		classNames.put("http://etsmtl.ca/^^coursHoraire", coursHoraire.class);
+		classNames.put("http://etsmtl.ca/^^listeJoursRemplaces", listeJoursRemplaces.class);
+		classNames.put("http://etsmtl.ca/^^listeSeances", listeSeances.class);
+	}
+
+	private final String MsNs = "http://schemas.microsoft.com/2003/10/Serialization/";
+	HashMap<Object, String> reverseReferencesTable = new HashMap<Object, String>();
+	HashMap<String, Object> referencesTable = new HashMap<String, Object>();
 	public ExtendedSoapSerializationEnvelope() {
 		super(SoapEnvelope.VER11);
 		implicitTypes = true;
@@ -149,16 +146,16 @@ public class ExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope
 					method.invoke(this, writer, obj, type, qName[QNAME_MARSHAL]);
 				} catch (NoSuchMethodException e) {
 					e.printStackTrace(); // To change body of catch statement
-											// use File | Settings | File
-											// Templates.
+					// use File | Settings | File
+					// Templates.
 				} catch (IllegalAccessException e) {
 					e.printStackTrace(); // To change body of catch statement
-											// use File | Settings | File
-											// Templates.
+					// use File | Settings | File
+					// Templates.
 				} catch (InvocationTargetException e) {
 					e.printStackTrace(); // To change body of catch statement
-											// use File | Settings | File
-											// Templates.
+					// use File | Settings | File
+					// Templates.
 				}
 				// writeElement(writer, obj, type, qName[QNAME_MARSHAL]);
 			} else {
@@ -266,5 +263,8 @@ public class ExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope
 			ex.printStackTrace();
 			return null;
 		}
+	}
+
+	public interface IReferenceObject {
 	}
 }
