@@ -3,6 +3,7 @@ package ca.etsmtl.applets.etsmobile.ui.fragment;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,10 @@ public class FAQFragment extends WebFragment {
         faqWebView.getSettings().setJavaScriptEnabled(true);
         faqWebView.getSettings().setAppCachePath(getActivity().getCacheDir().getAbsolutePath());
         faqWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            faqWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
 
         faqWebView.setWebViewClient(new WebViewClient() {
             @Override
