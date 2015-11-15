@@ -5,7 +5,6 @@ import android.content.Context;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -15,28 +14,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.kobjects.base64.Base64;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.security.KeyStore;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 import java.util.Iterator;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManagerFactory;
 
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
-import ca.etsmtl.applets.etsmobile.util.HTTPSRequest;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -66,12 +47,11 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
 
         try {
 
-            // Instantiate the custom HttpClient to call Https request
-            DefaultHttpClient client = new HTTPSRequest(context);
+            DefaultHttpClient client = new DefaultHttpClient();
             HttpGet get = new HttpGet(address);
 
-            String userCredentials = context.getString(R.string.credentials_api);
-            String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
+            String apiCredentials = context.getString(R.string.credentials_api);
+            String basicAuth = "Basic " + new String(new Base64().encode(apiCredentials.getBytes()));
             get.setHeader("Authorization", basicAuth);
             get.setHeader("Content-Type", "application/json; charset=utf-8");
             String method = get.getMethod();
