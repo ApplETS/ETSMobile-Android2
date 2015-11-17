@@ -194,7 +194,7 @@ public class MainActivity extends Activity {
             } else {
                 MyMenuItem myMenuItem = ApplicationManager.mMenu.get(fragment.getTag());
                 if (myMenuItem.hasToBeLoggedOn()) {
-                    selectItem(AboutFragment.   class.getName());
+                    selectItem(AboutFragment.class.getName());
                 }
                 selectItem(fragment.getTag());
             }

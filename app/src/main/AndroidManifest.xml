@@ -46,13 +46,6 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <!--<meta-data-->
-        <!--android:name="com.google.android.gms.version"-->
-        <!--android:value="@integer/google_play_services_version" />-->
-        <!--   -->
-        <!--<meta-data-->
-        <!--android:name="com.google.android.maps.v2.API_KEY"-->
-        <!--android:value="@string/map_key" />-->
 
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
@@ -146,14 +139,6 @@
             android:name="io.supportkit.core.GcmRegistrationIntentService"
             android:exported="false" />
 
-        <!--<service-->
-            <!--android:name="io.supportkit.core.GcmService"-->
-            <!--android:exported="false">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
-            <!--</intent-filter>-->
-        <!--</service>-->
-
         <service android:name="ca.etsmtl.applets.etsmobile.util.ETSAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
@@ -199,13 +184,6 @@
             android:exported="false" >
         </service>
 
-
-
-
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="***REMOVED***" />
     </application>
 
 </manifest>
