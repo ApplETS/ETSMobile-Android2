@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <!--<PreferenceCategory-->
+        <!--android:title="dialog_based_preferences">-->
+
+        <!--<MultiSelectListPreference-->
+            <!--android:key="list_preference"-->
+            <!--android:title="title_list_preference"-->
+            <!--android:summary="summary_list_preference"-->
+            <!--android:entries="@array/sources_news"-->
+            <!--android:entryValues="@array/sources_news_values"-->
+            <!--android:dialogTitle="dialog_title_list_preference"-->
+            <!--/>-->
+
+
+    <!--</PreferenceCategory>-->
+
+
+</PreferenceScreen>

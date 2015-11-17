@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2009 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_contact_adder"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TableRow
+                android:background="@color/gray"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Compte"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow android:background="@android:color/darker_gray" >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
+            </TableRow>
+
+            <TableRow>
+
+                <Spinner
+                    android:id="@+id/accountSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="5dp"
+                android:background="@color/gray"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Nom"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow android:background="@android:color/darker_gray" >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
+            </TableRow>
+
+            <TableRow>
+
+                <EditText
+                    android:id="@+id/contactNameEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="John Smith" />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="5dp"
+                android:background="@color/gray"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Numéro de téléphone"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow android:background="@android:color/darker_gray" >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
+            </TableRow>
+
+            <TableRow>
+
+                <EditText
+                    android:id="@+id/contactPhoneEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="1(514)123-4567"
+                    android:inputType="phone" />
+
+                <Spinner
+                    android:id="@+id/contactPhoneTypeSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="5dp"
+                android:background="@color/gray"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Courriel"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow android:background="@android:color/darker_gray" >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
+            </TableRow>
+
+            <TableRow>
+
+                <EditText
+                    android:id="@+id/contactEmailEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="textWebEmailAddress" />
+
+                <Spinner
+                    android:id="@+id/contactEmailTypeSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="5dp"
+                android:background="@color/gray"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Adresse"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow android:background="@android:color/darker_gray" >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
+            </TableRow>
+
+            <TableRow>
+
+                <EditText
+                    android:id="@+id/addressEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="5dp" >
+
+                <Button
+                    android:id="@+id/contactSaveButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Enregistrer" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+</RelativeLayout>

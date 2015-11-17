@@ -1,0 +1,45 @@
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+<resources>
+    <string name="ets_rss">http://www.etsmtl.ca/fils-rss?rss=NouvellesRSS</string>
+    <string name="ets_fb">http://www.facebook.com/feeds/page.php?id=8632204375</string>
+    <string name="ets_signets">https://signets-ens.etsmtl.ca/Secure/WebServices/SignetsMobile.asmx/%s</string>
+    <string name="url_biblio">http://bibliotheque.etsmtl.ca</string>
+    <string name="url_email_ets">https://etscourriel.etsmtl.ca/OWA/auth/logon.aspx</string>
+    
+    <string name="moodle">com.moodle.moodlemobile</string>
+
+    <string name="radio_piranha">ca.etsmtl.applets.radio</string>
+
+    <string-array name="other_apps">
+        <item>ca.etsmtl.applets.radio;ic_radio_piranha;radio_piranha_title</item>
+        <item>ca.applets.etsmap;ic_etsmap;etsmap_title</item>
+    </string-array>
+
+    <string name="moodle_url">https://ena.etsmlt.ca</string>
+    <string name="portail_api_authentification_url">https://portail.etsmtl.ca/api/authentification</string>
+    <string name="applets_api_calendar">https://api.clubapplets.ca/calendar/%1$s/%2$s/%3$s</string>
+    <string name="moodle_api_get_token">https://ena.etsmtl.ca/login/token.php?username=%1$s&amp;password=%2$s&amp;service=moodle_mobile_app</string>
+    <string name="moodle_api_get_siteinfo">https://ena.etsmtl.ca/webservice/rest/server.php?moodlewsrestformat=json&amp;wsfunction=moodle_webservice_get_siteinfo&amp;wstoken=%s</string>
+    <string name="moodle_api_enrol_get_users_courses">https://ena.etsmtl.ca/webservice/rest/server.php?moodlewsrestformat=json&amp;wsfunction=moodle_enrol_get_users_courses&amp;wstoken=%1$s&amp;userid=%2$s</string>
+    <string name="moodle_api_core_course_get_contents">https://ena.etsmtl.ca/webservice/rest/server.php?moodlewsrestformat=json&amp;wsfunction=core_course_get_contents&amp;wstoken=%1$s&amp;courseid=%2$s</string>
+    <string name="applets_api_news">https://api.clubapplets.ca/news/%1$s?post_date_min=%2$s&amp;post_date_max=%3$s</string>
+    <string name="applets_api_news_all">https://api.clubapplets.ca/news/all</string>
+    <string name="applets_api_sponsors">https://api2.clubapplets.ca/partners</string>
+    
+    <string name="bandwith_query">http://query.yahooapis.com/v1/public/yql?q=select%%20*%%20from%%20html%%20where%%20url%%3D%%22http%%3A%%2F%%2Fets-res%1$s-%2$s%%3Aets%2$s%%40www2.cooptel.qc.ca%%2Fservices%%2Ftemps%%2F%%3Fmois%%3D%3$s%%26cmd%%3DVisualiser%%22%%20and%%20xpath%%3D\'%%2F%%2Ftable%%5B%%40border%%3D%%221%%22%%5D\'&amp;format=json&amp;diagnostics=true&amp;callback=</string>
+
+
+
+
+    
+    <string name="credentials_supportkit"></string>
+    <string name="aws_access_key"></string>
+    <string name="aws_secret_key"></string>
+    <string name="aws_application_arn"></string>
+    <string name="credentials_api"></string>
+    <string name="credentials_preprod"></string>
+    <string name="google_authorized_entity"></string>
+    <string name="map_key"></string>
+
+
+</resources>

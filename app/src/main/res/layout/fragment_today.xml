@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/todays_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="0dp"
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:textStyle="bold"
+        tools:text="@string/lundi_le_26_avril"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ListView
+        android:id="@+id/todays_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/todays_name"
+        android:layoutAnimation="@anim/fade_in"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
+        tools:listitem="@layout/seances_item" />
+
+    <TextView
+        android:id="@+id/tv_todays_no_courses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/today_no_classes"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/todays_list" />
+
+    <!--<ca.etsmtl.applets.etsmobile.views.LoadingView-->
+    <!--android:id="@+id/loadingView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"/>-->
+
+
+</RelativeLayout>

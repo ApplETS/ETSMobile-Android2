@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:id="@+id/rl_detail_bottin">
+
+    <RelativeLayout
+        android:id="@+id/rl_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray"
+        android:paddingBottom="15dp" >
+
+        <TextView
+            android:id="@+id/tv_service_bottin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="département"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/rl_service"
+        android:background="@android:color/darker_gray" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_service"
+        android:isScrollContainer="true"
+        android:overScrollMode="always"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbars="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/tv_nom_prenom_bottin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="25dp"
+                android:text="nom et prénom de la personne"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_titre_bottin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_nom_prenom_bottin"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="3dp"
+                android:text="fonction à l&apos;ÉTS" />
+
+            <RelativeLayout
+                android:id="@+id/rl_emplacement_bottin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_titre_bottin"
+                android:layout_marginTop="23dp" >
+
+                <ImageView
+                    android:id="@+id/iv_emplacement_bottin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_emplacement" />
+
+                <TextView
+                    android:id="@+id/tv_emplacement_bottin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11dp"
+                    android:layout_toRightOf="@+id/iv_emplacement_bottin"
+                    android:text="coordonnées de son bureau" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_telephone_bottin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rl_emplacement_bottin"
+                android:clickable="true" >
+
+                <ImageView
+                    android:id="@+id/iv_telephone_bottin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_telephone" />
+
+                <TextView
+                    android:id="@+id/tv_telbureau_bottin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11dp"
+                    android:layout_toRightOf="@+id/iv_telephone_bottin"
+                    android:text="numéro de téléphone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_courriel_bottin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rl_telephone_bottin" >
+
+                <ImageView
+                    android:id="@+id/iv_courriel_bottin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_courriel" />
+
+                <TextView
+                    android:id="@+id/tv_courriel_bottin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11dp"
+                    android:layout_toRightOf="@+id/iv_courriel_bottin"
+                    android:text="adresse courriel" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btn_ajout_contact_bottin"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rl_courriel_bottin"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:text="Ajouter aux contacts" />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

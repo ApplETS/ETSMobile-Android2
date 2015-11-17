@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:id="@+id/activity_moodle_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="@string/activity_moodle_titre"
+        android:textSize="30sp"/>
+    
+    <LinearLayout 
+        android:id="@+id/activity_moodle_layout_url"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/activity_moodle_title"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp">
+        
+       <TextView 
+        android:id="@+id/activity_moodle_instruc_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_moodle_url_text"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+       
+        <TextView 
+        android:id="@+id/activity_moodle_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/moodle_url"
+        android:textSize="16dp"/>
+     </LinearLayout>   
+     <LinearLayout 
+         android:id="@+id/activity_moodle_layout_user_login"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/activity_moodle_layout_url"
+         android:orientation="vertical"
+         android:layout_marginTop="10dp"
+         android:layout_marginLeft="30dp">
+      
+       <TextView 
+        android:id="@+id/activity_moodle_instruc_nom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_moodle_nom"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+       
+        <TextView 
+        android:id="@+id/activity_moodle_instruc_nom_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_moodle_code_universelle"
+        android:textSize="16sp"/>
+     </LinearLayout>
+     <LinearLayout 
+         android:id="@+id/activity_moodle_layout_user_pwd"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/activity_moodle_layout_user_login"
+         android:orientation="vertical"
+         android:layout_marginTop="10dp"
+         android:layout_marginLeft="30dp">
+       <TextView 
+        android:id="@+id/activity_moodle_instruc_pwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="@string/activity_moodle_pwd"
+        android:textSize="20sp"/>
+       
+       <TextView 
+        android:id="@+id/activity_moodle_instruc_pwd_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_moodle_pwd_instruc"
+        android:textSize="16sp"/>
+    </LinearLayout>
+    
+    <Button 
+        android:id="@+id/activity_moodle_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:drawableTop="@drawable/moodle_icon_smal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/activity_moodle_app"
+        android:layout_below="@id/activity_moodle_layout_user_pwd"/>
+     
+     
+    
+
+</RelativeLayout>

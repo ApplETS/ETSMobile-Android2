@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rl_news_details_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px">
+
+            <TextView
+                android:id="@+id/tv_news_details_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                tools:text="ÉTS - École de technologie supérieure"
+                android:layout_centerHorizontal="true" />
+
+
+
+
+            <ImageView
+                android:id="@+id/iv_news_details_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5px"
+                android:layout_marginTop="10px"
+                android:layout_below="@id/tv_news_details_from"
+                tools:src="@drawable/test_nouvelles"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10px" />
+
+            <TextView
+                android:id="@+id/tv_news_details_updated_time"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_news_details_image"
+                android:layout_marginLeft="60px"
+                tools:text="2014-12-16 16:24:20"
+                android:layout_centerHorizontal="true" />
+
+
+
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_news_details_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_news_details_header"
+            android:layout_margin="10px"
+            tools:text="Une belle promotion du Centre sportif ÉTS pour les étudiants de l'école :" />
+
+        <TextView
+            android:id="@+id/tv_news_details_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_news_details_title"
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
+            tools:text="Message me message me message me message me message me message me message me message" />
+
+        <TextView
+            android:id="@+id/tv_news_details_fb_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_news_details_message"
+            android:layout_margin="10px"
+            android:autoLink="web"
+            tools:text="http://youtu.be/b2bgm_BfpKw" />
+
+
+    </RelativeLayout>
+</ScrollView>

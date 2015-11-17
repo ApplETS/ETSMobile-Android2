@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <TextView
+        android:id="@+id/tv_moodle_course_sigle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:text="TIN501-03-05-06" />
+
+    <TextView
+        android:id="@+id/tv_moodle_course_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_moodle_course_sigle"
+        android:layout_marginLeft="20dp"
+        android:textSize="17sp"
+        tools:text="Structure de données et algorithmes" />
+
+</RelativeLayout>
