@@ -184,6 +184,11 @@
             android:exported="false" >
         </service>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="@string/fabric_api_key" />
+
+
     </application>
 
 </manifest>
