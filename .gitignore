@@ -45,3 +45,4 @@ build
 gradlew
 
 app/src/main/res/values/secrets.xml
+google-services.json
