@@ -32,14 +32,7 @@
 
 
     
-    <string name="credentials_supportkit"></string>
-    <string name="aws_access_key"></string>
-    <string name="aws_secret_key"></string>
-    <string name="aws_application_arn"></string>
-    <string name="credentials_api"></string>
-    <string name="credentials_preprod"></string>
-    <string name="google_authorized_entity"></string>
-    <string name="map_key"></string>
+
 
 
 </resources>
