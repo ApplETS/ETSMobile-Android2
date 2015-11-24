@@ -4,9 +4,11 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
@@ -43,9 +45,6 @@ import ca.etsmtl.applets.etsmobile2.R;
 import io.fabric.sdk.android.Fabric;
 import io.supportkit.core.SupportKit;
 
-/**
- * Created by Phil on 17/11/13.
- */
 public class ApplicationManager extends Application {
 
 
@@ -53,6 +52,12 @@ public class ApplicationManager extends Application {
     public static UserCredentials userCredentials;
     public static String domaine;
     public static int typeUsagerId;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {

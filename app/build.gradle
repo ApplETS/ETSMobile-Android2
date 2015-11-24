@@ -37,6 +37,7 @@ android {
         targetSdkVersion 21
         versionCode 16
         versionName "2.05"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -84,5 +85,6 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-sns:2.2.5'
     compile 'com.amazonaws:aws-android-sdk-core:2.2.5'
     compile 'net.sf.opencsv:opencsv:2.3'
+    compile 'com.android.support:multidex:1.0.0'
 
 }
