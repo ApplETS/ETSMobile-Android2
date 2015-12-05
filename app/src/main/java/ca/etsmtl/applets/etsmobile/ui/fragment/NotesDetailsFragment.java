@@ -86,7 +86,6 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.notes_details_fragment, container, false);
-        ((TextView) v.findViewById(R.id.notes_fragment_sigle)).setText(sigle);
         ((TextView) v.findViewById(R.id.note_fragment_titre_cours)).setText(titreCours);
         mlistView = (ListView) v.findViewById(android.R.id.list);
 
