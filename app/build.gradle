@@ -86,5 +86,7 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-core:2.2.5'
     compile 'net.sf.opencsv:opencsv:2.3'
     compile 'com.android.support:multidex:1.0.0'
+    compile 'me.grantland:autofittextview:0.2.+'
+
 
 }

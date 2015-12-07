@@ -1,33 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-    <RelativeLayout 
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical">
+
+    <LinearLayout
         android:id="@+id/notes_framgent_sigle_layout"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/black_gray">
-	    <TextView android:id="@+id/notes_fragment_sigle"
-	      android:layout_width="wrap_content"
-	      android:layout_height="wrap_content"
-	      android:layout_centerHorizontal="true"
-	      android:textSize="28sp"
-	      android:text="GTI619"
-          android:gravity="center_horizontal"
-          android:layout_gravity="center_vertical"
-          android:textColor="@color/gray"/>
-    </RelativeLayout>
 
-     <ListView 
+        <me.grantland.widget.AutofitTextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/note_fragment_titre_cours"
+            android:singleLine="true"
+            android:textColor="@color/gray"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="30sp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:text="Cours Title"
+            />
+    </LinearLayout>
+
+    <ListView
         android:id="@android:id/list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:layout_below="@id/notes_framgent_sigle_layout"
-        android:padding="10dp"
+        android:divider="@color/black_gray"
         android:dividerHeight="1dp"
-        android:divider="@color/black_gray"/>
+        android:padding="10dp"/>
 
     <ProgressBar
         android:id="@+id/progressBar_notes_details"
