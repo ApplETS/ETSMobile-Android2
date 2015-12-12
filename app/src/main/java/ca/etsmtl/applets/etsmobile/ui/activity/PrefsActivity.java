@@ -53,8 +53,8 @@ public class PrefsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
 
             addPreferencesFromResource(R.xml.preferences);
-
-            String[] selections = {"ets","applets"};
+            
+            String[] selections = getResources().getStringArray(R.array.sources_news_values);
             Set<String> selectionSet = new HashSet<String>();
             selectionSet.addAll(Arrays.asList(selections));
 
