@@ -33,7 +33,6 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.OtherAppsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.ProfilFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.RadioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
@@ -153,14 +152,6 @@ public class ApplicationManager extends Application {
                         getString(R.string.menu_section_2_biblio),
                         BiblioFragment.class,
                         R.drawable.ic_ico_library,
-                        false
-                ));
-
-        mMenu.put(RadioFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_2_radio),
-                        RadioFragment.class,
-                        R.drawable.ic_ico_radio,
                         false
                 ));
 
