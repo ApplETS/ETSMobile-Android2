@@ -21,4 +21,5 @@ public class Constants {
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String EXP_DATE_COOKIE = "EXP_DATE_COOKIE";
+    public static final String ALL_NOTIFS_LOADED = "ALL_NOTIFS_LOADED";
 }
