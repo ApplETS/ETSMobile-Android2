@@ -1,10 +1,14 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.URLUtil;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -17,7 +21,6 @@ import java.util.ArrayList;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
-import ca.etsmtl.applets.etsmobile.model.MonETSNotificationList;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotificationsAdapter;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -47,8 +50,20 @@ public class NotificationActivity extends Activity implements RequestListener<Ob
 
         notificationsAdapter = new NotificationsAdapter(this, R.layout.row_notification, new ArrayList<MonETSNotification>());
         listView.setAdapter(notificationsAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MonETSNotification item = notificationsAdapter.getItem(position);
+                String url = item.getUrl();
+                if (URLUtil.isValidUrl(url)) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            }
+        });
 
-       syncAdapterWithDB();
+        syncAdapterWithDB();
 
 
         Utility.loadNotifications(this, this);
