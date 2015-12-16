@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -55,9 +56,12 @@ public class NotificationsAdapter extends ArrayAdapter<MonETSNotification> {
 
         MonETSNotification item = getItem(position);
 
-        holder.tvNomApplication.setText(item.getNotificationApplicationNom());
+        String nomApplication = item.getNotificationApplicationNom();
+        int colour = Utility.stringToColour(nomApplication, 60);
+
+        holder.tvNomApplication.setText(nomApplication);
         holder.tvTexteNotification.setText(item.getNotificationTexte());
-//        holder.linearLayoutNotification
+        holder.linearLayoutNotification.setBackgroundColor(colour);
 
         return view;
     }

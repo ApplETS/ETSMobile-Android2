@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.TextUtils;
 
 import com.j256.ormlite.dao.Dao;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -152,6 +153,35 @@ public class Utility {
 
             }
         });
+    }
+
+    /**
+     * Returns a color for a given string.
+     *
+     * @param str
+     * @param transparency between 0 (transparent) and 255 (opaque)
+     * @return
+     */
+    public static int stringToColour(String str, int transparency) {
+        if (transparency < 0) {
+            transparency = 0;
+        }
+
+        if (transparency > 255) {
+            transparency = 255;
+        }
+
+        if(TextUtils.isEmpty(str)) {
+            str = "default";
+        }
+
+        int hash = str.hashCode();
+
+        int r = (hash & 0xFF0000) >> 16;
+        int g = (hash & 0x00FF00) >> 8;
+        int b = hash & 0x0000FF;
+
+        return Color.argb(transparency, r, g, b);
     }
 
 }
