@@ -1,7 +1,11 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -24,6 +28,7 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
+import ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
@@ -46,6 +51,7 @@ public class TodayFragment extends HttpFragment implements Observer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -65,6 +71,31 @@ public class TodayFragment extends HttpFragment implements Observer {
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_today, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.menu_item_notifications:
+
+
+                Intent intent = new Intent(getActivity(), NotificationActivity.class);
+                startActivity(intent);
+
+
+                return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
