@@ -73,7 +73,7 @@ public class DataManager {
 	 * Send a request to Signet-Mobile Web Service
 	 * 
 	 * @param method
-	 *            Int, methods are stored in {@link SignetMethod}
+	 *            Int, methods are stored in SignetMethod
 	 * @param creds
 	 *            User Credentials
 	 * @param listener
@@ -257,7 +257,7 @@ public class DataManager {
 
 								dtEnd = new DateTime(trimestre.dateFin);
 
-								if(dt.isBefore(dtEnd)) {
+								if(dt.isBefore(dtEnd.plusDays(1))) {
 									listeSeances.ListeDesSeances.addAll( signetsMobileSoap.lireHoraireDesSeances(username, password, "", trimestre.abrege, "", "").ListeDesSeances);
 								}
 							}
@@ -279,7 +279,7 @@ public class DataManager {
 								
 								dtEnd2 = new DateTime(trimestre.dateFin);
 								
-								if(dt2.isBefore(dtEnd2)) {
+								if(dt2.isBefore(dtEnd2.plusDays(1))) {
 									listeHoraireExamensFinaux.listeHoraire.addAll( signetsMobileSoap.listeHoraireExamensFin(username, password, trimestre.abrege).listeHoraire );
 								}
 							}
@@ -301,7 +301,7 @@ public class DataManager {
 								
 								dtEnd3 = new DateTime(trimestre.dateFin);
 								
-								if(dt3.isBefore(dtEnd3)) {
+								if(dt3.isBefore(dtEnd3.plusDays(1))) {
 									
 									listeJoursRemplaces.listeJours.addAll( signetsMobileSoap.lireJoursRemplaces(trimestre.abrege).listeJours );
 									
