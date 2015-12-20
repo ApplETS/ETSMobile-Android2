@@ -94,9 +94,12 @@ public class SponsorsFragment extends HttpFragment implements Observer {
                                     int position, long id) {
                 Sponsor item = sponsorList.get(position);
                 String url = item.getUrl();
-                Intent internetIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(url));
-                startActivity(internetIntent);
+                if (url != null)
+                {
+                    Intent internetIntent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(url));
+                    startActivity(internetIntent);
+                }
             }
         });
     }
