@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -94,8 +95,7 @@ public class SponsorsFragment extends HttpFragment implements Observer {
                                     int position, long id) {
                 Sponsor item = sponsorList.get(position);
                 String url = item.getUrl();
-                if (url != null)
-                {
+                if (URLUtil.isValidUrl(url)) {
                     Intent internetIntent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse(url));
                     startActivity(internetIntent);
