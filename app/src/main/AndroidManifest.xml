@@ -114,6 +114,7 @@
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity"
             android:label="@string/title_activity_notification"
+            android:launchMode="singleTop"
             android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
             android:screenOrientation="portrait">
             <meta-data

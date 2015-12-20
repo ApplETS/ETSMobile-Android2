@@ -10,15 +10,29 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.Random;
 
+import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
+import ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -30,6 +44,7 @@ import io.supportkit.core.GcmService;
 public class ETSGcmListenerService extends GcmService {
 
     private static final String TAG = "MyGcmListenerService";
+    private static final int NUMBER_OF_NOTIF_TO_DISPLAY = 5;
 
     /**
      * Called when message is received.
@@ -38,7 +53,6 @@ public class ETSGcmListenerService extends GcmService {
      * @param data Data bundle containing message data as key/value pairs.
      *             For Set of keys use data.keySet().
      */
-    // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
 
@@ -62,7 +76,6 @@ public class ETSGcmListenerService extends GcmService {
             sendNotification(data);
         }
     }
-    // [END receive_message]
 
     /**
      * Create and show a simple notification containing the received GCM message.
@@ -70,39 +83,98 @@ public class ETSGcmListenerService extends GcmService {
      * @param data GCM message received.
      */
     private void sendNotification(Bundle data) {
-
-        String notificationTexte = data.getString("NotificationTexte");
-        String notificationApplicationNom = data.getString("NotificationApplicationNom");
-        String notificationSigleCours = data.getString("NotificationSigleCours");
-        String url = data.getString("Url");
-        String notificationDateDebutAffichage = data.getString("NotificationDateDebutAffichage");
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-
         SecurePreferences securePreferences = new SecurePreferences(this);
-        int id = securePreferences.getInt(Constants.NOTIFICATION_ID, 1);
+        Gson gson = new Gson();
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        String receivedNotifString = securePreferences.getString(Constants.RECEIVED_NOTIF, "");
 
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_ets);
+        ArrayList<MonETSNotification> receivedNotif = gson.fromJson(
+                receivedNotifString,
+                new TypeToken<ArrayList<MonETSNotification>>() {
+                }.getType());
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+        if (receivedNotif == null) {
+            receivedNotif = new ArrayList<>();
+        }
+
+        MonETSNotification nouvelleNotification = getMonETSNotificationFromBundle(data);
+
+        receivedNotif.add(nouvelleNotification);
+
+        int numberOfNotifications = receivedNotif.size();
+        Intent intent = new Intent(this, NotificationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_ets);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.school_48)
-                .setLargeIcon(bm)
-                .setContentTitle(notificationApplicationNom)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationTexte))
-                .setContentText(notificationTexte)
+                .setColor(getResources().getColor(R.color.red))
+                .setContentTitle(getString(R.string.ets))
+                .setContentText(getString(R.string.new_notifications))
+                .setContentIntent(pendingIntent)
+                .setLargeIcon(icon)
                 .setAutoCancel(true)
-                .setGroup(Constants.GROUP_KEY_NOTIFICATIONS)
-                .setContentIntent(pendingIntent);
+                .setNumber(numberOfNotifications);
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.InboxStyle inBoxStyle = new NotificationCompat.InboxStyle();
 
+        // Sets a title for the Inbox in expanded layout
+        String bigContentTitle = getString(R.string.notification_content_title,
+                numberOfNotifications,
+                (numberOfNotifications == 1 ? "" : "s"),
+                (numberOfNotifications == 1 ? "" : "s"));
+        inBoxStyle.setBigContentTitle(bigContentTitle);
 
-        notificationManager.notify(id, notificationBuilder.build());
-        id++;
-        securePreferences.edit().putInt(Constants.NOTIFICATION_ID, id).commit();
+        String username = ApplicationManager.userCredentials.getUsername();
+        Spannable sb = new SpannableString(username);
+        sb.setSpan(
+                new StyleSpan(android.graphics.Typeface.BOLD),
+                0,
+                username.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+
+        inBoxStyle.setSummaryText(sb);
+
+        securePreferences.edit().putString(Constants.RECEIVED_NOTIF, gson.toJson(receivedNotif)).commit();
+
+        int minimumIndex = receivedNotif.size() - NUMBER_OF_NOTIF_TO_DISPLAY;
+        minimumIndex = minimumIndex < 0 ? 0 : minimumIndex;
+        for (int i = receivedNotif.size() - 1; i >= minimumIndex; i--) {
+            inBoxStyle.addLine(receivedNotif.get(i).getNotificationTexte());
+        }
+
+        if (numberOfNotifications > NUMBER_OF_NOTIF_TO_DISPLAY) {
+
+            int plusOthers = (numberOfNotifications - NUMBER_OF_NOTIF_TO_DISPLAY);
+            String plusOthersString = getString(R.string.others_notifications, plusOthers, (plusOthers == 1 ? "" : "s"));
+            Spannable others = new SpannableString(plusOthersString);
+            others.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, others.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            inBoxStyle.addLine(others);
+        }
+
+        mBuilder.setStyle(inBoxStyle);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(1, mBuilder.build());
+    }
+
+    public MonETSNotification getMonETSNotificationFromBundle(Bundle data) {
+        int id = Integer.valueOf(data.getString("Id"));
+        String notificationTexte = data.getString("NotificationTexte");
+
+        String notificationApplicationNom = data.getString("NotificationApplicationNom");
+        //String notificationSigleCours = data.getString("NotificationSigleCours");
+        String url = data.getString("Url");
+
+        return new MonETSNotification(
+                id,
+                0,
+                notificationTexte,
+                null,
+                notificationApplicationNom,
+                url);
     }
 
 }

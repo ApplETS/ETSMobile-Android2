@@ -43,6 +43,15 @@ public class MonETSNotification implements Comparable<MonETSNotification> {
     public MonETSNotification() {
     }
 
+    public MonETSNotification(int id, int dossierId, String notificationTexte, Date notificationDateDebutAffichage, String notificationApplicationNom, String url) {
+        this.id = id;
+        this.dossierId = dossierId;
+        this.notificationTexte = notificationTexte;
+        this.notificationDateDebutAffichage = notificationDateDebutAffichage;
+        this.notificationApplicationNom = notificationApplicationNom;
+        this.url = url;
+    }
+
     public int getId() {
         return id;
     }

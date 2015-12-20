@@ -19,6 +19,7 @@ import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.MonETSNotificationList;
 import ca.etsmtl.applets.etsmobile.util.Constants;
+import ca.etsmtl.applets.etsmobile2.R;
 
 /**
  * Created by gnut3ll4 on 15/12/15.
@@ -47,11 +48,11 @@ public class MonETSNotificationsRequest extends SpringAndroidSpiceRequest<MonETS
             authToken = accountManager.peekAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE);
         }
 
-        String url;
+        String url = context.getString(R.string.portail_api_base_url);
         if (onlyNewNotifs) {
-            url = "https://portail.etsmtl.ca/api/notification/dossier/1";
+            url += "/api/notification/dossier/1";
         } else {
-            url = "https://portail.etsmtl.ca/api/notification";
+            url += "/api/notification";
         }
 
         ClientHttpRequestInterceptor interceptor = new ClientHttpRequestInterceptor() {

@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotificationsAdapter;
+import ca.etsmtl.applets.etsmobile.util.Constants;
+import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -34,11 +36,14 @@ public class NotificationActivity extends Activity implements RequestListener<Ob
     private ListView listView;
     private DatabaseHelper databaseHelper = new DatabaseHelper(this);
     private NotificationsAdapter notificationsAdapter;
+    private SecurePreferences securePreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
+
+        securePreferences = new SecurePreferences(this);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar_notifications);
         listView = (ListView) findViewById(R.id.listView_notifications);
@@ -65,9 +70,7 @@ public class NotificationActivity extends Activity implements RequestListener<Ob
 
         syncAdapterWithDB();
 
-
         Utility.loadNotifications(this, this);
-
 
     }
 
@@ -95,6 +98,7 @@ public class NotificationActivity extends Activity implements RequestListener<Ob
     @Override
     public void onRequestSuccess(Object o) {
         progressBar.setVisibility(View.GONE);
+        securePreferences.edit().remove(Constants.RECEIVED_NOTIF).commit();
         syncAdapterWithDB();
 
     }

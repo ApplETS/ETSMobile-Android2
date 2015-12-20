@@ -113,6 +113,11 @@ public class Utility {
 
     }
 
+    /**
+     * Gets MonÉTS notifications and update DB
+     * @param context
+     * @param requestListener
+     */
     public static void loadNotifications(Context context, final RequestListener<Object> requestListener) {
         final SecurePreferences securePreferences = new SecurePreferences(context);
         final boolean allNotifsLoaded = securePreferences.getBoolean(Constants.ALL_NOTIFS_LOADED, false);
@@ -123,13 +128,15 @@ public class Utility {
             monETSNotificationsRequest = new MonETSNotificationsRequest(context, true);
         }
 
-        DataManager dataManager = DataManager.getInstance(context);
+        final DataManager dataManager = DataManager.getInstance(context);
+        dataManager.start();
         final DatabaseHelper databaseHelper = new DatabaseHelper(context);
 
         dataManager.sendRequest(monETSNotificationsRequest, new RequestListener<Object>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 requestListener.onRequestFailure(spiceException);
+                dataManager.stop();
             }
 
             @Override
@@ -150,6 +157,7 @@ public class Utility {
 
                     }
                 }
+                dataManager.stop();
 
             }
         });
