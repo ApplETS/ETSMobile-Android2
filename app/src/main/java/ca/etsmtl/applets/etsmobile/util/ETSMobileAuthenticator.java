@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Date;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
@@ -75,8 +76,12 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
 
         String authToken = am.peekAuthToken(account, authTokenType);
 
+        SecurePreferences securePreferences = new SecurePreferences(mContext);
+        Date expirationDate = Utility.getDate(securePreferences, Constants.EXP_DATE_COOKIE, new Date());
+        Date now = new Date();
+
         // Lets give another try to authenticate the user
-        if (TextUtils.isEmpty(authToken)) {
+        if (TextUtils.isEmpty(authToken) || expirationDate.before(now)) {
             final String password = am.getPassword(account);
             final String username = account.name;
 
@@ -100,7 +105,6 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
                     if (httpResponse.code() == 200) {
                         authToken = httpResponse.header("Set-Cookie");
 
-                        SecurePreferences securePreferences = new SecurePreferences(mContext);
                         Utility.saveCookieExpirationDate(authToken, securePreferences);
 
                         JSONObject jsonResponse = new JSONObject(httpResponse.body().string());
