@@ -112,6 +112,17 @@
         </activity>
 
         <activity
+            android:name="ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity"
+            android:label="@string/title_activity_notification"
+            android:launchMode="singleTop"
+            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
+        </activity>
+
+        <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity"
             android:label="PrefsActivity"
             android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
@@ -186,7 +197,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="@string/fabric_api_key" />
+            android:value="" />
 
 
     </application>

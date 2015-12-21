@@ -122,25 +122,6 @@ public class MainActivity extends Activity {
         getActionBar().setHomeButtonEnabled(true);
 
         securePreferences = new SecurePreferences(this);
-        refreshMonETSAuthToken(false);
-
-    }
-
-    /**
-     * Refresh MonETS cookie. This function is to call regularly because the cookie expires often
-     */
-    private void refreshMonETSAuthToken(boolean checkExpiration) {
-        Date expirationDate = Utility.getDate(securePreferences, Constants.EXP_DATE_COOKIE, new Date());
-        Date now = new Date();
-        if (expirationDate.before(now) || !checkExpiration) {
-            Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
-            if (accounts.length > 0) {
-                String authToken = accountManager.peekAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE);
-                // validate the token, invalidate and generate a new one if required
-                accountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authToken);
-                accountManager.getAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, null, this, null, null);
-            }
-        }
 
     }
 
@@ -174,9 +155,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        refreshMonETSAuthToken(true);
-
 
         //In case of : retry registering to GCM
         if (!isGCMTokenSent && ApplicationManager.domaine != null) {

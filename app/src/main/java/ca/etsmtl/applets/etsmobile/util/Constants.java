@@ -19,6 +19,9 @@ public class Constants {
     public static final int REQUEST_CODE_EMAIL = 1;
     public static final String GROUP_KEY_NOTIFICATIONS = "GROUP_KEY_NOTIFICATIONS";
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
+    public static final String NUMBER_OF_NOTIFICATIONS = "NUMBER_OF_NOTIFICATIONS";
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String EXP_DATE_COOKIE = "EXP_DATE_COOKIE";
+    public static final String ALL_NOTIFS_LOADED = "ALL_NOTIFS_LOADED";
+    public static final String RECEIVED_NOTIF = "RECEIVED_NOTIF";
 }
