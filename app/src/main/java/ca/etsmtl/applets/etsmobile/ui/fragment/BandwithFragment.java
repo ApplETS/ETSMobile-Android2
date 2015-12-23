@@ -43,6 +43,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar;
 import ca.etsmtl.applets.etsmobile.views.ProgressItem;
@@ -245,6 +246,8 @@ public class BandwithFragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
         });
+
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
     }

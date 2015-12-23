@@ -9,6 +9,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -60,6 +61,8 @@ public class BiblioFragment extends WebFragment {
 		});
 
 		webView.loadUrl(getActivity().getString(R.string.url_biblio));
+
+		AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
 		return v;
 	}

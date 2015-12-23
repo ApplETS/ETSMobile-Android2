@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import org.joda.time.DateTime;
@@ -34,6 +35,7 @@ import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
@@ -154,6 +156,8 @@ public class HoraireFragment extends HttpFragment implements Observer {
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
     }

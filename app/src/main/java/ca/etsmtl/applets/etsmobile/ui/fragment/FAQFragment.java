@@ -14,6 +14,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -45,6 +46,8 @@ public class FAQFragment extends WebFragment {
         });
 
         faqWebView.loadUrl("http://www.clubapplets.ca/faq/");
+
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
     }

@@ -26,6 +26,7 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MoodleCoursesAdapter;
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -57,6 +58,8 @@ public class MoodleFragment extends HttpFragment {
 
 
         queryMoodleToken();
+
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
 		return v;
 	}

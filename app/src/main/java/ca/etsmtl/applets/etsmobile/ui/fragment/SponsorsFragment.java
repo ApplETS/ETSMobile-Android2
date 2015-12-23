@@ -22,6 +22,7 @@ import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiSponsorRequest;
 import ca.etsmtl.applets.etsmobile.model.Sponsor;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SponsorAdapter;
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.SponsorManager;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -52,6 +53,7 @@ public class SponsorsFragment extends HttpFragment implements Observer {
         refreshList();
         dataManager.sendRequest(new AppletsApiSponsorRequest(getActivity()), this);
 
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
     }

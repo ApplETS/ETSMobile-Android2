@@ -36,6 +36,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.ProfilFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
@@ -61,7 +62,7 @@ public class ApplicationManager extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        AnalyticsHelper.getInstance(this);
         createDatabaseTables();
 
         SupportKit.init(this, getString(R.string.credentials_supportkit));

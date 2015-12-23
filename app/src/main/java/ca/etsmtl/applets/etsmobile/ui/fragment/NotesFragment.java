@@ -78,8 +78,8 @@ public class NotesFragment extends HttpFragment implements Observer {
         dataManager.getDataFromSignet(SignetMethods.LIST_COURS, ApplicationManager.userCredentials, this, "");
         dataManager.getDataFromSignet(SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this, "");
 
-        AnalyticsHelper.getInstance(getActivity()).getTracker().send(new HitBuilders.EventBuilder("ui", "open").setLabel(getClass().getSimpleName()).build());
-        System.out.println();
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
+
         return v;
     }
 

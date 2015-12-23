@@ -18,6 +18,7 @@ import android.widget.TextView;
 //import com.google.android.gms.maps.MapView;
 
 import ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity;
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class SecuriteFragment extends BaseFragment {
@@ -97,7 +98,9 @@ public class SecuriteFragment extends BaseFragment {
 						startActivity(intent);
 					}
 				});
-				
+
+		AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
+
 		return v; 
 	}
 }

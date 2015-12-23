@@ -22,6 +22,7 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -36,8 +37,8 @@ public class AboutFragment extends WebFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_about, container, false);
-
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
         return v;
     }
-    
+
 }

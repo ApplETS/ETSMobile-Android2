@@ -1,26 +1,27 @@
 package ca.etsmtl.applets.etsmobile.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import ca.etsmtl.applets.etsmobile2.R;
 
-/**
- * Created by jjghali on 15-11-20.
- */
 public class AnalyticsHelper {
 
 
+    public static final String FENETRE = "Fenetre";
+    public static final String OUVERTURE = "Ouverture";
     private static AnalyticsHelper instance;
     private static GoogleAnalytics analytics;
     private static Tracker tracker;
 
     public AnalyticsHelper(Context context) {
         analytics = GoogleAnalytics.getInstance(context);
-
-        tracker = analytics.newTracker(R.string.global_tracker);
+        Resources res = context.getResources();
+        tracker = analytics.newTracker(res.getString(R.string.global_tracker));
         tracker.enableExceptionReporting(true);
 
         tracker.enableAdvertisingIdCollection(false);
@@ -35,7 +36,11 @@ public class AnalyticsHelper {
         return instance;
     }
 
-    public static Tracker getTracker() {
+   /* public static Tracker getTracker() {
         return tracker;
+    }*/
+
+    public void sendScreenEvent(String screenName){
+        tracker.send(new HitBuilders.EventBuilder(FENETRE, OUVERTURE).setLabel(screenName).build());
     }
 }

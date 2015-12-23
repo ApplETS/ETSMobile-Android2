@@ -35,6 +35,7 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourses;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreModule;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleModuleContent;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleSectionAdapter;
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -136,6 +137,8 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
         super.onCreateView(inflater, v, savedInstanceState);
 
         expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_moodle_courses_details);
+
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
     }

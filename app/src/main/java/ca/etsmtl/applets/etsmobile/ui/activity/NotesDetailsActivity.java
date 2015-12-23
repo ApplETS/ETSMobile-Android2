@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesDetailsFragment;
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -37,6 +38,7 @@ public class NotesDetailsActivity extends Activity {
             Fragment fragment = NotesDetailsFragment.newInstance(sigle, sessionName, abrege, cote, groupe, titreCours);
             getFragmentManager().beginTransaction().add(R.id.container, fragment, NotesDetailsFragment.class.getName()).commit();
         }
+
     }
 
     @Override

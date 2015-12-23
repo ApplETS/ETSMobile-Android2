@@ -35,6 +35,7 @@ import ca.etsmtl.applets.etsmobile.model.Nouvelles;
 import ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
 
 
@@ -62,7 +63,7 @@ public class NewsFragment extends HttpFragment {
 
         newsListView = (ListView) v.findViewById(R.id.listView_news);
 
-
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
 		return v;
 	}

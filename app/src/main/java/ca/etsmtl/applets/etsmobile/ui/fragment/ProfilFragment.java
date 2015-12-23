@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.Programme;
 import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ProfileAdapter;
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -26,83 +28,85 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class ProfilFragment extends HttpFragment {
 
-	private ProfileAdapter profileAdapter;
-	private ProfilManager profilManager;
-	private ListView listViewProfile;
+    private ProfileAdapter profileAdapter;
+    private ProfilManager profilManager;
+    private ListView listViewProfile;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		profileAdapter = new ProfileAdapter(getActivity(),null,null);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        profileAdapter = new ProfileAdapter(getActivity(), null, null);
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_profil, container,  false);
-		super.onCreateView(inflater, v, savedInstanceState);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_profil, container, false);
+        super.onCreateView(inflater, v, savedInstanceState);
 
-		loadingView.showLoadingView();
+        loadingView.showLoadingView();
 
-		dataManager.getDataFromSignet(SignetMethods.INFO_ETUDIANT, ApplicationManager.userCredentials, this, "");
-		dataManager.getDataFromSignet(SignetMethods.LIST_PROGRAM, ApplicationManager.userCredentials, this, "");
+        dataManager.getDataFromSignet(SignetMethods.INFO_ETUDIANT, ApplicationManager.userCredentials, this, "");
+        dataManager.getDataFromSignet(SignetMethods.LIST_PROGRAM, ApplicationManager.userCredentials, this, "");
 
-		listViewProfile = (ListView) v.findViewById(R.id.listview_profile);
-		listViewProfile.setAdapter(profileAdapter);
+        listViewProfile = (ListView) v.findViewById(R.id.listview_profile);
+        listViewProfile.setAdapter(profileAdapter);
 
-		profilManager = new ProfilManager(getActivity());
+        profilManager = new ProfilManager(getActivity());
 
-		Button logoutButton = (Button) v.findViewById(R.id.profil_button_logout);
-		logoutButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				ApplicationManager.deconnexion(getActivity());
-			}
-		});
+        Button logoutButton = (Button) v.findViewById(R.id.profil_button_logout);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ApplicationManager.deconnexion(getActivity());
+            }
+        });
 
-		return v;
-	}
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
-	@Override
-	void updateUI() {
-		Etudiant etudiant = profilManager.getEtudiant();
-		profileAdapter.updateEtudiant(etudiant);
-		List<Programme> programmes = profilManager.getProgrammes();
-		profileAdapter.updateListeDesProgrammes(new ArrayList<Programme>(programmes));
-	}
+        return v;
+    }
 
-	@Override
-	public void onRequestSuccess(Object o) {
-		super.onRequestSuccess(o);
-		if (o != null) {
-			if (o instanceof Etudiant) {
+    @Override
+    void updateUI() {
+        Etudiant etudiant = profilManager.getEtudiant();
+        profileAdapter.updateEtudiant(etudiant);
+        List<Programme> programmes = profilManager.getProgrammes();
+        profileAdapter.updateListeDesProgrammes(new ArrayList<Programme>(programmes));
+    }
 
-				Etudiant etudiant = (Etudiant) o;
+    @Override
+    public void onRequestSuccess(Object o) {
+        super.onRequestSuccess(o);
+        if (o != null) {
+            if (o instanceof Etudiant) {
 
-				profileAdapter.updateEtudiant(etudiant);
+                Etudiant etudiant = (Etudiant) o;
 
-				if (etudiant.erreur == null) {
-					// Save Etudiant class in DB
-					profilManager.updateEtudiant(etudiant);
-				}
-			} else if (o instanceof listeDesProgrammes) {
+                profileAdapter.updateEtudiant(etudiant);
 
-				listeDesProgrammes listeDesProgrammes = (listeDesProgrammes) o;
+                if (etudiant.erreur == null) {
+                    // Save Etudiant class in DB
+                    profilManager.updateEtudiant(etudiant);
+                }
+            } else if (o instanceof listeDesProgrammes) {
 
-				if (listeDesProgrammes.erreur == null) {
-					for (Programme p : listeDesProgrammes.liste) {
-						profilManager.updateProgramme(p);
-					}
-				}
-			}
-			updateUI();
-		}
+                listeDesProgrammes listeDesProgrammes = (listeDesProgrammes) o;
 
-	}
+                if (listeDesProgrammes.erreur == null) {
+                    for (Programme p : listeDesProgrammes.liste) {
+                        profilManager.updateProgramme(p);
+                    }
+                }
+            }
+            updateUI();
+        }
 
-	@Override
-	public void onRequestFailure(SpiceException e) {
-		loadingView.hideProgessBar();
-	}
+    }
+
+    @Override
+    public void onRequestFailure(SpiceException e) {
+        loadingView.hideProgessBar();
+    }
 
 
 }
