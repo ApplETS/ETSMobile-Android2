@@ -95,6 +95,11 @@ public class SecuriteFragment extends BaseFragment {
 						final String uri = "tel:" + phoneNumber.trim();
 						final Intent intent = new Intent(Intent.ACTION_DIAL);
 						intent.setData(Uri.parse(uri));
+
+						AnalyticsHelper.getInstance(getActivity())
+								.sendActionEvent(getClass()
+										.getSimpleName(), UrgenceActivity.APPEL_D_URGENCE);
+
 						startActivity(intent);
 					}
 				});

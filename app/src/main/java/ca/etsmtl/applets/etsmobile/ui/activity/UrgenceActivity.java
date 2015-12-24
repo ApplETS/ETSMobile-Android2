@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import android.app.ActionBar;
@@ -50,6 +51,7 @@ public class UrgenceActivity extends Activity {
 	private static final String APPLICATION_PDF = "application/pdf";
 	private static final String SDCARD = Environment
 			.getExternalStorageDirectory().getPath();
+	public static final String APPEL_D_URGENCE = "Appel d'urgence";
 	private int id;
 	private String pdf_raw;
 
@@ -164,10 +166,14 @@ public class UrgenceActivity extends Activity {
 
 					@Override
 					public void onClick(final View v) {
+
 						final String uri = "tel:"
 								+ getString(R.string.secu_phone_lbl);
 						final Intent intent = new Intent(Intent.ACTION_DIAL);
 						intent.setData(Uri.parse(uri));
+
+						AnalyticsHelper.getInstance(getApplication())
+								.sendActionEvent(getClass().getSimpleName(), APPEL_D_URGENCE);
 						startActivity(intent);
 					}
 				});

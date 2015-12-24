@@ -7,7 +7,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/txtJoindreSecurite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/gray"
@@ -19,7 +19,7 @@
         android:textStyle="bold" />
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
+        android:id="@+id/infoSecurite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dip"

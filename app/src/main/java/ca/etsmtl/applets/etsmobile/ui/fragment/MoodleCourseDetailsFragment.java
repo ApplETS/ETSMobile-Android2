@@ -43,6 +43,8 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class MoodleCourseDetailsFragment extends HttpFragment {
 
+    public static final String TELECHARGE_FICHIER_MOODLE = "A téléchargé un fichier de moodle";
+    public static final String CONSULTE_PAGE_MOODLE = "A consulté une page sur Moodle";
     public static String COURSE_ID = "COURSE_ID";
 
     private long enqueue;
@@ -233,6 +235,9 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
                         dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
                         enqueue = dm.enqueue(request);
+
+                        AnalyticsHelper.getInstance(getActivity())
+                                .sendActionEvent(getClass().getSimpleName(), TELECHARGE_FICHIER_MOODLE);
                     }
 
                     if (object instanceof MoodleCoreModule) {
@@ -245,6 +250,9 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                             url = item.getUrl();
                         }
 
+
+                        AnalyticsHelper.getInstance(getActivity())
+                                .sendActionEvent(getClass().getSimpleName(), CONSULTE_PAGE_MOODLE);
 
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(url));

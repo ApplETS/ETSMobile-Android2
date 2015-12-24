@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
@@ -158,8 +159,8 @@ public class HoraireFragment extends HttpFragment implements Observer {
         dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
-
         return v;
+
     }
 
     @Override

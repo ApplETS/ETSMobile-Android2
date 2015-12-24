@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -48,6 +49,8 @@ public class PrefsActivity extends PreferenceActivity {
     public static class PrefsFragment extends PreferenceFragment {
 
 
+        public static final String CHOIX_DES_SOURCES = "Choix des sources";
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -60,7 +63,7 @@ public class PrefsActivity extends PreferenceActivity {
 
             MultiSelectListPreference multiSelectPref = new MultiSelectListPreference(getActivity());
             multiSelectPref.setKey("multi_pref");
-            multiSelectPref.setTitle("Choix des sources");
+            multiSelectPref.setTitle(CHOIX_DES_SOURCES);
             multiSelectPref.setEntries(R.array.sources_news);
             multiSelectPref.setEntryValues(R.array.sources_news_values);
             multiSelectPref.setDefaultValue(selectionSet);
@@ -85,6 +88,8 @@ public class PrefsActivity extends PreferenceActivity {
                 case android.R.id.home:
                     // app icon in action bar clicked; goto parent activity.
                     getActivity().onBackPressed();
+                    AnalyticsHelper.getInstance(getActivity())
+                            .sendActionEvent(getClass().getSimpleName(), CHOIX_DES_SOURCES);
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);

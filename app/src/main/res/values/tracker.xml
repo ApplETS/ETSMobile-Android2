@@ -2,4 +2,5 @@
 <resources>
     <integer name="ga_sessionTimeout">300</integer>
     <string name="global_tracker">api</string>
+    <bool name="ga_autoActivityTracking">true</bool>
 </resources>
