@@ -279,10 +279,4 @@ public class ApplicationManager extends Application {
             e.printStackTrace();
         }
     }
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
 }
