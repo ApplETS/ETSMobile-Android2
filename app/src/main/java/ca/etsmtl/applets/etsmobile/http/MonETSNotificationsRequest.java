@@ -11,6 +11,7 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.support.HttpRequestWrapper;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -68,7 +69,30 @@ public class MonETSNotificationsRequest extends SpringAndroidSpiceRequest<MonETS
         List<ClientHttpRequestInterceptor> list = new ArrayList<ClientHttpRequestInterceptor>();
         list.add(interceptor);
         restTemplate.setInterceptors(list);
+        try {
+            return restTemplate.getForObject(url, MonETSNotificationList.class);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode().value() == 401) {
+                if (accounts.length > 0) {
+                    accountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authToken);
+                    authToken = accountManager.blockingGetAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, true);
 
-        return restTemplate.getForObject(url, MonETSNotificationList.class);
+                    interceptor = new ClientHttpRequestInterceptor() {
+                        @Override
+                        public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+                            HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);
+                            requestWrapper.getHeaders().set("Cookie", authToken);
+                            return execution.execute(requestWrapper, body);
+                        }
+                    };
+                    list.clear();
+                    list.add(interceptor);
+                    restTemplate.setInterceptors(list);
+
+                }
+            }
+        } finally {
+            return restTemplate.getForObject(url, MonETSNotificationList.class);
+        }
     }
 }
