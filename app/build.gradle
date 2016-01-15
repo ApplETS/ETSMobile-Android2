@@ -89,5 +89,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.0'
     compile 'me.grantland:autofittextview:0.2.+'
 
+    wearApp project(':etsmobile-wear')
+
 
 }
