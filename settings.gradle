@@ -1,1 +1,1 @@
-include ':app', ':etsmobile-wear'
+include ':app'
