@@ -5,25 +5,30 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
@@ -32,6 +37,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
@@ -64,6 +70,7 @@ public class MainActivity extends Activity {
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private boolean isGCMTokenSent;
     private SecurePreferences securePreferences;
+    public SharedPreferences prefs;
 
 
     @Override
@@ -74,7 +81,7 @@ public class MainActivity extends Activity {
         checkPlayServices();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
+        setLocale();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
 
@@ -89,17 +96,17 @@ public class MainActivity extends Activity {
 
 
         // Set the adapter for the list view
-        int stringSet = ApplicationManager.mMenu.keySet().size();
+        /*int stringSet = ApplicationManager.mMenu.keySet().size();
         final Collection<MyMenuItem> myMenuItems = ApplicationManager.mMenu.values();
 
         MyMenuItem[] menuItems = new MyMenuItem[stringSet];
-        mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems.toArray(menuItems)));
+        mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems.toArray(menuItems)));*/
 
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
                 mDrawerLayout, /* DrawerLayout object */
-                R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+                //R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
                 R.string.drawer_open, /* "open drawer" description */
                 R.string.drawer_close /* "close drawer" description */
         ) {
@@ -129,6 +136,15 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(ApplicationManager.userCredentials == null){
+            menu.findItem(R.id.action_logout).setVisible(false);
+        }
+        super.onPrepareOptionsMenu(menu);
         return true;
     }
 
@@ -267,6 +283,29 @@ public class MainActivity extends Activity {
         if (id == R.id.action_logout) {
             ApplicationManager.deconnexion(this);
         }
+        if (id == R.id.action_language){
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle(getResources().getString(R.string.lang_title));
+            builder.setMessage(getResources().getString(R.string.lang_description));
+            builder.setPositiveButton(getResources().getString(R.string.lang_choix_positif),
+                    new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    prefs.edit().remove("language").apply();
+                    prefs.edit().putString("language", "fr").apply();
+                    recreate();
+                }
+            });
+            builder.setNegativeButton(getResources().getString(R.string.lang_choix_negatif),
+                    new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    prefs.edit().remove("language").apply();
+                    prefs.edit().putString("language", "en").apply();
+                    recreate();
+                }
+            });
+            builder.show();
+        }
+
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
         else if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -274,6 +313,34 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private String setLocale() {
+        Locale locale;
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        prefs = this.getSharedPreferences("Language", 0);
+        String restoredText = prefs.getString("language", "");
+        Log.d("prefsSetting", "language: " + restoredText);
+        if (restoredText.equalsIgnoreCase("en")) {
+            Log.d("prefsSetting", "locale set to en");
+            locale = Locale.ENGLISH;
+        }
+        else
+            locale = Locale.CANADA_FRENCH;
+        Locale.setDefault(locale);
+        //conf = new Configuration();
+        conf.locale = locale;
+        res.updateConfiguration(conf, dm);
+
+        int stringSet = ApplicationManager.mMenu.keySet().size();
+        final Collection<MyMenuItem> myMenuItems = ApplicationManager.mMenu.values();
+
+        MyMenuItem[] menuItems = new MyMenuItem[stringSet];
+        mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems.toArray(menuItems)));
+
+        return restoredText;
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
