@@ -37,6 +37,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
@@ -45,6 +46,19 @@ import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.CommentairesFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.OtherAppsFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.ProfilFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
@@ -60,6 +74,7 @@ import io.supportkit.ui.ConversationActivity;
  */
 public class MainActivity extends Activity {
 
+    public static LinkedHashMap<String, MyMenuItem> mMenu = new LinkedHashMap<String, MyMenuItem>(17);
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private CharSequence mTitle;
@@ -79,9 +94,10 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
         checkPlayServices();
+        setLocale();
+        setTitles();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        setLocale();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
 
@@ -95,12 +111,13 @@ public class MainActivity extends Activity {
         };
 
 
+
         // Set the adapter for the list view
-        /*int stringSet = ApplicationManager.mMenu.keySet().size();
-        final Collection<MyMenuItem> myMenuItems = ApplicationManager.mMenu.values();
+        int stringSet = mMenu.keySet().size();
+        final Collection<MyMenuItem> myMenuItems = mMenu.values();
 
         MyMenuItem[] menuItems = new MyMenuItem[stringSet];
-        mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems.toArray(menuItems)));*/
+        mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems.toArray(menuItems)));
 
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
@@ -186,7 +203,7 @@ public class MainActivity extends Activity {
             if (fragment == null) {
                 selectItem(AboutFragment.class.getName());
             } else {
-                MyMenuItem myMenuItem = ApplicationManager.mMenu.get(fragment.getTag());
+                MyMenuItem myMenuItem = mMenu.get(fragment.getTag());
                 if (myMenuItem.hasToBeLoggedOn()) {
                     selectItem(AboutFragment.class.getName());
                 }
@@ -242,7 +259,7 @@ public class MainActivity extends Activity {
     }
 
     private void instantiateFragments(Bundle savedInstanceState) {
-        MyMenuItem ajdItem = ApplicationManager.mMenu.get(TodayFragment.class.getName());
+        MyMenuItem ajdItem = mMenu.get(TodayFragment.class.getName());
 
         // Select Aujourd'Hui
         if (savedInstanceState != null) {
@@ -315,32 +332,25 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private String setLocale() {
+    private void setLocale() {
         Locale locale;
         Resources res = getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
         Configuration conf = res.getConfiguration();
         prefs = this.getSharedPreferences("Language", 0);
         String restoredText = prefs.getString("language", "");
-        Log.d("prefsSetting", "language: " + restoredText);
         if (restoredText.equalsIgnoreCase("en")) {
-            Log.d("prefsSetting", "locale set to en");
             locale = Locale.ENGLISH;
         }
-        else
+        else if(restoredText.equalsIgnoreCase("fr"))
             locale = Locale.CANADA_FRENCH;
+        else
+        locale = Locale.getDefault();
         Locale.setDefault(locale);
         //conf = new Configuration();
         conf.locale = locale;
         res.updateConfiguration(conf, dm);
 
-        int stringSet = ApplicationManager.mMenu.keySet().size();
-        final Collection<MyMenuItem> myMenuItems = ApplicationManager.mMenu.values();
-
-        MyMenuItem[] menuItems = new MyMenuItem[stringSet];
-        mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems.toArray(menuItems)));
-
-        return restoredText;
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -365,7 +375,7 @@ public class MainActivity extends Activity {
     private void selectItem(String key) {
         // Create a new fragment and specify the planet to show based on position
         fragment = null;
-        MyMenuItem myMenuItem = ApplicationManager.mMenu.get(key);
+        MyMenuItem myMenuItem = mMenu.get(key);
 
 
         if (myMenuItem.hasToBeLoggedOn() && ApplicationManager.userCredentials == null) {
@@ -393,7 +403,7 @@ public class MainActivity extends Activity {
                     .addToBackStack(aClass.getName()).commit();
 
             // Update the title, and close the drawer
-            setTitle(ApplicationManager.mMenu.get(key).title);
+            setTitle(mMenu.get(key).title);
             mDrawerLayout.closeDrawer(mDrawerList);
         }
 
@@ -418,5 +428,151 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
         this.finish();
+    }
+
+
+    public void setTitles(){
+        // Section 1 - Moi
+        mMenu.put(getString(R.string.menu_section_1_moi),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_moi),
+                        null
+                ));
+
+        mMenu.put(TodayFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_ajd),
+                        TodayFragment.class,
+                        R.drawable.ic_ico_aujourdhui,
+                        true
+                ));
+
+        mMenu.put(HoraireFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_horaire),
+                        HoraireFragment.class,
+                        R.drawable.ic_ico_schedule,
+                        true
+                ));
+
+        mMenu.put(NotesFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_notes),
+                        NotesFragment.class,
+                        R.drawable.ic_ico_notes,
+                        true
+                ));
+
+        mMenu.put(MoodleFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_moodle),
+                        MoodleFragment.class,
+                        R.drawable.ic_moodle_icon_small,
+                        true
+                ));
+
+        mMenu.put(ProfilFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_profil),
+                        ProfilFragment.class,
+                        R.drawable.ic_ico_profil,
+                        true
+                ));
+
+        mMenu.put(BandwithFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_bandwith),
+                        BandwithFragment.class,
+                        R.drawable.ic_ico_internet,
+                        false
+                ));
+
+
+        // Section 2 - ÉTS
+        mMenu.put(getString(R.string.menu_section_2_ets),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_ets),
+                        null
+                ));
+
+        mMenu.put(NewsFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_news),
+                        NewsFragment.class,
+                        R.drawable.ic_ico_news,
+                        false
+                ));
+
+
+        mMenu.put(BottinFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_bottin),
+                        BottinFragment.class,
+                        R.drawable.ic_ico_bottin,
+                        false
+                ));
+
+        mMenu.put(BiblioFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_biblio),
+                        BiblioFragment.class,
+                        R.drawable.ic_ico_library,
+                        false
+                ));
+
+        mMenu.put(SecuriteFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_securite),
+                        SecuriteFragment.class,
+                        R.drawable.ic_ico_security,
+                        false
+                ));
+
+        // Section 3 - ApplETS
+        mMenu.put(getString(R.string.menu_section_3_applets),
+                new MyMenuItem(
+                        getString(R.string.menu_section_3_applets),
+                        null
+                ));
+
+        mMenu.put(OtherAppsFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_3_apps),
+                        OtherAppsFragment.class,
+                        R.drawable.ic_star_60x60,
+                        false
+                ));
+
+        mMenu.put(AboutFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_3_about),
+                        AboutFragment.class,
+                        R.drawable.ic_logo_icon_final,
+                        false
+                ));
+
+        mMenu.put(CommentairesFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_3_comms),
+                        CommentairesFragment.class,
+                        R.drawable.ic_ico_comment,
+                        false
+                ));
+
+        mMenu.put(SponsorsFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_3_sponsors),
+                        SponsorsFragment.class,
+                        R.drawable.ic_ico_partners,
+                        false
+                ));
+
+        mMenu.put(FAQFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_3_faq),
+                        FAQFragment.class,
+                        R.drawable.ic_ico_faq,
+                        false
+                ));
     }
 }
