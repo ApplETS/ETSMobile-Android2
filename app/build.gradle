@@ -35,8 +35,8 @@ android {
         applicationId "ca.etsmtl.applets.etsmobile"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 16
-        versionName "2.05"
+        versionCode 17
+        versionName "2.06"
         multiDexEnabled true
     }
 
@@ -54,7 +54,8 @@ dependencies {
     //Google play service
     //compile 'com.google.android.gms:play-services-maps:6.5.+'
     // Robospice
-    //    compile 'com.octo.android.robospice:robospice:1.4.12'
+    compile 'com.octo.android.robospice:robospice-spring-android:1.4.12'
+//    compile 'com.octo.android.robospice:robospice:1.4.12'
     // Robospice - JSON
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.3'
@@ -67,7 +68,13 @@ dependencies {
     // JodaTime objects
     compile 'joda-time:joda-time:2.3'
     compile 'org.joda:joda-convert:1.7'
+
     compile 'com.android.support:support-v4:21.0.3'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
+        transitive = true;
+    }
+
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
     compile 'com.google.android.gms:play-services-analytics:8.4.0'
     compile 'com.google.code.gson:gson:2.3.1'
@@ -75,9 +82,11 @@ dependencies {
     compile 'io.supportkit:core:latest.release'
     compile 'io.supportkit:ui:latest.release'
     compile 'com.squareup.picasso:picasso:2.5.2'
+
     compile 'com.amazonaws:aws-android-sdk-sns:2.2.5'
     compile 'com.amazonaws:aws-android-sdk-core:2.2.5'
     compile 'net.sf.opencsv:opencsv:2.3'
     compile 'com.android.support:multidex:1.0.0'
     compile 'me.grantland:autofittextview:0.2.+'
+
 }

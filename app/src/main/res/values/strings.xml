@@ -13,7 +13,7 @@
 
     <!--MENU DE LANGAGE-->
     <string name="lang_title">Changement de langue</string>
-    <string name="lang_description">Utiliser ce menu pour choisir la langue de l\'application.
+    <string name="lang_description">Utilisez ce menu pour choisir la langue de l\'application.
         Les langages disponibles sont l\'anglais et le français</string>
     <string name="lang_choix_positif">Français</string>
     <string name="lang_choix_negatif">Anglais</string>
