@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
-import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
@@ -14,9 +13,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,7 +28,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
@@ -37,7 +35,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 
@@ -63,7 +60,6 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
-import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.supportkit.core.User;
 import io.supportkit.ui.ConversationActivity;
@@ -80,7 +76,7 @@ public class MainActivity extends Activity {
     private ListView mDrawerList;
     private CharSequence mTitle;
     private ActionBarDrawerToggle mDrawerToggle;
-    private Fragment fragment;
+    private Fragment mfragment;
     private String TAG = "FRAGMENTTAG";
     private AccountManager accountManager;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
@@ -204,17 +200,17 @@ public class MainActivity extends Activity {
                 new IntentFilter(Constants.REGISTRATION_COMPLETE));
 
         if (ApplicationManager.userCredentials == null) {
-            if (fragment == null) {
+            if (mfragment == null) {
                 selectItem(AboutFragment.class.getName());
             } else {
-                MyMenuItem myMenuItem = mMenu.get(fragment.getTag());
+                MyMenuItem myMenuItem = mMenu.get(mfragment.getTag());
                 if (myMenuItem.hasToBeLoggedOn()) {
                     selectItem(AboutFragment.class.getName());
                 }
-                selectItem(fragment.getTag());
+                selectItem(mfragment.getTag());
             }
         } else {
-            if (fragment == null) {
+            if (mfragment == null) {
                 selectItem(TodayFragment.class.getName());
             }
 
@@ -250,11 +246,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         FragmentManager manager = getFragmentManager();
-        if (fragment != null) {
-            manager.putFragment(outState, fragment.getTag(), fragment);
-            outState.putString(TAG, fragment.getTag());
-            super.onSaveInstanceState(outState);
+        if (mfragment != null || mfragment.isAdded()) {
+            manager.putFragment(outState, mfragment.getTag(), mfragment);
+            outState.putString(TAG, mfragment.getTag());
         }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -269,7 +265,7 @@ public class MainActivity extends Activity {
         if (savedInstanceState != null) {
             FragmentManager fragmentManager = getFragmentManager();
             String tag = savedInstanceState.getString(TAG);
-            fragment = fragmentManager.getFragment(savedInstanceState, tag);
+            mfragment = fragmentManager.getFragment(savedInstanceState, tag);
 
         } else {
             selectItem(ajdItem.mClass.getName());
@@ -377,8 +373,7 @@ public class MainActivity extends Activity {
      */
     @SuppressWarnings("rawtypes")
     private void selectItem(String key) {
-        // Create a new fragment and specify the planet to show based on position
-        fragment = null;
+        Fragment fragment = null;
         MyMenuItem myMenuItem = mMenu.get(key);
 
 
@@ -395,25 +390,26 @@ public class MainActivity extends Activity {
             Class aClass = myMenuItem.mClass;
             try {
                 fragment = (Fragment) aClass.newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             // Insert the fragment by replacing any existing fragment
             String biblio = "ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment";
 
-            if(aClass.getName().equals(biblio))
-                this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-            else
-                this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            if(aClass.getName().equals(biblio)) {
+                String url = getString(R.string.url_biblio);
+                Intent internetIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(url));
+                startActivity(internetIntent);
+            }else {
+                mfragment = fragment;
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, mfragment, aClass.getName())
+                        .addToBackStack(aClass.getName()).commit();
 
-            getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
-                    .addToBackStack(aClass.getName()).commit();
-
-            // Update the title, and close the drawer
-            setTitle(mMenu.get(key).title);
-            mDrawerLayout.closeDrawer(mDrawerList);
+                // Update the title, and close the drawer
+                setTitle(mMenu.get(key).title);
+                mDrawerLayout.closeDrawer(mDrawerList);
+            }
         }
 
     }

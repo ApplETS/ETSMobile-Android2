@@ -103,8 +103,6 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 
     @Override
     public void onStart() {
-        Log.v("NotesDetailsFragment", "Note detailsFragement pwd = " + ApplicationManager.userCredentials.getPassword());
-
         dataManager.getDataFromSignet(SignetMethods.LIST_EVAL, ApplicationManager.userCredentials, this, session, groupe, sigle);
 
         super.onStart();
@@ -124,8 +122,6 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 
         if (o instanceof ListeDesElementsEvaluation) {
             mlisteDesElementsEvaluation = (ListeDesElementsEvaluation) o;
-            Log.v("NotesDetailsFragment", "NotesDetailsFragment: list =" + mlisteDesElementsEvaluation.liste.size() + " cote="
-                    + cote);
 
             mlisteDesElementsEvaluation.id = id;
 
@@ -158,7 +154,6 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
 
     @Override
     void updateUI() {
-        // TODO Auto-generated method stub
 
     }
 
