@@ -16,8 +16,9 @@ repositories {
 
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion '21.1.2'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+    useLibrary 'org.apache.http.legacy'
 
     packagingOptions {
         exclude 'LICENSE.txt'
@@ -49,6 +50,7 @@ android {
 }
 
 dependencies {
+    wearApp project(':wear')
     //    compile 'com.android.support:multidex:1.0.+'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //Google play service
