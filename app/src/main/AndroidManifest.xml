@@ -9,8 +9,8 @@
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -22,15 +22,14 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
         android:name="ca.etsmtl.applets.etsmobile.permission.C2D_MESSAGE"
-        android:protectionLevel="signature"/>
+        android:protectionLevel="signature" />
 
-    <uses-permission android:name="ca.etsmtl.applets.etsmobile.permission.C2D_MESSAGE"/>
+    <uses-permission android:name="ca.etsmtl.applets.etsmobile.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -40,19 +39,20 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
 
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name="ca.etsmtl.applets.etsmobile.ApplicationManager"
         android:allowBackup="true"
+        android:configChanges="locale|layoutDirection"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:configChanges="locale|layoutDirection">
-
+        android:theme="@style/AppTheme">
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
+            android:configChanges="locale|layoutDirection"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:configChanges="locale|layoutDirection">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,18 +61,15 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateVisible" />
-
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity"
             android:label="@string/title_activity_moodle_course"
@@ -82,7 +79,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
-
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity"
             android:label="@string/title_activity_news_details"
@@ -92,7 +88,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
-
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity"
             android:label="@string/title_activity_bottin_details"
@@ -102,7 +97,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
-
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.NotesDetailsActivity"
             android:label="@string/title_activity_notes_details"
@@ -112,7 +106,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
-
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity"
             android:label="@string/title_activity_notification"
@@ -123,7 +116,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
-
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity"
             android:label="PrefsActivity"
@@ -137,9 +129,7 @@
         <service
             android:name="ca.etsmtl.applets.etsmobile.http.MyJackSpringAndroidSpiceService"
             android:exported="false" />
-
         <service android:name="io.supportkit.core.service.SupportKitService" />
-
         <service
             android:name="io.supportkit.core.GcmInstanceIDListenerService"
             android:exported="false">
@@ -147,16 +137,16 @@
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
-
         <service
             android:name="io.supportkit.core.GcmRegistrationIntentService"
             android:exported="false" />
-
         <service android:name="ca.etsmtl.applets.etsmobile.util.ETSAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
-            <meta-data android:name="android.accounts.AccountAuthenticator"
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
 
@@ -165,19 +155,19 @@
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                <category android:name="ca.etsmtl.applets.etsmobile"/>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="ca.etsmtl.applets.etsmobile" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
             </intent-filter>
         </receiver>
-
 
         <!-- [START gcm_listener] -->
         <service
             android:name="ca.etsmtl.applets.etsmobile.service.ETSGcmListenerService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
@@ -186,7 +176,7 @@
         <!-- [START instanceId_listener] -->
         <service
             android:name="ca.etsmtl.applets.etsmobile.service.ETSInstanceIDListenerService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
@@ -194,14 +184,21 @@
         <!-- [END instanceId_listener] -->
         <service
             android:name="ca.etsmtl.applets.etsmobile.service.RegistrationIntentService"
-            android:exported="false" >
-        </service>
+            android:exported="false"></service>
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="" />
 
+        <service
+            android:name="ca.etsmtl.applets.etsmobile.service.WearService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
+            </intent-filter>
 
+        </service>
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -19,19 +20,27 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
 public class MainActivity extends WearableActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, DataApi.DataListener{
 
     TextView mClock, mText;
     ListView listView;
     GoogleApiClient googleClient;
+    ArrayList<Seances> seanceList = new ArrayList<Seances>();
+    private static final SimpleDateFormat AMBIENT_DATE_FORMAT =
+            new SimpleDateFormat("HH:mm", Locale.US);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mClock = (TextView) findViewById(R.id.clock);
-        mText = (TextView) findViewById(R.id.list);
+        listView = (ListView) findViewById(R.id.list);
 
 
         googleClient = new GoogleApiClient.Builder(this)
@@ -40,29 +49,15 @@ public class MainActivity extends WearableActivity implements GoogleApiClient.Co
                 .addOnConnectionFailedListener(this)
                 .build();
 
-
-        /*IntentFilter messageFilter = new IntentFilter(Intent.ACTION_SEND);
-        MessageReceiver messageReceiver = new MessageReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, messageFilter);*/
     }
 
     @Override
     public void onResume(){
         super.onResume();
         googleClient.connect();
-        Log.d("wearMainAct", "Request sent");
+        mClock.setText(AMBIENT_DATE_FORMAT.format(new Date()));
     }
 
-    /*public class MessageReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String message = intent.getStringExtra("message");
-            Log.v("wearMainAct", "Main activity received message: " + message);
-            String value = message + " GB";
-            // Display message in UI
-            mText.setText(value);
-        }
-    }*/
     @Override
     public void onDataChanged(DataEventBuffer dataEvents)
     {
@@ -74,10 +69,12 @@ public class MainActivity extends WearableActivity implements GoogleApiClient.Co
             DataItem item = event.getDataItem();
             DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
             if(!dataMap.get("map").equals("nothing to show!")) {
+                DataMap mMap = dataMap.getDataMap("map");
                 String itemPath = item.getUri().getPath();
                 Seances seances = new Seances();
-                seances.getData(dataMap);
-                mText.setText(seances.libelleCours);
+                seances.getData(mMap);
+                seanceList.add(seances);
+                listView.setAdapter(new TodayAdapter(this,R.layout.row_today_courses,seanceList));
             }else{
                 mText.setText(dataMap.get("map").toString());
             }
@@ -110,6 +107,7 @@ public class MainActivity extends WearableActivity implements GoogleApiClient.Co
     @Override
     public void onConnected(Bundle connectionHint) {
         Wearable.DataApi.addListener(googleClient, this);
+        Log.d("wearMainAct", "Request sent");
         new SendToDataLayerThread("/today_req", "value_requested").start();
     }
 
@@ -119,7 +117,8 @@ public class MainActivity extends WearableActivity implements GoogleApiClient.Co
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) { }
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d("wearMainAct", connectionResult.getErrorMessage());}
 
     @Override
     protected void onStop() {
