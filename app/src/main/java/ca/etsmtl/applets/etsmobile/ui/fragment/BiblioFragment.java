@@ -39,7 +39,7 @@ public class BiblioFragment extends WebFragment {
 		webSettings.setJavaScriptEnabled(true);
 
         loadingView.showLoadingView();
-	
+
 
 		webView.setWebViewClient(new WebViewClient() {
 			@Override

@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -92,6 +93,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            instantiateFragments(savedInstanceState);
+        }
         setContentView(R.layout.activity_main);
         checkPlayServices();
         setLocale();
@@ -397,9 +401,14 @@ public class MainActivity extends Activity {
                 e.printStackTrace();
             }
             // Insert the fragment by replacing any existing fragment
-            final FragmentManager fragmentManager = getFragmentManager();
+            String biblio = "ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment";
 
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
+            if(aClass.getName().equals(biblio))
+                this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            else
+                this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment, aClass.getName())
                     .addToBackStack(aClass.getName()).commit();
 
             // Update the title, and close the drawer
