@@ -67,6 +67,7 @@ public class WearService extends WearableListenerService implements GoogleApiCli
                 DateTime.Property pDoW = dateTime.dayOfWeek();
                 DateTime.Property pDoM = dateTime.dayOfMonth();
                 DateTime.Property pMoY = dateTime.monthOfYear();
+                databaseHelper = new DatabaseHelper(this);
                 SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
                 todayList = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
                 Collections.sort(todayList, new SeanceComparator());
@@ -74,11 +75,18 @@ public class WearService extends WearableListenerService implements GoogleApiCli
                 e.printStackTrace();
             }
 
-            new SendToDataLayerThread("/today_req", todayList).start();
+            if(todayList != null && todayList.size()>0) {
+                for (int i = 0; i < todayList.size(); i++) {
+                    Seances seances;
+                    seances = todayList.get(i);
+                    new SendToDataLayerThread("/today_req", seances).start();
+                }
+            }
+            /*new SendToDataLayerThread("/today_req", todayList).start();
             Intent messageIntent = new Intent();
             messageIntent.setAction(Intent.ACTION_SEND);
             messageIntent.putExtra("message", message);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent);*/
         }
         else {
             super.onMessageReceived(messageEvent);
@@ -111,12 +119,13 @@ public class WearService extends WearableListenerService implements GoogleApiCli
 
     class SendToDataLayerThread extends Thread {
         String path;
-        ArrayList<Seances> list = new ArrayList<Seances>();
+        //ArrayList<Seances> list = new ArrayList<Seances>();
+        Seances seances;
 
         // Constructor to send a message to the data layer
-        SendToDataLayerThread(String p, ArrayList<Seances> list) {
+        SendToDataLayerThread(String p, Seances seances) {
             path = p;
-            this.list = list;
+            this.seances = seances;
         }
 
         public void run() {
@@ -124,13 +133,17 @@ public class WearService extends WearableListenerService implements GoogleApiCli
             DataMap dataMap = dataMapReq.getDataMap();
             //list.add(new Seances().getData(new DataMap().putString("libelleCours", "ELE462")));
 
-            if(list != null && list.size()>0) {
-                dataMap.putDataMap("map", list.get(0).putData());
+            /*if(list != null && list.size()>0) {
+                for(int i=0; i< list.size(); i++ ) {
+                    dataMap.putDataMap("map", list.get(i).putData());
+                    dataMap.putString("time",String.valueOf(dateTime.getMillisOfSecond()));
+                }
             }else{
                 dataMap.putString("map", "nothing to show!");
                 //dataMapReq.getDataMap().putDataMap("contents", dataMap);
-            }
-
+            }*/
+            dataMap.putDataMap("map", seances.putData());
+            dataMap.putString("time",String.valueOf(dateTime.getMillisOfSecond()));
 
             PutDataRequest request = dataMapReq.asPutDataRequest();
             Log.v("mobListener", "datamap = " + dataMap.toString());

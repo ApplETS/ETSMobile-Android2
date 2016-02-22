@@ -22,6 +22,7 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
@@ -71,9 +72,10 @@ public class MainActivity extends WearableActivity implements GoogleApiClient.Co
             if(!dataMap.get("map").equals("nothing to show!")) {
                 DataMap mMap = dataMap.getDataMap("map");
                 String itemPath = item.getUri().getPath();
-                Seances seances = new Seances();
-                seances.getData(mMap);
-                seanceList.add(seances);
+                    Seances seances = new Seances();
+                    seances.getData(mMap);
+                    seanceList.add(seances);
+                Collections.sort(seanceList, new SeanceComparator());
                 listView.setAdapter(new TodayAdapter(this,R.layout.row_today_courses,seanceList));
             }else{
                 mText.setText(dataMap.get("map").toString());

@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 
 /**
@@ -45,8 +47,14 @@ public class TodayAdapter extends ArrayAdapter<Seances> {
         }
         Seances item = getItem(position);
 
-        holder.tvHeureDebut.setText(item.dateDebut);
-        holder.tvHeureFin.setText(item.dateFin);
+        DateTime mDateDebut = DateTime.parse(item.dateDebut);
+        DateTime mDateFin = DateTime.parse(item.dateFin);
+
+        String dateDebut = String.format("%dh%02d", mDateDebut.getHourOfDay(), mDateDebut.getMinuteOfHour());
+        String dateFin = String.format("%dh%02d", mDateFin.getHourOfDay(), mDateFin.getMinuteOfHour());
+
+        holder.tvHeureDebut.setText(dateDebut);
+        holder.tvHeureFin.setText(dateFin);
         holder.tvNomActivite.setText(item.nomActivite);
         holder.tvCoursGroupe.setText(item.coursGroupe);
         holder.tvLibelleCours.setText(item.libelleCours);

@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -36,9 +38,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,8 +50,13 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar;
+import ca.etsmtl.applets.etsmobile.views.PieChart;
 import ca.etsmtl.applets.etsmobile.views.ProgressItem;
 import ca.etsmtl.applets.etsmobile2.R;
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.view.PieChartView;
 
 /**
  * Created by Phil on 17/11/13. Coded by Laurence 26/03/14
@@ -61,6 +70,11 @@ public class BandwithFragment extends Fragment {
     private final int UPLOAD = 2;
     private final int DOWNLOAD = 3;
     private final String CONTENT = "content";
+    double upload, download;
+    private static int day;
+    private PieChartView chart;
+    private PieChartData data;
+    double total;
 
 
     /**
@@ -168,6 +182,7 @@ public class BandwithFragment extends Fragment {
         grid = (GridView) v.findViewById(R.id.bandwith_grid);
         loadProgressBar = (ProgressBar)v.findViewById(R.id.progressBarLoad);
 
+        chart = (PieChartView) v.findViewById(R.id.chart);
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String phase = defaultSharedPreferences.getString("Phase", "");
         String app = defaultSharedPreferences.getString("App", "");
@@ -177,10 +192,12 @@ public class BandwithFragment extends Fragment {
             editTextPhase.setHint(phase);
             System.currentTimeMillis();
             Calendar calendar = Calendar.getInstance();
+            day = calendar.get(Calendar.DAY_OF_MONTH);
+            Log.d("day of month", ""+ day);
             int month = calendar.get(Calendar.MONTH);
             month += 1;
             String url = getActivity().getString(R.string.bandwith_query, phase, app, month);
-
+            Log.d("urlUsed", url);
             if(Utility.isNetworkAvailable(getActivity())){
                 loadProgressBar.setVisibility(View.VISIBLE);
                 new BandwithAsyncTask().execute(url);
@@ -279,6 +296,7 @@ public class BandwithFragment extends Fragment {
 
         String url = getActivity().getString(R.string.bandwith_query, phase, app, month);
 
+        Log.d("urlUsed", url);
         savePhaseAppPreferences(phase, app);
         if(Utility.isNetworkAvailable(getActivity())){
             loadProgressBar.setVisibility(View.VISIBLE);
@@ -437,19 +455,24 @@ public class BandwithFragment extends Fragment {
                                 i++;
                             }
                         }
-
+                        JSONObject objectElem = (JSONObject) arrayElem.get(day+1);
+                        JSONArray arrayElemtd = objectElem.getJSONArray("td");
+                        upload = ((JSONObject) arrayElemtd.get(1)).getDouble(CONTENT);
+                        download = ((JSONObject) arrayElemtd.get(2)).getDouble(CONTENT);
+                        Log.d("Bandwidth", "upload and download: "+upload + " "+download);
                         JSONArray quotaJson = quota.getJSONArray("tr");
                         JSONObject objectQuota = (JSONObject) quotaJson.get(1);
                         JSONArray arrayQuota = objectQuota.getJSONArray("td");
                         double quotaValue = ((JSONObject) arrayQuota.get(1)).getDouble(CONTENT);
                         quotaValue = Math.round(quotaValue / 1024 * 100) / 100.0;
-                        double total = map.get("total");
+                        total = map.get("total");
                         total = Math.round(total / 1024 * 100) / 100.0;
                         double rest = Math.round((quotaValue - total) * 100) / 100.0;
                         values[size - 1] = rest;
                         rooms[size - 1] = "■ Restant " + rest + " Go";
                         setProgressBar(total, quotaValue);
                         updateProgressBarColorItems(quotaValue);
+                        updatePieChart();
                     } else {
                         setError(editTextApp, getString(R.string.error_invalid_app));
                     }
@@ -462,6 +485,62 @@ public class BandwithFragment extends Fragment {
 
             super.onPostExecute(s);
 
+        }
+
+        public void updatePieChart(){
+            upload = upload / 1024;
+            download = download / 1024;
+            double reste = total - download - upload;
+            List<SliceValue> values = new ArrayList<SliceValue>();
+            //TODO put labels
+            values.add(new SliceValue((float) upload, ChartUtils.nextColor()));
+            values.add(new SliceValue((float) download, ChartUtils.nextColor()));
+            values.add(new SliceValue((float) reste, ChartUtils.nextColor()));
+
+            data = new PieChartData(values);
+
+            chart.setPieChartData(data);
+        }
+        private void generateData() {
+            int numValues = 2;
+
+            List<SliceValue> values = new ArrayList<SliceValue>();
+                values.add(new SliceValue((float) upload, ChartUtils.pickColor()));
+            values.add(new SliceValue((float) download, ChartUtils.pickColor()));
+
+            data = new PieChartData(values);
+            /*data.setHasLabels(hasLabels);
+            data.setHasLabelsOnlyForSelected(hasLabelForSelected);
+            data.setHasLabelsOutside(hasLabelsOutside);
+            data.setHasCenterCircle(hasCenterCircle);*/
+
+            /*if (isExploded) {
+                data.setSlicesSpacing(24);
+            }*/
+
+            /*if (hasCenterText1) {
+                data.setCenterText1("Hello!");
+
+                // Get roboto-italic font.
+                Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "Roboto-Italic.ttf");
+                data.setCenterText1Typeface(tf);
+
+                // Get font size from dimens.xml and convert it to sp(library uses sp values).
+                data.setCenterText1FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+                        (int) getResources().getDimension(R.dimen.pie_chart_text1_size)));
+            }*/
+
+            /*if (hasCenterText2) {
+                data.setCenterText2("Charts (Roboto Italic)");
+
+                Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "Roboto-Italic.ttf");
+
+                data.setCenterText2Typeface(tf);
+                data.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+                        (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
+            }*/
+
+            chart.setPieChartData(data);
         }
 
         private String containtPort(String port, HashMap<String, Double> map) {
