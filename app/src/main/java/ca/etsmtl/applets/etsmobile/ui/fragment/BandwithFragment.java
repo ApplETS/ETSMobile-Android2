@@ -74,7 +74,7 @@ public class BandwithFragment extends Fragment {
     private static int day;
     private PieChartView chart;
     private PieChartData data;
-    double total;
+    double rest;
 
 
     /**
@@ -183,6 +183,7 @@ public class BandwithFragment extends Fragment {
         loadProgressBar = (ProgressBar)v.findViewById(R.id.progressBarLoad);
 
         chart = (PieChartView) v.findViewById(R.id.chart);
+        chart.setVisibility(View.INVISIBLE);
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String phase = defaultSharedPreferences.getString("Phase", "");
         String app = defaultSharedPreferences.getString("App", "");
@@ -455,23 +456,23 @@ public class BandwithFragment extends Fragment {
                                 i++;
                             }
                         }
-                        JSONObject objectElem = (JSONObject) arrayElem.get(day+1);
-                        JSONArray arrayElemtd = objectElem.getJSONArray("td");
-                        upload = ((JSONObject) arrayElemtd.get(1)).getDouble(CONTENT);
-                        download = ((JSONObject) arrayElemtd.get(2)).getDouble(CONTENT);
-                        Log.d("Bandwidth", "upload and download: "+upload + " "+download);
                         JSONArray quotaJson = quota.getJSONArray("tr");
                         JSONObject objectQuota = (JSONObject) quotaJson.get(1);
                         JSONArray arrayQuota = objectQuota.getJSONArray("td");
                         double quotaValue = ((JSONObject) arrayQuota.get(1)).getDouble(CONTENT);
                         quotaValue = Math.round(quotaValue / 1024 * 100) / 100.0;
-                        total = map.get("total");
+                        double total = map.get("total");
                         total = Math.round(total / 1024 * 100) / 100.0;
-                        double rest = Math.round((quotaValue - total) * 100) / 100.0;
+                        rest = Math.round((quotaValue - total) * 100) / 100.0;
                         values[size - 1] = rest;
                         rooms[size - 1] = "■ Restant " + rest + " Go";
                         setProgressBar(total, quotaValue);
                         updateProgressBarColorItems(quotaValue);
+                        JSONObject objectElem = (JSONObject) arrayElem.get(day+1);
+                        JSONArray arrayElemtd = objectElem.getJSONArray("td");
+                        upload = ((JSONObject) arrayElemtd.get(1)).getDouble(CONTENT);
+                        download = ((JSONObject) arrayElemtd.get(2)).getDouble(CONTENT);
+                        Log.d("Bandwidth", "upload and download: " + upload + " " + download);
                         updatePieChart();
                     } else {
                         setError(editTextApp, getString(R.string.error_invalid_app));
@@ -490,56 +491,17 @@ public class BandwithFragment extends Fragment {
         public void updatePieChart(){
             upload = upload / 1024;
             download = download / 1024;
-            double reste = total - download - upload;
+            Log.d("reste", ""+rest);
             List<SliceValue> values = new ArrayList<SliceValue>();
             //TODO put labels
-            values.add(new SliceValue((float) upload, ChartUtils.nextColor()));
-            values.add(new SliceValue((float) download, ChartUtils.nextColor()));
-            values.add(new SliceValue((float) reste, ChartUtils.nextColor()));
+            values.add(new SliceValue((float) upload).setLabel("Upload : " + String.format("%.2f",upload) + " Go").setColor(Color.BLUE));
+            values.add(new SliceValue((float) download).setLabel("Download : " + String.format("%.2f",download) + " Go").setColor(Color.RED));
+            values.add(new SliceValue((float) rest).setLabel("Restant : " + rest + " Go").setColor(Color.GREEN));
 
             data = new PieChartData(values);
 
-            chart.setPieChartData(data);
-        }
-        private void generateData() {
-            int numValues = 2;
-
-            List<SliceValue> values = new ArrayList<SliceValue>();
-                values.add(new SliceValue((float) upload, ChartUtils.pickColor()));
-            values.add(new SliceValue((float) download, ChartUtils.pickColor()));
-
-            data = new PieChartData(values);
-            /*data.setHasLabels(hasLabels);
-            data.setHasLabelsOnlyForSelected(hasLabelForSelected);
-            data.setHasLabelsOutside(hasLabelsOutside);
-            data.setHasCenterCircle(hasCenterCircle);*/
-
-            /*if (isExploded) {
-                data.setSlicesSpacing(24);
-            }*/
-
-            /*if (hasCenterText1) {
-                data.setCenterText1("Hello!");
-
-                // Get roboto-italic font.
-                Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "Roboto-Italic.ttf");
-                data.setCenterText1Typeface(tf);
-
-                // Get font size from dimens.xml and convert it to sp(library uses sp values).
-                data.setCenterText1FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
-                        (int) getResources().getDimension(R.dimen.pie_chart_text1_size)));
-            }*/
-
-            /*if (hasCenterText2) {
-                data.setCenterText2("Charts (Roboto Italic)");
-
-                Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "Roboto-Italic.ttf");
-
-                data.setCenterText2Typeface(tf);
-                data.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
-                        (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
-            }*/
-
+            chart.setVisibility(View.VISIBLE);
+            data.setHasLabels(true);
             chart.setPieChartData(data);
         }
 

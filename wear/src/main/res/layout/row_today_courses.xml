@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:textSize="14sp"
+            android:textColor="@android:color/black"
             tools:text="10h30" />
 
         <TextView
@@ -28,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:textSize="14sp"
+            android:textColor="@android:color/black"
             tools:text="12h30" />
 
     </RelativeLayout>
