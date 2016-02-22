@@ -39,6 +39,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -71,7 +72,6 @@ public class BandwithFragment extends Fragment {
     private final int DOWNLOAD = 3;
     private final String CONTENT = "content";
     double upload, download;
-    private static int day;
     private PieChartView chart;
     private PieChartData data;
     double rest;
@@ -193,8 +193,6 @@ public class BandwithFragment extends Fragment {
             editTextPhase.setHint(phase);
             System.currentTimeMillis();
             Calendar calendar = Calendar.getInstance();
-            day = calendar.get(Calendar.DAY_OF_MONTH);
-            Log.d("day of month", ""+ day);
             int month = calendar.get(Calendar.MONTH);
             month += 1;
             String url = getActivity().getString(R.string.bandwith_query, phase, app, month);
@@ -468,8 +466,10 @@ public class BandwithFragment extends Fragment {
                         rooms[size - 1] = "■ Restant " + rest + " Go";
                         setProgressBar(total, quotaValue);
                         updateProgressBarColorItems(quotaValue);
-                        JSONObject objectElem = (JSONObject) arrayElem.get(day+1);
+                        JSONObject objectElem = (JSONObject) arrayElem.get(arrayElem.length()-2);
+                        Log.d("objectElem", objectElem.toString());
                         JSONArray arrayElemtd = objectElem.getJSONArray("td");
+                        Log.d("arrayElemtd", arrayElemtd.toString());
                         upload = ((JSONObject) arrayElemtd.get(1)).getDouble(CONTENT);
                         download = ((JSONObject) arrayElemtd.get(2)).getDouble(CONTENT);
                         Log.d("Bandwidth", "upload and download: " + upload + " " + download);
@@ -478,7 +478,7 @@ public class BandwithFragment extends Fragment {
                         setError(editTextApp, getString(R.string.error_invalid_app));
                     }
 
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
