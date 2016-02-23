@@ -49,13 +49,13 @@ public class MainActivity extends WearableActivity implements GoogleApiClient.Co
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+        googleClient.connect();
 
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        googleClient.connect();
         mClock.setText(AMBIENT_DATE_FORMAT.format(new Date()));
     }
 
