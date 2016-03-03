@@ -89,13 +89,14 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null) {
-            instantiateFragments(savedInstanceState);
-        }
+
         setContentView(R.layout.activity_main);
         checkPlayServices();
         setLocale();
         setTitles();
+        if (savedInstanceState != null) {
+            instantiateFragments(savedInstanceState);
+        }
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -309,6 +310,7 @@ public class MainActivity extends Activity {
                 public void onClick(DialogInterface dialog, int id) {
                     prefs.edit().remove("language").apply();
                     prefs.edit().putString("language", "fr").apply();
+                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
                     recreate();
                 }
             });
@@ -317,6 +319,7 @@ public class MainActivity extends Activity {
                 public void onClick(DialogInterface dialog, int id) {
                     prefs.edit().remove("language").apply();
                     prefs.edit().putString("language", "en").apply();
+                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
                     recreate();
                 }
             });
