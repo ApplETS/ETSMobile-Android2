@@ -34,8 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/notes_framgent_sigle_layout"
         android:divider="@color/black_gray"
-        android:dividerHeight="1dp"
-        android:padding="10dp"/>
+        android:dividerHeight="1dp"/>
 
     <ProgressBar
         android:id="@+id/progressBar_notes_details"
