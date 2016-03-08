@@ -4,6 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/gray" >
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBarLoad"
+        android:visibility="gone"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
     
      <LinearLayout 
          android:id="@+id/bandwith_info"
@@ -98,24 +107,31 @@
                     android:layout_weight="1"
                     android:progress="1" />
      </LinearLayout>
-     <GridView 
-         android:id="@+id/bandwith_grid"
-         android:layout_below="@+id/bandwith_progress_layout"
-         android:layout_width="fill_parent"
-         android:layout_height="fill_parent"
-         android:columnWidth="150dp"
-         android:gravity="center"
-         android:layout_marginLeft="30dp"
-       	 android:numColumns="auto_fit"/>
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBarLoad"
-        android:visibility="gone"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+    <LinearLayout
+        android:id="@+id/bandwith_grid_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@id/bandwith_progress_layout">
+
+        <GridView
+            android:id="@+id/bandwith_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnWidth="150dp"
+            android:gravity="center"
+            android:layout_marginLeft="30dp"
+            android:numColumns="auto_fit"/>
+
+        <lecho.lib.hellocharts.view.PieChartView
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+
+
 
 
 </RelativeLayout>

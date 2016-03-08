@@ -16,8 +16,9 @@ repositories {
 
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion '21.1.2'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+    useLibrary 'org.apache.http.legacy'
 
     packagingOptions {
         exclude 'LICENSE.txt'
@@ -49,45 +50,31 @@ android {
 }
 
 dependencies {
-    //    compile 'com.android.support:multidex:1.0.+'
+    wearApp project(':wear')
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    //Google play service
-    //compile 'com.google.android.gms:play-services-maps:6.5.+'
-    // Robospice
     compile 'com.octo.android.robospice:robospice-spring-android:1.4.12'
-//    compile 'com.octo.android.robospice:robospice:1.4.12'
-    // Robospice - JSON
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.3'
-    // compile 'com.fasterxml.jackson.core:jackson-core:2.3.3'
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.11'
-    // Robospice - XML
-//    compile('org.simpleframework:simple-xml:2.7.1') {
-//        exclude module: 'stax-api'
-//    }
-    // JodaTime objects
     compile 'joda-time:joda-time:2.3'
     compile 'org.joda:joda-convert:1.7'
-
-    compile 'com.android.support:support-v4:21.0.3'
-
+    compile 'com.android.support:support-v4:23.1.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
         transitive = true;
     }
-
-    compile 'com.google.android.gms:play-services-gcm:8.3.0'
-    compile 'com.google.android.gms:play-services-analytics:8.3.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
+    compile 'com.google.android.gms:play-services-wearable:8.4.0'
+    compile 'com.google.android.gms:play-services-analytics:8.4.0'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'io.supportkit:core:latest.release'
     compile 'io.supportkit:ui:latest.release'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
     compile 'com.amazonaws:aws-android-sdk-sns:2.2.5'
     compile 'com.amazonaws:aws-android-sdk-core:2.2.5'
     compile 'net.sf.opencsv:opencsv:2.3'
     compile 'com.android.support:multidex:1.0.0'
     compile 'me.grantland:autofittextview:0.2.+'
-
+    compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
 
 }
