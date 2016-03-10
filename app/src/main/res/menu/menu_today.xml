@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_item_notifications"
-        android:icon="@drawable/ic_notification"
+        android:icon="@drawable/ic_notification_50x50"
         android:showAsAction="collapseActionView|ifRoom"
         android:title="@string/notifications"></item>
 

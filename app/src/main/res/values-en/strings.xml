@@ -4,11 +4,19 @@
     <string name="app_name">ÉTSMobile</string>
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
+    <string name="action_language">Language</string>
     <string name="drawer_title">Menu</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="contact_creation_failed">Contact creation failed</string>
     <string name="cannot_open_file">No application can open that file</string>
+
+    <!--MENU DE LANGAGE-->
+    <string name="lang_title">Language change</string>
+    <string name="lang_description">Use this menu if you want to change the language used in this app.
+    The app supports French and English.</string>
+    <string name="lang_choix_positif">French</string>
+    <string name="lang_choix_negatif">English</string>
 
 
     <!-- MENU -->

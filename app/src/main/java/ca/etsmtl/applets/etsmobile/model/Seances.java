@@ -19,6 +19,7 @@ import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import com.google.android.gms.wearable.DataMap;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -56,6 +57,28 @@ public class Seances extends AttributeContainer implements KvmSerializable
   public Seances ()
   {
   }
+
+    public void getData(DataMap map){
+        dateDebut = map.getString("dateDebut");
+        dateFin = map.getString("dateFin");
+        coursGroupe = map.getString("coursGroupe");
+        nomActivite = map.getString("nomActivite");
+        local = map.getString("local");
+        descriptionActivite = map.getString("descriptionActivite");
+        libelleCours = map.getString("libelleCours");
+    }
+
+    public DataMap putData(){
+        DataMap map = new DataMap();
+        map.putString("dateDebut", dateDebut);
+        map.putString("dateFin", dateFin);
+        map.putString("coursGroupe", coursGroupe);
+        map.putString("nomActivite", nomActivite);
+        map.putString("local", local);
+        map.putString("descriptionActivite", descriptionActivite);
+        map.putString("libelleCours", libelleCours);
+        return map;
+    }
 
   public Seances (AttributeContainer inObj,ExtendedSoapSerializationEnvelope envelope)
   {

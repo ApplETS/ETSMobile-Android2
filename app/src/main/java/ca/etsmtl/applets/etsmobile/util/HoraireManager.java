@@ -224,7 +224,8 @@ public class HoraireManager extends Observable implements RequestListener<Object
 
             SeancesInAPI.id = SeancesInAPI.coursGroupe +
                     SeancesInAPI.dateDebut +
-                    SeancesInAPI.dateFin;
+                    SeancesInAPI.dateFin +
+                    SeancesInAPI.local;
 
             listeSeancesInAPI.put(SeancesInAPI.id, SeancesInAPI);
         }
