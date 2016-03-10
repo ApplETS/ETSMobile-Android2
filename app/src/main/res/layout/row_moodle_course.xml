@@ -13,12 +13,23 @@
         android:textStyle="bold"
         tools:text="TIN501-03-05-06" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tv_moodle_course_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_moodle_course_sigle"
+        android:layout_below="@id/tv_moodle_course_sigle"
         android:layout_marginLeft="20dp"
+        android:textSize="17sp"
+        tools:text="Structure de données et algorithmes" />-->
+
+    <me.grantland.widget.AutofitTextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/tv_moodle_course_sigle"
+        android:id="@+id/tv_moodle_course_name"
+        android:singleLine="true"
+        android:layout_gravity="center_vertical"
         android:textSize="17sp"
         tools:text="Structure de données et algorithmes" />
 

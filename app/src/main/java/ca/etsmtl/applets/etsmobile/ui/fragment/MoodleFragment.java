@@ -27,6 +27,8 @@ import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MoodleCoursesAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
+import ca.etsmtl.applets.etsmobile.util.CourseComparator;
+import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -103,6 +105,7 @@ public class MoodleFragment extends HttpFragment {
             if (o instanceof MoodleCourses) {
                 MoodleCourses moodleCourses = (MoodleCourses) o;
                 moodleCoursesAdapter = new MoodleCoursesAdapter(getActivity(), R.layout.row_moodle_course, this);
+                Collections.sort(moodleCourses, new CourseComparator());
                 Collections.reverse(moodleCourses); // To get the most current semester first
                 String semesterString;
                 List<String> semesterList = new ArrayList<>();
