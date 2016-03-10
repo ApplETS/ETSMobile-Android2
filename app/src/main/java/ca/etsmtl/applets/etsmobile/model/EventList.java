@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EventList {
+public class EventList extends ArrayList<Event>{
 
     @JsonProperty("ets")
     ArrayList<Event> events;

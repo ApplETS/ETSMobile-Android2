@@ -30,6 +30,7 @@ import java.util.Observer;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
+import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
@@ -40,6 +41,7 @@ import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
+import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -157,6 +159,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), "2015-04-16", "2015-05-28"), this);
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
         return v;
@@ -173,6 +176,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
 
     @Override
     public void onRequestSuccess(final Object o) {
+
         if (o instanceof ListeDeSessions) {
 
             ListeDeSessions listeDeSessions = (ListeDeSessions) o;
@@ -185,7 +189,6 @@ public class HoraireFragment extends HttpFragment implements Observer {
                 if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
                     String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
                     String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
-                    //todo dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateStartString, dateEndString), HoraireFragment.this);
                     break;
                 }
             }
