@@ -18,9 +18,9 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -50,6 +50,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.CommentairesFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
@@ -398,13 +399,27 @@ public class MainActivity extends Activity {
             }
             // Insert the fragment by replacing any existing fragment
             String biblio = "ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment";
+            String monETS = "ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment";
 
             if(aClass.getName().equals(biblio)) {
                 String url = getString(R.string.url_biblio);
                 Intent internetIntent = new Intent(Intent.ACTION_VIEW,
                         Uri.parse(url));
                 startActivity(internetIntent);
-            }else {
+            }else if(aClass.getName().equals(monETS)){
+                /*Authenticator.setDefault(new Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(ApplicationManager.userCredentials.getUsername(),
+                                ApplicationManager.userCredentials.getPassword().toCharArray());
+                    }
+                });*/
+                String url = "https://"+ApplicationManager.userCredentials.getUsername()+":"+
+                        ApplicationManager.userCredentials.getPassword()+"@portail.etsmtl.ca/";
+                Intent internetIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(url));
+                startActivity(internetIntent);
+
+            } else{
                 mfragment = fragment;
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, mfragment, aClass.getName())
                         .addToBackStack(aClass.getName()).commit();
@@ -483,6 +498,14 @@ public class MainActivity extends Activity {
                 new MyMenuItem(
                         getString(R.string.menu_section_1_profil),
                         ProfilFragment.class,
+                        R.drawable.ic_ico_profil,
+                        true
+                ));
+
+        mMenu.put(MonETSFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_1_monETS),
+                        MonETSFragment.class,
                         R.drawable.ic_ico_profil,
                         true
                 ));
