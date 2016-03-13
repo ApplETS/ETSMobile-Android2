@@ -506,7 +506,7 @@ public class MainActivity extends Activity {
                 new MyMenuItem(
                         getString(R.string.menu_section_1_monETS),
                         MonETSFragment.class,
-                        R.drawable.ic_ico_profil,
+                        R.drawable.ic_monets,
                         true
                 ));
 
