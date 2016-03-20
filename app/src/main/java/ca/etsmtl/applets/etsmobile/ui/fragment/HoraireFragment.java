@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -28,6 +29,8 @@ import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
@@ -55,6 +58,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
     private DateTime dateTime = new DateTime();
     private DatabaseHelper databaseHelper;
     private ProgressBar progressBarSyncHoraire;
+    @Bind(R.id.calendarView) CalendarView mCalendarView;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -118,7 +122,22 @@ public class HoraireFragment extends HttpFragment implements Observer {
         return super.onOptionsItemSelected(item);
 
     }
+    public void initializeCalendar(){
+        mCalendarView.setShowWeekNumber(false);
 
+        mCalendarView.setFirstDayOfWeek(2);
+//        mCalendarView.setSelectedDateVerticalBar(R.color.black);
+
+//        mCalendarView.setUnfocusedMonthDateColor(getResources().getColor(R.color.gray));
+        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                //Take date
+                //Fetch course for the date
+                //
+            }
+        });
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +147,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_calendar, container, false);
+        ButterKnife.bind(this, v);
 
         databaseHelper = new DatabaseHelper(getActivity());
 
