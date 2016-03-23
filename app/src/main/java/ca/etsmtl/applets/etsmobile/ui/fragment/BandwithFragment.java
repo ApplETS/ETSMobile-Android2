@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,24 +21,16 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,16 +38,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ca.etsmtl.applets.etsmobile.model.ConsommationBP;
 import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar;
-import ca.etsmtl.applets.etsmobile.views.PieChart;
 import ca.etsmtl.applets.etsmobile.views.ProgressItem;
 import ca.etsmtl.applets.etsmobile2.R;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
-import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 
 /**
@@ -71,10 +61,12 @@ public class BandwithFragment extends Fragment {
     private final int UPLOAD = 2;
     private final int DOWNLOAD = 3;
     private final String CONTENT = "content";
+    static double uploadTot, downloadTot;
     double upload, download;
     private PieChartView chart;
     private PieChartData data;
-    double rest;
+    static double limit;
+    static String phase, app;
 
 
     /**
@@ -185,8 +177,8 @@ public class BandwithFragment extends Fragment {
         chart = (PieChartView) v.findViewById(R.id.chart);
         chart.setVisibility(View.INVISIBLE);
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String phase = defaultSharedPreferences.getString("Phase", "");
-        String app = defaultSharedPreferences.getString("App", "");
+        phase = defaultSharedPreferences.getString("Phase", "");
+        app = defaultSharedPreferences.getString("App", "");
 
         if (phase.length() > 0 && app.length() > 0) {
             editTextApp.setHint(app);
@@ -391,7 +383,7 @@ public class BandwithFragment extends Fragment {
         protected String doInBackground(String... param) {
             try {
 
-                HttpClient httpClient = new DefaultHttpClient();
+                /*HttpClient httpClient = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
                 URI uriWeb = new URI(param[0]);
                 request.setURI(uriWeb);
@@ -408,23 +400,53 @@ public class BandwithFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
 
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+                OkHttpClient client = new OkHttpClient();
+
+                Request request = new Request.Builder()
+                        .url("https://api3.clubapplets.ca/cooptel?phase="+phase+"&appt="+app)
+                        .get()
+                        .addHeader("cache-control", "no-cache")
+                        .build();
+
+                Response response = client.newCall(request).execute();
+
+                String jsonData = response.body().string();
+                JSONObject Jobject = new JSONObject(jsonData);
+                JSONArray Jarray = Jobject.getJSONArray("consommations");
+                ArrayList<ConsommationBP> consommationList = new ArrayList<>();
+                for (int i = 0; i < Jarray.length(); i++) {
+                    JSONObject object = Jarray.getJSONObject(i);
+                    ConsommationBP consommationBP = new ConsommationBP(object);
+                    consommationList.add(consommationBP);
+                }
+                limit = Jobject.getDouble("restant");
+
+                downloadTot = 0;
+                uploadTot = 0;
+                for(int i = 0; i<consommationList.size()-1; i++){
+                    double uploadTemp, downloadTemp;
+                    uploadTemp = consommationList.get(i).getUpload();
+                    downloadTemp = consommationList.get(i).getDownload();
+                    uploadTot = uploadTot + uploadTemp;
+                    downloadTot = downloadTot + downloadTemp;
+                }
+                uploadTot = uploadTot / 1024;
+                downloadTot = downloadTot / 1024;
+                limit = limit /1024;
+
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return null;
         }
 
         @Override
         protected void onPostExecute(String s) {
             if (isAdded()) {
-                try {
+                /*try {
 
                     if (!query.getString("results").equals("null")) {
                         JSONObject results = (JSONObject) query.get("results");
@@ -461,9 +483,9 @@ public class BandwithFragment extends Fragment {
                         quotaValue = Math.round(quotaValue / 1024 * 100) / 100.0;
                         double total = map.get("total");
                         total = Math.round(total / 1024 * 100) / 100.0;
-                        rest = Math.round((quotaValue - total) * 100) / 100.0;
-                        values[size - 1] = rest;
-                        rooms[size - 1] = "■ Restant " + rest + " Go";
+                        limit = Math.round((quotaValue - total) * 100) / 100.0;
+                        values[size - 1] = limit;
+                        rooms[size - 1] = "■ Restant " + limit + " Go";
                         setProgressBar(total, quotaValue);
                         updateProgressBarColorItems(quotaValue);
                         JSONObject objectElem = (JSONObject) arrayElem.get(arrayElem.length()-2);
@@ -480,23 +502,25 @@ public class BandwithFragment extends Fragment {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
+                }*/
             }
             loadProgressBar.setVisibility(View.GONE);
+            updatePieChart();
+            setProgressBar(downloadTot+uploadTot, limit);
 
             super.onPostExecute(s);
 
         }
 
         public void updatePieChart(){
-            upload = upload / 1024;
-            download = download / 1024;
-            Log.d("reste", ""+rest);
+            Log.d("reste", ""+ limit);
             List<SliceValue> values = new ArrayList<SliceValue>();
+            double rest;
+            rest = limit-uploadTot-downloadTot;
             //TODO put labels
-            values.add(new SliceValue((float) upload).setLabel("Upload : " + String.format("%.2f",upload) + " Go").setColor(Color.BLUE));
-            values.add(new SliceValue((float) download).setLabel("Download : " + String.format("%.2f",download) + " Go").setColor(Color.RED));
-            values.add(new SliceValue((float) rest).setLabel("Restant : " + rest + " Go").setColor(Color.GREEN));
+            values.add(new SliceValue((float) uploadTot).setLabel("Upload : " + String.format("%.2f",uploadTot) + " Go").setColor(Color.BLUE));
+            values.add(new SliceValue((float) downloadTot).setLabel("Download : " + String.format("%.2f",downloadTot) + " Go").setColor(Color.RED));
+            values.add(new SliceValue((float) rest).setLabel("Restant : " + String.format("%.2f",rest) + " Go").setColor(Color.GREEN));
 
             data = new PieChartData(values);
 
