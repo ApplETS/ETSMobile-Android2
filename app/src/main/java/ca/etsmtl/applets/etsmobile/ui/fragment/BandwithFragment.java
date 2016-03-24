@@ -67,6 +67,8 @@ public class BandwithFragment extends Fragment {
     private PieChartData data;
     static double limit;
     static String phase, app;
+    ArrayList<Double> upDownList = new ArrayList<>();
+
 
 
     /**
@@ -375,6 +377,38 @@ public class BandwithFragment extends Fragment {
         }
     }
 
+    private void chambreBP(ArrayList<ConsommationBP> list){
+        ArrayList<ConsommationBP> autreChambre = new ArrayList<ConsommationBP>();
+        double chambreUpTot=0, chambreDownTot=0, chambreTot;
+        for(int i=0;i<list.size()-1; i++){
+            ConsommationBP item = list.get(i);
+            int id = list.get(0).getIdChambre();
+            if(id == item.getIdChambre()){
+                chambreUpTot = chambreUpTot + item.getUpload();
+                chambreDownTot = chambreDownTot + item.getDownload();
+            }else{
+                autreChambre.add(item);
+            }
+        }
+        if(autreChambre.size()>0){
+            chambreTot = chambreUpTot/1024 + chambreDownTot/1024;
+            upDownList.add(chambreTot);
+            chambreBP(autreChambre);
+        }else{
+            chambreTot = chambreUpTot/1024 + chambreDownTot/1024;
+            upDownList.add(chambreTot);
+            rooms = new String[upDownList.size()];
+            values = new double[upDownList.size()];
+            for(int i=0; i<upDownList.size(); i++){
+                values[i] = upDownList.get(i);
+                int j =i+1;
+                rooms[i] = "■ Chambre" + j + " " + String.format("%.2f",values[i]) + " Go";
+            }
+            upDownList.clear();
+            updateProgressBarColorItems(limit);
+        }
+    }
+
     private class BandwithAsyncTask extends AsyncTask<String, Void, String> {
 
         private JSONObject query;
@@ -423,14 +457,15 @@ public class BandwithFragment extends Fragment {
                 }
                 limit = Jobject.getDouble("restant");
 
+                chambreBP(consommationList);
                 downloadTot = 0;
                 uploadTot = 0;
-                for(int i = 0; i<consommationList.size()-1; i++){
-                    double uploadTemp, downloadTemp;
-                    uploadTemp = consommationList.get(i).getUpload();
-                    downloadTemp = consommationList.get(i).getDownload();
-                    uploadTot = uploadTot + uploadTemp;
-                    downloadTot = downloadTot + downloadTemp;
+                for(int i = 0; i<consommationList.size(); i++){
+                    double uploadTotTemp, downloadTotTemp;
+                    uploadTotTemp = consommationList.get(i).getUpload();
+                    downloadTotTemp = consommationList.get(i).getDownload();
+                    uploadTot = uploadTot + uploadTotTemp;
+                    downloadTot = downloadTot + downloadTotTemp;
                 }
                 uploadTot = uploadTot / 1024;
                 downloadTot = downloadTot / 1024;
@@ -511,6 +546,8 @@ public class BandwithFragment extends Fragment {
             super.onPostExecute(s);
 
         }
+
+
 
         public void updatePieChart(){
             Log.d("reste", ""+ limit);
