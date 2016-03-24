@@ -5,13 +5,13 @@ import org.json.JSONObject;
 /**
  * Created by steve on 2016-03-23.
  */
-public class ConsommationBP {
+public class ConsommationBandePassante {
 
     String date;
     double download, upload;
     int idChambre;
 
-    public ConsommationBP(JSONObject jsonObject){
+    public ConsommationBandePassante(JSONObject jsonObject){
         try{
             date = jsonObject.getString("date");
             download = jsonObject.getDouble("download");
