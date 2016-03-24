@@ -7,7 +7,7 @@ public class TodayDataRowItem {
 
 
     public static enum viewType {
-        VIEW_TYPE_TITLE_EVENT(0), VIEW_TYPE_EVENT(1), VIEW_TYPE_TITLE_SEANCE(2), VIEW_TYPE_SEANCE(3);
+        VIEW_TYPE_TITLE_EVENT(0), VIEW_TYPE_EVENT(1), VIEW_TYPE_TITLE_SEANCE(2), VIEW_TYPE_SEANCE(3), VIEW_TYPE_ETS_EVENT(4);
         private final int value;
 
         private viewType(int value) {

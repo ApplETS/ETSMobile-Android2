@@ -80,16 +80,12 @@ public class HoraireManager extends Observable implements RequestListener<Object
                     syncSeancesEnded = true;
                 }
 
-                //Calendar ApplETS API with ETS
-                syncEventListEnded = true;
-                /*todo
+                // ETS Calendar Events
                 if (o instanceof EventList) {
-                    EventList eventList = (EventList) o;
-                    deleteExpiredEvent(eventList);
-                    createOrUpdateEventListInBD(eventList);
+                    deleteExpiredEvent((EventList) o);
+                    createOrUpdateEventListInBD((EventList) o);
                     syncEventListEnded = true;
                 }
-                //*/
 
                 return null;
             }
@@ -116,10 +112,6 @@ public class HoraireManager extends Observable implements RequestListener<Object
 
         DatabaseHelper dbHelper = new DatabaseHelper(activity);
 
-        HashMap<String, Event> eventHashMap = new HashMap<String, Event>();
-        for (Event event : envEventList.getEvents()) {
-            eventHashMap.put(event.getId(), event);
-        }
         ArrayList<Event> dbEvents = new ArrayList<Event>();
         try {
             dbEvents = (ArrayList<Event>) dbHelper.getDao(Event.class).queryForAll();
@@ -131,7 +123,6 @@ public class HoraireManager extends Observable implements RequestListener<Object
                     Log.v("Supression", eventsNew.getId() + " supprimé");
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -146,7 +137,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
         DatabaseHelper dbHelper = new DatabaseHelper(activity);
 
         try {
-            for (Event event : eventList.getEvents()) {
+            for (Event event : eventList) {
                 dbHelper.getDao(Event.class).createOrUpdate(event);
             }
 
@@ -439,8 +430,8 @@ public class HoraireManager extends Observable implements RequestListener<Object
                     "",
                     ""
                     ,
-                    joursRemplacesFormatter.parse(event.getStartDate()),
-                    joursRemplacesFormatter.parse(event.getEndDate()));
+                    joursRemplacesFormatter.parse(event.getDateDebut()),
+                    joursRemplacesFormatter.parse(event.getDateFin()));
         }
 
 

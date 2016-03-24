@@ -23,6 +23,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Observable;
@@ -33,6 +34,7 @@ import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
+import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
@@ -54,7 +56,6 @@ public class HoraireFragment extends HttpFragment implements Observer {
     private ListView horaireListView;
     private ArrayList<TodayDataRowItem> listSeances;
     private SeanceAdapter seanceAdapter;
-    private DateTime dateTime = new DateTime();
     private DatabaseHelper databaseHelper;
     private ProgressBar progressBarSyncHoraire;
 
@@ -138,10 +139,9 @@ public class HoraireFragment extends HttpFragment implements Observer {
 
         seanceAdapter = new SeanceAdapter(getActivity());
         horaireListView.setAdapter(seanceAdapter);
-        listSeances = new ArrayList<TodayDataRowItem>();
 
         try{
-            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll());
+            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll(), (ArrayList<Event>) databaseHelper.getDao(Event.class).queryForAll());
             seanceAdapter.notifyDataSetChanged();
         } catch(SQLException e) {
             e.printStackTrace();
@@ -159,7 +159,10 @@ public class HoraireFragment extends HttpFragment implements Observer {
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), "2015-04-16", "2015-05-28"), this);
+        // @TODO Eventually, we might want to make the call for ETS Events here instead of in the onRequestSuccess.
+        // The problem right now is getting the endDate without using the ListeDeSessions
+        /*String dateStart = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateStart, "2016-04-30"), this);*/
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
         return v;
@@ -180,18 +183,21 @@ public class HoraireFragment extends HttpFragment implements Observer {
         if (o instanceof ListeDeSessions) {
 
             ListeDeSessions listeDeSessions = (ListeDeSessions) o;
-            Date currentDate = new Date();
-            Date dateStart;
-            Date dateEnd;
-            for (int i = listeDeSessions.liste.size() - 1; i > 0; i--) {
-                dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
-                dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
-                if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
-                    String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
-                    String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
+            DateTime dateDebut = new DateTime();
+            DateTime dateEnd = new DateTime();
+
+            for (int i = 0; i < listeDeSessions.liste.size() - 1; i++) {
+                dateEnd = new DateTime(listeDeSessions.liste.get(i).dateFin);
+
+                if(dateDebut.isBefore(dateEnd.plusDays(1))) {
                     break;
                 }
             }
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String dateToday = formatter.format(dateDebut.toDate());
+            String dateSessionEnd = formatter.format(dateEnd.toDate());
+            dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateToday, dateSessionEnd), this);
         }
 
         horaireManager.onRequestSuccess(o);
@@ -209,7 +215,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
         progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 
         try{
-            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll());
+            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll(), (ArrayList<Event>) databaseHelper.getDao(Event.class).queryForAll());
             seanceAdapter.notifyDataSetChanged();
         } catch(SQLException e) {
             e.printStackTrace();

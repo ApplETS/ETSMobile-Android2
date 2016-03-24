@@ -18,8 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import ca.etsmtl.applets.etsmobile.model.Event;
+import ca.etsmtl.applets.etsmobile.model.IHoraireRows;
 import ca.etsmtl.applets.etsmobile.model.Seances;
-import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
+import ca.etsmtl.applets.etsmobile.util.HoraireComparator;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class SeanceAdapter extends BaseAdapter {
@@ -90,10 +92,18 @@ public class SeanceAdapter extends BaseAdapter {
                 seancesHolder.tvLocal = (TextView) convertView.findViewById(R.id.tv_today_local);
                 seancesHolder.tvSeparator = (TextView) convertView.findViewById(R.id.tv_vertical_separator);
                 convertView.setTag(seancesHolder);
+            } else if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_ETS_EVENT.getValue()){
+                convertView = LayoutInflater.from(context).inflate(R.layout.row_today_ets_event, parent, false );
+                ViewEvenementETSHolder etsEventHolder = new ViewEvenementETSHolder();
+                etsEventHolder.tvLibelleEvenementETS = (TextView) convertView.findViewById(R.id.tv_today_libelle_ets_evenement);
+                convertView.setTag(etsEventHolder);
             }
         }
 
-        if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_SEANCE.getValue()) {
+        if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE.getValue()) {
+            ViewSeancesTitleHolder titleHolder = (ViewSeancesTitleHolder) convertView.getTag();
+            titleHolder.tvTitle.setText((String) getItem(position));
+        } else if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_SEANCE.getValue()) {
             Seances seance = (Seances) getItem(position);
             ViewSeancesHolder viewSeancesHolder = (ViewSeancesHolder) convertView.getTag();
             viewSeancesHolder.tvNomActivite.setText(seance.nomActivite);
@@ -119,10 +129,14 @@ public class SeanceAdapter extends BaseAdapter {
 
             viewSeancesHolder.tvHeureDebut.setText(dateDebut);
             viewSeancesHolder.tvHeureFin.setText(dateFin);
-        } else if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE.getValue()) {
-            ViewSeancesTitleHolder titleHolder = (ViewSeancesTitleHolder) convertView.getTag();
-            titleHolder.tvTitle.setText((String) getItem(position));
+        } else if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_ETS_EVENT.getValue()) {
+            Event event = (Event) getItem(position);
+            ViewEvenementETSHolder viewSeancesHolder = (ViewEvenementETSHolder) convertView.getTag();
+            viewSeancesHolder.tvLibelleEvenementETS.setText(event.getTitle());
         }
+
+
+
         return convertView;
     }
 
@@ -130,26 +144,30 @@ public class SeanceAdapter extends BaseAdapter {
         return listSeances;
     }
 
-    public void setItemList(List<Seances> itemList) {
+    public void setItemList(List<Seances> itemListSeance, List<Event> itemListEvent) {
 
         listSeances = new ArrayList<>();
+        ArrayList<IHoraireRows> listRowItems = new ArrayList<IHoraireRows>();
         String tempDate = "";
         DateTime today = new DateTime();
 
-        Collections.sort(itemList,new SeanceComparator());
+        listRowItems.addAll(itemListEvent);
+        listRowItems.addAll(itemListSeance);
 
-        for(Seances seances : itemList) {
+        Collections.sort(listRowItems, new HoraireComparator());
+
+        for(IHoraireRows rows : listRowItems) {
 
             DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-            DateTime seanceDay = formatter.parseDateTime(seances.dateDebut.substring(0,10));
+            DateTime seanceDay = formatter.parseDateTime(rows.getDateDebut().substring(0, 10));
 
             if(today.isAfter(seanceDay) && !DateUtils.isToday(seanceDay.getMillis()) ) {
                 continue;
             }
 
-            if(!seances.dateDebut.substring(0,10).equals(tempDate)) {
+            if(!rows.getDateDebut().substring(0,10).equals(tempDate)) {
 
-                tempDate = seances.dateDebut.substring(0,10);
+                tempDate = rows.getDateDebut().substring(0,10);
 
                 DateTime.Property pDoW = seanceDay.dayOfWeek();
                 DateTime.Property pDoM = seanceDay.dayOfMonth();
@@ -157,7 +175,12 @@ public class SeanceAdapter extends BaseAdapter {
 
                 this.listSeances.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE, context.getString(R.string.date_text, pDoW.getAsText(Locale.getDefault()), pDoM.get(), pMoY.getAsText(Locale.getDefault()))));
             }
-            this.listSeances.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_SEANCE, seances));
+
+            if(rows.getClass().equals(Event.class)){
+                this.listSeances.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_ETS_EVENT, rows));
+            } else if(rows.getClass().equals(Seances.class)){
+                this.listSeances.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_SEANCE, rows));
+            }
         }
 
     }
@@ -174,5 +197,9 @@ public class SeanceAdapter extends BaseAdapter {
 
     static class ViewSeancesTitleHolder {
         TextView tvTitle;
+    }
+
+    static class ViewEvenementETSHolder {
+        TextView tvLibelleEvenementETS;
     }
 }
