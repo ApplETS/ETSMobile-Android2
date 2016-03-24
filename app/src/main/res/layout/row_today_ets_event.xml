@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/ets_red"
+    android:padding="1dp">
+
+    <RelativeLayout
+        android:id="@+id/rl_heures_deb_fin"
+        android:layout_width="45dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="1dp"
+        android:layout_marginStart="1dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:text="@string/ets"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_vertical_separator"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="6dp"
+        android:layout_marginStart="6dp"
+        android:background="@color/black_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bright_foreground_material_dark"
+        android:orientation="vertical"
+        android:paddingEnd="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingStart="5dp">
+
+        <TextView
+            android:id="@+id/tv_today_libelle_ets_evenement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            tools:text="Date limite pour déposer une demande de révision de note de la session d'automne 2015" />
+    </LinearLayout>
+</LinearLayout>
