@@ -9,13 +9,13 @@ public class ConsommationBandePassante {
 
     String date;
     double download, upload;
-    int idChambre;
+    String idChambre;
 
     public ConsommationBandePassante(JSONObject jsonObject){
         try{
             date = jsonObject.getString("date");
             download = jsonObject.getDouble("download");
-            idChambre = jsonObject.getInt("idChambre");
+            idChambre = jsonObject.getString("idChambre");
             upload = jsonObject.getDouble("upload");
         }catch(Exception e){
             e.printStackTrace();
@@ -34,7 +34,10 @@ public class ConsommationBandePassante {
         return upload;
     }
 
-    public int getIdChambre() {
-        return idChambre;
+    public int getIdChambre()
+    {
+        String[] idParts = idChambre.split("-");
+        int id = Integer.valueOf(idParts[0]);
+        return id;
     }
 }

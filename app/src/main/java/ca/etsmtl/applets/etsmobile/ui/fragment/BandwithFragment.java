@@ -93,8 +93,8 @@ public class BandwithFragment extends Fragment {
         app = defaultSharedPreferences.getString("App", "");
 
         if (phase.length() > 0 && app.length() > 0) {
-            editTextApp.setHint(app);
-            editTextPhase.setHint(phase);
+            editTextApp.setText(app);
+            editTextPhase.setText(phase);
             getBandwith(phase, app);
         }
         editTextPhase.addTextChangedListener(new TextWatcher() {
@@ -169,9 +169,11 @@ public class BandwithFragment extends Fragment {
 
                 @Override
                 public void run() {
+                    reset();
+                    loadProgressBar.setVisibility(View.GONE);
                     edit.setError(messageError);
                     edit.requestFocus();
-                    edit.setHint(edit.getText());
+                    //edit.setHint(edit.getText());
                     edit.setText("");
                 }
             });
@@ -182,6 +184,7 @@ public class BandwithFragment extends Fragment {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         savePhaseAppPreferences(phase, app);
+        reset();
         String url = "https://api3.clubapplets.ca/cooptel?phase="+phase+"&appt="+app;
         if(Utility.isNetworkAvailable(getActivity())){
             loadProgressBar.setVisibility(View.VISIBLE);
