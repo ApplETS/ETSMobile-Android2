@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,11 +20,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Observable;
@@ -58,7 +64,8 @@ public class HoraireFragment extends HttpFragment implements Observer {
     private DateTime dateTime = new DateTime();
     private DatabaseHelper databaseHelper;
     private ProgressBar progressBarSyncHoraire;
-    @Bind(R.id.calendarView) CalendarView mCalendarView;
+    @Bind(R.id.calendarView)
+    MaterialCalendarView mCalendarView;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -123,20 +130,30 @@ public class HoraireFragment extends HttpFragment implements Observer {
 
     }
     public void initializeCalendar(){
-        mCalendarView.setShowWeekNumber(false);
 
-        mCalendarView.setFirstDayOfWeek(2);
-//        mCalendarView.setSelectedDateVerticalBar(R.color.black);
 
-//        mCalendarView.setUnfocusedMonthDateColor(getResources().getColor(R.color.gray));
-        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                //Take date
-                //Fetch course for the date
-                //
-            }
-        });
+        mCalendarView.setSelectedDate(new Date());
+//        mCalendarView.setShowOtherDates(1);
+        mCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+           @Override
+           public void onDateSelected(MaterialCalendarView widget, CalendarDay date, boolean selected) {
+
+               Log.i("HORRAIREFRAGMENT",DateFormat.getDateInstance().format(date.getDate()));
+               widget.setSelectedDate(date);
+               Toast.makeText(getActivity(), DateFormat.getDateInstance().format(date.getDate()), Toast.LENGTH_SHORT);
+
+               try {
+                   SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
+                   seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(date.getDate()).toString() + "%").query());
+
+                   ;
+               } catch (SQLException e) {
+                   e.printStackTrace();
+               }
+
+               seanceAdapter.notifyDataSetChanged();
+           }
+       });
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -179,6 +196,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
         dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
+        initializeCalendar();
         return v;
 
     }
@@ -226,7 +244,9 @@ public class HoraireFragment extends HttpFragment implements Observer {
         progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 
         try{
-            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll());
+            SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
+            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(new DateTime().toDate()).toString() + "%").query());
+
             seanceAdapter.notifyDataSetChanged();
         } catch(SQLException e) {
             e.printStackTrace();
