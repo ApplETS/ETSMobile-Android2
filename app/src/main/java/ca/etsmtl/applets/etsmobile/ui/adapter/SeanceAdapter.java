@@ -143,9 +143,9 @@ public class SeanceAdapter extends BaseAdapter {
             DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
             DateTime seanceDay = formatter.parseDateTime(seances.dateDebut.substring(0,10));
 
-            if(today.isAfter(seanceDay) && !DateUtils.isToday(seanceDay.getMillis()) ) {
-                continue;
-            }
+//            if(today.isAfter(seanceDay) && !DateUtils.isToday(seanceDay.getMillis()) ) {
+//                continue;
+//            }
 
             if(!seances.dateDebut.substring(0,10).equals(tempDate)) {
 
