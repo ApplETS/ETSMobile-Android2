@@ -1,6 +1,9 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,18 +16,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
@@ -54,11 +55,11 @@ import ca.etsmtl.applets.etsmobile2.R;
 /**
  * Created by Thibaut on 30/08/14.
  */
-public class HoraireFragment extends HttpFragment implements Observer {
+public class HoraireFragment extends HttpFragment implements Observer, OnDateSelectedListener {
 
     private HoraireManager horaireManager;
     private CustomProgressDialog customProgressDialog;
-    private ListView horaireListView;
+
     private ArrayList<TodayDataRowItem> listSeances;
     private SeanceAdapter seanceAdapter;
     private DateTime dateTime = new DateTime();
@@ -129,32 +130,14 @@ public class HoraireFragment extends HttpFragment implements Observer {
         return super.onOptionsItemSelected(item);
 
     }
-    public void initializeCalendar(){
+
+    public void initializeCalendar() {
 
 
         mCalendarView.setSelectedDate(new Date());
-//        mCalendarView.setShowOtherDates(1);
-        mCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
-           @Override
-           public void onDateSelected(MaterialCalendarView widget, CalendarDay date, boolean selected) {
-
-               Log.i("HORRAIREFRAGMENT",DateFormat.getDateInstance().format(date.getDate()));
-               widget.setSelectedDate(date);
-               Toast.makeText(getActivity(), DateFormat.getDateInstance().format(date.getDate()), Toast.LENGTH_SHORT);
-
-               try {
-                   SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
-                   seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(date.getDate()).toString() + "%").query());
-
-                   ;
-               } catch (SQLException e) {
-                   e.printStackTrace();
-               }
-
-               seanceAdapter.notifyDataSetChanged();
-           }
-       });
+        mCalendarView.setOnDateChangedListener(this);
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,24 +146,16 @@ public class HoraireFragment extends HttpFragment implements Observer {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_calendar, container, false);
+        View v = inflater.inflate(R.layout.calendar_horraire_layout, container, false);
         ButterKnife.bind(this, v);
 
         databaseHelper = new DatabaseHelper(getActivity());
 
-        horaireListView = (ListView) v.findViewById(R.id.listView_horaire);
-        horaireListView.setEmptyView(v.findViewById(R.id.txt_empty_calendar));
-
         seanceAdapter = new SeanceAdapter(getActivity());
-        horaireListView.setAdapter(seanceAdapter);
+
         listSeances = new ArrayList<TodayDataRowItem>();
 
-        try{
-            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll());
-            seanceAdapter.notifyDataSetChanged();
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
+        fillSeancesList(dateTime.toDate());
 
         horaireManager = new HoraireManager(this, getActivity());
         horaireManager.addObserver(this);
@@ -197,6 +172,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
         initializeCalendar();
+        openCourseListDialog();
         return v;
 
     }
@@ -205,7 +181,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
     public void onRequestFailure(SpiceException arg0) {
         progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 //        customProgressDialog.dismiss();
-        if(getActivity() != null)
+        if (getActivity() != null)
             Toast.makeText(getActivity(), getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT).show();
     }
 
@@ -243,14 +219,37 @@ public class HoraireFragment extends HttpFragment implements Observer {
 //        customProgressDialog.dismiss();
         progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 
-        try{
-            SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
-            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(new DateTime().toDate()).toString() + "%").query());
-
-            seanceAdapter.notifyDataSetChanged();
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
+        fillSeancesList(dateTime.toDate());
     }
 
+    public void fillSeancesList(Date date) {
+        SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
+        try {
+            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(date).toString() + "%").query());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        seanceAdapter.notifyDataSetChanged();
+    }
+
+    public void openCourseListDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.dialogStyle);
+        if (seanceAdapter.getCount() > 0) {
+            builder.setAdapter(seanceAdapter, null);
+            builder.setTitle(R.string.today_course);
+        } else {
+            builder.setTitle(R.string.empty_calendar);
+        }
+        builder.setNeutralButton(R.string.drawer_close, null);
+        builder.create().show();
+    }
+
+    @Override
+    public void onDateSelected(MaterialCalendarView widget, CalendarDay date, boolean selected) {
+        widget.setSelectedDate(date);
+        fillSeancesList(date.getDate());
+
+        openCourseListDialog();
+    }
 }
