@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendarView"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
-        app:mcv_selectionColor="@color/ets_red"
         app:mcv_arrowColor="@color/ets_red_darker"
-        android:id="@+id/calendarView"/>
+        app:mcv_selectionColor="@color/ets_red"
+         />
 
     <ProgressBar
+        android:id="@+id/progressBar_sync_horaire"
         style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20px"
-        android:layout_marginTop="20px"
-        android:id="@+id/progressBar_sync_horaire"
         android:layout_alignParentTop="true"
-        />
+        android:layout_marginRight="20px"
+        android:layout_marginTop="20px" />
 </LinearLayout>

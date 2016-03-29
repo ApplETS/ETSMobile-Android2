@@ -27,11 +27,15 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
@@ -47,6 +51,7 @@ import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
+import ca.etsmtl.applets.etsmobile.util.CourseDecorator;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
@@ -131,12 +136,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
     }
 
-    public void initializeCalendar() {
 
-
-        mCalendarView.setSelectedDate(new Date());
-        mCalendarView.setOnDateChangedListener(this);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,6 +157,12 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
         fillSeancesList(dateTime.toDate());
 
+
+        mCalendarView.setSelectedDate(new Date());
+        mCalendarView.setOnDateChangedListener(this);
+        mCalendarView.addDecorator(new CourseDecorator(R.color.SupportKit_accentLight, getCourseDate()));
+
+
         horaireManager = new HoraireManager(this, getActivity());
         horaireManager.addObserver(this);
 
@@ -171,7 +177,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
-        initializeCalendar();
+
         openCourseListDialog();
         return v;
 
@@ -243,6 +249,25 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         }
         builder.setNeutralButton(R.string.drawer_close, null);
         builder.create().show();
+    }
+    public Collection<CalendarDay> getCourseDate() {
+
+        ArrayList<Seances> itemList = null;
+        ArrayList<CalendarDay> dates = new ArrayList<>();
+        try {
+            itemList = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll();
+            for (Seances seances : itemList) {
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Date seanceDay = formatter.parse(seances.dateDebut.substring(0, 10), new ParsePosition(0));
+                Log.i("CourseList","Date:"+seances.dateDebut.substring(0, 10)+"  -   Cours: " + seances.libelleCours + "  -   NomACtivity: " + seances.nomActivite +"  -   DescriptionActivite: " + seances.descriptionActivite );
+                dates.add(new CalendarDay(seanceDay));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return dates;
     }
 
     @Override
