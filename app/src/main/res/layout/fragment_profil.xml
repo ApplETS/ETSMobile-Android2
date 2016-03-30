@@ -18,14 +18,6 @@
             android:paddingRight="10dp"
             android:paddingTop="10dp" />
 
-        <Button
-            android:id="@+id/profil_button_logout"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/black_gray"
-            android:text="@string/profil_logout"
-            android:textColor="@color/gray" />
-
     </LinearLayout>
 
     <ca.etsmtl.applets.etsmobile.views.LoadingView
