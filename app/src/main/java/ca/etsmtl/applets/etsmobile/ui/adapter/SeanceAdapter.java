@@ -111,11 +111,11 @@ public class SeanceAdapter extends BaseAdapter {
             viewSeancesHolder.tvCoursGroupe.setText(seance.coursGroupe);
             viewSeancesHolder.tvLocal.setText(seance.local);
 
-            if(colors.containsKey(seance.nomActivite)) {
-                viewSeancesHolder.tvSeparator.setBackgroundColor(colors.get(seance.nomActivite));
+            if(colors.containsKey(seance.coursGroupe)) {
+                viewSeancesHolder.tvSeparator.setBackgroundColor(colors.get(seance.coursGroupe));
             } else {
 
-                colors.put(seance.nomActivite,rainbow[indexColor%rainbow.length]);
+                colors.put(seance.coursGroupe,rainbow[indexColor%rainbow.length]);
                 viewSeancesHolder.tvSeparator.setBackgroundColor(rainbow[indexColor%rainbow.length]);
                 indexColor++;
 
