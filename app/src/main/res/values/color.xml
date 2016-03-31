@@ -4,6 +4,7 @@
     <color name="medium_gray">#8d8989</color>
     <color name="black">#ff212121</color>
     <color name="black_gray">#ff464646</color>
+    <color name="dark_blue">#023066</color>
     <color name="red">#f23c3b</color>
     <color name="ets_red">#E70033</color>
     <color name="ets_red_fonce">#ffe70033</color>

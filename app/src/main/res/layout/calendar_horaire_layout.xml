@@ -39,6 +39,13 @@
             android:text="@string/legend_final_exam"
             android:textStyle="bold"
             android:textColor="@color/ets_red" />
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/legend_event"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="@color/purple_bandwith" />-->
     </LinearLayout>
 
     <ProgressBar

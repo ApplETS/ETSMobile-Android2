@@ -280,5 +280,6 @@
     <string name="ets">ÉTS</string>
     <string name="notification_content_title">%1$s nouvelle%2$s notification%3$s</string>
     <string name="others_notifications">+ %1$s autre%2$s</string>
+    <string name="legend_event">Événement ÉTS</string>
 
 </resources>
