@@ -43,7 +43,7 @@ public class CourseDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
 
-        view.addSpan(new DotSpan(15, ContextCompat.getColor(context, R.color.blue_ets)));
+        view.addSpan(new DotSpan(20, ContextCompat.getColor(context, R.color.blue_ets)));
         view.addSpan(new StyleSpan(Typeface.BOLD));
 
 
