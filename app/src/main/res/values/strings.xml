@@ -157,8 +157,8 @@
     <string name="dialog_Updating_Calendar">Mise à jour du calendrier en cours</string>
     <string name="empty_calendar">Aucun cours à afficher</string>
     <string name="legend">Légende</string>
-    <string name="legend_cours">Cours</string>
-    <string name="legend_final_exam">Examen final</string>
+    <string name="legend_cours">Cours ●</string>
+    <string name="legend_final_exam">Examen final ●</string>
 
 
     <!-- Nouvelles -->
