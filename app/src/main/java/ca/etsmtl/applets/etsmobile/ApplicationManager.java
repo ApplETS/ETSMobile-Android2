@@ -67,7 +67,7 @@ public class ApplicationManager extends Application {
         AnalyticsHelper.getInstance(this);
         createDatabaseTables();
 
-        SupportKit.init(this, getString(R.string.credentials_supportkit));
+//        SupportKit.init(this, getString(R.string.credentials_supportkit));
         Fabric.with(this, new Crashlytics());
 
         AccountManager accountManager = AccountManager.get(this);

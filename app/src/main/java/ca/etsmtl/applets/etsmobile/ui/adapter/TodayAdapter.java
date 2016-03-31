@@ -93,6 +93,11 @@ public class TodayAdapter extends BaseAdapter {
                 seancesHolder.tvLibelleCours = (TextView) convertView.findViewById(R.id.tv_today_libelle_cours);
                 seancesHolder.tvLocal = (TextView) convertView.findViewById(R.id.tv_today_local);
                 convertView.setTag(seancesHolder);
+            } else if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_ETS_EVENT.getValue()) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.row_today_ets_event, parent, false);
+                ViewEtsEventHolder etsEventHolder = new ViewEtsEventHolder();
+                etsEventHolder.tvLibelleEvenementETS = (TextView) convertView.findViewById(R.id.tv_today_libelle_ets_evenement);
+                convertView.setTag(etsEventHolder);
             }
         }
 
@@ -133,5 +138,9 @@ public class TodayAdapter extends BaseAdapter {
         TextView tvCoursGroupe;
         TextView tvLibelleCours;
         TextView tvLocal;
+    }
+
+    class ViewEtsEventHolder {
+        TextView tvLibelleEvenementETS;
     }
 }

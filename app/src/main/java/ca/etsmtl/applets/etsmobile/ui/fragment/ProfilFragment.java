@@ -53,14 +53,6 @@ public class ProfilFragment extends HttpFragment {
 
         profilManager = new ProfilManager(getActivity());
 
-        Button logoutButton = (Button) v.findViewById(R.id.profil_button_logout);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ApplicationManager.deconnexion(getActivity());
-            }
-        });
-
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;

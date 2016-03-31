@@ -27,7 +27,7 @@ import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 import ca.etsmtl.applets.etsmobile.http.soap.Helper;
 
 @DatabaseTable(tableName = "seances")
-public class Seances extends AttributeContainer implements KvmSerializable
+public class Seances extends AttributeContainer implements KvmSerializable, IHoraireRows
 {
   
   @DatabaseField
@@ -284,8 +284,18 @@ public class Seances extends AttributeContainer implements KvmSerializable
           info.namespace= "http://etsmtl.ca/";
       }
   }
-  
-  @Override
+
+    @Override
+    public String getDateDebut() {
+        return dateDebut;
+    }
+
+    @Override
+    public String getDateFin() {
+        return dateFin;
+    }
+
+    @Override
   public void setProperty(int arg0, java.lang.Object arg1)
   {
   }

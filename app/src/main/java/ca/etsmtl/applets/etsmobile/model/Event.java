@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.j256.ormlite.field.DatabaseField;
@@ -12,11 +11,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "event")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Event {
-
-    @DatabaseField
-    @JsonProperty("event_id")
-    String eventID;
+public class Event implements IHoraireRows{
 
     @DatabaseField(id=true)
     @JsonProperty("id")
@@ -37,20 +32,11 @@ public class Event {
     public Event() {
     }
 
-    public Event(String eventID, String id, String startDate, String endDate, String title) {
-        this.eventID = eventID;
+    public Event(String id, String startDate, String endDate, String title) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.title = title;
-    }
-
-    public String getEventID() {
-        return eventID;
-    }
-
-    public void setEventID(String eventID) {
-        this.eventID = eventID;
     }
 
     public String getId() {
@@ -61,7 +47,7 @@ public class Event {
         this.id = id;
     }
 
-    public String getStartDate() {
+    public String getDateDebut() {
         return startDate;
     }
 
@@ -69,7 +55,7 @@ public class Event {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public String getDateFin() {
         return endDate;
     }
 
