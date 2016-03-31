@@ -7,12 +7,39 @@
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendarView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
 
         android:layout_height="wrap_content"
         app:mcv_arrowColor="@color/ets_red_darker"
-        app:mcv_selectionColor="@color/ets_red"
-         />
+        app:mcv_selectionColor="@color/ets_red" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/legend" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/legend_cours"
+            android:textStyle="bold"
+            android:textColor="@color/blue_ets" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/legend_final_exam"
+            android:textStyle="bold"
+            android:textColor="@color/ets_red" />
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBar_sync_horaire"
