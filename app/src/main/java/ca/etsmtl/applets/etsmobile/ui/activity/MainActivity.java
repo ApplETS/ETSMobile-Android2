@@ -407,14 +407,7 @@ public class MainActivity extends Activity {
                         Uri.parse(url));
                 startActivity(internetIntent);
             }else if(aClass.getName().equals(monETS)){
-                /*Authenticator.setDefault(new Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(ApplicationManager.userCredentials.getUsername(),
-                                ApplicationManager.userCredentials.getPassword().toCharArray());
-                    }
-                });*/
-                String url = "https://"+ApplicationManager.userCredentials.getUsername()+":"+
-                        ApplicationManager.userCredentials.getPassword()+"@portail.etsmtl.ca/";
+                String url = "https://portail.etsmtl.ca/";
                 Intent internetIntent = new Intent(Intent.ACTION_VIEW,
                         Uri.parse(url));
                 startActivity(internetIntent);
