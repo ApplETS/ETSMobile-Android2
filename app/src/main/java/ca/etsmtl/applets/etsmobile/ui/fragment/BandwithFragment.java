@@ -6,13 +6,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -22,41 +20,29 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ca.etsmtl.applets.etsmobile.model.ConsommationBandePassante;
 import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar;
-import ca.etsmtl.applets.etsmobile.views.PieChart;
 import ca.etsmtl.applets.etsmobile.views.ProgressItem;
 import ca.etsmtl.applets.etsmobile2.R;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
-import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 
 /**
@@ -64,93 +50,11 @@ import lecho.lib.hellocharts.view.PieChartView;
  */
 public class BandwithFragment extends Fragment {
 
-    /** Constantes basées sur la requête qu'on reçoit en JSON de Cooptel */
-    private final int DETAILED_BANDWITH_INDEX = 0;
-    private final int QUOTA_INDEX = 1;
-    private final int PORT = 0;
-    private final int UPLOAD = 2;
-    private final int DOWNLOAD = 3;
-    private final String CONTENT = "content";
-    double upload, download;
     private PieChartView chart;
     private PieChartData data;
-    double rest;
-
-
-    /**
-     * En date du 20 mars 2015
-     * Voici un exemple du JSON qui est traité dans cette classe.
-     *
-    "results":{
-        "table":[
-            {
-                "border":"1",
-                "tbody":{
-                    "tr":[
-                        {
-                            "td":[
-                                "Port..",
-                                "Date",
-                                "Upload (Mo)",
-                                "Download (Mo)"
-                            ]
-                        },
-                        {
-                            "td":[
-                                "10033",
-                                    "2015-03-01",
-                                    {
-                                        "align":"RIGHT",
-                                        "content":"    354.39"
-                                    },
-                                    {
-                                        "align":"RIGHT",
-                                        "content":"  11204.47"
-                                    }
-                             ]
-                        },
-                        {...}, (X nombre de jour)
-                        {
-                            "td":[
-                                {
-                                    "colspan":"3",
-                                    "b":"Total combiné:"
-                                },
-                                {
-                                    "align":"RIGHT",
-                                    "content":" 103794.37"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "border":"1",
-                "width":"50%",
-                "tbody":{
-                    "tr":[
-                        {
-                            "td":[
-                                " ",
-                                "Quota (MO)"
-                            ]
-                        },
-                        {
-                            "td":[
-                                "Quota permis pour la période",
-                                {
-                                    "align":"RIGHT",
-                                    "content":"128000"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        ]
-    }
-     */
+    static double limit;
+    static String phase, app;
+    ArrayList<Double> upDownList = new ArrayList<>();
     private double[] values;
     private String[] rooms;
     private MultiColorProgressBar progressBar;
@@ -185,24 +89,13 @@ public class BandwithFragment extends Fragment {
         chart = (PieChartView) v.findViewById(R.id.chart);
         chart.setVisibility(View.INVISIBLE);
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String phase = defaultSharedPreferences.getString("Phase", "");
-        String app = defaultSharedPreferences.getString("App", "");
+        phase = defaultSharedPreferences.getString("Phase", "");
+        app = defaultSharedPreferences.getString("App", "");
 
         if (phase.length() > 0 && app.length() > 0) {
-            editTextApp.setHint(app);
-            editTextPhase.setHint(phase);
-            System.currentTimeMillis();
-            Calendar calendar = Calendar.getInstance();
-            int month = calendar.get(Calendar.MONTH);
-            month += 1;
-            String url = getActivity().getString(R.string.bandwith_query, phase, app, month);
-            Log.d("urlUsed", url);
-            if(Utility.isNetworkAvailable(getActivity())){
-                loadProgressBar.setVisibility(View.VISIBLE);
-                new BandwithAsyncTask().execute(url);
-
-            }
-
+            editTextApp.setText(app);
+            editTextPhase.setText(phase);
+            getBandwith(phase, app);
         }
         editTextPhase.addTextChangedListener(new TextWatcher() {
 
@@ -276,9 +169,11 @@ public class BandwithFragment extends Fragment {
 
                 @Override
                 public void run() {
+                    reset();
+                    loadProgressBar.setVisibility(View.GONE);
                     edit.setError(messageError);
                     edit.requestFocus();
-                    edit.setHint(edit.getText());
+                    //edit.setHint(edit.getText());
                     edit.setText("");
                 }
             });
@@ -288,21 +183,13 @@ public class BandwithFragment extends Fragment {
     private void getBandwith(String phase, String app) {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-        System.currentTimeMillis();
-        Calendar calendar = Calendar.getInstance();
-        int month = calendar.get(Calendar.MONTH);
-        month += 1;
-
-        String url = getActivity().getString(R.string.bandwith_query, phase, app, month);
-
-        Log.d("urlUsed", url);
         savePhaseAppPreferences(phase, app);
+        reset();
+        String url = "https://api3.clubapplets.ca/cooptel?phase="+phase+"&appt="+app;
         if(Utility.isNetworkAvailable(getActivity())){
             loadProgressBar.setVisibility(View.VISIBLE);
             new BandwithAsyncTask().execute(url);
-
         }
-
     }
 
     private void savePhaseAppPreferences(String phase, String app) {
@@ -321,7 +208,7 @@ public class BandwithFragment extends Fragment {
 
         progressBar.clearProgressItems();
 
-        for (int i = 0, color = 0; i < values.length - 1; ++i) {
+        for (int i = 0, color = 0; i < values.length-1; ++i) {
             ProgressItem progressItem = new ProgressItem(colorChoice[color], (values[i] / bandwidthQuota) * 100);
 
             progressBar.addProgressItem(progressItem);
@@ -377,179 +264,131 @@ public class BandwithFragment extends Fragment {
         View v = getView();
         if (v != null) {
             progressBar.setProgress(0);
+            chart.setVisibility(View.INVISIBLE);
             String gb = getString(R.string.gigaoctetx);
             ((TextView) v.findViewById(R.id.bandwith_used_lbl)).setText("");
             ((TextView) v.findViewById(R.id.bandwith_max)).setText(gb);
         }
     }
 
-    private class BandwithAsyncTask extends AsyncTask<String, Void, String> {
+    private void bandePassanteParChambre(ArrayList<ConsommationBandePassante> list){
+        ArrayList<ConsommationBandePassante> autreChambre = new ArrayList<ConsommationBandePassante>();
+        double chambreUpTot=0, chambreDownTot=0, chambreTot;
+        for(int i=0;i<list.size(); i++){
+            ConsommationBandePassante item = list.get(i);
+            int id = list.get(0).getIdChambre();
+            if(id == item.getIdChambre()){
+                chambreUpTot = chambreUpTot + item.getUpload();
+                chambreDownTot = chambreDownTot + item.getDownload();
+            }else{
+                autreChambre.add(item);
+            }
+        }
+        if(autreChambre.size()>0){
+            chambreTot = chambreUpTot/1024 + chambreDownTot/1024;
+            upDownList.add(chambreTot);
+            bandePassanteParChambre(autreChambre);
+        }else{
+            chambreTot = chambreUpTot/1024 + chambreDownTot/1024;
+            upDownList.add(chambreTot);
+            rooms = new String[upDownList.size()];
+            values = new double[upDownList.size()+1];
+            double tot=0;
+            for(int i=0; i<upDownList.size(); i++){
+                values[i] = upDownList.get(i);
+                tot = tot + values[i];
+                int j =i+1;
+                rooms[i] = "■ Chambre" + j + " " + String.format("%.2f",values[i]) + " Go";
+                if(i == upDownList.size()-1){
+                    values[i+1] = limit - tot;
+                }
+            }
+            upDownList.clear();
+            updateProgressBarColorItems(limit);
+        }
+    }
 
-        private JSONObject query;
+    private class BandwithAsyncTask extends AsyncTask<String, Void, HashMap<String, Double>> {
 
         @Override
-        protected String doInBackground(String... param) {
+        protected HashMap<String,Double> doInBackground(String... param) {
+            double total[] = new double[2];
+            HashMap<String,Double> map = new HashMap<>();
             try {
-
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpGet request = new HttpGet();
-                URI uriWeb = new URI(param[0]);
-                request.setURI(uriWeb);
-                HttpResponse response = httpClient.execute(request);
-                int code = response.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    try {
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity()
-                                .getContent(), "UTF-8"));
-                        String json = reader.readLine();
-                        JSONObject obj = new JSONObject(json);
-                        query = (JSONObject) obj.get("query");
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                double uploadTot, downloadTot;
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .url(param[0])
+                        .get()
+                        .addHeader("cache-control", "no-cache")
+                        .build();
+                Response response = client.newCall(request).execute();
+                if(response.code() == 200) {
+                    String jsonData = response.body().string();
+                    JSONObject Jobject = new JSONObject(jsonData);
+                    JSONArray Jarray = Jobject.getJSONArray("consommations");
+                    ArrayList<ConsommationBandePassante> consommationList = new ArrayList<>();
+                    for (int i = 0; i < Jarray.length(); i++) {
+                        JSONObject object = Jarray.getJSONObject(i);
+                        ConsommationBandePassante consommationBandePassante = new ConsommationBandePassante(object);
+                        consommationList.add(consommationBandePassante);
                     }
-                }
+                    limit = Jobject.getDouble("restant");
 
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            if (isAdded()) {
-                try {
-
-                    if (!query.getString("results").equals("null")) {
-                        JSONObject results = (JSONObject) query.get("results");
-                        JSONArray arrayTable = results.getJSONArray("table");
-                        JSONObject tableauElem = arrayTable.getJSONObject(DETAILED_BANDWITH_INDEX).getJSONObject("tbody");
-                        JSONObject quota = arrayTable.getJSONObject(QUOTA_INDEX).getJSONObject("tbody");
-                        JSONArray arrayElem = tableauElem.getJSONArray("tr");
-                        HashMap<String, Double> map = getBandwithUserFromPort(arrayElem);
-                        int size = map.size();
-                        values = new double[size];
-                        rooms = new String[size];
-                        Iterator<String> iter = map.keySet().iterator();
-                        int i = 0;
-
-                        while (iter.hasNext()) {
-                            String entry = iter.next();
-                            if (!entry.equals("total")) {
-                                double value = map.get(entry);
-                                values[i] = Math.round((value / 1024) * 100) / 100.0;
-                                String[] stringArray = entry.split("-");
-                                if (stringArray.length > 1) {
-                                    rooms[i] = "■ " + stringArray[1].toString() + " " + values[i] + " Go";
-                                } else {
-                                    int j = i + 1;
-                                    rooms[i] =  "■ Chambre" + j + " " + values[i] + " Go";
-                                }
-                                i++;
-                            }
-                        }
-                        JSONArray quotaJson = quota.getJSONArray("tr");
-                        JSONObject objectQuota = (JSONObject) quotaJson.get(1);
-                        JSONArray arrayQuota = objectQuota.getJSONArray("td");
-                        double quotaValue = ((JSONObject) arrayQuota.get(1)).getDouble(CONTENT);
-                        quotaValue = Math.round(quotaValue / 1024 * 100) / 100.0;
-                        double total = map.get("total");
-                        total = Math.round(total / 1024 * 100) / 100.0;
-                        rest = Math.round((quotaValue - total) * 100) / 100.0;
-                        values[size - 1] = rest;
-                        rooms[size - 1] = "■ Restant " + rest + " Go";
-                        setProgressBar(total, quotaValue);
-                        updateProgressBarColorItems(quotaValue);
-                        JSONObject objectElem = (JSONObject) arrayElem.get(arrayElem.length()-2);
-                        Log.d("objectElem", objectElem.toString());
-                        JSONArray arrayElemtd = objectElem.getJSONArray("td");
-                        Log.d("arrayElemtd", arrayElemtd.toString());
-                        upload = ((JSONObject) arrayElemtd.get(1)).getDouble(CONTENT);
-                        download = ((JSONObject) arrayElemtd.get(2)).getDouble(CONTENT);
-                        Log.d("Bandwidth", "upload and download: " + upload + " " + download);
-                        updatePieChart();
-                    } else {
-                        setError(editTextApp, getString(R.string.error_invalid_app));
+                    downloadTot = 0;
+                    uploadTot = 0;
+                    for (int i = 0; i < consommationList.size(); i++) {
+                        uploadTot = uploadTot + consommationList.get(i).getUpload();
+                        downloadTot = downloadTot + consommationList.get(i).getDownload();
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    uploadTot = uploadTot / 1024;
+                    downloadTot = downloadTot / 1024;
+                    limit = limit / 1024;
+                    bandePassanteParChambre(consommationList);
+                    map.put("uploadTot", uploadTot);
+                    map.put("downloadTot", downloadTot);
+                    map.put("total", uploadTot + downloadTot);
+                    map.put("limit", limit);
+                    total[0] = uploadTot + downloadTot;
+                    total[1] = limit;
+                }else{
+                    return null;
                 }
-            }
-            loadProgressBar.setVisibility(View.GONE);
-
-            super.onPostExecute(s);
-
-        }
-
-        public void updatePieChart(){
-            upload = upload / 1024;
-            download = download / 1024;
-            Log.d("reste", ""+rest);
-            List<SliceValue> values = new ArrayList<SliceValue>();
-            //TODO put labels
-            values.add(new SliceValue((float) upload).setLabel("Upload : " + String.format("%.2f",upload) + " Go").setColor(Color.BLUE));
-            values.add(new SliceValue((float) download).setLabel("Download : " + String.format("%.2f",download) + " Go").setColor(Color.RED));
-            values.add(new SliceValue((float) rest).setLabel("Restant : " + rest + " Go").setColor(Color.GREEN));
-
-            data = new PieChartData(values);
-
-            chart.setVisibility(View.VISIBLE);
-            data.setHasLabels(true);
-            chart.setPieChartData(data);
-        }
-
-        private String containtPort(String port, HashMap<String, Double> map) {
-            Iterator<String> iter = map.keySet().iterator();
-            while (iter.hasNext()) {
-                String entry = iter.next();
-                if (entry.contains(port)) {
-                    return entry;
-                }
-            }
-            return null;
-        }
-
-        private HashMap<String, Double> getBandwithUserFromPort(JSONArray array) {
-            HashMap<String, Double> map = new HashMap<>();
-            try {
-                for (int i = 1; i < array.length(); i++) {
-                    JSONObject obj = (JSONObject) array.get(i);
-                    JSONArray elem = obj.getJSONArray("td");
-                    final boolean IS_NOT_LAST_ELEMENT = i < array.length() - 2;
-                    final boolean IS_LAST_ELEMENT = i == array.length() - 1;
-
-                    if (IS_NOT_LAST_ELEMENT) {
-                        String portElem = elem.getString(PORT);
-                        if (containtPort(portElem, map) != null)
-                            portElem = containtPort(portElem, map);
-
-                        JSONObject upload = elem.getJSONObject(UPLOAD);
-                        JSONObject downLoad = elem.getJSONObject(DOWNLOAD);
-                        double downUpLoad = upload.getDouble(CONTENT) + downLoad.getDouble(CONTENT);
-                        if (map.containsKey(portElem)) {
-                            double downUpLoadValue = map.get(portElem);
-                            downUpLoad += downUpLoadValue;
-                        }
-                        map.put(portElem, downUpLoad);
-                    } else if (IS_LAST_ELEMENT) {
-                        JSONObject totalObject = (JSONObject) elem.get(1);
-                        double total = totalObject.getDouble(CONTENT);
-                        map.put("total", total);
-                    }
-                }
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return map;
         }
 
+        @Override
+        protected void onPostExecute(HashMap<String, Double> map) {
+            if(map !=null) {
+                loadProgressBar.setVisibility(View.GONE);
+                updatePieChart(map);
+                setProgressBar(map.get("total"), map.get("limit"));
+            }else{
+                setError(editTextApp, getString(R.string.error_invalid_phase));
+            }
+            super.onPostExecute(map);
+        }
     }
 
+    public void updatePieChart(HashMap<String, Double> map){
+        List<SliceValue> values = new ArrayList<SliceValue>();
+        double rest;
+        rest = map.get("limit")-map.get("total");
+        double upload, download;
+        upload = map.get("uploadTot");
+        download = map.get("downloadTot");
+        //TODO put labels
+        values.add(new SliceValue((float) upload).setLabel("Upload : " + String.format("%.2f",upload) + " Go").setColor(Color.rgb(217,119,37)));
+        values.add(new SliceValue((float) download).setLabel("Download : " + String.format("%.2f",download) + " Go").setColor(Color.rgb(217,52,37)));
+        values.add(new SliceValue((float) rest).setLabel("Restant : " + String.format("%.2f",rest) + " Go").setColor(Color.rgb(105,184,57)));
+
+        data = new PieChartData(values);
+
+        chart.setVisibility(View.VISIBLE);
+        data.setHasLabels(true);
+        chart.setPieChartData(data);
+    }
 }
