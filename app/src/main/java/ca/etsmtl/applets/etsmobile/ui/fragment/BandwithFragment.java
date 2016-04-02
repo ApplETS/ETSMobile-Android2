@@ -281,14 +281,18 @@ public class BandwithFragment extends Fragment {
                 chambreUpTot = chambreUpTot + item.getUpload();
                 chambreDownTot = chambreDownTot + item.getDownload();
             }else{
+                //on met tous les chambres différent dans une liste
                 autreChambre.add(item);
             }
         }
         if(autreChambre.size()>0){
+            // S'il y a plusieur chambres, on enregistre le total de cette chambre ci et on refait
+            // une itération de la méthode pour les autres chambres
             chambreTot = chambreUpTot/1024 + chambreDownTot/1024;
             upDownList.add(chambreTot);
             bandePassanteParChambre(autreChambre);
         }else{
+            //updownlist contient une liste de tous les totaux upload/download de tous les chambres
             chambreTot = chambreUpTot/1024 + chambreDownTot/1024;
             upDownList.add(chambreTot);
             rooms = new String[upDownList.size()];
@@ -313,6 +317,7 @@ public class BandwithFragment extends Fragment {
         @Override
         protected HashMap<String,Double> doInBackground(String... param) {
             double total[] = new double[2];
+            ArrayList<ConsommationBandePassante> consommationList;
             HashMap<String,Double> map = new HashMap<>();
             try {
                 double uploadTot, downloadTot;
@@ -326,25 +331,32 @@ public class BandwithFragment extends Fragment {
                 if(response.code() == 200) {
                     String jsonData = response.body().string();
                     JSONObject Jobject = new JSONObject(jsonData);
-                    JSONArray Jarray = Jobject.getJSONArray("consommations");
-                    ArrayList<ConsommationBandePassante> consommationList = new ArrayList<>();
-                    for (int i = 0; i < Jarray.length(); i++) {
-                        JSONObject object = Jarray.getJSONObject(i);
-                        ConsommationBandePassante consommationBandePassante = new ConsommationBandePassante(object);
-                        consommationList.add(consommationBandePassante);
-                    }
                     limit = Jobject.getDouble("restant");
-
-                    downloadTot = 0;
-                    uploadTot = 0;
-                    for (int i = 0; i < consommationList.size(); i++) {
-                        uploadTot = uploadTot + consommationList.get(i).getUpload();
-                        downloadTot = downloadTot + consommationList.get(i).getDownload();
+                    Object consommations = Jobject.get("consommations");
+                    if(consommations instanceof JSONArray){
+                        JSONArray consommationsArray = (JSONArray) consommations;
+                        consommationList = new ArrayList<>();
+                        for (int i = 0; i < consommationsArray.length(); i++) {
+                            JSONObject object = consommationsArray.getJSONObject(i);
+                            ConsommationBandePassante consommationBandePassante = new ConsommationBandePassante(object);
+                            consommationList.add(consommationBandePassante);
+                        }
+                        downloadTot = 0;
+                        uploadTot = 0;
+                        for (int i = 0; i < consommationList.size(); i++) {
+                            uploadTot = uploadTot + consommationList.get(i).getUpload();
+                            downloadTot = downloadTot + consommationList.get(i).getDownload();
+                        }
+                        bandePassanteParChambre(consommationList);
+                    }else{
+                        JSONObject consommationsObject = (JSONObject) consommations;
+                        ConsommationBandePassante consommationBandePassante = new ConsommationBandePassante(consommationsObject);
+                        uploadTot = consommationBandePassante.getUpload();
+                        downloadTot = consommationBandePassante.getDownload();
                     }
                     uploadTot = uploadTot / 1024;
                     downloadTot = downloadTot / 1024;
                     limit = limit / 1024;
-                    bandePassanteParChambre(consommationList);
                     map.put("uploadTot", uploadTot);
                     map.put("downloadTot", downloadTot);
                     map.put("total", uploadTot + downloadTot);
