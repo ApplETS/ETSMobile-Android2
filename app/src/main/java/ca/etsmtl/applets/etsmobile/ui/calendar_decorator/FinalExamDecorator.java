@@ -21,15 +21,14 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class FinalExamDecorator implements DayViewDecorator {
 
+    private static float DEFAULT_LENGTH = 25;
     private HashSet<CalendarDay> dates;
-    private Context context;
+    private int color;
+    private float length;
 
-
-    public FinalExamDecorator(Context context, Collection<CalendarDay> dates) {
-
-        this.dates = new HashSet<>(dates);
-        this.context = context;
-
+    public FinalExamDecorator(HashSet<CalendarDay> dates, int color) {
+        this.dates = dates;
+        this.color = color;
     }
 
     @Override
@@ -40,7 +39,7 @@ public class FinalExamDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
 
-        view.addSpan(new DotSpan(20, ContextCompat.getColor(context, R.color.ets_red)));
+        view.addSpan(new SquareSpan(40, color));
         view.addSpan(new StyleSpan(Typeface.BOLD));
 
 

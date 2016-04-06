@@ -23,14 +23,12 @@ import ca.etsmtl.applets.etsmobile2.R;
 public class EventDecorator implements DayViewDecorator {
 
     private HashSet<CalendarDay> dates;
-    private Context context;
+     private int color;
 
 
-    public EventDecorator(Context context, Collection<CalendarDay> dates) {
-
-        this.dates = new HashSet<>(dates);
-        this.context = context;
-
+    public EventDecorator(HashSet<CalendarDay> dates, int color) {
+        this.dates = dates;
+        this.color = color;
     }
 
     @Override

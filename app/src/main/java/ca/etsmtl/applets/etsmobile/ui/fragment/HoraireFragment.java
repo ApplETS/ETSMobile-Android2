@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -154,7 +155,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         mCalendarView.setSelectedDate(new Date());
         mCalendarView.setOnDateChangedListener(this);
         mCalendarView.addDecorators(
-                new CourseDecorator(getActivity(), courseDays),
+                new CourseDecorator( courseDays, ContextCompat.getColor(getActivity(),R.color.ets_red_darker)),
                 new FinalExamDecorator(getActivity(), finalExamDays),
                 new EventDecorator(getActivity(), eventDays));
 

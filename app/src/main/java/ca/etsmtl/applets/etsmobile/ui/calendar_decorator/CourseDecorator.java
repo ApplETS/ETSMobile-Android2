@@ -24,15 +24,21 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class CourseDecorator implements DayViewDecorator {
 
+    private static final float DEFAULT_RADIUS = 20;
     private HashSet<CalendarDay> dates;
-    private Context context;
+    private int color;
+    private float radius;
 
+    public CourseDecorator(HashSet<CalendarDay> dates, int color, float radius) {
+        this.dates = dates;
+        this.color = color;
+        this.radius = radius;
+    }
 
-    public CourseDecorator(Context context, Collection<CalendarDay> dates) {
-
-        this.dates = new HashSet<>(dates);
-        this.context = context;
-
+    public CourseDecorator(HashSet<CalendarDay> dates, int color) {
+        this.dates = dates;
+        this.color = color;
+        this.radius = DEFAULT_RADIUS;
     }
 
     @Override
@@ -43,7 +49,8 @@ public class CourseDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
 
-        view.addSpan(new DotSpan(20, ContextCompat.getColor(context, R.color.blue_ets)));
+
+        view.addSpan(new DotSpan(radius, color));
         view.addSpan(new StyleSpan(Typeface.BOLD));
 
 
