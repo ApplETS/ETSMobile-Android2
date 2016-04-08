@@ -207,7 +207,7 @@ public class BandwithFragment extends Fragment {
         final Activity activity = getActivity();
 
         progressBar.clearProgressItems();
-
+        bandwidthQuota = bandwidthQuota / 1024;
         for (int i = 0, color = 0; i < values.length-1; ++i) {
             ProgressItem progressItem = new ProgressItem(colorChoice[color], (values[i] / bandwidthQuota) * 100);
 
