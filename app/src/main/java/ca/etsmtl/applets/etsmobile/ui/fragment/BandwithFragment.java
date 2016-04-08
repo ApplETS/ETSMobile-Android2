@@ -368,6 +368,7 @@ public class BandwithFragment extends Fragment {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                return null;
             }
             return map;
         }
