@@ -158,8 +158,10 @@
     <string name="dialog_Updating_Calendar">Mise à jour du calendrier en cours</string>
     <string name="empty_calendar">Aucun cours à afficher</string>
     <string name="legend">Légende</string>
-    <string name="legend_cours">Cours ●</string>
-    <string name="legend_final_exam">Examen final ●</string>
+    <string name="legend_cours">Cours</string>
+    <string name="legend_final_exam">Examen final</string>
+    <string name="legend_today">Aujourd\'hui</string>
+    <string name="legend_event">Événement ÉTS</string>
 
 
     <!-- Nouvelles -->
@@ -281,6 +283,6 @@
     <string name="ets">ÉTS</string>
     <string name="notification_content_title">%1$s nouvelle%2$s notification%3$s</string>
     <string name="others_notifications">+ %1$s autre%2$s</string>
-    <string name="legend_event">Événement ÉTS</string>
+
 
 </resources>

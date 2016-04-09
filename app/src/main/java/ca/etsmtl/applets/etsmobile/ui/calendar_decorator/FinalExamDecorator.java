@@ -10,6 +10,7 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -25,10 +26,19 @@ public class FinalExamDecorator implements DayViewDecorator {
     private HashSet<CalendarDay> dates;
     private int color;
     private float length;
+    private Context context;
 
-    public FinalExamDecorator(HashSet<CalendarDay> dates, int color) {
-        this.dates = dates;
+    public FinalExamDecorator(Context context,ArrayList<CalendarDay> dates, int color) {
+        this.dates = new HashSet<>(dates);
         this.color = color;
+        this.length = DEFAULT_LENGTH;
+        this.context = context;
+    }
+
+    public FinalExamDecorator(ArrayList<CalendarDay> dates, int color, float length) {
+        this.dates = new HashSet<>(dates);
+        this.color = color;
+        this.length = length;
     }
 
     @Override
@@ -39,7 +49,7 @@ public class FinalExamDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
 
-        view.addSpan(new SquareSpan(40, color));
+        view.setBackgroundDrawable(ContextCompat.getDrawable(context,R.drawable.calendar_exam_circle));
         view.addSpan(new StyleSpan(Typeface.BOLD));
 
 
