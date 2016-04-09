@@ -35,12 +35,11 @@ public class EventDecorator implements DayViewDecorator {
 
     @Override
     public boolean shouldDecorate(CalendarDay day) {
-        return dates.contains(day) && !day.getDate().equals(new Date());
+        return dates.contains(day) ;
     }
 
     @Override
     public void decorate(DayViewFacade view) {
-
         view.addSpan(new StyleSpan(Typeface.BOLD));
         view.addSpan(new TriangleSpan(color));
 

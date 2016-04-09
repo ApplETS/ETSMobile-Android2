@@ -22,36 +22,25 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class FinalExamDecorator implements DayViewDecorator {
 
-    private static float DEFAULT_LENGTH = 25;
+
     private HashSet<CalendarDay> dates;
-    private int color;
-    private float length;
     private Context context;
 
-    public FinalExamDecorator(Context context,ArrayList<CalendarDay> dates, int color) {
-        this.dates = new HashSet<>(dates);
-        this.color = color;
-        this.length = DEFAULT_LENGTH;
+    public FinalExamDecorator(Context context,ArrayList<CalendarDay> date) {
+        this.dates = new HashSet<>(date);
         this.context = context;
     }
 
-    public FinalExamDecorator(ArrayList<CalendarDay> dates, int color, float length) {
-        this.dates = new HashSet<>(dates);
-        this.color = color;
-        this.length = length;
-    }
+
 
     @Override
     public boolean shouldDecorate(CalendarDay day) {
-        return dates.contains(day) && !day.getDate().equals(new Date());
+        return dates.contains(day);
     }
 
     @Override
     public void decorate(DayViewFacade view) {
-
         view.setBackgroundDrawable(ContextCompat.getDrawable(context,R.drawable.calendar_exam_circle));
         view.addSpan(new StyleSpan(Typeface.BOLD));
-
-
     }
 }

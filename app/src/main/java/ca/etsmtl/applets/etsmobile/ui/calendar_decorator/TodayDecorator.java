@@ -18,15 +18,10 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class TodayDecorator implements DayViewDecorator {
 
-    private static final int DEFAULT_RADIUS = 85;
     private CalendarDay today;
-    private int color;
-    private float radius;
     private Context context;
 
     public TodayDecorator(Context context) {
-        this.color = color;
-
         today = CalendarDay.today();
         this.context = context;
     }
@@ -38,10 +33,7 @@ public class TodayDecorator implements DayViewDecorator {
 
     @Override
     public void decorate(DayViewFacade view) {
-
         view.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.calendar_today_circle));
-
         view.addSpan(new StyleSpan(Typeface.BOLD));
-
     }
 }
