@@ -160,8 +160,8 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         mCalendarView.setOnDateChangedListener(this);
         mCalendarView.addDecorators(
                 new TodayDecorator(getActivity()),
-                new CourseDecorator(getActivity(),courseDays, ContextCompat.getColor(getActivity(), R.color.blue_ets)),
-                new FinalExamDecorator(getActivity(),finalExamDays, ContextCompat.getColor(getActivity(),R.color.ets_red_darker)),
+                new CourseDecorator(getActivity(),courseDays),
+                new FinalExamDecorator(getActivity(),finalExamDays),
                 new EventDecorator(eventDays,  ContextCompat.getColor(getActivity(),R.color.black)));
 
 
@@ -257,7 +257,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
                     .like("startDate", today + "%")
                     .query();
             seanceAdapter.setItemList(seances, events);
-            Log.i("SYLVAIN", events.size() + " events");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -300,7 +300,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
                 Date eventDay = formatter.parse(event.getDateDebut().substring(0, 10), new ParsePosition(0));
                 eventDays.add(CalendarDay.from(eventDay));
             }
-            eventDays.add(CalendarDay.today());
+
 
 
         } catch (SQLException e) {
