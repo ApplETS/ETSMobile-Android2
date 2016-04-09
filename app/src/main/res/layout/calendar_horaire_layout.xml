@@ -28,8 +28,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,7 +36,8 @@
                 android:paddingRight="5dp"
                 android:text="@string/legend_cours"
                 android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_gravity="center" />
 
             <ImageView
                 android:layout_width="20dp"
@@ -48,8 +48,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,7 +57,8 @@
 
                 android:text="@string/legend_final_exam"
                 android:textColor="@color/blue_ets"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_gravity="center" />
 
             <ImageView
                 android:layout_width="20dp"
@@ -69,8 +69,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -78,7 +77,8 @@
                 android:paddingRight="5dp"
                 android:text="@string/legend_today"
                 android:textColor="@color/ets_red_darker"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_gravity="center" />
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -88,27 +88,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/legend_event"
                 android:paddingRight="5dp"
-                android:textColor="@color/ets_red"
-                android:textStyle="bold" />
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center" />
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/calendar_exam_circle" />
+                android:src="@drawable/calendar_event_triangle" />
         </LinearLayout>
-        <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/legend_event"-->
-        <!--android:textStyle="bold"-->
-        <!--android:textColor="@color/purple_bandwith" />-->
     </LinearLayout>
 
     <ProgressBar
