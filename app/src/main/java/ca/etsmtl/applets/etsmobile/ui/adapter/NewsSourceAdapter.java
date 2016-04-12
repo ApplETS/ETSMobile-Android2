@@ -45,8 +45,9 @@ public class NewsSourceAdapter extends ArrayAdapter<NewsSource> {
         }
 
         NewsSource item = getItem(position);
-        holder.tvName.setText(item.getName());
         Picasso.with(context).load(item.getUrlImage()).resize(200,200).into(holder.imageSource);
+        holder.tvName.setText(item.getName());
+
 
         return view;
     }

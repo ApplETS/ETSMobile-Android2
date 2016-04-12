@@ -175,4 +175,8 @@
     <string name="SupportKit_errorUserOffline">Offline. Awaiting connection...</string>
     <string name="profil_code_universel">Universal code</string>
 
+    <!--Nouvelle-->
+    <string name="erreur_lien">Unfortunately, there is no external link for this article</string>
+    <string name="erreur_chargement">Unfortunately, there was a problem loading the news items</string>
+
 </resources>

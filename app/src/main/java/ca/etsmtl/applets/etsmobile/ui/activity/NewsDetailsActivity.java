@@ -2,9 +2,33 @@ package ca.etsmtl.applets.etsmobile.ui.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.widget.AdapterViewCompat;
 import android.view.MenuItem;
+import android.view.View;
+import android.webkit.URLUtil;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import ca.etsmtl.applets.etsmobile.model.NewsSource;
+import ca.etsmtl.applets.etsmobile.model.Nouvelle;
+import ca.etsmtl.applets.etsmobile.model.Sponsor;
+import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
+import ca.etsmtl.applets.etsmobile.ui.adapter.NewsSourceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsDetailsFragment;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -12,6 +36,12 @@ import ca.etsmtl.applets.etsmobile2.R;
  * Created by gnut3ll4 on 12/19/14.
  */
 public class NewsDetailsActivity extends Activity {
+    ListView listView;
+    String key;
+    String name;
+    String type;
+    String urlImage;
+    String value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,24 +54,33 @@ public class NewsDetailsActivity extends Activity {
             if (extras == null) {
                 return;
             }
-
-            setTitle("Détails");
-
-            String from = extras.getString("from");
-            String image = extras.getString("image");
-            String title = extras.getString("title");
-            String created_time = extras.getString("created_time");
-            String facebook_link = extras.getString("facebook_link");
-            String updated_time = extras.getString("updated_time");
-            String message = extras.getString("message");
-            String id = extras.getString("id");
-            String icon_link = extras.getString("icon_link");
-
-            Fragment fragment = NewsDetailsFragment.newInstance(from,image,title,created_time,facebook_link,updated_time,message,id,icon_link);
-            getFragmentManager().beginTransaction().add(R.id.container, fragment, "NewsDetailsFragment").commit();
-            
-
+            key = extras.getString("key");
+            name = extras.getString("name");
+            type = extras.getString("type");
+            urlImage = extras.getString("urlImage");
+            value = extras.getString("value");
+            setTitle(name);
         }
+        listView = (ListView) findViewById(R.id.list_news_details);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Nouvelle item = (Nouvelle) parent.getItemAtPosition(position);
+                String url = item.getLink();
+                if (URLUtil.isValidUrl(url)) {
+                    Intent internetIntent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(url));
+                    startActivity(internetIntent);
+                }else{
+                    Toast.makeText(NewsDetailsActivity.this, getString(R.string.erreur_lien), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        new NewsDetailAsyncTask().execute("https://api3.clubapplets.ca/news/list/" + key);
     }
 
     @Override
@@ -57,6 +96,60 @@ public class NewsDetailsActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class NewsDetailAsyncTask extends AsyncTask<String, Void, ArrayList<Nouvelle>> {
+
+        @Override
+        protected ArrayList<Nouvelle> doInBackground(String... param) {
+            ArrayList<Nouvelle> nouvelleList;
+            try {
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .url(param[0])
+                        .get()
+                        .addHeader("cache-control", "no-cache")
+                        .build();
+                Response response = client.newCall(request).execute();
+                if(response.code() == 200) {
+                    String jsonData = response.body().string();
+                    JSONObject Jobject = new JSONObject(jsonData);
+                    nouvelleList = new ArrayList<>();
+                    Object source = Jobject.get("nouvelle");
+                    if(source instanceof JSONArray){
+                        JSONArray nouvelleArray = (JSONArray) source;
+
+                        for (int i = 0; i < nouvelleArray.length(); i++) {
+                            JSONObject object = nouvelleArray.getJSONObject(i);
+                            Nouvelle nouvelle = new Nouvelle(object);
+                            nouvelleList.add(nouvelle);
+                        }
+                    }else{
+                        JSONObject object = (JSONObject) source;
+                        Nouvelle nouvelle = new Nouvelle(object);
+                        nouvelleList.add(nouvelle);
+                    }
+                }else{
+                    return null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            return nouvelleList;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Nouvelle> list) {
+            if(list !=null) {
+                //loadProgressBar.setVisibility(View.GONE);
+                NewsAdapter adapter = new NewsAdapter(NewsDetailsActivity.this, R.layout.row_news, list);
+                listView.setAdapter(adapter);
+            }else{
+                Toast.makeText(NewsDetailsActivity.this, getString(R.string.erreur_chargement), Toast.LENGTH_SHORT).show();
+            }
+            super.onPostExecute(list);
+        }
     }
 
 

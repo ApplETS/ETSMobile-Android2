@@ -43,7 +43,7 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
     @Override
     public Nouvelles loadDataFromNetwork() throws Exception {
 
-        String address = context.getString(R.string.applets_api_news, source, startDate, endDate);
+        /*String address = context.getString(R.string.applets_api_news, source, startDate, endDate);
 
         Nouvelles nouvelles = null;
 
@@ -232,5 +232,7 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
                 return 0;
 
         }
+    }*/
+        return null;
     }
 }
