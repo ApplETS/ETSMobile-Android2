@@ -6,12 +6,12 @@
     android:padding="5dp">
 
     <ImageView
-        android:id="@+id/iv_news_source"
+        android:id="@+id/iv_news_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:maxWidth="42dp"
-        android:maxHeight="42dp"
+        android:maxWidth="64dp"
+        android:maxHeight="64dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_ets" />
 
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="3dp"
-        android:layout_toRightOf="@+id/iv_news_source"
+        android:layout_toRightOf="@+id/iv_news_image"
         tools:text="Forces Avenir vient tout juste de publier les vidéos des lauréats" />
 
 

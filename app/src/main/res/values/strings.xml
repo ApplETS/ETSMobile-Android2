@@ -163,6 +163,8 @@
 
 
     <!-- Nouvelles -->
+    <string name="erreur_lien">Malheureusement, il ne semble pas avoir de lien externe pour cette article</string>
+    <string name="erreur_chargement">Un problème est survenu lors du chargement des nouvelles</string>
     <string-array name="sources_news_values">
         <item>ets</item>
         <item>substance</item>

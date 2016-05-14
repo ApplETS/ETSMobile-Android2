@@ -2,6 +2,7 @@ package ca.etsmtl.applets.etsmobile.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -27,12 +29,12 @@ import ca.etsmtl.applets.etsmobile2.R;
 public class NewsAdapter extends ArrayAdapter<Nouvelle> {
 
     private LayoutInflater inflater;
-    private RequestListener<Object> listener;
+    private Context context;
 
-    public NewsAdapter(Context context,int rowLayoutResourceId, ArrayList<Nouvelle> list, RequestListener<Object> listener) {
+    public NewsAdapter(Context context,int rowLayoutResourceId, ArrayList<Nouvelle> list) {
         super(context, rowLayoutResourceId, list);
         this.inflater = LayoutInflater.from(context);
-        this.listener = listener;
+        this.context = context;
     }
 
     @SuppressLint("DefaultLocale")
@@ -47,27 +49,25 @@ public class NewsAdapter extends ArrayAdapter<Nouvelle> {
             holder = new ViewHolder();
             holder.tvTitre = (TextView) view.findViewById(R.id.tv_row_news_titre);
             holder.tvDate = (TextView) view.findViewById(R.id.tv_row_news_date);
-            holder.imageSource = (ImageView) view.findViewById(R.id.iv_news_source);
+            holder.imageSource = (ImageView) view.findViewById(R.id.iv_news_image);
             view.setTag(holder);
         }
 
         Nouvelle item = getItem(position);
-
-        holder.tvTitre.setText(item.getTitle());
-        String updatedTime = item.getUpdated_time();
-
         String pattern = "yyyy-MM-dd'T'HH:mm:ssZ";
         DateTimeFormatter dtf = DateTimeFormat.forPattern(pattern);
-
-        DateTime date = dtf.parseDateTime(updatedTime);
+        String image = item.getUrlPicture();
 
         /*DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         DateTime date = dateTimeFormatter.parseDateTime(updatedTime);
         DateTimeFormatter dateToDisplay = DateTimeFormat.forPattern("dd MMM yyyy");*/
 
-        holder.tvDate.setText(date.toString("dd MMM yyyy", Locale.CANADA_FRENCH));
-        holder.tvTitre.setText(item.getTitle());
-        holder.imageSource.setImageResource(item.getImageResource());
+        //holder.tvDate.setText(date.toString("dd MMM yyyy", Locale.CANADA_FRENCH));
+        if(!image.equals("")) {
+            Picasso.with(context).load(image).resize(300, 300).into(holder.imageSource);
+        }
+        holder.tvTitre.setText(item.getTitre());
+
 
         return view;
     }
