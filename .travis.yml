@@ -3,6 +3,7 @@ android:
   components:
     - platform-tools
     - tools
+    - tools
     - android-23
 
 script:
