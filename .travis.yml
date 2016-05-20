@@ -12,7 +12,6 @@ android:
     - addon-google_apis-google-23
     
 
-install: travis_wait mvn install
 
 script:
-   - ./gradlew build assembleDebug
+   - ./gradlew assembleDebug -PdisablePreDex
