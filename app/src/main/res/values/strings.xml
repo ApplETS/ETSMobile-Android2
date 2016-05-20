@@ -17,7 +17,7 @@
         Les langages disponibles sont l\'anglais et le français</string>
     <string name="lang_choix_positif">Français</string>
     <string name="lang_choix_negatif">Anglais</string>
-  
+
 
     <!-- MENU -->
     <!-- Section 1 Moi-->
@@ -50,7 +50,7 @@
     <string name="toast_Connection_Required">Une connexion internet est requise pour télécharger le bottin</string>
     <string name="dialog_Loading_Directory">Chargement du bottin en cours</string>
     <string name="menu_bottin_refresh">Recharger le bottin</string>
-   
+
 
     <!-- Moodle Page -->
     <string name="activity_moodle_titre">Instructions Moodle</string>
@@ -152,7 +152,7 @@
     <string name="horaire">Horaire du %1$s %2$s %3$s</string>
     <string name="date_text">%1$s %2$s %3$s</string>
     <string name="export_calendar">Exporter</string>
-    
+
     <!-- Horaire -->
     <string name="toast_Calendar_Update_Error">Une erreur est survenue lors de la mise à jour du calendrier.</string>
     <string name="dialog_Updating_Calendar">Mise à jour du calendrier en cours</string>

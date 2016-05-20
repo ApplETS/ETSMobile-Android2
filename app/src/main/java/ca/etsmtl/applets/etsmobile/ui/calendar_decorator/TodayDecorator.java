@@ -9,36 +9,29 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
- * Created by komlan on 28/03/16.
+ * Created by komlan on 08/04/16.
  */
-public class CourseDecorator implements DayViewDecorator {
+public class TodayDecorator implements DayViewDecorator {
 
-
-    private HashSet<CalendarDay> dates;
+    private CalendarDay today;
     private Context context;
 
-    public CourseDecorator(Context context,ArrayList<CalendarDay>dates) {
+    public TodayDecorator(Context context) {
+        today = CalendarDay.today();
         this.context = context;
-        this.dates = new HashSet<>(dates);
     }
-
-
 
     @Override
     public boolean shouldDecorate(CalendarDay day) {
-        return dates.contains(day);
+        return day.equals(today);
     }
 
     @Override
     public void decorate(DayViewFacade view) {
-        view.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.calendar_course_circle));
+        view.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.calendar_today_circle));
         view.addSpan(new StyleSpan(Typeface.BOLD));
     }
-
 }
