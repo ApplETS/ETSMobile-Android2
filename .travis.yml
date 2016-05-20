@@ -12,4 +12,4 @@ android:
     - addon-google_apis-google-23
 
 script:
-   - ./gradlew build connectedCheck
+   - ./gradlew build assembleDebug
