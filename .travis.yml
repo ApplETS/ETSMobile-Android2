@@ -10,6 +10,9 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
     - addon-google_apis-google-23
+    
+
+install: travis_wait mvn install
 
 script:
    - ./gradlew build assembleDebug
