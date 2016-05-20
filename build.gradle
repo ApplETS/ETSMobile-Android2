@@ -14,7 +14,9 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
+}
 allprojects {
     repositories {
         mavenCentral()
