@@ -5,6 +5,11 @@ android:
     - build-tools-23.0.3
     - platform-tools
     - android-23
+    
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - addon-google_apis-google-23
 
 script:
    - ./gradlew build connectedCheck
