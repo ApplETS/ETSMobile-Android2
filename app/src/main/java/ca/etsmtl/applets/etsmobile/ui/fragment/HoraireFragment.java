@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -211,7 +210,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
             DateTime dateEnd = new DateTime();
             Trimestre trimestre;
 
-            for (int i = 0; i < listeDeSessions.liste.size() - 1; i++) {
+            /*for (int i = 0; i < listeDeSessions.liste.size() - 1; i++) {
                 trimestre = listeDeSessions.liste.get(i);
                 dateEnd = new DateTime(trimestre.dateFin);
 
@@ -219,7 +218,10 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
                     dateDebut = new DateTime(trimestre.dateDebut);
                     break;
                 }
-            }
+            }*/
+            trimestre = listeDeSessions.liste.get(listeDeSessions.liste.size()-1);
+            dateEnd = new DateTime(trimestre.dateFin);
+            dateDebut = new DateTime(trimestre.dateDebut);
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             String dateSessionStart = formatter.format(dateDebut.toDate());
