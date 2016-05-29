@@ -70,6 +70,7 @@ gen-external-apklibs
 
 # Mongo Explorer plugin:
 .idea/mongoSettings.xml
+.idea/
 
 ## File-based project format:
 *.iws
@@ -191,3 +192,6 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+#secret.example to make sure nobody commits it by mistake
+app/src/main/res/values/secrets.xml
