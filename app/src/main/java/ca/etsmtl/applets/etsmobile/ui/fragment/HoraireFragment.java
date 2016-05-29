@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,6 +49,7 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.EventDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.FinalExamDecorator;
+import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.TodayDecorator;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
@@ -149,14 +152,17 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         seanceAdapter = new SeanceAdapter(getActivity());
 
         fillSeancesList(dateTime.toDate());
-        setEventsList();
+        setDaysList();
 
+
+        mCalendarView.setCurrentDate(new Date());
         mCalendarView.setSelectedDate(new Date());
         mCalendarView.setOnDateChangedListener(this);
         mCalendarView.addDecorators(
-                new CourseDecorator(getActivity(), courseDays),
-                new FinalExamDecorator(getActivity(), finalExamDays),
-                new EventDecorator(getActivity(), eventDays));
+                new TodayDecorator(getActivity()),
+                new CourseDecorator(getActivity(),courseDays),
+                new FinalExamDecorator(getActivity(),finalExamDays),
+                new EventDecorator(eventDays,  ContextCompat.getColor(getActivity(),R.color.black)));
 
 
         horaireManager = new HoraireManager(this, getActivity());
@@ -251,6 +257,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
                     .like("startDate", today + "%")
                     .query();
             seanceAdapter.setItemList(seances, events);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -270,7 +277,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         builder.create().show();
     }
 
-    public void setEventsList() {
+    public void setDaysList() {
 
         courseDays = new ArrayList<>();
         finalExamDays = new ArrayList<>();
@@ -283,17 +290,17 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 Date seanceDay = formatter.parse(seance.dateDebut.substring(0, 10), new ParsePosition(0));
                 if (seance.descriptionActivite.contains("final"))
-                    finalExamDays.add(new CalendarDay(seanceDay));
+                    finalExamDays.add(CalendarDay.from(seanceDay));
                 else
-                    courseDays.add(new CalendarDay(seanceDay));
+                    courseDays.add(CalendarDay.from(seanceDay));
             }
-
             ArrayList<Event> eventList = (ArrayList<Event>) databaseHelper.getDao(Event.class).queryForAll();
             for (Event event : eventList) {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 Date eventDay = formatter.parse(event.getDateDebut().substring(0, 10), new ParsePosition(0));
-                eventDays.add(new CalendarDay(eventDay));
+                eventDays.add(CalendarDay.from(eventDay));
             }
+
 
 
         } catch (SQLException e) {

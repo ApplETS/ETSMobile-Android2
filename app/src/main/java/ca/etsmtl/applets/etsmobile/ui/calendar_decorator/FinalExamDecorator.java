@@ -10,6 +10,7 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -21,28 +22,25 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class FinalExamDecorator implements DayViewDecorator {
 
+
     private HashSet<CalendarDay> dates;
     private Context context;
 
-
-    public FinalExamDecorator(Context context, Collection<CalendarDay> dates) {
-
-        this.dates = new HashSet<>(dates);
+    public FinalExamDecorator(Context context,ArrayList<CalendarDay> date) {
+        this.dates = new HashSet<>(date);
         this.context = context;
-
     }
+
+
 
     @Override
     public boolean shouldDecorate(CalendarDay day) {
-        return dates.contains(day) && !day.getDate().equals(new Date());
+        return dates.contains(day);
     }
 
     @Override
     public void decorate(DayViewFacade view) {
-
-        view.addSpan(new DotSpan(20, ContextCompat.getColor(context, R.color.ets_red)));
+        view.setBackgroundDrawable(ContextCompat.getDrawable(context,R.drawable.calendar_exam_circle));
         view.addSpan(new StyleSpan(Typeface.BOLD));
-
-
     }
 }

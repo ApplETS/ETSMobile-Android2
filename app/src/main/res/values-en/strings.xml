@@ -158,8 +158,10 @@
     <string name="dialog_Updating_Calendar">Updating calendar...</string>
     <string name="empty_calendar">No classes to display</string>
     <string name="legend">Legend</string>
-    <string name="legend_cours">Classes ●</string>
-    <string name="legend_final_exam">Final exam ●</string>
+    <string name="legend_cours">Classes</string>
+    <string name="legend_final_exam">Final exam</string>
+    <string name="legend_today">Today</string>
+    <string name="legend_event">ÉTS Event</string>
 
 
 
