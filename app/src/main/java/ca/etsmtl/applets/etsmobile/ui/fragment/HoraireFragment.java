@@ -220,6 +220,8 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
                 }
             }*/
             trimestre = listeDeSessions.liste.get(listeDeSessions.liste.size()-1);
+            if(dateDebut.isBefore(new DateTime(trimestre.dateDebut)))
+                trimestre = listeDeSessions.liste.get(listeDeSessions.liste.size()-2);
             dateEnd = new DateTime(trimestre.dateFin);
             dateDebut = new DateTime(trimestre.dateDebut);
 
