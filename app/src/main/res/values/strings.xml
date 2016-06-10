@@ -162,6 +162,8 @@
     <string name="legend_final_exam">Examen final</string>
     <string name="legend_today">Aujourd\'hui</string>
     <string name="legend_event">Événement ÉTS</string>
+    <string name="calendar">Calendrier</string>
+    <string name="list">Liste</string>
 
 
     <!-- Nouvelles -->

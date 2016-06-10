@@ -15,8 +15,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -64,15 +66,20 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     private HoraireManager horaireManager;
     private CustomProgressDialog customProgressDialog;
     private DateTime dateTime = new DateTime();
-    private SeanceAdapter seanceAdapter;
+    private SeanceAdapter seanceAdapter;//Seances d'une journee
+    private SeanceAdapter allseanceAdapter;//Seances du semestre
     private DatabaseHelper databaseHelper;
     private ProgressBar progressBarSyncHoraire;
     @Bind(R.id.calendarView)
     MaterialCalendarView mCalendarView;
-
+    @Bind(R.id.horraireViewSwitcher)
+    ViewSwitcher horraireViewSwitcher;
+    @Bind(R.id.calendar_listview)
+    ListView calendar_listview;
     private ArrayList<CalendarDay> courseDays;
     private ArrayList<CalendarDay> eventDays;
     private ArrayList<CalendarDay> finalExamDays;
+    private  boolean listDisplay = true;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -132,7 +139,18 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
                 return true;
             case R.id.calendar_display_toggle:
+                if(listDisplay){
 
+                    item.setIcon(R.drawable.list_icon);
+                    Toast.makeText(getActivity(), R.string.calendar, Toast.LENGTH_SHORT).show();
+                    listDisplay = false;
+                }else{
+                    item.setIcon(R.drawable.icon_calendar);
+                    Toast.makeText(getActivity(), R.string.list, Toast.LENGTH_SHORT).show();
+                    listDisplay = true;
+                }
+                horraireViewSwitcher.showNext();
+//                Toast.makeText(getActivity(), "Switching", Toast.LENGTH_SHORT).show();
                 return true;
         }
 
@@ -154,10 +172,13 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         databaseHelper = new DatabaseHelper(getActivity());
 
         seanceAdapter = new SeanceAdapter(getActivity());
+        allseanceAdapter = new SeanceAdapter(getActivity());
 
         fillSeancesList(dateTime.toDate());
+        fillListView(dateTime.toDate());
         setDaysList();
 
+        calendar_listview.setAdapter(allseanceAdapter);
 
         mCalendarView.setCurrentDate(new Date());
         mCalendarView.setSelectedDate(new Date());
@@ -190,7 +211,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
-        openCourseListDialog();
+//        openCourseListDialog();
         return v;
 
     }
@@ -247,6 +268,21 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         fillSeancesList(dateTime.toDate());
     }
 
+    public void fillListView(Date date){
+        SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
+        String today = seancesFormatter.format(date).toString();
+
+        try {
+            List<Seances> seances = databaseHelper.getDao(Seances.class).queryForAll();
+            List<Event> events = databaseHelper.getDao(Event.class).queryForAll();
+            allseanceAdapter.setItemList(seances, events);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        allseanceAdapter.notifyDataSetChanged();
+    }
     public void fillSeancesList(Date date) {
         SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
         String today = seancesFormatter.format(date).toString();

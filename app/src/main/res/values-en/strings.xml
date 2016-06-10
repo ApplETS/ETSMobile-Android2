@@ -162,7 +162,8 @@
     <string name="legend_final_exam">Final exam</string>
     <string name="legend_today">Today</string>
     <string name="legend_event">ÉTS Event</string>
-
+    <string name="calendar">Calendar</string>
+    <string name="list">List</string>
 
 
     <!-- Commentaire & contact | SupportKit -->

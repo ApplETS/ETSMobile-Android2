@@ -7,7 +7,7 @@
         android:title="@string/export_calendar">
     </item>
     <item
-        android:icon="@drawable/calendar_list_icon"
+        android:icon="@drawable/icon_calendar"
         android:id="@+id/calendar_display_toggle"
         android:showAsAction="ifRoom"
         />

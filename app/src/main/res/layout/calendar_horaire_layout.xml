@@ -3,12 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     android:orientation="vertical">
 
     <ViewSwitcher
+        android:id="@+id/horraireViewSwitcher"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <ListView
+            android:id="@+id/calendar_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -26,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp">
+                >
 
                 <TextView
                     style="?android:listSeparatorTextViewStyle"
@@ -117,10 +122,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/calendar_listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></ListView>
+
     </ViewSwitcher>
 
     <ProgressBar
