@@ -131,6 +131,9 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
 
                 return true;
+            case R.id.calendar_display_toggle:
+
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

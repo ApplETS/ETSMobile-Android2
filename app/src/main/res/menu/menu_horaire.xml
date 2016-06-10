@@ -8,7 +8,7 @@
     </item>
     <item
         android:icon="@drawable/calendar_list_icon"
-        android:id="@+id/lol"
+        android:id="@+id/calendar_display_toggle"
         android:showAsAction="ifRoom"
         />
 
