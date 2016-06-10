@@ -174,7 +174,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         allseanceAdapter = new SeanceAdapter(getActivity());
 
         fillSeancesList(dateTime.toDate());
-        fillListView(dateTime.toDate());
+        fillListView();
         setDaysList();
 
         calendar_listview.setAdapter(allseanceAdapter);
@@ -210,7 +210,6 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
-//        openCourseListDialog();
         return v;
 
     }
@@ -272,9 +271,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         fillSeancesList(dateTime.toDate());
     }
 
-    public void fillListView(Date date){
-        SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
-        String today = seancesFormatter.format(date).toString();
+    public void fillListView(){
 
         try {
             List<Seances> seances = databaseHelper.getDao(Seances.class).queryForAll();
