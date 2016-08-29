@@ -5,7 +5,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -36,50 +40,18 @@ public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorL
 
         String address = context.getString(R.string.applets_api_sponsors);
 
-        SponsorList sponsorList = null;
+        OkHttpClient client = new OkHttpClient();
 
-        try {
+        Request request = new Request.Builder()
+                .url(address)
+                .get()
+                .build();
 
-            // Instantiate the custom HttpClient to call Https request
-            DefaultHttpClient client = new DefaultHttpClient();
-            HttpGet get = new HttpGet(address);
+        Response response = client.newCall(request).execute();
 
-            String apiCredentials = context.getString(R.string.credentials_api);
+        String result = response.body().string();
+        SponsorList sponsors = new Gson().fromJson(result, SponsorList.class);
 
-            String basicAuth = "Basic " + new String(new Base64().encode(apiCredentials.getBytes()));
-            get.setHeader("Authorization", basicAuth);
-            get.setHeader("Content-Type", "application/json; charset=utf-8");
-            String method = get.getMethod();
-
-            HttpResponse getResponse = client.execute(get);
-            HttpEntity responseEntity = getResponse.getEntity();
-
-            String result = EntityUtils.toString(responseEntity, "UTF-8");
-            JSONObject data = new JSONObject(result);
-
-            /*JSONObject root = new JSONObject(result);
-            JSONObject data = root.getJSONObject("data");*/
-            ObjectMapper mapper = new ObjectMapper();
-            sponsorList = new SponsorList();
-            Iterator keys = data.keys();
-            while (keys.hasNext()) {
-
-                int imageResource = 0;
-                String currentDynamicKey = (String) keys.next();
-
-                //imageResource = assignResource(currentDynamicKey);
-
-                JSONArray arraySponsors = data.getJSONArray(currentDynamicKey);
-
-                for (int i = 0; i < arraySponsors.length(); i++) {
-                    Sponsor sponsor = mapper.readValue(arraySponsors.getJSONObject(i).toString(), Sponsor.class);
-                    //sponsor.setImageResource(imageResource);
-                    sponsorList.add(sponsor);
-                }
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return sponsorList;
+        return sponsors;
     }
 }
