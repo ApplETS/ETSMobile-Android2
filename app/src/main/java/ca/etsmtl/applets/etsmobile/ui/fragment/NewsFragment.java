@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -28,6 +30,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +38,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import ca.etsmtl.applets.etsmobile.http.AppletsApiNewsRequest;
@@ -54,19 +58,19 @@ public class NewsFragment extends HttpFragment {
 
     private ListView newsListView;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         //Sélection des sources
         setHasOptionsMenu(true);
-	}
+    }
 
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
 
-		View v = inflater.inflate(R.layout.fragment_news, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View v = inflater.inflate(R.layout.fragment_news, container, false);
 
         newsListView = (ListView) v.findViewById(R.id.listView_news);
 
@@ -90,8 +94,8 @@ public class NewsFragment extends HttpFragment {
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
-		return v;
-	}
+        return v;
+    }
 
     @Override
     public void onResume() {
@@ -125,65 +129,53 @@ public class NewsFragment extends HttpFragment {
     }
 
     @Override
-	public void onRequestFailure(SpiceException e) {
-	}
+    public void onRequestFailure(SpiceException e) {
+    }
 
-	@Override
-	public void onRequestSuccess(Object o) {
-	}
+    @Override
+    public void onRequestSuccess(Object o) {
+    }
 
-	@Override
-	void updateUI() {
-	}
+    @Override
+    void updateUI() {
+    }
 
     private class NewsSourceAsyncTask extends AsyncTask<String, Void, ArrayList<NewsSource>> {
 
         @Override
         protected ArrayList<NewsSource> doInBackground(String... param) {
-            ArrayList<NewsSource> newsSourceList;
-            try {
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder()
-                        .url(param[0])
-                        .get()
-                        .addHeader("cache-control", "no-cache")
-                        .build();
-                Response response = client.newCall(request).execute();
-                if(response.code() == 200) {
-                    String jsonData = response.body().string();
-                    JSONObject Jobject = new JSONObject(jsonData);
-                    newsSourceList = new ArrayList<>();
-                    Object source = Jobject.get("source");
-                    if(source instanceof JSONArray){
-                        JSONArray sourceArray = (JSONArray) source;
+            List<NewsSource> sources = null;
+            OkHttpClient client = new OkHttpClient();
 
-                        for (int i = 0; i < sourceArray.length(); i++) {
-                            JSONObject object = sourceArray.getJSONObject(i);
-                            NewsSource newsSource = new NewsSource(object);
-                            newsSourceList.add(newsSource);
-                        }
-                    }else{
-                        JSONObject object = (JSONObject) source;
-                        NewsSource newsSource = new NewsSource(object);
-                        newsSourceList.add(newsSource);
-                    }
-                }else{
-                    return null;
+            Request request = new Request.Builder()
+                    .url(param[0])
+                    .get()
+                    .build();
+
+            try {
+                Response response = client.newCall(request).execute();
+
+                if (response.code() == 200) {
+                    String jsonData = response.body().string();
+
+                    sources = new Gson().fromJson(jsonData, new TypeToken<List<NewsSource>>() {
+                    }.getType());
+
                 }
-            } catch (Exception e) {
+                return new ArrayList<>(sources);
+            } catch (IOException e) {
                 e.printStackTrace();
-                return null;
             }
-            return newsSourceList;
+            return null;
         }
 
         @Override
         protected void onPostExecute(ArrayList<NewsSource> list) {
-            if(list !=null) {
+            if (list != null) {
                 //loadProgressBar.setVisibility(View.GONE);
                 NewsSourceAdapter adapter = new NewsSourceAdapter(getActivity(), R.layout.row_news_source, list);
                 newsListView.setAdapter(adapter);
-            }else{
+            } else {
                 Toast.makeText(getActivity(), getString(R.string.erreur_chargement), Toast.LENGTH_SHORT).show();
             }
             super.onPostExecute(list);

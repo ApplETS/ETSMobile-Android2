@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -23,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.NewsSource;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
@@ -71,14 +74,15 @@ public class NewsDetailsActivity extends Activity {
                     Intent internetIntent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse(url));
                     startActivity(internetIntent);
-                }else{
+                } else {
                     Toast.makeText(NewsDetailsActivity.this, getString(R.string.erreur_lien), Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         new NewsDetailAsyncTask().execute("https://api3.clubapplets.ca/news/list/" + key);
     }
@@ -102,56 +106,41 @@ public class NewsDetailsActivity extends Activity {
 
         @Override
         protected ArrayList<Nouvelle> doInBackground(String... param) {
-            ArrayList<Nouvelle> nouvelleList;
+            List<Nouvelle> nouvelles = null;
             try {
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder()
                         .url(param[0])
                         .get()
-                        .addHeader("cache-control", "no-cache")
                         .build();
-                Response response = client.newCall(request).execute();
-                if(response.code() == 200) {
-                    String jsonData = response.body().string();
-                    JSONObject Jobject = new JSONObject(jsonData);
-                    nouvelleList = new ArrayList<>();
-                    Object source = Jobject.get("nouvelle");
-                    if(source instanceof JSONArray){
-                        JSONArray nouvelleArray = (JSONArray) source;
 
-                        for (int i = 0; i < nouvelleArray.length(); i++) {
-                            JSONObject object = nouvelleArray.getJSONObject(i);
-                            Nouvelle nouvelle = new Nouvelle(object);
-                            nouvelleList.add(nouvelle);
-                        }
-                    }else{
-                        JSONObject object = (JSONObject) source;
-                        Nouvelle nouvelle = new Nouvelle(object);
-                        nouvelleList.add(nouvelle);
-                    }
-                }else{
-                    return null;
+                Response response = client.newCall(request).execute();
+
+                if (response.code() == 200) {
+                    String jsonData = response.body().string();
+
+                    nouvelles = new Gson().fromJson(jsonData, new TypeToken<List<Nouvelle>>() {
+                    }.getType());
+                    return new ArrayList<>(nouvelles);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;
             }
-            return nouvelleList;
+            return null;
         }
 
         @Override
         protected void onPostExecute(ArrayList<Nouvelle> list) {
-            if(list !=null) {
+            if (list != null) {
                 //loadProgressBar.setVisibility(View.GONE);
                 NewsAdapter adapter = new NewsAdapter(NewsDetailsActivity.this, R.layout.row_news, list);
                 listView.setAdapter(adapter);
-            }else{
+            } else {
                 Toast.makeText(NewsDetailsActivity.this, getString(R.string.erreur_chargement), Toast.LENGTH_SHORT).show();
             }
             super.onPostExecute(list);
         }
     }
-
 
 
 }

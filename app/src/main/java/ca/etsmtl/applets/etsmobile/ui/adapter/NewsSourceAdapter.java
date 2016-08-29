@@ -2,6 +2,7 @@ package ca.etsmtl.applets.etsmobile.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
 import ca.etsmtl.applets.etsmobile.model.NewsSource;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -45,9 +47,17 @@ public class NewsSourceAdapter extends ArrayAdapter<NewsSource> {
         }
 
         NewsSource item = getItem(position);
-        Picasso.with(context).load(item.getUrlImage()).resize(200,200).into(holder.imageSource);
-        holder.tvName.setText(item.getName());
 
+        String urlImage = item.getType().equals("facebook") ?
+                "http://graph.facebook.com/" + item.getValue() + "/picture" :
+                item.getUrlImage();
+
+        Picasso.with(context)
+                .load(urlImage)
+                .resize(200, 200)
+                .into(holder.imageSource);
+
+        holder.tvName.setText(item.getName());
 
         return view;
     }
