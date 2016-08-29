@@ -2,6 +2,7 @@ package ca.etsmtl.applets.etsmobile.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EventList extends ArrayList<Event>{
 
-    @JsonProperty("ets")
+    @SerializedName("ets")
     ArrayList<Event> events;
 
     public EventList() {

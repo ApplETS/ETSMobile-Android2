@@ -2,6 +2,7 @@ package ca.etsmtl.applets.etsmobile.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -14,19 +15,19 @@ import com.j256.ormlite.table.DatabaseTable;
 public class Event implements IHoraireRows{
 
     @DatabaseField(id=true)
-    @JsonProperty("id")
+    @SerializedName("id")
     String id;
 
     @DatabaseField
-    @JsonProperty("start_date")
+    @SerializedName("start_date")
     String startDate;
 
     @DatabaseField
-    @JsonProperty("end_date")
+    @SerializedName("end_date")
     String endDate;
 
     @DatabaseField
-    @JsonProperty("title")
+    @SerializedName("summary")
     String title;
 
     public Event() {

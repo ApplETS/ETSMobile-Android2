@@ -28,6 +28,7 @@ import java.sql.SQLException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Observable;
@@ -51,6 +52,7 @@ import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.FinalExamDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.TodayDecorator;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
+import ca.etsmtl.applets.etsmobile.util.TrimestreComparator;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -159,9 +161,9 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         mCalendarView.setOnDateChangedListener(this);
         mCalendarView.addDecorators(
                 new TodayDecorator(getActivity()),
-                new CourseDecorator(getActivity(),courseDays),
-                new FinalExamDecorator(getActivity(),finalExamDays),
-                new EventDecorator(eventDays,  ContextCompat.getColor(getActivity(),R.color.black)));
+                new CourseDecorator(getActivity(), courseDays),
+                new FinalExamDecorator(getActivity(), finalExamDays),
+                new EventDecorator(eventDays, ContextCompat.getColor(getActivity(), R.color.black)));
 
 
         horaireManager = new HoraireManager(this, getActivity());
@@ -203,28 +205,25 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
             ListeDeSessions listeDeSessions = (ListeDeSessions) o;
 
-            DateTime dateDebut = new DateTime();
-            DateTime dateEnd = new DateTime();
-            Trimestre trimestre;
+            Trimestre derniereSession = Collections.max(listeDeSessions.liste, new TrimestreComparator());
 
-            /*for (int i = 0; i < listeDeSessions.liste.size() - 1; i++) {
-                trimestre = listeDeSessions.liste.get(i);
-                dateEnd = new DateTime(trimestre.dateFin);
-                if (dateDebut.isBefore(dateEnd.plusDays(1))) {
-                    dateDebut = new DateTime(trimestre.dateDebut);
-                    break;
-                }
-            }*/
-            trimestre = listeDeSessions.liste.get(listeDeSessions.liste.size()-1);
-            if(dateDebut.isBefore(new DateTime(trimestre.dateDebut)))
-                trimestre = listeDeSessions.liste.get(listeDeSessions.liste.size()-2);
-            dateEnd = new DateTime(trimestre.dateFin);
-            dateDebut = new DateTime(trimestre.dateDebut);
+            DateTime dateDebut = new DateTime(derniereSession.dateDebut);
+
+            if(DateTime.now().isBefore(dateDebut)) {
+                dateDebut = DateTime.now();
+            }
+
+            DateTime dateEnd = new DateTime(derniereSession.dateFin);
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String dateSessionStart = formatter.format(dateDebut.toDate());
-            String dateSessionEnd = formatter.format(dateEnd.toDate());
-            dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateSessionStart, dateSessionEnd), this);
+            String dateDebutFormatted = formatter.format(dateDebut.toDate());
+            String dateFinFormatted = formatter.format(dateEnd.toDate());
+            dataManager.sendRequest(
+                    new AppletsApiCalendarRequest(getActivity(),
+                            dateDebutFormatted,
+                            dateFinFormatted
+                    ),
+                    this);
         }
 
         horaireManager.onRequestSuccess(o);
@@ -303,7 +302,6 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
                 Date eventDay = formatter.parse(event.getDateDebut().substring(0, 10), new ParsePosition(0));
                 eventDays.add(CalendarDay.from(eventDay));
             }
-
 
 
         } catch (SQLException e) {
