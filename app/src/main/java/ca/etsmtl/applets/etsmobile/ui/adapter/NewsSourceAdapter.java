@@ -54,6 +54,7 @@ public class NewsSourceAdapter extends ArrayAdapter<NewsSource> {
 
         Picasso.with(context)
                 .load(urlImage)
+                .placeholder(R.drawable.loading_spinner)
                 .resize(200, 200)
                 .into(holder.imageSource);
 

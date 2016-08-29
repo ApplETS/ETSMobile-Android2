@@ -64,7 +64,11 @@ public class NewsAdapter extends ArrayAdapter<Nouvelle> {
 
         //holder.tvDate.setText(date.toString("dd MMM yyyy", Locale.CANADA_FRENCH));
         if(!image.equals("")) {
-            Picasso.with(context).load(image).resize(300, 300).into(holder.imageSource);
+            Picasso.with(context)
+                    .load(image)
+                    .placeholder(R.drawable.loading_spinner)
+                    .resize(300, 300)
+                    .into(holder.imageSource);
         }
         holder.tvTitre.setText(item.getTitre());
 
