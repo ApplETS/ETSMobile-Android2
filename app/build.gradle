@@ -36,8 +36,8 @@ android {
         applicationId "ca.etsmtl.applets.etsmobile"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 17
-        versionName "2.06"
+        versionCode 19
+        versionName "2.08"
         multiDexEnabled true
     }
 
@@ -81,5 +81,9 @@ dependencies {
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.prolificinteractive:material-calendarview:1.4.0'
+
+    compile 'com.google.code.ksoap2-android:ksoap2-android:3.5.0'
+    compile 'com.j256.ormlite:ormlite-core:4.48'
+    compile 'com.j256.ormlite:ormlite-android:4.48'
 
 }

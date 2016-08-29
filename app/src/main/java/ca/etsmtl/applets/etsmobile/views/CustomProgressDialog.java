@@ -28,7 +28,7 @@ public class CustomProgressDialog extends Dialog {
 		
 		rotatingImageView = new ImageView(context);
 		rotatingImageView.setImageResource(resourceIdOfImage);
-		rotatingImageView.setId(1);
+//		rotatingImageView.setId(1);
 		
 		layout.addView(rotatingImageView, params);
 		
