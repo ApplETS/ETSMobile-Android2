@@ -6,6 +6,11 @@
         android:showAsAction="collapseActionView|ifRoom"
         android:title="@string/export_calendar">
     </item>
+    <item
+        android:icon="@drawable/icon_calendar"
+        android:id="@+id/calendar_display_toggle"
+        android:showAsAction="ifRoom"
+        />
 
 
 

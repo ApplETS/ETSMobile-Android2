@@ -1,5 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.calendar_decorator;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
@@ -17,27 +18,28 @@ import ca.etsmtl.applets.etsmobile2.R;
 /**
  * Created by komlan on 28/03/16.
  */
-public class CourseDecorator implements DayViewDecorator {
+public class CourseTodayDecorator implements DayViewDecorator {
 
 
     private HashSet<CalendarDay> dates;
     private Context context;
 
-    public CourseDecorator(Context context,ArrayList<CalendarDay>dates) {
+    public CourseTodayDecorator(Context context,ArrayList<CalendarDay>dates) {
         this.context = context;
         this.dates = new HashSet<>(dates);
     }
 
 
 
+
     @Override
     public boolean shouldDecorate(CalendarDay day) {
-        return dates.contains(day);
+        return day.equals(CalendarDay.today()) && dates.contains(day);
     }
 
     @Override
     public void decorate(DayViewFacade view) {
-        view.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.calendar_course_circle));
+        view.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.calendar_course_today_circle));
         view.addSpan(new StyleSpan(Typeface.BOLD));
     }
 

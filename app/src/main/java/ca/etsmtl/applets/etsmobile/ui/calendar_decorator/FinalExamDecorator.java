@@ -8,11 +8,8 @@ import android.text.style.StyleSpan;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
-import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 
 import ca.etsmtl.applets.etsmobile2.R;
@@ -40,7 +37,7 @@ public class FinalExamDecorator implements DayViewDecorator {
 
     @Override
     public void decorate(DayViewFacade view) {
-        view.setBackgroundDrawable(ContextCompat.getDrawable(context,R.drawable.calendar_exam_circle));
+        view.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.calendar_exam_circle));
         view.addSpan(new StyleSpan(Typeface.BOLD));
     }
 }

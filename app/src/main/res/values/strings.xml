@@ -162,6 +162,8 @@
     <string name="legend_final_exam">Examen final</string>
     <string name="legend_today">Aujourd\'hui</string>
     <string name="legend_event">Événement ÉTS</string>
+    <string name="calendar">Calendrier</string>
+    <string name="list">Liste</string>
 
 
     <!-- Nouvelles -->
@@ -285,6 +287,5 @@
     <string name="ets">ÉTS</string>
     <string name="notification_content_title">%1$s nouvelle%2$s notification%3$s</string>
     <string name="others_notifications">+ %1$s autre%2$s</string>
-
 
 </resources>

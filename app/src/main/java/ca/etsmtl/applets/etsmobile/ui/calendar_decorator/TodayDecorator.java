@@ -1,10 +1,8 @@
 package ca.etsmtl.applets.etsmobile.ui.calendar_decorator;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;

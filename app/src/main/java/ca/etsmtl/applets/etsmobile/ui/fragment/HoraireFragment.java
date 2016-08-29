@@ -14,8 +14,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -47,6 +49,7 @@ import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseDecorator;
+import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseTodayDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.EventDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.FinalExamDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.TodayDecorator;
@@ -56,23 +59,25 @@ import ca.etsmtl.applets.etsmobile.util.TrimestreComparator;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
 import ca.etsmtl.applets.etsmobile2.R;
 
-/**
- * Created by Thibaut on 30/08/14.
- */
 public class HoraireFragment extends HttpFragment implements Observer, OnDateSelectedListener {
 
     private HoraireManager horaireManager;
     private CustomProgressDialog customProgressDialog;
     private DateTime dateTime = new DateTime();
-    private SeanceAdapter seanceAdapter;
+    private SeanceAdapter seanceAdapter;//Seances d'une journee
+    private SeanceAdapter allseanceAdapter;//Seances du semestre
     private DatabaseHelper databaseHelper;
     private ProgressBar progressBarSyncHoraire;
     @Bind(R.id.calendarView)
     MaterialCalendarView mCalendarView;
-
+    @Bind(R.id.horraireViewSwitcher)
+    ViewSwitcher horraireViewSwitcher;
+    @Bind(R.id.calendar_listview)
+    ListView calendar_listview;
     private ArrayList<CalendarDay> courseDays;
     private ArrayList<CalendarDay> eventDays;
     private ArrayList<CalendarDay> finalExamDays;
+    private  boolean listDisplay = true;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -131,6 +136,17 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
 
                 return true;
+            case R.id.calendar_display_toggle:
+                if(listDisplay){
+
+                    item.setIcon(R.drawable.list_icon);
+                    listDisplay = false;
+                }else{
+                    item.setIcon(R.drawable.icon_calendar);
+                    listDisplay = true;
+                }
+                horraireViewSwitcher.showNext();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -151,19 +167,24 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         databaseHelper = new DatabaseHelper(getActivity());
 
         seanceAdapter = new SeanceAdapter(getActivity());
+        allseanceAdapter = new SeanceAdapter(getActivity());
 
         fillSeancesList(dateTime.toDate());
+        fillListView();
         setDaysList();
 
+        calendar_listview.setAdapter(allseanceAdapter);
 
         mCalendarView.setCurrentDate(new Date());
         mCalendarView.setSelectedDate(new Date());
         mCalendarView.setOnDateChangedListener(this);
         mCalendarView.addDecorators(
+                new CourseDecorator(getActivity(),courseDays),
+                new FinalExamDecorator(getActivity(),finalExamDays),
+                new EventDecorator(eventDays,  ContextCompat.getColor(getActivity(),R.color.black)),
                 new TodayDecorator(getActivity()),
-                new CourseDecorator(getActivity(), courseDays),
-                new FinalExamDecorator(getActivity(), finalExamDays),
-                new EventDecorator(eventDays, ContextCompat.getColor(getActivity(), R.color.black)));
+                new CourseTodayDecorator(getActivity(),courseDays)
+                );
 
 
         horaireManager = new HoraireManager(this, getActivity());
@@ -185,7 +206,6 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
-        openCourseListDialog();
         return v;
 
     }
@@ -243,6 +263,19 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         fillSeancesList(dateTime.toDate());
     }
 
+    public void fillListView(){
+
+        try {
+            List<Seances> seances = databaseHelper.getDao(Seances.class).queryForAll();
+            List<Event> events = databaseHelper.getDao(Event.class).queryForAll();
+            allseanceAdapter.setItemList(seances, events);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        allseanceAdapter.notifyDataSetChanged();
+    }
     public void fillSeancesList(Date date) {
         SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
         String today = seancesFormatter.format(date).toString();
@@ -302,6 +335,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
                 Date eventDay = formatter.parse(event.getDateDebut().substring(0, 10), new ParsePosition(0));
                 eventDays.add(CalendarDay.from(eventDay));
             }
+
 
 
         } catch (SQLException e) {
