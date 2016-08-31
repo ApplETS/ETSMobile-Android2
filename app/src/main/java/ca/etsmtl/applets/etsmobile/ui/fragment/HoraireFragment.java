@@ -221,7 +221,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     @Override
     public void onRequestSuccess(final Object o) {
 
-        if (o instanceof ListeDeSessions) {
+        if (o instanceof ListeDeSessions && !((ListeDeSessions) o).liste.isEmpty()) {
 
             ListeDeSessions listeDeSessions = (ListeDeSessions) o;
 
