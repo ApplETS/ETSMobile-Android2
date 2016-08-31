@@ -51,6 +51,7 @@ import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsSourceAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
+import ca.etsmtl.applets.etsmobile.util.NewsSourceComparator;
 import ca.etsmtl.applets.etsmobile2.R;
 
 
@@ -172,6 +173,7 @@ public class NewsFragment extends HttpFragment {
         @Override
         protected void onPostExecute(ArrayList<NewsSource> list) {
             if (list != null) {
+                Collections.sort(list,new NewsSourceComparator());
                 //loadProgressBar.setVisibility(View.GONE);
                 NewsSourceAdapter adapter = new NewsSourceAdapter(getActivity(), R.layout.row_news_source, list);
                 newsListView.setAdapter(adapter);
