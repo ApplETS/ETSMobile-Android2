@@ -54,15 +54,13 @@ public class NewsAdapter extends ArrayAdapter<Nouvelle> {
         }
 
         Nouvelle item = getItem(position);
-        String pattern = "yyyy-MM-dd'T'HH:mm:ssZ";
-        DateTimeFormatter dtf = DateTimeFormat.forPattern(pattern);
         String image = item.getUrlPicture();
 
-        /*DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        DateTime date = dateTimeFormatter.parseDateTime(updatedTime);
-        DateTimeFormatter dateToDisplay = DateTimeFormat.forPattern("dd MMM yyyy");*/
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+        DateTime date = dateTimeFormatter.parseDateTime(item.getDate());
 
-        //holder.tvDate.setText(date.toString("dd MMM yyyy", Locale.CANADA_FRENCH));
+        holder.tvDate.setText(date.toString("dd MMM yyyy", Locale.CANADA_FRENCH));
+
         if(!image.equals("")) {
             Picasso.with(context)
                     .load(image)

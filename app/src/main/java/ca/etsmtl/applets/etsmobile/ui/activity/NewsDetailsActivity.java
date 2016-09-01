@@ -25,6 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.NewsSource;
@@ -33,6 +35,7 @@ import ca.etsmtl.applets.etsmobile.model.Sponsor;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsSourceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsDetailsFragment;
+import ca.etsmtl.applets.etsmobile.util.NewsComparator;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -133,6 +136,9 @@ public class NewsDetailsActivity extends Activity {
         protected void onPostExecute(ArrayList<Nouvelle> list) {
             if (list != null) {
                 //loadProgressBar.setVisibility(View.GONE);
+
+                Collections.sort(list, new NewsComparator());
+
                 NewsAdapter adapter = new NewsAdapter(NewsDetailsActivity.this, R.layout.row_news, list);
                 listView.setAdapter(adapter);
             } else {

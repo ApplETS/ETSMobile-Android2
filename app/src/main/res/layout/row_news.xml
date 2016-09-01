@@ -23,14 +23,14 @@
         android:layout_toRightOf="@+id/iv_news_image"
         tools:text="Forces Avenir vient tout juste de publier les vidéos des lauréats" />
 
-
     <TextView
         android:id="@+id/tv_row_news_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="italic|bold"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_row_news_titre"
         tools:text="27 nov. 2014" />
 
 
