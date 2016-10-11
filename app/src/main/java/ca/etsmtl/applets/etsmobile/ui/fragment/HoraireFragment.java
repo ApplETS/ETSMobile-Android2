@@ -25,6 +25,7 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
 
 import java.sql.SQLException;
 import java.text.ParsePosition;
@@ -46,6 +47,7 @@ import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
+import ca.etsmtl.applets.etsmobile.model.TodaysCourses;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseDecorator;
@@ -66,6 +68,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     private DateTime dateTime = new DateTime();
     private SeanceAdapter seanceAdapter;//Seances d'une journee
     private SeanceAdapter allseanceAdapter;//Seances du semestre
+    private SeanceAdapter upcomingseanceAdapter;//Seances du semestre
     private DatabaseHelper databaseHelper;
     private ProgressBar progressBarSyncHoraire;
     @Bind(R.id.calendarView)
@@ -168,12 +171,13 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
         seanceAdapter = new SeanceAdapter(getActivity());
         allseanceAdapter = new SeanceAdapter(getActivity());
+        upcomingseanceAdapter = new SeanceAdapter(getActivity());
 
         fillSeancesList(dateTime.toDate());
         fillListView();
         setDaysList();
 
-        calendar_listview.setAdapter(allseanceAdapter);
+        calendar_listview.setAdapter(upcomingseanceAdapter);
 
         mCalendarView.setCurrentDate(new Date());
         mCalendarView.setSelectedDate(new Date());
@@ -270,11 +274,32 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
             List<Event> events = databaseHelper.getDao(Event.class).queryForAll();
             allseanceAdapter.setItemList(seances, events);
 
+
+            List<Seances> upcomingSeances = new ArrayList<>();
+            List<Event> upcomingEvents = new ArrayList<>();
+
+            DateTime now = new DateTime();
+            for(Seances sc : seances){
+                DateTime scDate = DateTime.parse(sc.getDateDebut());
+                if( DateTimeComparator.getDateOnlyInstance().compare(now, scDate) <= 0 ){
+                    upcomingSeances.add(sc);
+                }
+            }
+            for(Event ev : events){
+                DateTime evDate = DateTime.parse(ev.getDateDebut());
+                if( DateTimeComparator.getDateOnlyInstance().compare(now, evDate) <= 0 ){
+                    upcomingEvents.add(ev);
+                }
+            }
+
+            upcomingseanceAdapter.setItemList(upcomingSeances,upcomingEvents);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         allseanceAdapter.notifyDataSetChanged();
+        upcomingseanceAdapter.notifyDataSetChanged();
     }
     public void fillSeancesList(Date date) {
         SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
