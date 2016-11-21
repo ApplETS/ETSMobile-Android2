@@ -90,4 +90,8 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-core:4.43'
     compile 'com.j256.ormlite:ormlite-android:4.43'
 
+    compile('com.mikepenz:materialdrawer:5.8.0@aar') {
+        transitive = true
+    }
+
 }
