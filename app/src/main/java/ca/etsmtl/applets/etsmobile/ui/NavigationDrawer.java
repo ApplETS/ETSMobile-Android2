@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -40,6 +41,7 @@ public class NavigationDrawer {
     public static final int ABOUT_FRAGMENT = 13;
     public static final int COMMENTS_FRAGMENT = 14;
     public static final int FAQ_FRAGMENT = 15;
+    public static final int SPONSOR_FRAGMENT = 15;
 
     private Drawer.OnDrawerItemClickListener drawerItemListener = null;
 
@@ -59,6 +61,14 @@ public class NavigationDrawer {
     }
 
     private void makeDrawer() {
+        AccountHeaderBuilder builder = new AccountHeaderBuilder()
+                .withActivity((MainActivity) context)
+                .withDividerBelowHeader(false)
+                .withHeaderBackground(R.color.ets_red_fonce)
+                .withSelectionListEnabled(false);
+
+
+        accountHeader = builder.build();
     }
 
     private void makeHeader() {
@@ -67,34 +77,28 @@ public class NavigationDrawer {
                 .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
                 .withSelectedItem(SCHEDULE_FRAGMENT)
-                .withDisplayBelowStatusBar(true)
-                .withTranslucentStatusBar(false)
                 .withActionBarDrawerToggle(true)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName(context.getString(R.string.menu_section_1_moi)).
-                                withSubItems(
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_horaire)).withIdentifier(SCHEDULE_FRAGMENT).withIcon(R.drawable.ic_ico_schedule),
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_notes)).withIdentifier(COURSE_FRAGMENT),
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_2_moodle)).withIdentifier(MOODLE_FRAGMENT),
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_monETS)).withIdentifier(MONETS_FRAGMENT),
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_bandwith)).withIdentifier(BANDWIDTH_FRAGMENT)
-                                ),
-                        new PrimaryDrawerItem().withName(context.getString(R.string.menu_section_2_ets)).
-                                withSubItems(
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_2_ets)),
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_2_news)).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_2_bottin)).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin),
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_monETS)).withIdentifier(LIBRARY_FRAGMENT).withIcon(R.drawable.ic_ico_library),
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_bandwith)).withIdentifier(SECURITY_FRAGMENT).withIcon(R.drawable.ic_ico_security)
-                                ),
-                        new PrimaryDrawerItem().withName(context.getString(R.string.menu_section_1_moi)).
-                                withSubItems(
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_horaire)),
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_notes)),
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_2_moodle)),
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_monETS)),
-                                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_bandwith))
-                                )
+                        new PrimaryDrawerItem().withName(context.getString(R.string.menu_section_1_moi)).withSelectable(false),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_horaire)).withIdentifier(SCHEDULE_FRAGMENT).withIcon(R.drawable.ic_ico_schedule),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_notes)).withIdentifier(COURSE_FRAGMENT).withIcon(R.drawable.ic_ico_notes),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_2_moodle)).withIdentifier(MOODLE_FRAGMENT).withIcon(R.drawable.ic_moodle_icon_small),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_profil)).withIdentifier(PROFILE_FRAGMENT).withIcon(R.drawable.ic_ico_profil),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_monETS)).withIdentifier(MONETS_FRAGMENT).withIcon(R.drawable.ic_monets),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_bandwith)).withIdentifier(BANDWIDTH_FRAGMENT).withIcon(R.drawable.ic_ico_internet),
+
+                        new PrimaryDrawerItem().withName(context.getString(R.string.menu_section_2_ets)),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_2_news)).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_2_bottin)).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_monETS)).withIdentifier(LIBRARY_FRAGMENT).withIcon(R.drawable.ic_ico_library),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_bandwith)).withIdentifier(SECURITY_FRAGMENT).withIcon(R.drawable.ic_ico_security),
+
+                        new PrimaryDrawerItem().withName(context.getString(R.string.menu_section_3_applets)),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_3_apps)).withIdentifier(ACHIEVEMENTS_FRAGMENT).withIcon(R.drawable.ic_star_60x60),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_3_about)).withIdentifier(ABOUT_FRAGMENT).withIcon(R.drawable.ic_logo_icon_final),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_3_comms)).withIdentifier(COMMENTS_FRAGMENT).withIcon(R.drawable.ic_ico_comment),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_3_sponsors)).withIdentifier(SPONSOR_FRAGMENT).withIcon(R.drawable.ic_ico_partners),
+                        new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_3_faq)).withIdentifier(FAQ_FRAGMENT).withIcon(R.drawable.ic_ico_faq)
 
                 );
 
@@ -105,9 +109,6 @@ public class NavigationDrawer {
         drawer = drawerBuilder.build();
     }
 
-    public AccountHeader getAccountHeader() {
-        return accountHeader;
-    }
 
     public Drawer getDrawer() {
         return drawer;

@@ -47,7 +47,8 @@
         android:configChanges="locale|layoutDirection"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        >
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
             android:configChanges="locale|layoutDirection"
