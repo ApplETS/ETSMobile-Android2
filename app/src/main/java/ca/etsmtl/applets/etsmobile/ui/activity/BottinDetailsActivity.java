@@ -1,8 +1,8 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinDetailsFragment;
@@ -11,7 +11,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 /**
  * Created by gnut3ll4 on 12/19/14.
  */
-public class BottinDetailsActivity extends Activity {
+public class BottinDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +37,8 @@ public class BottinDetailsActivity extends Activity {
 
 
             Fragment fragment = BottinDetailsFragment.newInstance(nom, prenom, telBureau, emplacement, courriel, service, titre);
-            getFragmentManager().beginTransaction().add(R.id.container, fragment, BottinDetailsFragment.class.getName()).commit();
-
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, fragment).commit();
 
         }
     }

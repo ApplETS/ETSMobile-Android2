@@ -68,7 +68,7 @@ public class ApplicationManager extends Application {
         createDatabaseTables();
 
 //        SupportKit.init(this, getString(R.string.credentials_supportkit));
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
 
         AccountManager accountManager = AccountManager.get(this);
         Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);

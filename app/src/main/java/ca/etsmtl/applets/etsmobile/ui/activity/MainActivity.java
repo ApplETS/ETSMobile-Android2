@@ -5,7 +5,6 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,6 +17,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -38,6 +38,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -83,13 +84,13 @@ public class MainActivity extends AppCompatActivity {
 //    private ListView mDrawerList;
 //    private CharSequence mTitle;
 //    private ActionBarDrawerToggle mDrawerToggle;
-//    private Fragment mfragment;
-//    private String TAG = "FRAGMENTTAG";
-//    private AccountManager accountManager;
-//    private BroadcastReceiver mRegistrationBroadcastReceiver;
-//    private boolean isGCMTokenSent;
-//    private SecurePreferences securePreferences;
-//    public SharedPreferences prefs;
+    private Fragment mfragment;
+    private String TAG = "MainActivity";
+    private AccountManager accountManager;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private boolean isGCMTokenSent;
+    private SecurePreferences securePreferences;
+    public SharedPreferences prefs;
 
     private Drawer drawer;
 
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new TodayFragment()).addToBackStack("sdas").commit();
+            goToFragment(new TodayFragment(),TodayFragment.getClassName());
         }
 
 
@@ -114,10 +115,11 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationDrawer navigationDrawer = new NavigationDrawer(this, toolbar);
         navigationDrawer.setDrawerItemListener(drawerItemClickListener);
+        navigationDrawer.setAccountHeaderListener(accountHeaderListener);
         navigationDrawer.create();
         drawer = navigationDrawer.getDrawer();
-//        checkPlayServices();
-//        setLocale();
+        checkPlayServices();
+        setLocale();
 //        setTitles();
 //        if (savedInstanceState != null) {
 //            instantiateFragments(savedInstanceState);
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 //        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 //        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        accountManager = AccountManager.get(this);
+        accountManager = AccountManager.get(this);
 //
 //        isGCMTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
 //        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
@@ -171,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 //        getActionBar().setDisplayHomeAsUpEnabled(true);
 //        getActionBar().setHomeButtonEnabled(true);
 //
-//        securePreferences = new SecurePreferences(this);
+        securePreferences = new SecurePreferences(this);
 
     }
 
@@ -184,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(ApplicationManager.userCredentials == null){
+        if (ApplicationManager.userCredentials == null) {
             menu.findItem(R.id.action_logout).setVisible(false);
         }
         super.onPrepareOptionsMenu(menu);
@@ -215,37 +217,37 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-//        //In case of : retry registering to GCM
-//        if (!isGCMTokenSent && ApplicationManager.domaine != null) {
-//            // Start IntentService to register this application with GCM.
-//            Intent intent = new Intent(this, RegistrationIntentService.class);
-//            startService(intent);
-//        }
-//
-//        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-//                new IntentFilter(Constants.REGISTRATION_COMPLETE));
-//
-//        if (ApplicationManager.userCredentials == null) {
-//            if (mfragment == null) {
-//                selectItem(AboutFragment.class.getName());
-//            } else {
+        //In case of : retry registering to GCM
+        if (!isGCMTokenSent && ApplicationManager.domaine != null) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Constants.REGISTRATION_COMPLETE));
+
+        if (ApplicationManager.userCredentials == null) {
+            if (mfragment == null) {
+                goToFragment(new AboutFragment(),AboutFragment.class.getName());
+            } else {
 //                MyMenuItem myMenuItem = mMenu.get(mfragment.getTag());
 //                if (myMenuItem.hasToBeLoggedOn()) {
-//                    selectItem(AboutFragment.class.getName());
+//                    goToFragment(new AboutFragment(),AboutFragment.class.getName());
 //                }
 //                selectItem(mfragment.getTag());
-//            }
-//        } else {
-//            if (mfragment == null) {
-//                selectItem(TodayFragment.class.getName());
-//            }
-//
-//        }
+            }
+        } else {
+            if (mfragment == null) {
+                goToFragment(new TodayFragment(),TodayFragment.class.getName());
+            }
+
+        }
     }
 
     @Override
     protected void onPause() {
-//        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
     }
 
@@ -255,17 +257,17 @@ public class MainActivity extends AppCompatActivity {
      * the Google Play Store or enable it in the device's system settings.
      */
     private boolean checkPlayServices() {
-//        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-//        if (resultCode != ConnectionResult.SUCCESS) {
-//            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-//                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-//                        Constants.PLAY_SERVICES_RESOLUTION_REQUEST).show();
-//            } else {
-//                Log.i(TAG, "This device is not supported.");
-//                finish();
-//            }
-//            return false;
-//        }
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        Constants.PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
         return true;
     }
 
@@ -303,15 +305,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 //
-//        if (requestCode == Constants.REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
-//            String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-//
-//            User user = User.getCurrentUser();
-//            user.setEmail(accountName);
-//
-//            ConversationActivity.show(this);
-//
-//        }
+        if (requestCode == Constants.REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
+            String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+
+            User user = User.getCurrentUser();
+            user.setEmail(accountName);
+
+            ConversationActivity.show(this);
+
+        }
     }
 
     @Override
@@ -322,37 +324,37 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        if (id == R.id.action_logout) {
-//            ApplicationManager.deconnexion(this);
-//        }
-//        if (id == R.id.action_language){
-//            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//            builder.setTitle(getResources().getString(R.string.lang_title));
-//            builder.setMessage(getResources().getString(R.string.lang_description));
-//            builder.setPositiveButton(getResources().getString(R.string.lang_choix_positif),
-//                    new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int id) {
-//                    prefs.edit().remove("language").apply();
-//                    prefs.edit().putString("language", "fr").apply();
+        int id = item.getItemId();
+        if (id == R.id.action_logout) {
+            ApplicationManager.deconnexion(this);
+        }
+        if (id == R.id.action_language){
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle(getResources().getString(R.string.lang_title));
+            builder.setMessage(getResources().getString(R.string.lang_description));
+            builder.setPositiveButton(getResources().getString(R.string.lang_choix_positif),
+                    new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    prefs.edit().remove("language").apply();
+                    prefs.edit().putString("language", "fr").apply();
 //                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
-//                    recreate();
-//                }
-//            });
-//            builder.setNegativeButton(getResources().getString(R.string.lang_choix_negatif),
-//                    new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int id) {
-//                    prefs.edit().remove("language").apply();
-//                    prefs.edit().putString("language", "en").apply();
+                    recreate();
+                }
+            });
+            builder.setNegativeButton(getResources().getString(R.string.lang_choix_negatif),
+                    new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    prefs.edit().remove("language").apply();
+                    prefs.edit().putString("language", "en").apply();
 //                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
-//                    recreate();
-//                }
-//            });
-//            builder.show();
-//        }
-//
-//        // Pass the event to ActionBarDrawerToggle, if it returns
-//        // true, then it has handled the app icon touch event
+                    recreate();
+                }
+            });
+            builder.show();
+        }
+
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
 //        else if (mDrawerToggle.onOptionsItemSelected(item)) {
 //            return true;
 //        }
@@ -361,23 +363,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setLocale() {
-//        Locale locale;
-//        Resources res = getResources();
-//        DisplayMetrics dm = res.getDisplayMetrics();
-//        Configuration conf = res.getConfiguration();
-//        prefs = this.getSharedPreferences("Language", 0);
-//        String restoredText = prefs.getString("language", "");
-//        if (restoredText.equalsIgnoreCase("en")) {
-//            locale = Locale.ENGLISH;
-//        }
-//        else if(restoredText.equalsIgnoreCase("fr"))
-//            locale = Locale.CANADA_FRENCH;
-//        else
-//        locale = Locale.getDefault();
-//        Locale.setDefault(locale);
-//        //conf = new Configuration();
-//        conf.locale = locale;
-//        res.updateConfiguration(conf, dm);
+        Locale locale;
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        prefs = this.getSharedPreferences("Language", 0);
+        String restoredText = prefs.getString("language", "");
+        if (restoredText.equalsIgnoreCase("en")) {
+            locale = Locale.ENGLISH;
+        }
+        else if(restoredText.equalsIgnoreCase("fr"))
+            locale = Locale.CANADA_FRENCH;
+        else
+        locale = Locale.getDefault();
+        Locale.setDefault(locale);
+        conf = new Configuration();
+        conf.locale = locale;
+        res.updateConfiguration(conf, dm);
 
     }
 
@@ -624,22 +626,57 @@ public class MainActivity extends AppCompatActivity {
 //                ));
 //    }
 
+    private AccountHeader.OnAccountHeaderListener accountHeaderListener =new AccountHeader.OnAccountHeaderListener() {
+        @Override
+        public boolean onProfileChanged(View view, IProfile profile, boolean current) {
+            if (profile instanceof IDrawerItem && profile.getIdentifier() == NavigationDrawer.LOGIN_SETTING) {
+                final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
+                    @Override
+                    public void run(AccountManagerFuture<Bundle> future) {
+                        //Login successful
+                    }
+                }, null);
+
+            }
+
+            //false if you have not consumed the event and it should close the drawer
+            return false;
+        }
+    };
     private Drawer.OnDrawerItemClickListener drawerItemClickListener = new Drawer.OnDrawerItemClickListener() {
         @Override
         public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
 
             if (drawerItem != null) {
-//
-//                if (drawerItem.getIdentifier() == NavigationDrawer.ABOUT_FRAGMENT) {
-//                    goToFragment(new AboutFragment(), AboutFragment.TAG);
-//                } else if (drawerItem.getIdentifier() == NavigationDrawer.REVIEW_FRAGMENT) {
-//
-//                } else if (drawerItem.getIdentifier() == NavigationDrawer.CONTACT_FRAGMENT) {
-//                    goToFragment(new ContactUsFragment(), ContactUsFragment.TAG);
-//                } else if (drawerItem.getIdentifier() == NavigationDrawer.HOME) {
-//                    goToFragment(new CategoryPagerFragment(), CategoryPagerFragment.TAG);
-//                }
+
+                if (drawerItem.getIdentifier() == NavigationDrawer.SCHEDULE_FRAGMENT) {
+                    goToFragment(new HoraireFragment(), HoraireFragment.getClassName());
+                } else if (drawerItem.getIdentifier() == NavigationDrawer.TODAY_FRAGMENT) {
+                    goToFragment(new TodayFragment(), TodayFragment.getClassName());
+                } else if (drawerItem.getIdentifier() == NavigationDrawer.MOODLE_FRAGMENT) {
+                    goToFragment(new MoodleFragment(), MoodleFragment.getClassName());
+                } else if (drawerItem.getIdentifier() == NavigationDrawer.COURSE_FRAGMENT) {
+                    goToFragment(new NotesFragment(), NotesFragment.getClassName());
+                } else if (drawerItem.getIdentifier() == NavigationDrawer.TODAY_FRAGMENT) {
+                    goToFragment(new TodayFragment(), TodayFragment.getClassName());
+                } else if (drawerItem.getIdentifier() == NavigationDrawer.PROFILE_FRAGMENT) {
+                    goToFragment(new ProfilFragment(), ProfilFragment.getClassName());
+                } else if (drawerItem.getIdentifier() == NavigationDrawer.MONETS_FRAGMENT) {
+                    String url = "https://portail.etsmtl.ca/";
+                Intent internetIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(url));
+                startActivity(internetIntent);
+                } else if (drawerItem.getIdentifier() == NavigationDrawer.BANDWIDTH_FRAGMENT) {
+
+                } else if (drawerItem.getIdentifier() == NavigationDrawer.NEWS_FRAGMENT) {
+                    goToFragment(new NewsFragment(), NewsFragment.getClassName());
+                } else if (drawerItem.getIdentifier() == NavigationDrawer.LIBRARY_FRAGMENT) {
+                    String url = getString(R.string.url_biblio);
+                Intent internetIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(url));
+                startActivity(internetIntent);
+                }
 
             }
             return false;
@@ -647,12 +684,12 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void goToFragment(Fragment fragment, String tag) {
-//        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-//        fm.beginTransaction()
-//                .replace(R.id.fragmentContainer, fragment)
-//                .addToBackStack(tag)
-//                .commit();
-//        this.invalidateOptionsMenu();
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack(tag)
+                .commit();
+        this.invalidateOptionsMenu();
     }
 
 }

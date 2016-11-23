@@ -63,6 +63,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 public class HoraireFragment extends HttpFragment implements Observer, OnDateSelectedListener {
 
+    public static final String TAG = "HoraireFragment";
     private HoraireManager horaireManager;
     private CustomProgressDialog customProgressDialog;
     private DateTime dateTime = new DateTime();

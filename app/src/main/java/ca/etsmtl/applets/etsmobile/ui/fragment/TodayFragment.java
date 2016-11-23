@@ -39,6 +39,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 public class TodayFragment extends HttpFragment implements Observer {
 
+
     private ListView todaysList;
     private HoraireManager horaireManager;
     private TextView todaysTv;

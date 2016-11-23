@@ -1,8 +1,8 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +18,7 @@ import ca.etsmtl.applets.etsmobile2.R;
  *
  * @author Thibaut
  */
-public class MoodleCourseActivity extends Activity {
+public class MoodleCourseActivity extends AppCompatActivity {
 
     int idCours;
     String nameCours;
@@ -43,8 +43,8 @@ public class MoodleCourseActivity extends Activity {
             fragment = MoodleCourseDetailsFragment.newInstance(idCours);
             Log.d("MoodleActivity", "fragment created when saved instance = null with idCours :" + idCours);
 
-            getFragmentManager().beginTransaction().add(R.id.container, fragment, "MoodleCourseDetailsFragment").commit();
-            Log.d("moodleActivity", "fragment shown and created");
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, fragment).commit();   Log.d("moodleActivity", "fragment shown and created");
         } else {
             idCours = savedInstanceState.getInt("idCours");
             nameCours = savedInstanceState.getString("nameCours");
