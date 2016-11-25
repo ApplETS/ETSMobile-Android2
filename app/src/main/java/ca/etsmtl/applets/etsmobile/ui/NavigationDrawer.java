@@ -53,7 +53,8 @@ public class NavigationDrawer {
     public static final int SPONSOR_FRAGMENT = 16;
     public static final int TODAY_FRAGMENT = 17;
 
-    public static final long LOGIN_SETTING =  18;
+    public static final long LOGIN =  18;
+    public static final long LOGOUT =  19;
 
     private Drawer.OnDrawerItemClickListener drawerItemListener = null;
 
@@ -84,6 +85,7 @@ public class NavigationDrawer {
                 .withActivity((MainActivity) context)
                 .withHeaderBackground(R.drawable.ets_background)
                 .withCompactStyle(true)
+
                 .addProfiles(profile,login,logout);
 
 
@@ -122,7 +124,12 @@ public class NavigationDrawer {
                                 new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_3_faq)).withIdentifier(FAQ_FRAGMENT).withIcon(R.drawable.ic_ico_faq)
                         )
 
+
                 );
+        if(isUserLoggedIn)
+            drawerBuilder.addStickyDrawerItems(new SecondaryDrawerItem().withName("LOGOUT").withIdentifier(LOGOUT));
+        else
+            drawerBuilder.addStickyDrawerItems(new SecondaryDrawerItem().withName("LOGIN").withIdentifier(LOGIN));
 
         if (drawerItemListener != null)
             drawerBuilder.withOnDrawerItemClickListener(drawerItemListener);
