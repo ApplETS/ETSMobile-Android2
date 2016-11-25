@@ -3,9 +3,7 @@ package ca.etsmtl.applets.etsmobile.ui.activity;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,8 +17,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -31,17 +27,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
@@ -49,22 +48,12 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.NavigationDrawer;
-import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.CommentairesFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.OtherAppsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.ProfilFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
@@ -126,18 +115,18 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
 //
-//        isGCMTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
-//        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-//                isGCMTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
-//            }
-//        };
-//
+
+//  isGCMTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                isGCMTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
+            }
+        };
 //
 //
 //        // Set the adapter for the list view
@@ -270,7 +259,9 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
+    public  void deconnexion(){
 
+    }
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 //        FragmentManager manager = getFragmentManager();
@@ -457,7 +448,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private void selectAccount() {
         Intent intent = AccountPicker.newChooseAccountIntent(null, null,
-                new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
+                new String[]{"com.google"}, false, null, null, null, null);//TODO get the actual GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE ASAP!!!
+
+
         startActivityForResult(intent, Constants.REQUEST_CODE_EMAIL);
     }
 
@@ -629,13 +622,18 @@ public class MainActivity extends AppCompatActivity {
     private AccountHeader.OnAccountHeaderListener accountHeaderListener =new AccountHeader.OnAccountHeaderListener() {
         @Override
         public boolean onProfileChanged(View view, IProfile profile, boolean current) {
+            Log.i("Hey..","profile changed");
             if (profile instanceof IDrawerItem && profile.getIdentifier() == NavigationDrawer.LOGIN_SETTING) {
+
                 final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
                     @Override
                     public void run(AccountManagerFuture<Bundle> future) {
                         //Login successful
                     }
                 }, null);
+
+            }else if(profile instanceof IDrawerItem && profile.getIdentifier() == NavigationDrawer.LOGIN_SETTING){
+                deconnexion();
 
             }
 
@@ -691,5 +689,6 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         this.invalidateOptionsMenu();
     }
+
 
 }
