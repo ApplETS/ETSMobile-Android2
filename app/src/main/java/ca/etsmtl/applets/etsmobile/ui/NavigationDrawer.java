@@ -1,29 +1,22 @@
 package ca.etsmtl.applets.etsmobile.ui;
 
-import android.accounts.AccountManagerFuture;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile2.R;
-
-import static ca.etsmtl.applets.etsmobile2.R.drawable.ic_ico_security;
 
 /**
  * Created by club on 21/11/16.
@@ -53,7 +46,8 @@ public class NavigationDrawer {
     public static final int SPONSOR_FRAGMENT = 16;
     public static final int TODAY_FRAGMENT = 17;
 
-    public static final long LOGIN_SETTING =  18;
+    public static final long LOGIN_SETTING = 18;
+    public static final long LOGOUT_SETTING = 18;
 
     private Drawer.OnDrawerItemClickListener drawerItemListener = null;
 
@@ -75,8 +69,9 @@ public class NavigationDrawer {
         makeHeader();
         makeDrawer();
     }
+
     final IProfile profile = new ProfileDrawerItem().withName("Etudiant").withEmail("Futur ingenieur(e)").withIcon(R.drawable.ets);
-    final IProfile login = new ProfileSettingDrawerItem().withName("LOGIN");
+    final IProfile login = new ProfileSettingDrawerItem().withName("LOGIN").withIdentifier(LOGIN_SETTING);
     final IProfile logout = new ProfileSettingDrawerItem().withName("LOGOUT");
 
     private void makeHeader() {
@@ -84,8 +79,10 @@ public class NavigationDrawer {
                 .withActivity((MainActivity) context)
                 .withHeaderBackground(R.drawable.ets_background)
                 .withCompactStyle(true)
-                .addProfiles(profile,login,logout);
+                .addProfiles(profile, login, logout);
 
+        if (accountHeaderListener != null)
+            builder.withOnAccountHeaderListener(accountHeaderListener);
 
         accountHeader = builder.build();
     }
@@ -97,7 +94,7 @@ public class NavigationDrawer {
                 .withAccountHeader(accountHeader)
                 .withSelectedItem(TODAY_FRAGMENT)
                 .withDisplayBelowStatusBar(true)
-//                .withActionBarDrawerToggle(true)
+                //                .withActionBarDrawerToggle(true)
                 .addDrawerItems(
                         new ExpandableDrawerItem().withName(context.getString(R.string.menu_section_1_moi)).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_ajd)).withIdentifier(TODAY_FRAGMENT).withIcon(R.drawable.ic_ico_aujourdhui).withEnabled(isUserLoggedIn),
@@ -107,13 +104,13 @@ public class NavigationDrawer {
                                 new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_profil)).withIdentifier(PROFILE_FRAGMENT).withIcon(R.drawable.ic_ico_profil).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_monETS)).withIdentifier(MONETS_FRAGMENT).withIcon(R.drawable.ic_monets).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_bandwith)).withIdentifier(BANDWIDTH_FRAGMENT).withIcon(R.drawable.ic_ico_internet)
-                                ),
+                        ),
                         new ExpandableDrawerItem().withName(context.getString(R.string.menu_section_2_ets)).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_2_news)).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
                                 new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_2_bottin)).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin),
                                 new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_monETS)).withIdentifier(LIBRARY_FRAGMENT).withIcon(R.drawable.ic_ico_library),
                                 new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_1_bandwith)).withIdentifier(SECURITY_FRAGMENT).withIcon(R.drawable.ic_ico_security)
-                                ),
+                        ),
                         new ExpandableDrawerItem().withName(context.getString(R.string.menu_section_3_applets)).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_3_apps)).withIdentifier(ACHIEVEMENTS_FRAGMENT).withIcon(R.drawable.ic_star_60x60),
                                 new SecondaryDrawerItem().withName(context.getString(R.string.menu_section_3_about)).withIdentifier(ABOUT_FRAGMENT).withIcon(R.drawable.ic_logo_icon_final),
@@ -140,6 +137,7 @@ public class NavigationDrawer {
     public void setDrawerItemListener(Drawer.OnDrawerItemClickListener drawerItemListener) {
         this.drawerItemListener = drawerItemListener;
     }
+
     public void setAccountHeaderListener(AccountHeader.OnAccountHeaderListener listener) {
         this.accountHeaderListener = listener;
     }
