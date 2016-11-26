@@ -59,6 +59,11 @@ public class ProfilFragment extends HttpFragment {
     }
 
     @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_1_profil);
+    }
+
+    @Override
     void updateUI() {
         Etudiant etudiant = profilManager.getEtudiant();
         profileAdapter.updateEtudiant(etudiant);

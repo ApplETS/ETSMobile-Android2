@@ -79,6 +79,11 @@ public class TodayFragment extends HttpFragment implements Observer {
     }
 
     @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_1_ajd);
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_today, menu);
         super.onCreateOptionsMenu(menu, inflater);

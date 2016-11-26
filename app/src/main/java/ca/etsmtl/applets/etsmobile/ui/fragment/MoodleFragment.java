@@ -67,6 +67,11 @@ public class MoodleFragment extends HttpFragment {
 	}
 
     @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_2_moodle);
+    }
+
+    @Override
     void updateUI() {
         loadingView.showLoadingView();
     }

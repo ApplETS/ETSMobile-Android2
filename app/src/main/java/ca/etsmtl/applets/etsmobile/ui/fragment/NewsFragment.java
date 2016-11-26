@@ -99,6 +99,11 @@ public class NewsFragment extends HttpFragment {
     }
 
     @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_2_news);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         new NewsSourceAsyncTask().execute("https://api3.clubapplets.ca/news/sources");

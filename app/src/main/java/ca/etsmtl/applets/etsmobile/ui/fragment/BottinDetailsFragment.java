@@ -127,7 +127,12 @@ public class BottinDetailsFragment extends HttpFragment {
 		
 		return v;
 	}
-	
+
+	@Override
+	public String getFragmentTitle() {
+		return getString(R.string.menu_section_2_bottin);
+	}
+
 	@Override
 	public void onStart() {
 		super.onStart();

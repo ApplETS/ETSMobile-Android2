@@ -216,6 +216,11 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     }
 
     @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_1_horaire);
+    }
+
+    @Override
     public void onRequestFailure(SpiceException arg0) {
         progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 //        customProgressDialog.dismiss();

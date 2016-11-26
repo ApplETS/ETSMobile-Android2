@@ -77,6 +77,10 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 
     }
 
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_2_bottin);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

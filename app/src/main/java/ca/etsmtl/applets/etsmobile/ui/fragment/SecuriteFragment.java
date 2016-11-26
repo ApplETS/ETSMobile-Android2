@@ -108,4 +108,9 @@ public class SecuriteFragment extends BaseFragment {
 
 		return v; 
 	}
+
+	@Override
+	public String getFragmentTitle() {
+		return getString(R.string.menu_section_2_securite);
+	}
 }

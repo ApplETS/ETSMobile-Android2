@@ -59,6 +59,11 @@ public class SponsorsFragment extends HttpFragment implements Observer {
     }
 
     @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_3_sponsors);
+    }
+
+    @Override
     public void onRequestFailure(SpiceException e) {
         if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
