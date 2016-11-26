@@ -47,11 +47,14 @@
 
     </style>
 
-    <style name="CustomTheme" parent="MaterialDrawerTheme">
+    <style name="CustomTheme" parent="MaterialDrawerTheme.Light">
         <!-- ...and here we setting appcompat’s color theming attrs -->
-        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/ets_red_darker</item>
         <item name="colorAccent">@color/ets_red_pale</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
 
         <!-- MaterialDrawer specific values -->
         <item name="material_drawer_background">@color/black</item>
@@ -63,5 +66,10 @@
         <item name="material_drawer_selected">@color/black_gray</item>
         <item name="material_drawer_selected_text">@color/ets_red_darker</item>
         <!--<item name="material_drawer_header_selection_text">@color/material_drawer_header_selection_text</item>-->
+    </style>
+
+    <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
     </style>
 </resources>
