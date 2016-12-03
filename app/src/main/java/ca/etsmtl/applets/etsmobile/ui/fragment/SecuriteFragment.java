@@ -1,9 +1,9 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -62,7 +62,7 @@ public class SecuriteFragment extends BaseFragment {
 //				.fromResource(R.drawable.ets));
 //		map.addMarker(etsMarker);
 
-		final Activity activity = getActivity();
+		final AppCompatActivity activity = (AppCompatActivity) getActivity();
 
 		listView = (ListView) v.findViewById(android.R.id.list);
 

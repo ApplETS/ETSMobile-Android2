@@ -1,10 +1,11 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.URLUtil;
@@ -30,18 +31,20 @@ import ca.etsmtl.applets.etsmobile2.R;
 /**
  * Created by gnut3ll4 on 12/19/14.
  */
-public class NewsDetailsActivity extends Activity {
+public class NewsDetailsActivity extends AppCompatActivity {
     ListView listView;
     String key;
     String name;
     String type;
     String urlImage;
     String value;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
+
 
         if (savedInstanceState == null) {
 
@@ -56,6 +59,11 @@ public class NewsDetailsActivity extends Activity {
             value = extras.getString("value");
             setTitle(name);
         }
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(name);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         listView = (ListView) findViewById(R.id.list_news_details);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
