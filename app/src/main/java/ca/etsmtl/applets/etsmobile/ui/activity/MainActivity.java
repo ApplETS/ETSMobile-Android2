@@ -150,7 +150,8 @@ public class MainActivity extends AppCompatActivity {
         securePreferences = new SecurePreferences(this);
 
     }
-    private void initDrawer(Bundle bundle){
+
+    private void initDrawer(Bundle bundle) {
         boolean isUserLoggedIn = ApplicationManager.userCredentials != null;
 
         headerResult = new AccountHeaderBuilder()
@@ -203,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         result = drawerBuilder.build();
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -252,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                 new IntentFilter(Constants.REGISTRATION_COMPLETE));
 
         if (ApplicationManager.userCredentials == null) {
-                  goToFragment(new AboutFragment(), AboutFragment.class.getName());
+            goToFragment(new AboutFragment(), AboutFragment.class.getName());
 
         }
 
@@ -305,10 +307,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void instantiateFragments(Bundle savedInstanceState) {
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             result.setSelection(savedInstanceState.getLong("fragment"), true);
         }
-
 
 
     }
@@ -395,7 +396,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * Asks the user to pick a Google account so that we can have his email in slack support with
      * SupportKit
@@ -426,53 +426,53 @@ public class MainActivity extends AppCompatActivity {
 
             if (drawerItem != null) {
 
-                if (drawerItem.getIdentifier() ==  SCHEDULE_FRAGMENT) {
+                if (drawerItem.getIdentifier() == SCHEDULE_FRAGMENT) {
                     goToFragment(new HoraireFragment(), HoraireFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  TODAY_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == TODAY_FRAGMENT) {
                     goToFragment(new TodayFragment(), TodayFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  MOODLE_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == MOODLE_FRAGMENT) {
                     goToFragment(new MoodleFragment(), MoodleFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  COURSE_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == COURSE_FRAGMENT) {
                     goToFragment(new NotesFragment(), NotesFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  PROFILE_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == PROFILE_FRAGMENT) {
                     goToFragment(new ProfilFragment(), ProfilFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  MONETS_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == MONETS_FRAGMENT) {
                     String url = "https://portail.etsmtl.ca/";
                     Intent internetIntent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse(url));
                     startActivity(internetIntent);
-                } else if (drawerItem.getIdentifier() ==  BANDWIDTH_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == BANDWIDTH_FRAGMENT) {
                     goToFragment(new BandwithFragment(), BandwithFragment.getClassName());
 
-                } else if (drawerItem.getIdentifier() ==  NEWS_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == NEWS_FRAGMENT) {
                     goToFragment(new NewsFragment(), NewsFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  LIBRARY_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == LIBRARY_FRAGMENT) {
                     String url = getString(R.string.url_biblio);
                     Intent internetIntent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse(url));
                     startActivity(internetIntent);
-                } else if (drawerItem.getIdentifier() ==  DIRECTORY_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == DIRECTORY_FRAGMENT) {
                     goToFragment(new BottinFragment(), BottinFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  SECURITY_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == SECURITY_FRAGMENT) {
                     goToFragment(new SecuriteFragment(), SecuriteFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  FAQ_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == FAQ_FRAGMENT) {
                     goToFragment(new FAQFragment(), FAQFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  ACHIEVEMENTS_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == ACHIEVEMENTS_FRAGMENT) {
                     goToFragment(new OtherAppsFragment(), OtherAppsFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  ABOUT_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == ABOUT_FRAGMENT) {
                     goToFragment(new AboutFragment(), AboutFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  SPONSOR_FRAGMENT) {
+                } else if (drawerItem.getIdentifier() == SPONSOR_FRAGMENT) {
                     goToFragment(new SponsorsFragment(), SponsorsFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  COMMENTS_FRAGMENT) {
-                    goToFragment(new CommentairesFragment(), CommentairesFragment.getClassName());
-                } else if (drawerItem.getIdentifier() ==  LOGIN) {
+                } else if (drawerItem.getIdentifier() == COMMENTS_FRAGMENT) {
+                    selectAccount();
+                } else if (drawerItem.getIdentifier() == LOGIN) {
                     final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
                         @Override
                         public void run(AccountManagerFuture<Bundle> future) {
                             //Login successful
                         }
                     }, null);
-                } else if (drawerItem.getIdentifier() ==  LOGOUT) {
+                } else if (drawerItem.getIdentifier() == LOGOUT) {
                     deconnexion();
                 }
 
