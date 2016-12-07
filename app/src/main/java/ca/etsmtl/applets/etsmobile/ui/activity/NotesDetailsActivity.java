@@ -6,16 +6,21 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesDetailsFragment;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
+import me.grantland.widget.AutofitTextView;
 
 /**
  * Created by gnut3ll4 on 12/19/14.
  */
 public class NotesDetailsActivity extends AppCompatActivity {
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,15 @@ public class NotesDetailsActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, fragment).commit();
 
+            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+//            getSupportActionBar().setTitle(titreCours);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         }
+
+
 
     }
 
