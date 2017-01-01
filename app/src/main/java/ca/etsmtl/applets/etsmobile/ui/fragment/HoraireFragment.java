@@ -144,9 +144,11 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
                 if(listDisplay){
 
                     item.setIcon(R.drawable.list_icon);
+                    item.setTitle(R.string.list);
                     listDisplay = false;
                 }else{
                     item.setIcon(R.drawable.icon_calendar);
+                    item.setTitle(R.string.calendar);
                     listDisplay = true;
                 }
                 horraireViewSwitcher.showNext();

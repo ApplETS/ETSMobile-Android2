@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -10,6 +9,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,7 +50,7 @@ import ca.etsmtl.applets.etsmobile2.R;
  * @author Thibaut
  */
 public class BottinFragment extends HttpFragment implements SearchView.OnQueryTextListener  {
-
+    //TODO Change to activity to be able to search
     private SearchView searchView;
     private ExpandableListAdapter listAdapter;
 
@@ -68,12 +68,12 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         inflater.inflate(R.menu.menu_bottin, menu);
 
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.menuitem_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        searchView.setOnQueryTextListener(this);
-
-        super.onCreateOptionsMenu(menu, inflater);
+//        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+//        searchView = (SearchView) menu.findItem(R.id.menuitem_search).getActionView();
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+//        searchView.setOnQueryTextListener(this);
+//
+//        super.onCreateOptionsMenu(menu, inflater);
 
     }
 
@@ -201,7 +201,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     @Override
     void updateUI() {
         // Get le contenu dans la bd
-        Activity activity = getActivity();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
         DatabaseHelper dbHelper = new DatabaseHelper(activity);
 
         try {
