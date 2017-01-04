@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -49,10 +50,12 @@ import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BaseFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.CommentairesFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
@@ -62,6 +65,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
+import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.supportkit.core.User;
@@ -104,11 +108,9 @@ public class MainActivity extends AppCompatActivity {
 
     private AccountHeader headerResult = null;
     private Drawer result = null;
-    final IProfile profile = new ProfileDrawerItem().withName("Etudiant").withEmail("Futur ingenieur(e)").withIcon(R.drawable.ets);
 
 
     private Toolbar toolbar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,11 +155,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void initDrawer(Bundle bundle) {
         boolean isUserLoggedIn = ApplicationManager.userCredentials != null;
-
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.drawable.ets_background)
-                .addProfiles(profile).build();
+                .withHeaderBackground(R.drawable.ets_background_grayscale)
+                .addProfiles(
+                        new ProfileDrawerItem().withEmail("Etudiant").withSelectedTextColor(ContextCompat.getColor(this,R.color.red)).withIcon(R.drawable.ic_user)
+                ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean current) {
+                        goToFragment(new ProfilFragment(), ProfilFragment.getClassName());
+                        return false;
+                    }
+                }).build();
 
         DrawerBuilder drawerBuilder = new DrawerBuilder()
                 .withActivity(this)
@@ -167,36 +176,35 @@ public class MainActivity extends AppCompatActivity {
                 .withDisplayBelowStatusBar(true)
                 //                .withActionBarDrawerToggle(true)
                 .addDrawerItems(
-                        new ExpandableDrawerItem().withName(getString(R.string.menu_section_1_moi)).withSelectable(false).withSubItems(
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_1_ajd)).withIdentifier(TODAY_FRAGMENT).withIcon(R.drawable.ic_ico_aujourdhui).withEnabled(isUserLoggedIn),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_1_horaire)).withIdentifier(SCHEDULE_FRAGMENT).withIcon(R.drawable.ic_ico_schedule).withEnabled(isUserLoggedIn),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_1_notes)).withIdentifier(COURSE_FRAGMENT).withIcon(R.drawable.ic_ico_notes).withEnabled(isUserLoggedIn),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_2_moodle)).withIdentifier(MOODLE_FRAGMENT).withIcon(R.drawable.ic_moodle_icon_small).withEnabled(isUserLoggedIn),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_1_profil)).withIdentifier(PROFILE_FRAGMENT).withIcon(R.drawable.ic_ico_profil).withEnabled(isUserLoggedIn),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_1_monETS)).withIdentifier(MONETS_FRAGMENT).withIcon(R.drawable.ic_monets).withEnabled(isUserLoggedIn),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_1_bandwith)).withIdentifier(BANDWIDTH_FRAGMENT).withIcon(R.drawable.ic_ico_internet)
+                        new ExpandableDrawerItem().withName(R.string.menu_section_1_moi).withSelectable(false).withSubItems(
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_ajd).withIdentifier(TODAY_FRAGMENT).withIcon(R.drawable.ic_ico_aujourdhui).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_horaire).withIdentifier(SCHEDULE_FRAGMENT).withIcon(R.drawable.ic_ico_schedule).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_notes).withIdentifier(COURSE_FRAGMENT).withIcon(R.drawable.ic_ico_notes).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_moodle).withIdentifier(MOODLE_FRAGMENT).withIcon(R.drawable.ic_moodle_icon_small).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_monETS).withIdentifier(MONETS_FRAGMENT).withIcon(R.drawable.ic_monets).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_bandwith).withIdentifier(BANDWIDTH_FRAGMENT).withIcon(R.drawable.ic_ico_internet)
                         ),
-                        new ExpandableDrawerItem().withName(getString(R.string.menu_section_2_ets)).withSelectable(false).withSubItems(
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_2_news)).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_2_bottin)).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_1_monETS)).withIdentifier(LIBRARY_FRAGMENT).withIcon(R.drawable.ic_ico_library),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_2_securite)).withIdentifier(SECURITY_FRAGMENT).withIcon(R.drawable.ic_ico_security)
+                        new ExpandableDrawerItem().withName(R.string.menu_section_2_ets).withSelectable(false).withSubItems(
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_biblio).withIdentifier(LIBRARY_FRAGMENT).withIcon(R.drawable.ic_ico_library),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_securite).withIdentifier(SECURITY_FRAGMENT).withIcon(R.drawable.ic_ico_security)
                         ),
-                        new ExpandableDrawerItem().withName(getString(R.string.menu_section_3_applets)).withSelectable(false).withSubItems(
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_3_apps)).withIdentifier(ACHIEVEMENTS_FRAGMENT).withIcon(R.drawable.ic_star_60x60),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_3_about)).withIdentifier(ABOUT_FRAGMENT).withIcon(R.drawable.ic_logo_icon_final),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_3_comms)).withIdentifier(COMMENTS_FRAGMENT).withIcon(R.drawable.ic_ico_comment),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_3_sponsors)).withIdentifier(SPONSOR_FRAGMENT).withIcon(R.drawable.ic_ico_partners),
-                                new SecondaryDrawerItem().withName(getString(R.string.menu_section_3_faq)).withIdentifier(FAQ_FRAGMENT).withIcon(R.drawable.ic_ico_faq)
+                        new ExpandableDrawerItem().withName(R.string.menu_section_3_applets).withSelectable(false).withSubItems(
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_apps).withIdentifier(ACHIEVEMENTS_FRAGMENT).withIcon(R.drawable.ic_star_60x60),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_about).withIdentifier(ABOUT_FRAGMENT).withIcon(R.drawable.ic_logo_icon_final),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_comms).withIdentifier(COMMENTS_FRAGMENT).withIcon(R.drawable.ic_ico_comment),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_sponsors).withIdentifier(SPONSOR_FRAGMENT).withIcon(R.drawable.ic_ico_partners),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_faq).withIdentifier(FAQ_FRAGMENT).withIcon(R.drawable.ic_ico_faq)
                         )
 
 
                 )
                 .withSavedInstance(bundle);
         if (isUserLoggedIn)
-            drawerBuilder.addStickyDrawerItems(new SecondaryDrawerItem().withName("LOGOUT").withIdentifier(LOGOUT).withTextColorRes(R.color.red));
+            drawerBuilder.addStickyDrawerItems(new SecondaryDrawerItem().withName(R.string.action_logout).withIdentifier(LOGOUT).withTextColorRes(R.color.red));
         else
-            drawerBuilder.addStickyDrawerItems(new SecondaryDrawerItem().withName("LOGIN").withIdentifier(LOGIN));
+            drawerBuilder.addStickyDrawerItems(new SecondaryDrawerItem().withName(R.string.action_login).withIdentifier(LOGIN));
 
         drawerBuilder.withOnDrawerItemClickListener(drawerItemClickListener);
 
@@ -214,9 +222,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (ApplicationManager.userCredentials == null) {
-            menu.findItem(R.id.action_logout).setVisible(false);
-        }
+
         super.onPrepareOptionsMenu(menu);
         return true;
     }
@@ -257,6 +263,8 @@ public class MainActivity extends AppCompatActivity {
             goToFragment(new AboutFragment(), AboutFragment.class.getName());
 
         }
+        else
+            goToFragment(new TodayFragment(), TodayFragment.class.getName());
 
     }
 
@@ -332,15 +340,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-//        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_logout) {
-            ApplicationManager.deconnexion(this);
-        }
+
         if (id == R.id.action_language) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle(getResources().getString(R.string.lang_title));
@@ -437,20 +442,13 @@ public class MainActivity extends AppCompatActivity {
                 } else if (drawerItem.getIdentifier() == PROFILE_FRAGMENT) {
                     goToFragment(new ProfilFragment(), ProfilFragment.getClassName());
                 } else if (drawerItem.getIdentifier() == MONETS_FRAGMENT) {
-                    String url = "https://portail.etsmtl.ca/";
-                    Intent internetIntent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(url));
-                    startActivity(internetIntent);
+                    goToFragment(new MonETSFragment(), MonETSFragment.getClassName());
                 } else if (drawerItem.getIdentifier() == BANDWIDTH_FRAGMENT) {
                     goToFragment(new BandwithFragment(), BandwithFragment.getClassName());
-
                 } else if (drawerItem.getIdentifier() == NEWS_FRAGMENT) {
                     goToFragment(new NewsFragment(), NewsFragment.getClassName());
                 } else if (drawerItem.getIdentifier() == LIBRARY_FRAGMENT) {
-                    String url = getString(R.string.url_biblio);
-                    Intent internetIntent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(url));
-                    startActivity(internetIntent);
+                    goToFragment(new BiblioFragment(), BiblioFragment.getClassName());
                 } else if (drawerItem.getIdentifier() == DIRECTORY_FRAGMENT) {
                     goToFragment(new BottinFragment(), BottinFragment.getClassName());
                 } else if (drawerItem.getIdentifier() == SECURITY_FRAGMENT) {

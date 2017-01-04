@@ -34,7 +34,7 @@ public class BiblioFragment extends WebFragment {
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_web_view, container, false);
 		super.onCreateView(inflater, v, savedInstanceState);
 
-		/*webView = (WebView) v.findViewById(R.id.webView);
+		webView = (WebView) v.findViewById(R.id.webView);
 
 		final WebSettings webSettings = webView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
@@ -61,7 +61,7 @@ public class BiblioFragment extends WebFragment {
 			}
 		});
 
-		webView.loadUrl(getActivity().getString(R.string.url_biblio));*/
+		webView.loadUrl(getActivity().getString(R.string.url_biblio));
 		AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 		return v;
 	}

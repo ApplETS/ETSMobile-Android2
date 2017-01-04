@@ -4,6 +4,7 @@
     <string name="app_name">ÉTSMobile</string>
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
+    <string name="action_login">Login</string>
     <string name="action_language">Language</string>
     <string name="drawer_title">Menu</string>
     <string name="drawer_open">Open</string>
