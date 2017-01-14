@@ -152,6 +152,8 @@
     <string name="horaire">Schedule for %1$s %3$s %2$s</string>
     <string name="date_text">%1$s %3$s %2$s</string>
     <string name="export_calendar">Export</string>
+    <string name="semester_progression">Semester\'s progression:</string>
+    <string name="days">days</string>
 
     <!-- Horaire -->
     <string name="toast_Calendar_Update_Error">An error occurred while updating the calendar.</string>
