@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.text.util.Linkify;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -88,7 +89,7 @@ public class BottinDetailsFragment extends HttpFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
 		View v = inflater.inflate(R.layout.bottin_detail_fragment, container, false);
-		
+
 		tv_nom_prenom = (TextView) v.findViewById(R.id.tv_nom_prenom_bottin);
 		tv_titre = (TextView) v.findViewById(R.id.tv_titre_bottin);
 		tv_service = (TextView) v.findViewById(R.id.tv_service_bottin);
@@ -102,7 +103,7 @@ public class BottinDetailsFragment extends HttpFragment {
 		tv_service.setText(service);
 		tv_emplacement.setText(emplacement);
 		tv_telbureau.setText(telbureau);
-		Linkify.addLinks(tv_telbureau, Linkify.PHONE_NUMBERS);
+		Linkify.addLinks(tv_telbureau, Patterns.PHONE, "tel:", Linkify.sPhoneNumberMatchFilter, Linkify.sPhoneNumberTransformFilter);
 		tv_courriel.setText(courriel);
 		Linkify.addLinks(tv_courriel, Linkify.EMAIL_ADDRESSES);
 		
