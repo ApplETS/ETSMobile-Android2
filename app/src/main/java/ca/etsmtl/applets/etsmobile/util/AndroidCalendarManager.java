@@ -21,6 +21,7 @@ public class AndroidCalendarManager {
 
 
     private final Context context;
+    private final String CALENDAR_ACCOUNT_NAME = "Calendrier ApplETS";
 
     String[] projection = new String[] {
             CalendarContract.Calendars._ID,
@@ -43,7 +44,7 @@ public class AndroidCalendarManager {
 
 		ContentValues values = new ContentValues();
 
-        values.put(CalendarContract.Calendars.ACCOUNT_NAME, "Calendrier ApplETS");
+        values.put(CalendarContract.Calendars.ACCOUNT_NAME, CALENDAR_ACCOUNT_NAME);
         values.put(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
         values.put(CalendarContract.Calendars.NAME, calendarName);
         values.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, calendarName);
@@ -57,7 +58,7 @@ public class AndroidCalendarManager {
 
         Uri uri = CalendarContract.Calendars.CONTENT_URI.buildUpon()
                 .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER,"true")
-                .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, "Calendrier ApplETS")
+                .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, CALENDAR_ACCOUNT_NAME)
                 .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL).build();;
 
 
@@ -124,7 +125,8 @@ public class AndroidCalendarManager {
 
                 response += id+" "+ title+" "+description+" "+dtstart+" "+dtend +"\n";
 
-                Log.e("selectAllEventFromCalendarById",id+"-"+title+"-"+description+"-"+dtstart+"-"+dtend+"-"+eventLocation);
+                Log.e(getClass().getSimpleName(), "selectAllEventFromCalendarById");
+                Log.e(getClass().getSimpleName(), id+"-"+title+"-"+description+"-"+dtstart+"-"+dtend+"-"+eventLocation);
             } while (c.moveToNext());
         }
         c.close();
@@ -240,6 +242,4 @@ public class AndroidCalendarManager {
     		e.printStackTrace();
     	}
     }
-
-
 }
