@@ -450,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (drawerItem.getIdentifier() == LIBRARY_FRAGMENT) {
                     goToFragment(new BiblioFragment(), BiblioFragment.getClassName());
                 } else if (drawerItem.getIdentifier() == DIRECTORY_FRAGMENT) {
-                    goToFragment(new BottinFragment(), BottinFragment.getClassName());
+                    startActivity(new Intent(getApplicationContext(),BotinActivity.class));
                 } else if (drawerItem.getIdentifier() == SECURITY_FRAGMENT) {
                     goToFragment(new SecuriteFragment(), SecuriteFragment.getClassName());
                 } else if (drawerItem.getIdentifier() == FAQ_FRAGMENT) {
