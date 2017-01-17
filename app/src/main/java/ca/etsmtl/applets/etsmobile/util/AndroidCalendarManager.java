@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import ca.etsmtl.applets.etsmobile.ApplicationManager;
+
 /**
  * Created by gnut3ll4 on 6/23/14.
  */
@@ -40,13 +42,14 @@ public class AndroidCalendarManager {
     public void createCalendar(String calendarName){
 
 		ContentValues values = new ContentValues();
+
         values.put(CalendarContract.Calendars.ACCOUNT_NAME, "Calendrier ApplETS");
         values.put(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
         values.put(CalendarContract.Calendars.NAME, calendarName);
         values.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, calendarName);
         values.put(CalendarContract.Calendars.CALENDAR_COLOR, 0xffff0000);
         values.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER);
-        //values.put(CalendarContract.Calendars.OWNER_ACCOUNT, "test owner");
+        values.put(CalendarContract.Calendars.OWNER_ACCOUNT, ApplicationManager.userCredentials.getUsername());
         values.put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, "America/Montreal");
 
         values.put(CalendarContract.Calendars.VISIBLE, 1);
