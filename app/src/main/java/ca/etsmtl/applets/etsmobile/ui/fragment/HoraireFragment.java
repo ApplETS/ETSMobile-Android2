@@ -336,6 +336,15 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         openCourseListDialog();
     }
 
+    /**
+     * Shows a dialog to the user inviting him/her to select a type of calendar. It is based between
+     * three choices:
+     *
+     * Replaced days (Jours remplacés)
+     * Courses (Séances)
+     * ETS public calendar (Calendrier public ÉTS)
+     */
+
     public void showCalendarPickerDialog() {
 
          /*
@@ -373,6 +382,11 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     }
 
     private class AsyncUpdateCalendar extends AsyncTask<Object, Void, Object> {
+
+        /**
+         *  Async class responsible for synchronizing the calendar in the background so the user
+         *  experience isn't affected.
+         */
 
         private boolean isJoursRemplacesSelected;
         private boolean isSeancesSelected;

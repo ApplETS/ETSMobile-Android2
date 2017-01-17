@@ -379,7 +379,14 @@ public class HoraireManager extends Observable implements RequestListener<Object
         }
     }
 
-
+    /**
+     * Creates/Updates a new calendar on the user's device
+     *
+     * @param joursRemplacesSelected true if the "Jours remplacés" calendar was selected
+     * @param seancesSelected true if the "Séances" calendar was selected
+     * @param calPublicSelected true if the "Calendrier public ÉTS" was selected
+     * @throws Exception if there is an SQL when checking the replaced days (Jours remplacés)
+     */
     public void updateCalendar(boolean joursRemplacesSelected, boolean seancesSelected, boolean calPublicSelected) throws Exception {
 
         DatabaseHelper dbHelper = new DatabaseHelper(activity);
