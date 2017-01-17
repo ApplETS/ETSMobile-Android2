@@ -89,6 +89,8 @@ public class AndroidCalendarManager {
         if(id==0) {
             throw new Exception("Calendar not found");
         }
+
+        calendarCursor.close();
         return (int)id;
 
     }
@@ -125,6 +127,7 @@ public class AndroidCalendarManager {
                 Log.e("selectAllEventFromCalendarById",id+"-"+title+"-"+description+"-"+dtstart+"-"+dtend+"-"+eventLocation);
             } while (c.moveToNext());
         }
+        c.close();
         return response;
     }
 
@@ -218,7 +221,7 @@ public class AndroidCalendarManager {
 
             } while (calendarCursor.moveToNext());
         }
-
+        calendarCursor.close();
         return response;
     }
 
