@@ -160,6 +160,12 @@
     <string name="toast_Calendar_Update_Error">An error occurred while updating the calendar.</string>
     <string name="dialog_Updating_Calendar">Updating calendar...</string>
     <string name="empty_calendar">No classes to display</string>
+    <string name="export_courses_calendar">Courses</string>
+    <string name="export_calendar_dialog_positive_button">OK</string>
+    <string name="export_calendar_dialog_negative_button">Cancel</string>
+    <string name="export_calendar_dialog_title">Choose your calendar</string>
+    <string name="export_public_events_calendar">ETS public calendar</string>
+    <string name="export_replaced_days_calendar">Replaced days</string>
     <string name="legend">Legend</string>
     <string name="legend_cours">Classes</string>
     <string name="legend_final_exam">Final exam</string>
