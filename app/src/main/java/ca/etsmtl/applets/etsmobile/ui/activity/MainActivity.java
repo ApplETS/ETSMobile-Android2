@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_moodle).withIdentifier(MOODLE_FRAGMENT).withIcon(R.drawable.ic_moodle_icon_small).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_monETS).withIdentifier(MONETS_FRAGMENT).withIcon(R.drawable.ic_monets).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_bandwith).withIdentifier(BANDWIDTH_FRAGMENT).withIcon(R.drawable.ic_ico_internet)
-                        ),
+                        ).withIsExpanded(true),
                         new ExpandableDrawerItem().withName(R.string.menu_section_2_ets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin),
