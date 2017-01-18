@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                         ).withIsExpanded(true),
                         new ExpandableDrawerItem().withName(R.string.menu_section_2_ets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin).withSelectable(false),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_biblio).withIdentifier(LIBRARY_FRAGMENT).withIcon(R.drawable.ic_ico_library),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_securite).withIdentifier(SECURITY_FRAGMENT).withIcon(R.drawable.ic_ico_security)
                         ),
@@ -263,8 +263,6 @@ public class MainActivity extends AppCompatActivity {
             goToFragment(new AboutFragment(), AboutFragment.class.getName());
 
         }
-        else
-            goToFragment(new TodayFragment(), TodayFragment.class.getName());
 
     }
 
