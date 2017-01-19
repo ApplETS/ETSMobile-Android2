@@ -72,7 +72,7 @@ import io.supportkit.core.User;
 import io.supportkit.ui.ConversationActivity;
 
 /**
- * Main Activity for �TSMobile, handles the login and the menu
+ * Main Activity for �TSMobile, handles the login and the Navigation Drawer (menu)
  *
  * @author Philippe David
  */
@@ -131,10 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
         checkPlayServices();
         setLocale();
-        if (savedInstanceState != null) {
-            instantiateFragments(savedInstanceState);
-        }
-        initDrawer(savedInstanceState);
+        initDrawer();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
@@ -153,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initDrawer(Bundle bundle) {
+    private void initDrawer() {
         boolean isUserLoggedIn = ApplicationManager.userCredentials != null;
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -199,8 +196,7 @@ public class MainActivity extends AppCompatActivity {
                         )
 
 
-                )
-                .withSavedInstance(bundle);
+                );
         if (isUserLoggedIn)
             drawerBuilder.addStickyDrawerItems(new SecondaryDrawerItem().withName(R.string.action_logout).withIdentifier(LOGOUT).withTextColorRes(R.color.red));
         else
@@ -261,7 +257,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (ApplicationManager.userCredentials == null) {
             goToFragment(new AboutFragment(), AboutFragment.class.getName());
-
         }
 
     }
@@ -294,29 +289,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void deconnexion() {
         ApplicationManager.deconnexion(this);
-
-    }
-
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        //add the values which need to be saved from the drawer to the bundle
-        outState = result.saveInstanceState(outState);
-        //add the values which need to be saved from the accountHeader to the bundle
-        outState = headerResult.saveInstanceState(outState);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        instantiateFragments(savedInstanceState);
-    }
-
-    private void instantiateFragments(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            result.setSelection(savedInstanceState.getLong("fragment"), true);
-        }
-
 
     }
 
