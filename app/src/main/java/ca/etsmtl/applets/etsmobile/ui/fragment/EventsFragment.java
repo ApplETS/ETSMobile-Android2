@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.exception.RequestCancelledException;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.squareup.okhttp.OkHttpClient;
@@ -56,8 +57,6 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Sélection des sources
-        setHasOptionsMenu(true);
     }
 
 
@@ -91,20 +90,6 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
         });
 
         spiceManager = new SpiceManager(MyJackSpringAndroidSpiceService.class);
-        spiceManager.start(getActivity());
-        spiceManager.execute(new AppletsApiSourcesRequest(getActivity()), new RequestListener<SourceEvenementList>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                Toast.makeText(getActivity(), getString(R.string.SupportKit_errorCouldNotConnect), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onRequestSuccess(SourceEvenementList sourceEvenements) {
-                for(SourceEvenement source : sourceEvenements) {
-                    spiceManager.execute(new AppletsApiEvenementsRequest(getActivity(),source), EventsFragment.this);
-                }
-            }
-        });
 
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
@@ -115,6 +100,28 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
     @Override
     public void onResume() {
         super.onResume();
+
+        spiceManager.start(getActivity());
+        spiceManager.execute(new AppletsApiSourcesRequest(getActivity()), new RequestListener<SourceEvenementList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                Toast.makeText(getActivity(), getString(R.string.SupportKit_errorCouldNotConnect), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRequestSuccess(SourceEvenementList sourceEvenements) {
+                for (SourceEvenement source : sourceEvenements) {
+                    spiceManager.execute(new AppletsApiEvenementsRequest(getActivity(), source), EventsFragment.this);
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        spiceManager.cancelAllRequests();
     }
 
     @Override
@@ -144,7 +151,9 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
 
     @Override
     public void onRequestFailure(SpiceException e) {
-        Toast.makeText(getActivity(), getString(R.string.SupportKit_errorCouldNotConnect), Toast.LENGTH_SHORT).show();
+        if (!(e instanceof RequestCancelledException)) {
+            Toast.makeText(getActivity(), getString(R.string.SupportKit_errorCouldNotConnect), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
