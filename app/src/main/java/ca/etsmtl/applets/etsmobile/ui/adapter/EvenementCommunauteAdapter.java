@@ -1,6 +1,8 @@
 package ca.etsmtl.applets.etsmobile.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import java.util.Locale;
 
 import at.markushi.ui.CircleButton;
 import ca.etsmtl.applets.etsmobile.model.applets_events.EvenementCommunaute;
+import ca.etsmtl.applets.etsmobile.util.AndroidCalendarManager;
 import ca.etsmtl.applets.etsmobile.util.EventsComparator;
 import ca.etsmtl.applets.etsmobile.views.AnimatedExpandableListView;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -83,10 +86,7 @@ public class EvenementCommunauteAdapter extends AnimatedExpandableListView.Anima
         TextView textViewDescription = (TextView) convertView.findViewById(R.id.tv_description);
         ImageView imageViewLogoOrganisateur = (ImageView) convertView.findViewById(R.id.iv_logo_organisateur);
         TextView textViewNomOrganisateur = (TextView) convertView.findViewById(R.id.tv_nom_organisateur);
-        CircleButton buttonLocaliser = (CircleButton) convertView.findViewById(R.id.btn_localiser);
-        CircleButton buttonCalendrier = (CircleButton) convertView.findViewById(R.id.btn_calendrier);
         CircleButton buttonDetails = (CircleButton) convertView.findViewById(R.id.btn_details);
-        CircleButton buttonPartager = (CircleButton) convertView.findViewById(R.id.btn_partager);
 
 
         textViewDescription.setText(item.getDescription());
@@ -101,23 +101,15 @@ public class EvenementCommunauteAdapter extends AnimatedExpandableListView.Anima
                     .into(imageViewLogoOrganisateur);
         }
 
-        Button.OnClickListener buttonClicked = new Button.OnClickListener() {
+
+        buttonDetails.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(context, ((Button) view).getText() + " clicked", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                String url = "http://facebook.com/events/" + item.getId();
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                v.getContext().startActivity(intent);
             }
-        };
-
-
-//        buttonLocaliser.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-//        buttonCalendrier.setOnClickListener(buttonClicked);
-//        buttonDetails.setOnClickListener(buttonClicked);
-//        buttonPartager.setOnClickListener(buttonClicked);
+        });
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,6 +203,11 @@ public class EvenementCommunauteAdapter extends AnimatedExpandableListView.Anima
     @Override
     public boolean isChildSelectable(int listPosition, int expandedListPosition) {
         return true;
+    }
+
+    public void clearEvents() {
+        this.listEvenements.clear();
+        notifyDataSetChanged();
     }
 
     static class ViewHolder {

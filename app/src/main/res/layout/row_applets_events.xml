@@ -11,8 +11,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Description"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:text="Description" />
 
     <TextView
         android:id="@+id/tv_description"
@@ -32,79 +32,36 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:paddingStart="20dp"
-        android:paddingLeft="20dp">
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp">
 
         <ImageView
             android:id="@+id/iv_logo_organisateur"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
             tools:src="@drawable/logo_applets" />
 
         <TextView
             android:id="@+id/tv_nom_organisateur"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            tools:text="ApplETS" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp">
-
-        <!--<Button-->
-        <!--android:id="@+id/btn_localiser"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Localiser"-->
-        <!--android:textSize="10sp" />-->
-        <!--<at.markushi.ui.CircleButton-->
-            <!--android:id="@+id/btn_localiser"-->
-            <!--android:layout_width="64dp"-->
-            <!--android:layout_height="64dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:src="@drawable/ic_location_on_white_24dp"-->
-            <!--app:cb_color="@color/ets_red"-->
-            <!--app:cb_pressedRingWidth="8dip" />-->
-
-        <at.markushi.ui.CircleButton
-            android:id="@+id/btn_calendrier"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_event_white_24dp"
-            app:cb_color="@color/ets_red"
-            app:cb_pressedRingWidth="8dip"
-
-            />
+            tools:text="ApplETS" />
 
         <at.markushi.ui.CircleButton
             android:id="@+id/btn_details"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_link_white_24dp"
             app:cb_color="@color/ets_red"
             app:cb_pressedRingWidth="8dip" />
 
-        <at.markushi.ui.CircleButton
-            android:id="@+id/btn_partager"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_share_white_24dp"
-            app:cb_color="@color/ets_red"
-            app:cb_pressedRingWidth="8dip" />
 
     </LinearLayout>
-
 
 </LinearLayout>

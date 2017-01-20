@@ -44,6 +44,7 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.NewsSourceAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.NewsSourceComparator;
 import ca.etsmtl.applets.etsmobile.views.AnimatedExpandableListView;
+import ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar;
 import ca.etsmtl.applets.etsmobile2.R;
 
 
@@ -53,6 +54,9 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
     private SpiceManager spiceManager;
     private ArrayList<EvenementCommunaute> events = new ArrayList<>();
     private EvenementCommunauteAdapter expandableListAdapter;
+    private MultiColorProgressBar multiColorProgressBar;
+    private int nbSources;
+    private int countSourcesLoaded = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,7 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
         View v = inflater.inflate(R.layout.fragment_events, container, false);
 
         expandableListView = (AnimatedExpandableListView) v.findViewById(R.id.expandable_list_view);
+        multiColorProgressBar = (MultiColorProgressBar) v.findViewById(R.id.progress_bar);
 
         expandableListAdapter = new EvenementCommunauteAdapter(getActivity(), events, expandableListView);
         expandableListView.setAdapter(expandableListAdapter);
@@ -90,6 +95,7 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
         });
 
         spiceManager = new SpiceManager(MyJackSpringAndroidSpiceService.class);
+        spiceManager.start(getActivity());
 
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
@@ -101,8 +107,11 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
     public void onResume() {
         super.onResume();
 
-        spiceManager.start(getActivity());
+        expandableListAdapter.clearEvents();
+        multiColorProgressBar.setProgress(0);
+
         spiceManager.execute(new AppletsApiSourcesRequest(getActivity()), new RequestListener<SourceEvenementList>() {
+
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 Toast.makeText(getActivity(), getString(R.string.SupportKit_errorCouldNotConnect), Toast.LENGTH_SHORT).show();
@@ -110,6 +119,9 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
 
             @Override
             public void onRequestSuccess(SourceEvenementList sourceEvenements) {
+                multiColorProgressBar.setMax((int) sourceEvenements.size());
+                EventsFragment.this.nbSources = sourceEvenements.size();
+
                 for (SourceEvenement source : sourceEvenements) {
                     spiceManager.execute(new AppletsApiEvenementsRequest(getActivity(), source), EventsFragment.this);
                 }
@@ -159,6 +171,11 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
     @Override
     public void onRequestSuccess(EvenementCommunauteList events) {
         expandableListAdapter.addEvents(events);
+        countSourcesLoaded++;
+        multiColorProgressBar.setProgress((int) countSourcesLoaded);
+        if(countSourcesLoaded >= nbSources) {
+            multiColorProgressBar.setVisibility(View.GONE);
+        }
     }
 
 }
