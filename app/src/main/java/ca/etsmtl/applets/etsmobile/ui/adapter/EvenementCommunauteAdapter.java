@@ -1,7 +1,9 @@
 package ca.etsmtl.applets.etsmobile.ui.adapter;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,9 +107,15 @@ public class EvenementCommunauteAdapter extends AnimatedExpandableListView.Anima
         buttonDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://facebook.com/events/" + item.getId();
+                String url = getFacebookEventURL(item.getId());
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                v.getContext().startActivity(intent);
+                try {
+                    v.getContext().startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    url = "http://facebook.com/events/" + item.getId();
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    v.getContext().startActivity(intent);
+                }
             }
         });
 
@@ -131,6 +139,21 @@ public class EvenementCommunauteAdapter extends AnimatedExpandableListView.Anima
     @Override
     public Object getGroup(int listPosition) {
         return this.listEvenements.get(listPosition);
+    }
+
+    private String getFacebookEventURL(String eventId) {
+        PackageManager packageManager = context.getPackageManager();
+        String url = "http://facebook.com/events/" + eventId;
+        try {
+            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
+            if (versionCode >= 3002850) { //newer versions of fb app
+                return "fb://facewebmodal/f?href=" + url;
+            } else { //older versions of fb app
+                return "fb://events/" + eventId;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return url; //normal web url
+        }
     }
 
 

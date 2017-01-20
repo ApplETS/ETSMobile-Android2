@@ -5,15 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar
+    <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@android:style/Widget.ProgressBar.Horizontal"
-        android:max="100"
-        tools:progress="11"
-        android:progressDrawable="@drawable/semester_progress_bar_layer_list">
-    </ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar>
+        android:progressDrawable="@drawable/progress_bar_layer_list">
+    </ProgressBar>
 
     <ca.etsmtl.applets.etsmobile.views.AnimatedExpandableListView
         android:id="@+id/expandable_list_view"

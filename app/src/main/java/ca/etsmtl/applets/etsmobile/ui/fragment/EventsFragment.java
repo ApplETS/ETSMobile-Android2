@@ -1,7 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,42 +8,28 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.exception.RequestCancelledException;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.http.AppletsApiEvenementsRequest;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiSourcesRequest;
 import ca.etsmtl.applets.etsmobile.http.MyJackSpringAndroidSpiceService;
-import ca.etsmtl.applets.etsmobile.model.NewsSource;
 import ca.etsmtl.applets.etsmobile.model.applets_events.EvenementCommunaute;
 import ca.etsmtl.applets.etsmobile.model.applets_events.EvenementCommunauteList;
 import ca.etsmtl.applets.etsmobile.model.applets_events.SourceEvenement;
 import ca.etsmtl.applets.etsmobile.model.applets_events.SourceEvenementList;
-import ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.EvenementCommunauteAdapter;
-import ca.etsmtl.applets.etsmobile.ui.adapter.NewsSourceAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
-import ca.etsmtl.applets.etsmobile.util.NewsSourceComparator;
 import ca.etsmtl.applets.etsmobile.views.AnimatedExpandableListView;
-import ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar;
 import ca.etsmtl.applets.etsmobile2.R;
 
 
@@ -54,8 +39,8 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
     private SpiceManager spiceManager;
     private ArrayList<EvenementCommunaute> events = new ArrayList<>();
     private EvenementCommunauteAdapter expandableListAdapter;
-    private MultiColorProgressBar multiColorProgressBar;
-    private int nbSources;
+    private ProgressBar progressBar;
+    private int nbSources = 0;
     private int countSourcesLoaded = 0;
 
     @Override
@@ -71,8 +56,8 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
         View v = inflater.inflate(R.layout.fragment_events, container, false);
 
         expandableListView = (AnimatedExpandableListView) v.findViewById(R.id.expandable_list_view);
-        multiColorProgressBar = (MultiColorProgressBar) v.findViewById(R.id.progress_bar);
-
+        progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
+        progressBar.setProgress(0);
         expandableListAdapter = new EvenementCommunauteAdapter(getActivity(), events, expandableListView);
         expandableListView.setAdapter(expandableListAdapter);
 
@@ -108,7 +93,11 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
         super.onResume();
 
         expandableListAdapter.clearEvents();
-        multiColorProgressBar.setProgress(0);
+        progressBar.setVisibility(View.VISIBLE);
+        countSourcesLoaded = 0;
+        nbSources = 0;
+        progressBar.setProgress(0);
+
 
         spiceManager.execute(new AppletsApiSourcesRequest(getActivity()), new RequestListener<SourceEvenementList>() {
 
@@ -119,7 +108,7 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
 
             @Override
             public void onRequestSuccess(SourceEvenementList sourceEvenements) {
-                multiColorProgressBar.setMax((int) sourceEvenements.size());
+                progressBar.setMax(sourceEvenements.size());
                 EventsFragment.this.nbSources = sourceEvenements.size();
 
                 for (SourceEvenement source : sourceEvenements) {
@@ -138,26 +127,11 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //Sélection des sources
-        inflater.inflate(R.menu.menu_news, menu);
-
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        //Sélection des sources
-        switch (item.getItemId()) {
-            case R.id.menu_item_sources_news:
-
-                // Display the fragment as the main content.
-                Intent i = new Intent(getActivity(), PrefsActivity.class);
-
-                getActivity().startActivity(i);
-
-                return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -166,15 +140,16 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
         if (!(e instanceof RequestCancelledException)) {
             Toast.makeText(getActivity(), getString(R.string.SupportKit_errorCouldNotConnect), Toast.LENGTH_SHORT).show();
         }
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onRequestSuccess(EvenementCommunauteList events) {
         expandableListAdapter.addEvents(events);
-        countSourcesLoaded++;
-        multiColorProgressBar.setProgress((int) countSourcesLoaded);
-        if(countSourcesLoaded >= nbSources) {
-            multiColorProgressBar.setVisibility(View.GONE);
+        progressBar.setProgress(countSourcesLoaded++);
+        if (countSourcesLoaded >= nbSources) {
+            progressBar.setVisibility(View.GONE);
+            progressBar.setProgress(0);
         }
     }
 
