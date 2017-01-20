@@ -66,14 +66,14 @@
         <!--android:layout_height="wrap_content"-->
         <!--android:text="Localiser"-->
         <!--android:textSize="10sp" />-->
-        <at.markushi.ui.CircleButton
-            android:id="@+id/btn_localiser"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_location_on_white_24dp"
-            app:cb_color="@color/ets_red"
-            app:cb_pressedRingWidth="8dip" />
+        <!--<at.markushi.ui.CircleButton-->
+            <!--android:id="@+id/btn_localiser"-->
+            <!--android:layout_width="64dp"-->
+            <!--android:layout_height="64dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:src="@drawable/ic_location_on_white_24dp"-->
+            <!--app:cb_color="@color/ets_red"-->
+            <!--app:cb_pressedRingWidth="8dip" />-->
 
         <at.markushi.ui.CircleButton
             android:id="@+id/btn_calendrier"
