@@ -14,8 +14,14 @@ import android.widget.Toast;
 
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.exception.RequestCancelledException;
+import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 
@@ -36,7 +42,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 public class EventsFragment extends BaseFragment implements RequestListener<EvenementCommunauteList> {
 
     private AnimatedExpandableListView expandableListView;
-    private SpiceManager spiceManager;
+    private SpiceManager spiceManager = new SpiceManager(MyJackSpringAndroidSpiceService.class);
     private ArrayList<EvenementCommunaute> events = new ArrayList<>();
     private EvenementCommunauteAdapter expandableListAdapter;
     private ProgressBar progressBar;
@@ -79,13 +85,21 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
 
         });
 
-        spiceManager = new SpiceManager(MyJackSpringAndroidSpiceService.class);
-        spiceManager.start(getActivity());
-
-
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        spiceManager.start(getActivity());
+    }
+
+    @Override
+    public void onStop() {
+        spiceManager.shouldStop();
+        super.onStop();
     }
 
     @Override
@@ -98,11 +112,13 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
         nbSources = 0;
         progressBar.setProgress(0);
 
-
-        spiceManager.execute(new AppletsApiSourcesRequest(getActivity()), new RequestListener<SourceEvenementList>() {
+        AppletsApiSourcesRequest requestSources = new AppletsApiSourcesRequest(getActivity());
+        String cacheKey = requestSources.createCacheKey();
+        spiceManager.execute(requestSources, cacheKey, DurationInMillis.ONE_MINUTE * 10, new RequestListener<SourceEvenementList>() {
 
             @Override
             public void onRequestFailure(SpiceException spiceException) {
+                spiceException.printStackTrace();
                 Toast.makeText(getActivity(), getString(R.string.SupportKit_errorCouldNotConnect), Toast.LENGTH_SHORT).show();
             }
 
@@ -112,7 +128,9 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
                 EventsFragment.this.nbSources = sourceEvenements.size();
 
                 for (SourceEvenement source : sourceEvenements) {
-                    spiceManager.execute(new AppletsApiEvenementsRequest(getActivity(), source), EventsFragment.this);
+                    AppletsApiEvenementsRequest requestEvents = new AppletsApiEvenementsRequest(getActivity(), source);
+                    String cacheKey = requestEvents.createCacheKey();
+                    spiceManager.execute(requestEvents, cacheKey, DurationInMillis.ONE_MINUTE * 10, EventsFragment.this);
                 }
             }
         });
@@ -145,6 +163,7 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
 
     @Override
     public void onRequestSuccess(EvenementCommunauteList events) {
+
         expandableListAdapter.addEvents(events);
         progressBar.setProgress(countSourcesLoaded++);
         if (countSourcesLoaded >= nbSources) {
