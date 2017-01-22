@@ -12,6 +12,7 @@ apply plugin: 'com.android.application'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url 'https://github.com/leonardocardoso/mvn-repo/raw/master/maven-deploy' }
 }
 
 
@@ -89,5 +90,8 @@ dependencies {
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.5.0'
     compile 'com.j256.ormlite:ormlite-core:4.43'
     compile 'com.j256.ormlite:ormlite-android:4.43'
+
+    compile 'com.github.markushi:circlebutton:1.1'
+
 
 }

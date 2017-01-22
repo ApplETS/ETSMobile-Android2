@@ -48,6 +48,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.CommentairesFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.EventsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment;
@@ -517,6 +518,14 @@ public class MainActivity extends Activity {
                 new MyMenuItem(
                         getString(R.string.menu_section_2_ets),
                         null
+                ));
+
+        mMenu.put(EventsFragment.class.getName(),
+                new MyMenuItem(
+                        getString(R.string.menu_section_2_events),
+                        EventsFragment.class,
+                        R.drawable.ic_event_available,
+                        false
                 ));
 
         mMenu.put(NewsFragment.class.getName(),

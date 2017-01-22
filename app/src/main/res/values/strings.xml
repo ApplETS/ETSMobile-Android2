@@ -33,6 +33,7 @@
     <!--Section 2 ÉTS-->
     <string name="menu_section_2_ets">ÉTS</string>
     <string name="menu_section_2_news">Nouvelles</string>
+    <string name="menu_section_2_events">Événements</string>
     <string name="menu_section_2_bottin">Bottin</string>
     <string name="menu_section_2_biblio">Bibliothèque</string>
     <string name="menu_section_2_moodle">Moodle</string>
