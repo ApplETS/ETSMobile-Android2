@@ -53,6 +53,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.BaseFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.CommentairesFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.EventsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment;
@@ -487,8 +488,6 @@ public class MainActivity extends AppCompatActivity {
 
 //        setTitle(((BaseFragment)fragment).getFragmentTitle());
         this.invalidateOptionsMenu();
-
     }
-
 
 }

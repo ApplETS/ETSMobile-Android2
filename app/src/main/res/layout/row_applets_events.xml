@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        tools:text="Description" />
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="ApplETS Mobile Challenge est une compétition de développement mobile pour les étudiants au cégep et à l'université. Les participants sont invités à développer une application mobile sur la plateforme de leur choix respectant un thème donné" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:text="Organisé par"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp">
+
+        <ImageView
+            android:id="@+id/iv_logo_organisateur"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            tools:src="@drawable/logo_applets" />
+
+        <TextView
+            android:id="@+id/tv_nom_organisateur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            tools:text="ApplETS" />
+
+        <at.markushi.ui.CircleButton
+            android:id="@+id/btn_details"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_link_white_24dp"
+            app:cb_color="@color/ets_red"
+            app:cb_pressedRingWidth="8dip" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -34,6 +34,7 @@
     <!--Section 2 ÉTS-->
     <string name="menu_section_2_ets">ÉTS</string>
     <string name="menu_section_2_news">Nouvelles</string>
+    <string name="menu_section_2_events">Événements</string>
     <string name="menu_section_2_bottin">Bottin</string>
     <string name="menu_section_2_biblio">Bibliothèque</string>
     <string name="menu_section_2_moodle">Moodle</string>
@@ -153,6 +154,8 @@
     <string name="horaire">Horaire du %1$s %2$s %3$s</string>
     <string name="date_text">%1$s %2$s %3$s</string>
     <string name="export_calendar">Exporter</string>
+    <string name="semester_progression">Progression de la session :</string>
+    <string name="days">jours</string>
     
     <!-- Horaire -->
     <string name="toast_Calendar_Update_Error">Une erreur est survenue lors de la mise à jour du calendrier.</string>
