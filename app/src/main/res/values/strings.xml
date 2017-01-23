@@ -52,7 +52,8 @@
     <string name="toast_Connection_Required">Une connexion internet est requise pour télécharger le bottin</string>
     <string name="dialog_Loading_Directory">Chargement du bottin en cours</string>
     <string name="menu_bottin_refresh">Recharger le bottin</string>
-   
+    <string name="bottin_refresh_text">Le bottin va être supprimé puis téléchargé à nouveau.\nÊtes-vous sûr de votre choix ?</string>
+   <string name="bottin_search_hint">Recherche...</string>
 
     <!-- Moodle Page -->
     <string name="activity_moodle_titre">Instructions Moodle</string>
@@ -291,5 +292,6 @@
     <string name="ets">ÉTS</string>
     <string name="notification_content_title">%1$s nouvelle%2$s notification%3$s</string>
     <string name="others_notifications">+ %1$s autre%2$s</string>
+    <string name="title_bottin">Bottin</string>
 
 </resources>

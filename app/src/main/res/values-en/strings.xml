@@ -52,7 +52,8 @@
     <string name="toast_Connection_Required">An internet connection is required to load the directory</string>
     <string name="dialog_Loading_Directory">Loading directory</string>
     <string name="menu_bottin_refresh">Refresh directory</string>
-
+    <string name="bottin_refresh_text">The directory will be refreshed</string>
+    <string name="bottin_search_hint">Search...</string>
 
     <!-- Moodle Page -->
     <string name="activity_moodle_titre">Moodle instructions</string>

@@ -76,7 +76,7 @@
 
     <!-- Material-->
     <color name="ColorPrimary">@color/ets_red</color>
-    <color name="ColorPrimaryDark">@color/ets_red_fonce</color>
+    <color name="ColorPrimaryDark">@color/ets_red_darker</color>
     <color name="ColorPrimaryLight">@color/ets_red_pale</color>
     <color name="ColorAccent">@color/black</color>
     <color name="ColorPrimaryText">#212121</color>

@@ -7,9 +7,12 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +25,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.SearchView;
+
 import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
@@ -63,19 +66,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     private static BottinFragment instance;
 
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_bottin, menu);
-
-        // Associate searchable configuration with the SearchView
-//        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-//        searchView = (SearchView) menu.findItem(R.id.menuitem_search).getActionView();
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-//        searchView.setOnQueryTextListener(this);
-//
-//        super.onCreateOptionsMenu(menu, inflater);
-
-    }
 
     @Override
     public String getFragmentTitle() {
@@ -88,52 +78,45 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         switch (item.getItemId()) {
 
             case R.id.menu_item_update:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.menu_bottin_refresh)
+                        .setView(getActivity().getLayoutInflater().inflate(R.layout.dialog_bottin,null))
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Suppression du bottin
+                                DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+                                try {
+                                    Dao<FicheEmploye, ?> ficheEmployeDao = dbHelper.getDao(FicheEmploye.class);
+                                    List<FicheEmploye> ficheEmployeList = ficheEmployeDao.queryForAll();
+                                    for (FicheEmploye ficheEmploye : ficheEmployeList) {
+                                        ficheEmployeDao.delete(ficheEmploye);
+                                    }
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
 
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_bottin);
-                Button btn_yes = (Button)dialog.findViewById(R.id.btn_dialog_bottin_yes);
+                                //Mise à jour de la liste
+                                listDataHeader = new ArrayList<>();
+                                listDataChild = new HashMap<>();
 
-                //Rechargement du bottin
-                btn_yes.setOnClickListener(new OnClickListener() {
+                                listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
 
-                    @Override
-                    public void onClick(View v) {
 
-                        //Suppression du bottin
-                        DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-                        try {
-                            Dao<FicheEmploye, ?> ficheEmployeDao = dbHelper.getDao(FicheEmploye.class);
-                            List<FicheEmploye> ficheEmployeList = ficheEmployeDao.queryForAll();
-                            for (FicheEmploye ficheEmploye : ficheEmployeList) {
-                                ficheEmployeDao.delete(ficheEmploye);
+
+                                expListView.setAdapter(listAdapter);
+                                updateUI();
+                                dialogInterface.dismiss();
                             }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                builder.create().show();
 
-                        //Mise à jour de la liste
-                        listDataHeader = new ArrayList<>();
-                        listDataChild = new HashMap<>();
-
-                        listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
-
-                        dialog.dismiss();
-                        expListView.setAdapter(listAdapter);
-                        updateUI();
-
-                    }
-                });
-
-                Button btn_no = (Button) dialog.findViewById(R.id.btn_dialog_bottin_no);
-                btn_no.setOnClickListener(new OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
 
                 return true;
         }

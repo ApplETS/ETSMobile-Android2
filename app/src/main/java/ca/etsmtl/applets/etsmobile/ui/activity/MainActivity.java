@@ -73,7 +73,7 @@ import io.supportkit.core.User;
 import io.supportkit.ui.ConversationActivity;
 
 /**
- * Main Activity for �TSMobile, handles the login and the menu
+ * Main Activity for �TSMobile, handles the login and the Navigation Drawer (menu)
  *
  * @author Philippe David
  */
@@ -132,10 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         checkPlayServices();
         setLocale();
-        if (savedInstanceState != null) {
-            instantiateFragments(savedInstanceState);
-        }
-        initDrawer(savedInstanceState);
+        initDrawer();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
@@ -154,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initDrawer(Bundle bundle) {
+    private void initDrawer() {
         boolean isUserLoggedIn = ApplicationManager.userCredentials != null;
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -184,10 +181,10 @@ public class MainActivity extends AppCompatActivity {
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_moodle).withIdentifier(MOODLE_FRAGMENT).withIcon(R.drawable.ic_moodle_icon_small).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_monETS).withIdentifier(MONETS_FRAGMENT).withIcon(R.drawable.ic_monets).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_bandwith).withIdentifier(BANDWIDTH_FRAGMENT).withIcon(R.drawable.ic_ico_internet)
-                        ),
+                        ).withIsExpanded(true),
                         new ExpandableDrawerItem().withName(R.string.menu_section_2_ets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin).withSelectable(false),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_biblio).withIdentifier(LIBRARY_FRAGMENT).withIcon(R.drawable.ic_ico_library),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_securite).withIdentifier(SECURITY_FRAGMENT).withIcon(R.drawable.ic_ico_security)
                         ),
@@ -200,8 +197,7 @@ public class MainActivity extends AppCompatActivity {
                         )
 
 
-                )
-                .withSavedInstance(bundle);
+                );
         if (isUserLoggedIn)
             drawerBuilder.addStickyDrawerItems(new SecondaryDrawerItem().withName(R.string.action_logout).withIdentifier(LOGOUT).withTextColorRes(R.color.red));
         else
@@ -262,10 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (ApplicationManager.userCredentials == null) {
             goToFragment(new AboutFragment(), AboutFragment.class.getName());
-
         }
-        else
-            goToFragment(new TodayFragment(), TodayFragment.class.getName());
 
     }
 
@@ -297,29 +290,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void deconnexion() {
         ApplicationManager.deconnexion(this);
-
-    }
-
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        //add the values which need to be saved from the drawer to the bundle
-        outState = result.saveInstanceState(outState);
-        //add the values which need to be saved from the accountHeader to the bundle
-        outState = headerResult.saveInstanceState(outState);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        instantiateFragments(savedInstanceState);
-    }
-
-    private void instantiateFragments(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            result.setSelection(savedInstanceState.getLong("fragment"), true);
-        }
-
 
     }
 
@@ -451,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (drawerItem.getIdentifier() == LIBRARY_FRAGMENT) {
                     goToFragment(new BiblioFragment(), BiblioFragment.getClassName());
                 } else if (drawerItem.getIdentifier() == DIRECTORY_FRAGMENT) {
-                    goToFragment(new BottinFragment(), BottinFragment.getClassName());
+                    startActivity(new Intent(getApplicationContext(),BotinActivity.class));
                 } else if (drawerItem.getIdentifier() == SECURITY_FRAGMENT) {
                     goToFragment(new SecuriteFragment(), SecuriteFragment.getClassName());
                 } else if (drawerItem.getIdentifier() == FAQ_FRAGMENT) {

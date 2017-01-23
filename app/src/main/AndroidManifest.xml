@@ -90,6 +90,20 @@
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
         <activity
+            android:name="ca.etsmtl.applets.etsmobile.ui.activity.BotinActivity"
+            android:label="@string/title_bottin"
+            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
+        </activity>
+        <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity"
             android:label="@string/title_activity_bottin_details"
             android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
