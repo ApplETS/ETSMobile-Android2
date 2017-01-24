@@ -9,7 +9,5 @@
     android:layout_height="wrap_content"
     android:elevation="4dp"
     android:padding="0dp"
-    android:background="@color/ets_red_fonce"
-    android:titleTextColor="@color/white"
-    app:titleMarginBottom="0dp"
-    app:titleTextColor="@color/white" />
+    app:theme="@style/ToolbarTheme"
+    app:popupTheme="@style/ToolbarPopupTheme"/>

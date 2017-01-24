@@ -38,14 +38,6 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
-    <style name="dialogStyle" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="android:background">@color/gray</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:titleTextColor">@color/black</item>
-
-    </style>
 
     <style name="CustomTheme" parent="MaterialDrawerTheme.Light">
         <!-- ...and here we setting appcompat’s color theming attrs -->
@@ -69,6 +61,18 @@
         <item name="material_drawer_selected">@color/black_gray</item>
         <item name="material_drawer_selected_text">@color/ets_red_darker</item>
         <item name="material_drawer_header_selection_text">@color/ets_red_darker</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:background">@color/ets_red_fonce</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+    </style>
+
+    <style name="ToolbarPopupTheme">
+        <item name="android:textColorPrimary">@color/ColorPrimaryText</item>
+        <item name="android:background">@color/transparent</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">

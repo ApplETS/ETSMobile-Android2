@@ -334,7 +334,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     }
 
     public void openCourseListDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.dialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         if (seanceAdapter.getCount() > 0) {
             builder.setAdapter(seanceAdapter, null);
             builder.setTitle(R.string.today_course);
