@@ -15,7 +15,8 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white"
-        android:paddingTop="@dimen/activity_vertical_margin" />
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
 
     <ListView
         android:id="@+id/widget_todays_list"
@@ -23,9 +24,10 @@
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:layoutAnimation="@anim/fade_in"
-        tools:listitem="@layout/widget_row_today_courses"
+        tools:listitem="@layout/widget_today_row_courses"
         android:layout_below="@id/widget_todays_name"
-        android:divider="@null"/>
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"/>
 
     <TextView
         android:id="@+id/widget_empty_view"

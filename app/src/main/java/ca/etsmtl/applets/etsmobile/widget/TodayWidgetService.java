@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.model.Event;
@@ -44,7 +43,7 @@ public class TodayWidgetService extends RemoteViewsService {
 
         private List<Seances> listeSeances;
         private List<Event> listeEvents;
-        private List<TodayDataRowItem> dataRowItems;
+        private List<TodayDataRowItem> listeDataRowItems;
         private Context context;
         private int appWidgetId;
         private DatabaseHelper databaseHelper;
@@ -53,7 +52,7 @@ public class TodayWidgetService extends RemoteViewsService {
             this.context = context;
             this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
-            dataRowItems = new ArrayList<TodayDataRowItem>();
+            listeDataRowItems = new ArrayList<TodayDataRowItem>();
         }
 
         /**
@@ -65,12 +64,26 @@ public class TodayWidgetService extends RemoteViewsService {
             databaseHelper = new DatabaseHelper(context);
             try {
                 DateTime dateTime = new DateTime();
-                SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", context.getResources().getConfiguration().locale);
+                SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd",
+                        context.getResources().getConfiguration().locale);
                 listeSeances = databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
                 Collections.sort(listeSeances, new SeanceComparator());
                 listeEvents = databaseHelper.getDao(Event.class).queryBuilder().where().like("startDate", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
             } catch (SQLException e) {
                 e.printStackTrace();
+            }
+
+            if (!listeSeances.isEmpty()) {
+                for (Seances seances : listeSeances) {
+                    listeDataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_SEANCE, seances));
+                }
+            }
+
+            if (!listeEvents.isEmpty()) {
+                listeDataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_TITLE_EVENT));
+                for (Event event : listeEvents) {
+                    listeDataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_EVENT, event));
+                }
             }
         }
 
@@ -85,7 +98,10 @@ public class TodayWidgetService extends RemoteViewsService {
          */
         @Override
         public void onDataSetChanged() {
-
+            listeSeances = new ArrayList<Seances>();
+            listeEvents = new ArrayList<Event>();
+            listeDataRowItems = new ArrayList<TodayDataRowItem>();
+            onCreate();
         }
 
         /**
@@ -104,7 +120,7 @@ public class TodayWidgetService extends RemoteViewsService {
          */
         @Override
         public int getCount() {
-            return listeSeances.size();
+            return listeDataRowItems.size();
         }
 
         /**
@@ -122,35 +138,46 @@ public class TodayWidgetService extends RemoteViewsService {
             if (listeSeances.size() == 0)
                 return null;
 
-            Seances seance = listeSeances.get(position);
-            /*RemoteViews rv = new RemoteViews(context.getPackageName(),
-                    R.layout.seances_item);
-            // TODO Regarder TodayApdapter
-            rv.setTextViewText(R.id.seanceItemNomCoursTv, seance.libelleCours);
-            rv.setTextViewText(R.id.seanceItemTypeTv, seance.nomActivite);
-            DateTime mDateDebut = DateTime.parse(seance.dateDebut);
-            DateTime mDateFin = DateTime.parse(seance.dateFin);
-            String dateDebutStr = String.format("%d h %02d", mDateDebut.getHourOfDay(), mDateDebut.getMinuteOfHour());
-            String dateFinStr = String.format("%d h %02d", mDateFin.getHourOfDay(), mDateFin.getMinuteOfHour());
-            rv.setTextViewText(R.id.seanceItemDureeTv, dateDebutStr);
-            rv.setTextViewText(R.id.seanceItemLocalTv, seance.local);*/
+            RemoteViews rv = null;
+            TodayDataRowItem item = listeDataRowItems.get(position);
+            String packageName = context.getPackageName();
+            int viewType = getItemViewType(position);
 
-            RemoteViews rv = new RemoteViews(context.getPackageName(),
-                    R.layout.widget_row_today_courses);
+            if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_TITLE_EVENT.getValue()) {
+                rv = new RemoteViews(packageName, R.layout.row_today_title);
+                rv.setTextViewText(R.id.todays_title, getString(R.string.today_event));
 
-            DateTime mDateDebut = DateTime.parse(seance.dateDebut);
-            DateTime mDateFin = DateTime.parse(seance.dateFin);
-            String dateDebutStr = String.format("%d h %02d", mDateDebut.getHourOfDay(), mDateDebut.getMinuteOfHour());
-            String dateFinStr = String.format("%d h %02d", mDateFin.getHourOfDay(), mDateFin.getMinuteOfHour());
-            rv.setTextViewText(R.id.tv_today_heure_debut, dateDebutStr);
-            rv.setTextViewText(R.id.tv_today_heure_fin, dateFinStr);
-            rv.setTextViewText(R.id.tv_today_cours_groupe, seance.coursGroupe);
-            rv.setTextViewText(R.id.tv_today_nom_activite, seance.nomActivite);
-            rv.setTextViewText(R.id.tv_today_libelle_cours, seance.libelleCours);
-            rv.setTextViewText(R.id.tv_today_local, seance.local);
+            } else if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_EVENT.getValue()) {
+                Event event = (Event) item.data;
+                rv = new RemoteViews(packageName, R.layout.widget_today_row_event);
+                rv.setTextViewText(R.id.event_text, event.getTitle());
+
+            } else if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE.getValue()) {
+                rv = new RemoteViews(packageName, R.layout.row_today_title);
+                rv.setTextViewText(R.id.todays_title, getString(R.string.today_course));
+
+            } else if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_SEANCE.getValue()){
+                Seances seance = (Seances) item.data;
+                rv = new RemoteViews(packageName, R.layout.widget_today_row_courses);
+
+                DateTime mDateDebut = DateTime.parse(seance.dateDebut);
+                DateTime mDateFin = DateTime.parse(seance.dateFin);
+                String dateDebutStr = String.format("%d h %02d", mDateDebut.getHourOfDay(), mDateDebut.getMinuteOfHour());
+                String dateFinStr = String.format("%d h %02d", mDateFin.getHourOfDay(), mDateFin.getMinuteOfHour());
+                rv.setTextViewText(R.id.tv_today_heure_debut, dateDebutStr);
+                rv.setTextViewText(R.id.tv_today_heure_fin, dateFinStr);
+                rv.setTextViewText(R.id.tv_today_cours_groupe, seance.coursGroupe);
+                rv.setTextViewText(R.id.tv_today_nom_activite, seance.nomActivite);
+                rv.setTextViewText(R.id.tv_today_libelle_cours, seance.libelleCours);
+                rv.setTextViewText(R.id.tv_today_local, seance.local);
+            }
 
             return rv;
 
+        }
+
+        private int getItemViewType(int position) {
+            return listeDataRowItems.get(position).type;
         }
 
         /**
@@ -173,7 +200,7 @@ public class TodayWidgetService extends RemoteViewsService {
          */
         @Override
         public int getViewTypeCount() {
-            return 1;
+            return TodayDataRowItem.viewType.values().length;
         }
 
         /**
@@ -194,7 +221,7 @@ public class TodayWidgetService extends RemoteViewsService {
          */
         @Override
         public boolean hasStableIds() {
-            return true;
+            return false;
         }
     }
 }
