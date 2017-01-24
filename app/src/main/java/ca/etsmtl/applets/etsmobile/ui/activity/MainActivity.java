@@ -7,7 +7,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -61,6 +63,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
+import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.supportkit.core.User;
 import io.supportkit.ui.ConversationActivity;
@@ -112,8 +115,6 @@ public class MainActivity extends Activity {
             }
         };
 
-
-
         // Set the adapter for the list view
         int stringSet = mMenu.keySet().size();
         final Collection<MyMenuItem> myMenuItems = mMenu.values();
@@ -149,6 +150,7 @@ public class MainActivity extends Activity {
 
         securePreferences = new SecurePreferences(this);
 
+        TodayWidgetProvider.updateAllWidgets(this);
     }
 
     @Override

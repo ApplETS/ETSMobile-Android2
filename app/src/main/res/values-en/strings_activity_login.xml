@@ -14,4 +14,6 @@
     <string name="error_invalid_email">Invalid universal code</string>
     <string name="error_invalid_pwd">Invalid password</string>
     <string name="error_field_required">This field is required</string>
+
+    <string name="prompt_login">Please login</string>
 </resources>

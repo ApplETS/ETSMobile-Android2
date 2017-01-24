@@ -184,7 +184,7 @@
         <!-- [END instanceId_listener] -->
         <service
             android:name="ca.etsmtl.applets.etsmobile.service.RegistrationIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -195,10 +195,24 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
-        </service>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/today_widget_info" />
+        </receiver>
+
+        <service android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>
