@@ -14,5 +14,5 @@
     <string name="error_invalid_pwd">Le mot de passe est invalide</string>
     <string name="error_field_required">Ce champ est requis</string>
 
-    <string name="prompt_login">Veuillez vous connecter</string>
+    <string name="touch_login">Veuillez toucher pour vous connecter</string>
 </resources>

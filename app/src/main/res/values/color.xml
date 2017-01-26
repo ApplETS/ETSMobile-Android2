@@ -20,8 +20,8 @@
     <color name="green_bandwith">#4CAF50</color>
     <color name="purple_bandwith">#9C27B0</color>
     <color name="grey_bandwith">#9E9E9E</color>
-    <color name="noir_pale">#B3000000</color>
-    <color name="blanc_pale">#B3ffffff</color>
+    <color name="noir_pale">#4D000000</color>
+    <color name="blanc_pale">#A6ffffff</color>
 
 
     <color name="bright_pink">#FF007F</color>

@@ -66,9 +66,12 @@ public class TodayWidgetService extends RemoteViewsService {
                 DateTime dateTime = new DateTime();
                 SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd",
                         context.getResources().getConfiguration().locale);
-                listeSeances = databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
+                String dateStrFormatted = seancesFormatter.format(dateTime.toDate()).toString();
+                listeSeances = databaseHelper.getDao(Seances.class).queryBuilder().where().
+                        like("dateDebut", dateStrFormatted + "%").query();
                 Collections.sort(listeSeances, new SeanceComparator());
-                listeEvents = databaseHelper.getDao(Event.class).queryBuilder().where().like("startDate", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
+                listeEvents = databaseHelper.getDao(Event.class).queryBuilder().where().
+                        like("startDate", dateStrFormatted + "%").query();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -162,8 +165,10 @@ public class TodayWidgetService extends RemoteViewsService {
 
                 DateTime mDateDebut = DateTime.parse(seance.dateDebut);
                 DateTime mDateFin = DateTime.parse(seance.dateFin);
-                String dateDebutStr = String.format("%d h %02d", mDateDebut.getHourOfDay(), mDateDebut.getMinuteOfHour());
-                String dateFinStr = String.format("%d h %02d", mDateFin.getHourOfDay(), mDateFin.getMinuteOfHour());
+                String dateDebutStr = String.format("%d h %02d", mDateDebut.getHourOfDay(),
+                        mDateDebut.getMinuteOfHour());
+                String dateFinStr = String.format("%d h %02d", mDateFin.getHourOfDay(),
+                        mDateFin.getMinuteOfHour());
                 rv.setTextViewText(R.id.tv_today_heure_debut, dateDebutStr);
                 rv.setTextViewText(R.id.tv_today_heure_fin, dateFinStr);
                 rv.setTextViewText(R.id.tv_today_cours_groupe, seance.coursGroupe);
