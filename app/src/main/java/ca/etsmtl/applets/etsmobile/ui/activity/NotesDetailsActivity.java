@@ -33,7 +33,7 @@ public class NotesDetailsActivity extends Activity {
             String groupe = extras.getString("groupe");
             String titreCours = extras.getString("titreCours");
 
-            setTitle(sigle);
+            setTitle(sigle + " - " + groupe);
 
             Fragment fragment = NotesDetailsFragment.newInstance(sigle, sessionName, abrege, cote, groupe, titreCours);
             getFragmentManager().beginTransaction().add(R.id.container, fragment, NotesDetailsFragment.class.getName()).commit();
