@@ -3,6 +3,7 @@ package ca.etsmtl.applets.etsmobile.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RemoteViews;
@@ -27,6 +28,7 @@ import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Event;
+import ca.etsmtl.applets.etsmobile.model.EventList;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
@@ -82,7 +84,7 @@ public class TodayWidgetService extends RemoteViewsService {
             databaseHelper = new DatabaseHelper(context);
             updateUI();
 
-            // Requêtes d'obtention des données distantes
+            // Requêtes des données distantes
             dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
             dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
             dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
@@ -279,28 +281,53 @@ public class TodayWidgetService extends RemoteViewsService {
         public void onRequestSuccess(Object o) {
 
             if (o instanceof ListeDeSessions) {
+                requestEventList((ListeDeSessions) o);
+            } else {
+                horaireManager.onRequestSuccess(o);
+            }
+        }
 
-                ListeDeSessions listeDeSessions = (ListeDeSessions) o;
-                Date currentDate = new Date();
-                Date dateStart;
-                Date dateEnd;
-                for (int i = listeDeSessions.liste.size() - 1; i > 0; i-- ) {
-                    dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
-                    dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
-                    if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
-                        String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
-                        String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
-                        /*
-                        Requête permettant de satisfaire la condition syncEventListEnded de horaireManager
-                        Sinon, l'observateur n'est jamais avertit.
-                         */
-                        dataManager.sendRequest(new AppletsApiCalendarRequest(context, dateStartString, dateEndString), this);
-                        break;
-                    }
+        /**
+         * Requête permettant de satisfaire la condition syncEventListEnded de horaireManager.
+         *
+         * @param listeDeSessions
+         */
+        private void requestEventList(ListeDeSessions listeDeSessions) {
+            Date currentDate = new Date();
+            Date dateStart;
+            Date dateEnd;
+            for (int i = listeDeSessions.liste.size() - 1; i > 0; i-- ) {
+                dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
+                dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
+                if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
+                    String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
+                    String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
+                    AppletsApiCalendarRequest request = new AppletsApiCalendarRequest(context, dateStartString, dateEndString);
+                    new AsyncTask<AppletsApiCalendarRequest, Void, EventList>() {
+
+                        @Override
+                        protected EventList doInBackground(AppletsApiCalendarRequest... requests) {
+                            try {
+                                return requests[0].loadDataFromNetwork();
+                            } catch (Exception e) {
+                                // Too msny follow-up requests: 21
+                                e.printStackTrace();
+                            }
+
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(EventList eventList) {
+                            if (eventList != null) {
+                                super.onPostExecute(eventList);
+                                horaireManager.onRequestSuccess(eventList);
+                            }
+                        }
+                    }.execute(request);
+                    break;
                 }
             }
-
-            horaireManager.onRequestSuccess(o);
         }
 
         /**
