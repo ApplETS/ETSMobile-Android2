@@ -8,19 +8,31 @@ import android.view.ViewGroup;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
+import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
+import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
+import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Event;
+import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
+import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -39,7 +51,7 @@ public class TodayWidgetService extends RemoteViewsService {
         return new ListRemoteViewFactory(this.getApplicationContext(), intent);
     }
 
-    private class ListRemoteViewFactory implements RemoteViewsFactory {
+    private class ListRemoteViewFactory implements RemoteViewsFactory, RequestListener<Object>, Observer {
 
         private List<Seances> listeSeances;
         private List<Event> listeEvents;
@@ -47,12 +59,17 @@ public class TodayWidgetService extends RemoteViewsService {
         private Context context;
         private int appWidgetId;
         private DatabaseHelper databaseHelper;
+        private HoraireManager horaireManager;
+        private DataManager dataManager;
 
         public ListRemoteViewFactory(Context context, Intent intent) {
             this.context = context;
             this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             listeDataRowItems = new ArrayList<TodayDataRowItem>();
+            horaireManager = new HoraireManager(this, context);
+            horaireManager.addObserver(this);
+            dataManager = DataManager.getInstance(context);
         }
 
         /**
@@ -61,12 +78,33 @@ public class TodayWidgetService extends RemoteViewsService {
          */
         @Override
         public void onCreate() {
+            // Affichage des données locaux actuelles
             databaseHelper = new DatabaseHelper(context);
+            updateUI();
+
+            // Requêtes d'obtention des données distantes
+            dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
+            dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+            dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+        }
+
+        /**
+         * Mise à jour avec les données locaux
+         */
+        private void updateUI() {
+            listeSeances = new ArrayList<Seances>();
+            listeEvents = new ArrayList<Event>();
+            listeDataRowItems = new ArrayList<TodayDataRowItem>();
+
             try {
                 DateTime dateTime = new DateTime();
+                dateTime = dateTime.plusDays(4);
+
                 SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd",
                         context.getResources().getConfiguration().locale);
+
                 String dateStrFormatted = seancesFormatter.format(dateTime.toDate()).toString();
+
                 listeSeances = databaseHelper.getDao(Seances.class).queryBuilder().where().
                         like("dateDebut", dateStrFormatted + "%").query();
                 Collections.sort(listeSeances, new SeanceComparator());
@@ -76,13 +114,13 @@ public class TodayWidgetService extends RemoteViewsService {
                 e.printStackTrace();
             }
 
-            if (!listeSeances.isEmpty()) {
+            if (listeSeances != null && !listeSeances.isEmpty()) {
                 for (Seances seances : listeSeances) {
                     listeDataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_SEANCE, seances));
                 }
             }
 
-            if (!listeEvents.isEmpty()) {
+            if (listeEvents != null && !listeEvents.isEmpty()) {
                 listeDataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_TITLE_EVENT));
                 for (Event event : listeEvents) {
                     listeDataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_EVENT, event));
@@ -101,11 +139,9 @@ public class TodayWidgetService extends RemoteViewsService {
          */
         @Override
         public void onDataSetChanged() {
-            listeSeances = new ArrayList<Seances>();
-            listeEvents = new ArrayList<Event>();
-            listeDataRowItems = new ArrayList<TodayDataRowItem>();
             onCreate();
         }
+
 
         /**
          * Called when the last RemoteViewsAdapter that is associated with this factory is
@@ -194,7 +230,6 @@ public class TodayWidgetService extends RemoteViewsService {
          */
         @Override
         public RemoteViews getLoadingView() {
-
             return null;
         }
 
@@ -227,6 +262,59 @@ public class TodayWidgetService extends RemoteViewsService {
         @Override
         public boolean hasStableIds() {
             return false;
+        }
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            // Affichage des données locaux actuelles
+            databaseHelper = new DatabaseHelper(context);
+            updateUI();
+        }
+
+        /**
+         * Procédure appelée par dataManager à la suite du succès d'une requête
+         * @param o
+         */
+        @Override
+        public void onRequestSuccess(Object o) {
+
+            if (o instanceof ListeDeSessions) {
+
+                ListeDeSessions listeDeSessions = (ListeDeSessions) o;
+                Date currentDate = new Date();
+                Date dateStart;
+                Date dateEnd;
+                for (int i = listeDeSessions.liste.size() - 1; i > 0; i-- ) {
+                    dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
+                    dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
+                    if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
+                        String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
+                        String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
+                        /*
+                        Requête permettant de satisfaire la condition syncEventListEnded de horaireManager
+                        Sinon, l'observateur n'est jamais avertit.
+                         */
+                        dataManager.sendRequest(new AppletsApiCalendarRequest(context, dateStartString, dateEndString), this);
+                        break;
+                    }
+                }
+            }
+
+            horaireManager.onRequestSuccess(o);
+        }
+
+        /**
+         * This method is called if the specified {@code Observable} object's
+         * {@code notifyObservers} method is called (because the {@code Observable}
+         * object has been updated.
+         *
+         * @param observable the {@link Observable} object.
+         * @param data       the data passed to {@link Observable#notifyObservers(Object)}.
+         */
+        @Override
+        public void update(Observable observable, Object data) {
+            databaseHelper = new DatabaseHelper(context);
+            updateUI();
         }
     }
 }

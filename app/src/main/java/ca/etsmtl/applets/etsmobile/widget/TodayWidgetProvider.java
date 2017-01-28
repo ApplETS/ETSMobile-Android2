@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.widget;
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -8,12 +7,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
+
 import org.joda.time.DateTime;
 
-import java.util.Calendar;
 import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
@@ -41,8 +39,8 @@ public class TodayWidgetProvider extends AppWidgetProvider {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), widgetLayoutId);
 
-        views.setViewVisibility(progressBarId, View.VISIBLE);
         views.setViewVisibility(mRefreshBtnId, View.GONE);
+        views.setViewVisibility(progressBarId, View.VISIBLE);
 
         // Vue affichée lorsque la liste est vide
         views.setEmptyView(todayListId, emptyViewId);
@@ -52,8 +50,8 @@ public class TodayWidgetProvider extends AppWidgetProvider {
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
             views.setTextViewText(emptyViewId, context.getString(R.string.today_no_classes));
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, todayListId);
             views.setRemoteAdapter(appWidgetId, todayListId, intent);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, todayListId);
             views.setViewVisibility(emptyViewId, View.VISIBLE);
             setUpRefreshBtn(context, views);
         } else {
