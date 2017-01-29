@@ -153,11 +153,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void initDrawer() {
         boolean isUserLoggedIn = ApplicationManager.userCredentials != null;
+        String studentName = "";
+        String codeUniversel = "";
+        ProfilManager profilManager = new ProfilManager(this);
+        if(profilManager.getEtudiant() != null){
+            studentName = profilManager.getEtudiant().prenom.replace("  ","") +" "+ profilManager.getEtudiant().nom.replace(" ","");
+            codeUniversel= profilManager.getEtudiant().codePerm;
+        }
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.ets_background_grayscale)
                 .addProfiles(
-                        new ProfileDrawerItem().withEmail("Etudiant").withSelectedTextColor(ContextCompat.getColor(this,R.color.red)).withIcon(R.drawable.ic_user)
+                        new ProfileDrawerItem().withName(codeUniversel).withEmail(studentName).withSelectedTextColor(ContextCompat.getColor(this,R.color.red)).withIcon(R.drawable.ic_user)
                 ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
