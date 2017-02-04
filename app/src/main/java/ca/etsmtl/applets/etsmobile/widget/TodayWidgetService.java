@@ -3,14 +3,10 @@ package ca.etsmtl.applets.etsmobile.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.joda.time.DateTime;
 
@@ -18,23 +14,13 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
-import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Event;
-import ca.etsmtl.applets.etsmobile.model.EventList;
-import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
-import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
-import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -42,7 +28,6 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 
 public class TodayWidgetService extends RemoteViewsService {
-    public static boolean remoteRequestSent;
 
     /**
      * To be implemented by the derived service to generate appropriate factories for
@@ -55,7 +40,7 @@ public class TodayWidgetService extends RemoteViewsService {
         return new ListRemoteViewFactory(this.getApplicationContext(), intent);
     }
 
-    private class ListRemoteViewFactory implements RemoteViewsFactory, RequestListener<Object>, Observer {
+    private class ListRemoteViewFactory implements RemoteViewsFactory {
 
         private List<Seances> listeSeances;
         private List<Event> listeEvents;
@@ -63,17 +48,13 @@ public class TodayWidgetService extends RemoteViewsService {
         private Context context;
         private int appWidgetId;
         private DatabaseHelper databaseHelper;
-        private HoraireManager horaireManager;
-        private DataManager dataManager;
 
         public ListRemoteViewFactory(Context context, Intent intent) {
             this.context = context;
             this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             listeDataRowItems = new ArrayList<TodayDataRowItem>();
-            horaireManager = new HoraireManager(this, context);
-            horaireManager.addObserver(this);
-            dataManager = DataManager.getInstance(context);
+
         }
 
         /**
@@ -85,16 +66,6 @@ public class TodayWidgetService extends RemoteViewsService {
             // Affichage des données locales actuelles
             databaseHelper = new DatabaseHelper(context);
             updateUI();
-
-            if (!remoteRequestSent) {
-                // Requêtes des données distantes
-                dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
-                dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-                dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-
-                remoteRequestSent = true;
-            }
-
         }
 
         /**
@@ -107,7 +78,6 @@ public class TodayWidgetService extends RemoteViewsService {
 
             try {
                 DateTime dateTime = new DateTime();
-                dateTime = dateTime.plusDays(5);
 
                 SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd",
                         context.getResources().getConfiguration().locale);
@@ -271,84 +241,6 @@ public class TodayWidgetService extends RemoteViewsService {
         @Override
         public boolean hasStableIds() {
             return false;
-        }
-
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            // Affichage des données locales actuelles
-            databaseHelper = new DatabaseHelper(context);
-            updateUI();
-        }
-
-        /**
-         * Procédure appelée par dataManager à la suite du succès d'une requête
-         * @param o
-         */
-        @Override
-        public void onRequestSuccess(Object o) {
-
-            if (o instanceof ListeDeSessions) {
-                requestEventList((ListeDeSessions) o);
-            } else {
-                horaireManager.onRequestSuccess(o);
-            }
-        }
-
-        /**
-         * Requête permettant de satisfaire la condition syncEventListEnded de horaireManager.
-         *
-         * @param listeDeSessions
-         */
-        private void requestEventList(ListeDeSessions listeDeSessions) {
-            Date currentDate = new Date();
-            Date dateStart;
-            Date dateEnd;
-            for (int i = listeDeSessions.liste.size() - 1; i > 0; i-- ) {
-                dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
-                dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
-                if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
-                    String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
-                    String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
-                    AppletsApiCalendarRequest request = new AppletsApiCalendarRequest(context, dateStartString, dateEndString);
-                    new AsyncTask<AppletsApiCalendarRequest, Void, EventList>() {
-
-                        @Override
-                        protected EventList doInBackground(AppletsApiCalendarRequest... requests) {
-                            try {
-                                return requests[0].loadDataFromNetwork();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            return null;
-                        }
-
-                        @Override
-                        protected void onPostExecute(EventList eventList) {
-                            if (eventList != null) {
-                                super.onPostExecute(eventList);
-                                horaireManager.onRequestSuccess(eventList);
-                            }
-                        }
-                    }.execute(request);
-                    break;
-                }
-            }
-        }
-
-        /**
-         * This method is called if the specified {@code Observable} object's
-         * {@code notifyObservers} method is called (because the {@code Observable}
-         * object has been updated.
-         *
-         * @param observable the {@link Observable} object.
-         * @param data       the data passed to {@link Observable#notifyObservers(Object)}.
-         */
-        @Override
-        public void update(Observable observable, Object data) {
-            databaseHelper = new DatabaseHelper(context);
-            updateUI();
-            remoteRequestSent = false;
         }
     }
 }
