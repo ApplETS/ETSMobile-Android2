@@ -42,6 +42,8 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 
 public class TodayWidgetService extends RemoteViewsService {
+    public static boolean remoteRequestSent;
+
     /**
      * To be implemented by the derived service to generate appropriate factories for
      * the data.
@@ -80,18 +82,23 @@ public class TodayWidgetService extends RemoteViewsService {
          */
         @Override
         public void onCreate() {
-            // Affichage des données locaux actuelles
+            // Affichage des données locales actuelles
             databaseHelper = new DatabaseHelper(context);
             updateUI();
 
-            // Requêtes des données distantes
-            dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
-            dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-            dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+            if (!remoteRequestSent) {
+                // Requêtes des données distantes
+                dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
+                dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+                dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+
+                remoteRequestSent = true;
+            }
+
         }
 
         /**
-         * Mise à jour avec les données locaux
+         * Mise à jour avec les données locales
          */
         private void updateUI() {
             listeSeances = new ArrayList<Seances>();
@@ -100,7 +107,7 @@ public class TodayWidgetService extends RemoteViewsService {
 
             try {
                 DateTime dateTime = new DateTime();
-                dateTime = dateTime.plusDays(4);
+                dateTime = dateTime.plusDays(5);
 
                 SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd",
                         context.getResources().getConfiguration().locale);
@@ -176,7 +183,7 @@ public class TodayWidgetService extends RemoteViewsService {
          */
         @Override
         public RemoteViews getViewAt(int position) {
-            if (listeSeances.size() == 0)
+            if (listeDataRowItems.size() <= position)
                 return null;
 
             RemoteViews rv = null;
@@ -268,7 +275,7 @@ public class TodayWidgetService extends RemoteViewsService {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-            // Affichage des données locaux actuelles
+            // Affichage des données locales actuelles
             databaseHelper = new DatabaseHelper(context);
             updateUI();
         }
@@ -310,7 +317,6 @@ public class TodayWidgetService extends RemoteViewsService {
                             try {
                                 return requests[0].loadDataFromNetwork();
                             } catch (Exception e) {
-                                // Too msny follow-up requests: 21
                                 e.printStackTrace();
                             }
 
@@ -342,6 +348,7 @@ public class TodayWidgetService extends RemoteViewsService {
         public void update(Observable observable, Object data) {
             databaseHelper = new DatabaseHelper(context);
             updateUI();
+            remoteRequestSent = false;
         }
     }
 }
