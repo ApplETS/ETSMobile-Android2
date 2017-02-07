@@ -152,6 +152,7 @@
     <string name="horaire">Horaire du %1$s %2$s %3$s</string>
     <string name="date_text">%1$s %2$s %3$s</string>
     <string name="export_calendar">Exporter</string>
+    <string name="deux_points">" : "</string>
     
     <!-- Horaire -->
     <string name="toast_Calendar_Update_Error">Une erreur est survenue lors de la mise à jour du calendrier.</string>

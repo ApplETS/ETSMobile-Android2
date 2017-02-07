@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -110,6 +111,10 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             appWidgetsToBeUpdatedIds = appWidgetIds.clone();
         }
 
+        /*
+        Mise à jour avec les données locales en attendant les données distantes et pour l'affichage
+        de la progression
+         */
         for (int appWidgetId : appWidgetIds) {
 
             updateAppWidget(context, appWidgetManager, appWidgetId);
@@ -211,6 +216,9 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     @Override
     public void onRequestFailure(SpiceException spiceException) {
         syncEnCours = false;
+        Toast toast = Toast.makeText(context, "ÉTSMobile" + context.getString(R.string.deux_points)
+                + context.getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT);
+        toast.show();
 
         // Mise à jour avec les données locales
         for (int appWidgetId : appWidgetsToBeUpdatedIds) {
@@ -223,17 +231,12 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     public void onRequestSuccess(Object o) {
         if (o instanceof ListeDeSessions) {
             requestEventList((ListeDeSessions) o);
+        } else {
+            // Mise à jour des données locales
+            horaireManager.onRequestSuccess(o);
         }
-
-        // Mise à jour des données locales
-        horaireManager.onRequestSuccess(o);
     }
 
-    /**
-     * Requête permettant de satisfaire la condition syncEventListEnded de horaireManager.
-     *
-     * @param listeDeSessions
-     */
     private void requestEventList(ListeDeSessions listeDeSessions) {
         Trimestre derniereSession = Collections.max(listeDeSessions.liste, new TrimestreComparator());
 

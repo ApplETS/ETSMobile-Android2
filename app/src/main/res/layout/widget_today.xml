@@ -19,22 +19,32 @@
             android:gravity="left"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingLeft="5dp"/>
+            android:padding="5dp"/>
 
-        <Button
-            android:id="@+id/widget_sync_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:paddingLeft="5dp"
-            android:drawableLeft="@drawable/ic_refresh"
-            android:drawableTint="@color/blanc_pale"
-            android:background="?android:attr/selectableItemBackground"
-            android:visibility="gone"/>
+        <FrameLayout
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true">
+
+            <Button
+                android:id="@+id/widget_sync_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:drawableLeft="@drawable/ic_refresh"
+                android:drawableTint="@color/blanc_pale"
+                android:background="?android:attr/selectableItemBackground"
+                android:visibility="gone"/>
+
+            <ProgressBar
+                android:id="@+id/widget_progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"/>
+        </FrameLayout>
+
     </RelativeLayout>
 
     <ListView
@@ -47,8 +57,7 @@
         android:layout_below="@id/widget_title_bar"
         android:listSelector="@android:color/transparent"
         android:divider="@color/transparent"
-        android:dividerHeight="5dp"
-        android:layout_marginLeft="5dp"/>
+        android:dividerHeight="5dp" />
 
     <TextView
         android:id="@+id/widget_empty_view"
@@ -70,11 +79,5 @@
         android:gravity="bottom|center"
         android:paddingBottom="4dp"
         android:visibility="gone" />
-
-    <ProgressBar
-        android:id="@+id/widget_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

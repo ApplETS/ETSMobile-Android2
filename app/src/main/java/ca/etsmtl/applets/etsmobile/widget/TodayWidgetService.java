@@ -100,7 +100,7 @@ public class TodayWidgetService extends RemoteViewsService {
             }
 
             if (listeEvents != null && !listeEvents.isEmpty()) {
-                listeDataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_TITLE_EVENT));
+                //listeDataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_TITLE_EVENT));
                 for (Event event : listeEvents) {
                     listeDataRowItems.add(new TodayDataRowItem(TodayDataRowItem.viewType.VIEW_TYPE_EVENT, event));
                 }
