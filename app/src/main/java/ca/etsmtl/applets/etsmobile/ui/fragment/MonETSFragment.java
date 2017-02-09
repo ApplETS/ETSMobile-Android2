@@ -12,6 +12,7 @@ import android.webkit.WebViewClient;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -35,6 +36,7 @@ public class MonETSFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_web_view, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
+        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
 
         webView = (WebView) v.findViewById(R.id.webView);
 
@@ -70,6 +72,6 @@ public class MonETSFragment extends BaseFragment {
 
     @Override
     public String getFragmentTitle() {
-        return "MonETSFragment";
+        return getString(R.string.menu_section_1_monETS);
     }
 }

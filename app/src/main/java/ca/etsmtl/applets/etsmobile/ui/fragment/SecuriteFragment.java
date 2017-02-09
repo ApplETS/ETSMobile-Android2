@@ -17,6 +17,7 @@ import android.widget.TextView;
 //import com.google.android.gms.maps.GoogleMap;
 //import com.google.android.gms.maps.MapView;
 
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -42,7 +43,8 @@ public class SecuriteFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.security, container, false);
-		
+		( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
 //		mapView = (MapView) v.findViewById(R.id.map);
 //	    mapView.onCreate(savedInstanceState);
 //	    map = mapView.getMap();

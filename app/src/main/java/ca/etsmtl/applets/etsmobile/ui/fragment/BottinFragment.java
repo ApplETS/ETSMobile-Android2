@@ -43,6 +43,7 @@ import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
@@ -135,6 +136,8 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_bottin, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
+
+
         // get the listview
         expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
 

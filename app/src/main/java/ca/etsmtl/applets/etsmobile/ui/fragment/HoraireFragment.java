@@ -49,6 +49,7 @@ import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.model.TodaysCourses;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseTodayDecorator;
@@ -169,6 +170,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.calendar_horaire_layout, container, false);
         ButterKnife.bind(this, v);
+        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
 
         databaseHelper = new DatabaseHelper(getActivity());
 

@@ -30,6 +30,7 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
@@ -65,6 +66,8 @@ public class TodayFragment extends HttpFragment implements Observer {
                              Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_today, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
+        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
         semesterProgressBar = (ProgressBar) v.findViewById(R.id.semester_progress_bar);
         semesterProgressBarText = (TextView) v.findViewById(R.id.semester_progress_bar_text);
         todaysList = (ListView) v.findViewById(R.id.todays_list);

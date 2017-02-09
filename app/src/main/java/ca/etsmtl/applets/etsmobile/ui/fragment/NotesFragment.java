@@ -24,6 +24,7 @@ import ca.etsmtl.applets.etsmobile.model.Cours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotesSessionItem;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteAdapter;
@@ -62,6 +63,8 @@ public class NotesFragment extends HttpFragment implements Observer {
 
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_note, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
+        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
         mListView = (ListView) v.findViewById(R.id.activity_note_listview);
 
         listeDeCours = new ListeDeCours();

@@ -3,6 +3,7 @@ package ca.etsmtl.applets.etsmobile.ui.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,12 +24,13 @@ public class MoodleCourseActivity extends AppCompatActivity {
     int idCours;
     String nameCours;
     Fragment fragment;
-
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("MoodleActivity", "entered onCreate");
         setContentView(R.layout.activity_moodle_course);
+
 
         if (savedInstanceState == null) {
             Log.w("MoodleActivity", "savedInstance is null");
@@ -39,6 +41,11 @@ public class MoodleCourseActivity extends AppCompatActivity {
 
             idCours = extras.getInt("idCours");
             nameCours = extras.getString("nameCours");
+
+            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(nameCours);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             fragment = MoodleCourseDetailsFragment.newInstance(idCours);
             Log.d("MoodleActivity", "fragment created when saved instance = null with idCours :" + idCours);

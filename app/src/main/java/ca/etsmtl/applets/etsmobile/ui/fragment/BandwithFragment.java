@@ -35,6 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ca.etsmtl.applets.etsmobile.model.ConsommationBandePassante;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
@@ -80,6 +81,8 @@ public class BandwithFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_bandwith, container, false);
+        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
         progressBar = (MultiColorProgressBar) v.findViewById(R.id.bandwith_progress);
         editTextApp = (EditText) v.findViewById(R.id.bandwith_editText_app);
         editTextPhase = (EditText) v.findViewById(R.id.bandwith_editText_phase);

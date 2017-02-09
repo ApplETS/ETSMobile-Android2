@@ -27,7 +27,7 @@
     </style>
     
     <!--  Transparent dialog -->
-    <style name="CustomProgressDialog" parent="@android:Theme.Dialog">
+    <style name="CustomProgressDialog" parent="MaterialDrawerTheme.Light.DarkToolbar">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsFloating">true</item>
@@ -39,7 +39,7 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <style name="CustomTheme" parent="MaterialDrawerTheme.Light.DarkToolbar">
+    <style name="ETSMobileTheme" parent="MaterialDrawerTheme.Light.DarkToolbar">
         <!-- ...and here we setting appcompat’s color theming attrs -->
         <item name="colorPrimary">@color/ColorPrimary</item>
         <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>

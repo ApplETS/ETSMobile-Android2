@@ -46,6 +46,7 @@ import ca.etsmtl.applets.etsmobile.model.ConsommationBandePassante;
 import ca.etsmtl.applets.etsmobile.model.NewsSource;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
@@ -72,6 +73,7 @@ public class NewsFragment extends HttpFragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_news, container, false);
+        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
 
         newsListView = (ListView) v.findViewById(R.id.listView_news);
 

@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -465,6 +465,10 @@ public class MainActivity extends AppCompatActivity {
 
 //        setTitle(((BaseFragment)fragment).getFragmentTitle());
         this.invalidateOptionsMenu();
+    }
+
+    public void setTitle(String title){
+        getSupportActionBar().setTitle(title);
     }
 
 }
