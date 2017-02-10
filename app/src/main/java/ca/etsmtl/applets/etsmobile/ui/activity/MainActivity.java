@@ -297,7 +297,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void deconnexion() {
         ApplicationManager.deconnexion(this);
-
     }
 
     @Override
@@ -449,14 +448,43 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }, null);
                 } else if (drawerItem.getIdentifier() == LOGOUT) {
-                    deconnexion();
+                    openLogoutDialogAlert();
                 }
 
             }
             return false;
         }
     };
+    public void openLogoutDialogAlert(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                this);
 
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.action_logout));
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage(R.string.logout_confirmation)
+                .setPositiveButton(android.R.string.yes,new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        deconnexion();
+                        dialog.dismiss();
+
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel,new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+
+                        dialog.dismiss();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
     public void goToFragment(Fragment fragment, String tag) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)

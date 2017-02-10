@@ -11,6 +11,7 @@
     <string name="drawer_close">Close</string>
     <string name="contact_creation_failed">Contact creation failed</string>
     <string name="cannot_open_file">No application can open that file</string>
+    <string name="logout_confirmation">You are about to logout. Do you wish to proceed?</string>
 
     <!--MENU DE LANGAGE-->
     <string name="lang_title">Language change</string>
