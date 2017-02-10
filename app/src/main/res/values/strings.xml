@@ -11,7 +11,7 @@
     <string name="drawer_close">Close</string>
     <string name="contact_creation_failed">Echec de la création du contact</string>
     <string name="cannot_open_file">Aucune application ne peut ouvrir ce fichier</string>
-    <string name="logout_confirmation">Vous êtes sur le point d'être econnecté. Voulez-vous continuer?</string>
+    <string name="logout_confirmation">Êtes-vous sûr de vouloir vous déconnecter?</string>
 
     <!--MENU DE LANGAGE-->
     <string name="lang_title">Changement de langue</string>

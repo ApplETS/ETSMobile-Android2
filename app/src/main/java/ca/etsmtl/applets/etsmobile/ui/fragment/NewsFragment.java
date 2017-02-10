@@ -1,10 +1,8 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,34 +20,15 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.apache.commons.lang3.time.DateFormatUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
-import ca.etsmtl.applets.etsmobile.http.AppletsApiNewsRequest;
-import ca.etsmtl.applets.etsmobile.model.ConsommationBandePassante;
 import ca.etsmtl.applets.etsmobile.model.NewsSource;
-import ca.etsmtl.applets.etsmobile.model.Nouvelle;
-import ca.etsmtl.applets.etsmobile.model.Nouvelles;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
-import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsSourceAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.NewsSourceComparator;
