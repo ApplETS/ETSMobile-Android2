@@ -379,8 +379,15 @@ public class HoraireManager extends Observable implements RequestListener<Object
         }
     }
 
-
-    public void updateCalendar() throws Exception {
+    /**
+     * Creates/Updates a new calendar on the user's device
+     *
+     * @param joursRemplacesSelected true if the "Jours remplacés" calendar was selected
+     * @param seancesSelected true if the "Séances" calendar was selected
+     * @param calPublicSelected true if the "Calendrier public ÉTS" was selected
+     * @throws Exception if there is an SQL when checking the replaced days (Jours remplacés)
+     */
+    public void updateCalendar(boolean joursRemplacesSelected, boolean seancesSelected, boolean calPublicSelected) throws Exception {
 
         DatabaseHelper dbHelper = new DatabaseHelper(activity);
         AndroidCalendarManager androidCalendarManager = new AndroidCalendarManager(activity);
@@ -388,52 +395,52 @@ public class HoraireManager extends Observable implements RequestListener<Object
         androidCalendarManager.deleteCalendar(calendarName);
         androidCalendarManager.createCalendar(calendarName);
 
-
-        //Inserting JoursRemplaces in local calendar
         SimpleDateFormat joursRemplacesFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA_FRENCH);
-        ArrayList<JoursRemplaces> listeJoursRemplaces = (ArrayList<JoursRemplaces>) dbHelper.getDao(JoursRemplaces.class).queryForAll();
+
+        if (joursRemplacesSelected) {
+            //Inserting JoursRemplaces in local calendar
+            ArrayList<JoursRemplaces> listeJoursRemplaces = (ArrayList<JoursRemplaces>) dbHelper.getDao(JoursRemplaces.class).queryForAll();
 
 
-        for (JoursRemplaces joursRemplaces : listeJoursRemplaces) {
-            androidCalendarManager.insertEventInCalendar(calendarName,
-                    joursRemplaces.description,
-                    joursRemplaces.description,
-                    "",
-                    joursRemplacesFormatter.parse(joursRemplaces.dateOrigine),
-                    joursRemplacesFormatter.parse(joursRemplaces.dateOrigine));
+            for (JoursRemplaces joursRemplaces : listeJoursRemplaces) {
+                androidCalendarManager.insertEventInCalendar(calendarName,
+                        joursRemplaces.description,
+                        joursRemplaces.description,
+                        "",
+                        joursRemplacesFormatter.parse(joursRemplaces.dateOrigine),
+                        joursRemplacesFormatter.parse(joursRemplaces.dateOrigine));
+            }
         }
 
-
-        //Inserting Seances in local calendar
-        SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.CANADA_FRENCH);
-        ArrayList<Seances> seances = (ArrayList<Seances>) dbHelper.getDao(Seances.class).queryForAll();
-
-
-        for (Seances seance : seances) {
+        if (seancesSelected) {
+            //Inserting Seances in local calendar
+            SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.CANADA_FRENCH);
+            ArrayList<Seances> seances = (ArrayList<Seances>) dbHelper.getDao(Seances.class).queryForAll();
 
 
-            androidCalendarManager.insertEventInCalendar(calendarName,
-                    seance.descriptionActivite.equals("Examen final") ? "Examen final " + seance.coursGroupe : seance.coursGroupe,
-                    seance.libelleCours + " - " + seance.descriptionActivite,
-                    seance.local,
-                    seancesFormatter.parse(seance.dateDebut),
-                    seancesFormatter.parse(seance.dateFin));
+            for (Seances seance : seances) {
+
+                androidCalendarManager.insertEventInCalendar(calendarName,
+                        seance.descriptionActivite.equals("Examen final") ? "Examen final " + seance.coursGroupe : seance.coursGroupe,
+                        seance.libelleCours + " - " + seance.descriptionActivite,
+                        seance.local,
+                        seancesFormatter.parse(seance.dateDebut),
+                        seancesFormatter.parse(seance.dateFin));
+            }
         }
 
-
-        //Inserting public calendar ETS
-
-        ArrayList<Event> events = (ArrayList<Event>) dbHelper.getDao(Event.class).queryForAll();
-        for (Event event : events) {
-            androidCalendarManager.insertEventInCalendar(calendarName,
-                    event.getTitle(),
-                    "",
-                    ""
-                    ,
-                    joursRemplacesFormatter.parse(event.getDateDebut()),
-                    joursRemplacesFormatter.parse(event.getDateFin()));
+        if (calPublicSelected) {
+            //Inserting public calendar ETS
+            ArrayList<Event> events = (ArrayList<Event>) dbHelper.getDao(Event.class).queryForAll();
+            for (Event event : events) {
+                androidCalendarManager.insertEventInCalendar(calendarName,
+                        event.getTitle(),
+                        "",
+                        ""
+                        ,
+                        joursRemplacesFormatter.parse(event.getDateDebut()),
+                        joursRemplacesFormatter.parse(event.getDateFin()));
+            }
         }
-
-
     }
 }

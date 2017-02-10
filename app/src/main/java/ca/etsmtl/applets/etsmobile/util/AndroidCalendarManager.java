@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import ca.etsmtl.applets.etsmobile.ApplicationManager;
+
 /**
  * Created by gnut3ll4 on 6/23/14.
  */
@@ -19,6 +21,7 @@ public class AndroidCalendarManager {
 
 
     private final Context context;
+    private final String CALENDAR_ACCOUNT_NAME = "Calendrier ApplETS";
 
     String[] projection = new String[] {
             CalendarContract.Calendars._ID,
@@ -40,13 +43,14 @@ public class AndroidCalendarManager {
     public void createCalendar(String calendarName){
 
 		ContentValues values = new ContentValues();
-        values.put(CalendarContract.Calendars.ACCOUNT_NAME, "Calendrier ApplETS");
+
+        values.put(CalendarContract.Calendars.ACCOUNT_NAME, CALENDAR_ACCOUNT_NAME);
         values.put(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
         values.put(CalendarContract.Calendars.NAME, calendarName);
         values.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, calendarName);
         values.put(CalendarContract.Calendars.CALENDAR_COLOR, 0xffff0000);
         values.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER);
-        //values.put(CalendarContract.Calendars.OWNER_ACCOUNT, "test owner");
+        values.put(CalendarContract.Calendars.OWNER_ACCOUNT, ApplicationManager.userCredentials.getUsername());
         values.put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, "America/Montreal");
 
         values.put(CalendarContract.Calendars.VISIBLE, 1);
@@ -54,7 +58,7 @@ public class AndroidCalendarManager {
 
         Uri uri = CalendarContract.Calendars.CONTENT_URI.buildUpon()
                 .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER,"true")
-                .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, "Calendrier ApplETS")
+                .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, CALENDAR_ACCOUNT_NAME)
                 .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL).build();;
 
 
@@ -86,6 +90,8 @@ public class AndroidCalendarManager {
         if(id==0) {
             throw new Exception("Calendar not found");
         }
+
+        calendarCursor.close();
         return (int)id;
 
     }
@@ -119,9 +125,11 @@ public class AndroidCalendarManager {
 
                 response += id+" "+ title+" "+description+" "+dtstart+" "+dtend +"\n";
 
-                Log.e("selectAllEventFromCalendarById",id+"-"+title+"-"+description+"-"+dtstart+"-"+dtend+"-"+eventLocation);
+                Log.e(getClass().getSimpleName(), "selectAllEventFromCalendarById");
+                Log.e(getClass().getSimpleName(), id+"-"+title+"-"+description+"-"+dtstart+"-"+dtend+"-"+eventLocation);
             } while (c.moveToNext());
         }
+        c.close();
         return response;
     }
 
@@ -215,7 +223,7 @@ public class AndroidCalendarManager {
 
             } while (calendarCursor.moveToNext());
         }
-
+        calendarCursor.close();
         return response;
     }
 
@@ -234,6 +242,4 @@ public class AndroidCalendarManager {
     		e.printStackTrace();
     	}
     }
-
-
 }
