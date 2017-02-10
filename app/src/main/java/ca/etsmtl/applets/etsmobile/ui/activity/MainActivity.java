@@ -149,8 +149,6 @@ public class MainActivity extends Activity {
         getActionBar().setHomeButtonEnabled(true);
 
         securePreferences = new SecurePreferences(this);
-
-        TodayWidgetProvider.updateAllWidgets(this);
     }
 
     @Override
@@ -303,6 +301,7 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_logout) {
             ApplicationManager.deconnexion(this);
+            TodayWidgetProvider.updateAllWidgets(this);
         }
         if (id == R.id.action_language){
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -327,6 +326,7 @@ public class MainActivity extends Activity {
                 }
             });
             builder.show();
+            TodayWidgetProvider.updateAllWidgets(this);
         }
 
         // Pass the event to ActionBarDrawerToggle, if it returns

@@ -42,6 +42,7 @@ import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
+import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -218,6 +219,8 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 mPasswordView.setError(getString(R.string.error_invalid_pwd));
                 mPasswordView.requestFocus();
             } else {
+                TodayWidgetProvider.updateAllWidgets(this);
+
                 ApplicationManager.userCredentials = userCredentials;
 
 

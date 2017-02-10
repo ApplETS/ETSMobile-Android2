@@ -28,6 +28,7 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity;
+import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.TrimestreComparator;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -98,7 +99,6 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         horaireManager = new HoraireManager(this, context);
         horaireManager.addObserver(this);
 
-        // There may be multiple widgets active, so update all of them
         mUserLoggedIn = userLoggedIn();
 
         this.appWidgetManager = appWidgetManager;
@@ -111,10 +111,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             appWidgetsToBeUpdatedIds = appWidgetIds.clone();
         }
 
-        /*
-        Mise à jour avec les données locales en attendant les données distantes et pour l'affichage
-        de la progression
-         */
+        // Mise à jour de chaque widget avec les données locales en attendant les données distantes
         for (int appWidgetId : appWidgetIds) {
 
             updateAppWidget(context, appWidgetManager, appWidgetId);
@@ -167,8 +164,9 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         if (mUserLoggedIn) {
             views.setViewVisibility(loginBtnId, View.GONE);
         } else {
-            Intent intentConnexion = new Intent(context, LoginActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intentConnexion, 0);
+            Intent intentLogin = new Intent(context, LoginActivity.class);
+            intentLogin.putExtra(Constants.KEY_IS_ADDING_NEW_ACCOUNT, true);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intentLogin, 0);
             views.setOnClickPendingIntent(loginBtnId, pendingIntent);
             views.setTextViewText(loginBtnId, context.getString(R.string.touch_login));
             views.setViewVisibility(loginBtnId, View.VISIBLE);
@@ -216,6 +214,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     @Override
     public void onRequestFailure(SpiceException spiceException) {
         syncEnCours = false;
+
         Toast toast = Toast.makeText(context, "ÉTSMobile" + context.getString(R.string.deux_points)
                 + context.getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT);
         toast.show();
@@ -251,6 +250,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String dateDebutFormatted = formatter.format(dateDebut.toDate());
         String dateFinFormatted = formatter.format(dateEnd.toDate());
+        dataManager.start();
         dataManager.sendRequest(new AppletsApiCalendarRequest(context, dateDebutFormatted,
                 dateFinFormatted), this);
     }
