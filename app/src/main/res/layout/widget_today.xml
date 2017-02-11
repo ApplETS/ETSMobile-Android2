@@ -19,9 +19,11 @@
             android:gravity="left"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white"
-            android:padding="5dp"/>
+            android:padding="5dp"
+            android:layout_toLeftOf="@+id/widget_sync"/>
 
         <FrameLayout
+            android:id="@+id/widget_sync"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true">
@@ -33,16 +35,17 @@
                 android:layout_alignParentRight="true"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
-                android:drawableLeft="@drawable/ic_refresh"
-                android:drawableTint="@color/blanc_pale"
+                android:drawableLeft="@drawable/ic_sync"
                 android:background="?android:attr/selectableItemBackground"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:drawableTint="@color/ets_red"/>
 
             <ProgressBar
                 android:id="@+id/widget_progress_bar"
+                android:indeterminateDrawable="@drawable/widget_today_progress_bar_style"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true" />
         </FrameLayout>
 
     </RelativeLayout>

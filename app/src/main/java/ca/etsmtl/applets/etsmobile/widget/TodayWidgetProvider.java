@@ -27,6 +27,7 @@ import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
+import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
@@ -63,6 +64,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             views.setViewVisibility(progressBarId, View.GONE);
         } else if (syncEnCours && mUserLoggedIn){
             views.setViewVisibility(progressBarId, View.VISIBLE);
+            views.setProgressBar(progressBarId, 0, 0, true);
             views.setViewVisibility(syncBtnId, View.GONE);
         } else if (!mUserLoggedIn) {
             views.setViewVisibility(syncBtnId, View.GONE);
@@ -80,7 +82,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             views.setRemoteAdapter(appWidgetId, todayListId, intent);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, todayListId);
             views.setViewVisibility(emptyViewId, View.VISIBLE);
-            setUpRefreshBtn(context, views);
+            setUpSyncBtn(context, views);
         } else {
             views.setViewVisibility(todayListId, View.GONE);
             views.setViewVisibility(emptyViewId, View.GONE);
@@ -144,6 +146,14 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
     }
 
+    /**
+     * <h1>Mise à jour de tous les widgets</h1>
+     *
+     * Procédure pouvant être appelée dans l'application principale afin de déclencher la mise à
+     * jour de tous les widgets
+     *
+     * @param context
+     */
     public static void updateAllWidgets(Context context) {
         Intent intent = new Intent(context, TodayWidgetProvider.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -190,7 +200,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
     }
 
-    private void setUpRefreshBtn(Context context, RemoteViews views) {
+    private void setUpSyncBtn(Context context, RemoteViews views) {
         Intent intentRefresh = new Intent(context,  TodayWidgetProvider.class);
         intentRefresh.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         intentRefresh.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetsIds(context));
@@ -206,11 +216,18 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
     private void sync() {
         // Requêtes des données distantes
+        dataManager.start();
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
     }
 
+    /**
+     * Procédure appelée par {@link ca.etsmtl.applets.etsmobile.http.DataManager#getDataFromSignet(int, UserCredentials, RequestListener, String...)}
+     * en cas d'échec
+     *
+     * @param spiceException
+     */
     @Override
     public void onRequestFailure(SpiceException spiceException) {
         syncEnCours = false;
@@ -226,18 +243,32 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
     }
 
+    /**
+     * Procédure appelée par {@link ca.etsmtl.applets.etsmobile.http.DataManager#getDataFromSignet(int, UserCredentials, RequestListener, String...)}
+     * en cas de succès
+     *
+     * @param o
+     */
     @Override
     public void onRequestSuccess(Object o) {
         if (o instanceof ListeDeSessions) {
             requestEventList((ListeDeSessions) o);
         } else {
-            // Mise à jour des données locales
+            // Mise à jour de la BD contenant les données locales
             horaireManager.onRequestSuccess(o);
         }
     }
 
+    /**
+     * Procédure déclenchant une requête additionnelle pour permettre la synchronisation de la liste
+     * d'événements et satisfaire la condition syncEventListEnded dans
+     * {@link ca.etsmtl.applets.etsmobile.util.HoraireManager#onRequestSuccess(Object)}
+     *
+     * @param listeDeSessions
+     */
     private void requestEventList(ListeDeSessions listeDeSessions) {
-        Trimestre derniereSession = Collections.max(listeDeSessions.liste, new TrimestreComparator());
+        Trimestre derniereSession = Collections.max(listeDeSessions.liste,
+                new TrimestreComparator());
 
         DateTime dateDebut = new DateTime(derniereSession.dateDebut);
 
@@ -256,12 +287,11 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     }
 
     /**
-     * This method is called if the specified {@code Observable} object's
-     * {@code notifyObservers} method is called (because the {@code Observable}
-     * object has been updated.
+     * <h1>Mise à jour des widgets</h1>
      *
-     * @param observable the {@link Observable} object.
-     * @param data       the data passed to {@link Observable#notifyObservers(Object)}.
+     * À cette étape, les données distantes ont été obtenues et la BD locale a été mise à jour dans
+     * {@link ca.etsmtl.applets.etsmobile.util.HoraireManager#onRequestSuccess(Object)} permettant
+     * ainsi de déclencher la mise la jour des widgets
      */
     @Override
     public void update(Observable observable, Object data) {
