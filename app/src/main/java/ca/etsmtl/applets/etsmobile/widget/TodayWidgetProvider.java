@@ -66,9 +66,6 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             views.setViewVisibility(progressBarId, View.VISIBLE);
             views.setProgressBar(progressBarId, 0, 0, true);
             views.setViewVisibility(syncBtnId, View.GONE);
-        } else if (!mUserLoggedIn) {
-            views.setViewVisibility(syncBtnId, View.GONE);
-            views.setViewVisibility(progressBarId, View.GONE);
         }
 
         // Vue affichée lorsque la liste est vide
@@ -84,6 +81,8 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             views.setViewVisibility(emptyViewId, View.VISIBLE);
             setUpSyncBtn(context, views);
         } else {
+            views.setViewVisibility(syncBtnId, View.GONE);
+            views.setViewVisibility(progressBarId, View.GONE);
             views.setViewVisibility(todayListId, View.GONE);
             views.setViewVisibility(emptyViewId, View.GONE);
         }

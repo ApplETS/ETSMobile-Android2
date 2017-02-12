@@ -37,8 +37,7 @@
                 android:minHeight="0dp"
                 android:drawableLeft="@drawable/ic_sync"
                 android:background="?android:attr/selectableItemBackground"
-                android:visibility="gone"
-                android:drawableTint="@color/ets_red"/>
+                android:visibility="gone" />
 
             <ProgressBar
                 android:id="@+id/widget_progress_bar"
