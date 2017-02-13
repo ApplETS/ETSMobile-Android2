@@ -158,7 +158,7 @@ public class TodayFragment extends HttpFragment implements Observer {
         semesterProgressBar.setMax((int) nbJoursTotal);
         semesterProgressBar.setProgress((int) progressionJour);
         semesterProgressBarText.setText(getString(R.string.semester_progression)
-                + getString(R.string.deux_points) + " " + String.valueOf(progressionJour) + "/"
+                + getString(R.string.deux_points) + String.valueOf(progressionJour) + "/"
                 + String.valueOf(nbJoursTotal) + " " + getString(R.string.days));
         semesterProgressBarText.setVisibility(View.VISIBLE);
     }

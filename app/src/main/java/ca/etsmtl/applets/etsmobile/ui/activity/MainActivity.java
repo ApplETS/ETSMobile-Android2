@@ -349,6 +349,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
             builder.show();
+            TodayWidgetProvider.updateAllWidgets(this);
         }
 
         // Pass the event to ActionBarDrawerToggle, if it returns
