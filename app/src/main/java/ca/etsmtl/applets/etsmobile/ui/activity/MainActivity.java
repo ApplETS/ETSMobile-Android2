@@ -68,6 +68,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
+import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.supportkit.core.User;
 import io.supportkit.ui.ConversationActivity;
@@ -296,7 +297,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void deconnexion() {
+
         ApplicationManager.deconnexion(this);
+        TodayWidgetProvider.updateAllWidgets(this);
     }
 
     @Override

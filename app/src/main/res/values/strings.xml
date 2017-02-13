@@ -16,7 +16,7 @@
     <!--MENU DE LANGAGE-->
     <string name="lang_title">Changement de langue</string>
     <string name="lang_description">Utilisez ce menu pour choisir la langue de l\'application.
-        Les langages disponibles sont l\'anglais et le français</string>
+        Les langues disponibles sont l\'anglais et le français</string>
     <string name="lang_choix_positif">Français</string>
     <string name="lang_choix_negatif">Anglais</string>
   
@@ -157,7 +157,7 @@
     <string name="date_text">%1$s %2$s %3$s</string>
     <string name="export_calendar">Exporter</string>
     <string name="deux_points">" : "</string>
-    <string name="semester_progression">Progression de la session :</string>
+    <string name="semester_progression">Progression de la session</string>
     <string name="days">jours</string>
 
     <!-- Horaire -->
