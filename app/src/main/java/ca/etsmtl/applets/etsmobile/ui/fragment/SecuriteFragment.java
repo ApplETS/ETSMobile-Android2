@@ -1,9 +1,9 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 //import com.google.android.gms.maps.GoogleMap;
 //import com.google.android.gms.maps.MapView;
 
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -42,7 +43,8 @@ public class SecuriteFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.security, container, false);
-		
+		( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
 //		mapView = (MapView) v.findViewById(R.id.map);
 //	    mapView.onCreate(savedInstanceState);
 //	    map = mapView.getMap();
@@ -62,7 +64,7 @@ public class SecuriteFragment extends BaseFragment {
 //				.fromResource(R.drawable.ets));
 //		map.addMarker(etsMarker);
 
-		final Activity activity = getActivity();
+		final AppCompatActivity activity = (AppCompatActivity) getActivity();
 
 		listView = (ListView) v.findViewById(android.R.id.list);
 
@@ -107,5 +109,10 @@ public class SecuriteFragment extends BaseFragment {
 		AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
 		return v; 
+	}
+
+	@Override
+	public String getFragmentTitle() {
+		return getString(R.string.menu_section_2_securite);
 	}
 }

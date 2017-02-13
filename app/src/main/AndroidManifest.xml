@@ -47,7 +47,8 @@
         android:configChanges="locale|layoutDirection"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/ETSMobileTheme"
+        >
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
             android:configChanges="locale|layoutDirection"
@@ -84,6 +85,20 @@
             android:label="@string/title_activity_news_details"
             android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
             android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="ca.etsmtl.applets.etsmobile.ui.activity.BotinActivity"
+            android:label="@string/title_bottin"
+            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />

@@ -14,6 +14,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -29,6 +30,8 @@ public class FAQFragment extends WebFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_faq, container, false);
+        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
         final WebView faqWebView = (WebView) v.findViewById(R.id.faq_webview);
         faqWebView.getSettings().setJavaScriptEnabled(true);
         faqWebView.getSettings().setAppCachePath(getActivity().getCacheDir().getAbsolutePath());

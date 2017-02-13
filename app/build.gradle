@@ -12,6 +12,7 @@ apply plugin: 'com.android.application'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url 'https://github.com/leonardocardoso/mvn-repo/raw/master/maven-deploy' }
 }
 
 
@@ -65,13 +66,17 @@ dependencies {
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.11'
     compile 'joda-time:joda-time:2.3'
     compile 'org.joda:joda-convert:1.7'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+
     compile 'com.android.support:support-v4:23.1.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
         transitive = true;
     }
-    compile 'com.google.android.gms:play-services-gcm:8.4.0'
-    compile 'com.google.android.gms:play-services-wearable:8.4.0'
-    compile 'com.google.android.gms:play-services-analytics:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:10.0.0'
+    compile 'com.google.android.gms:play-services-wearable:10.0.0'
+    compile 'com.google.android.gms:play-services-analytics:10.0.0'
+
+    compile 'com.google.android.gms:play-services-base:10.0.0'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'io.supportkit:core:latest.release'
@@ -89,5 +94,11 @@ dependencies {
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.5.0'
     compile 'com.j256.ormlite:ormlite-core:4.43'
     compile 'com.j256.ormlite:ormlite-android:4.43'
+
+    compile('com.mikepenz:materialdrawer:5.8.0@aar') {
+        transitive = true
+    }
+    compile 'com.github.markushi:circlebutton:1.1'
+
 
 }

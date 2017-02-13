@@ -51,7 +51,6 @@
         <item>@color/violet</item>
         <item>@color/magenta</item>
     </array>
-
     <color name="SupportKit_accent">@color/ets_red</color>
     <color name="SupportKit_accentDark">@color/ets_red_darker</color>
     <color name="SupportKit_accentLight">@color/red_light</color>
@@ -76,4 +75,14 @@
     <color name="SupportKit_userMessageFailedBackground">@color/red_light</color>
     <color name="SupportKit_userMessageText">#ffffff</color>
 
+
+    <!-- Material-->
+    <color name="ColorPrimary">@color/ets_red</color>
+    <color name="ColorPrimaryDark">@color/ets_red_darker</color>
+    <color name="ColorPrimaryLight">@color/ets_red_pale</color>
+    <color name="ColorAccent">@color/black</color>
+    <color name="ColorPrimaryText">#212121</color>
+    <color name="ColorSecondaryText">#757575</color>
+    <color name="ColorIcons">#FFFFFF</color>
+    <color name="ColorDivider">#BDBDBD</color>
 </resources>

@@ -2,6 +2,7 @@ package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.app.AlertDialog;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -47,8 +48,8 @@ import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
-import ca.etsmtl.applets.etsmobile.model.TodaysCourses;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseTodayDecorator;
@@ -63,6 +64,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 public class HoraireFragment extends HttpFragment implements Observer, OnDateSelectedListener {
 
+    public static final String TAG = "HoraireFragment";
     private HoraireManager horaireManager;
     private CustomProgressDialog customProgressDialog;
     private DateTime dateTime = new DateTime();
@@ -95,57 +97,17 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         switch (item.getItemId()) {
 
             case R.id.menu_item_save_in_calendar:
-
-                new AsyncTask<Object, Void, Object>() {
-                    private Exception exception = null;
-
-                    protected void onPreExecute() {
-                        customProgressDialog = new CustomProgressDialog(getActivity(), R.drawable.loading_spinner, getString(R.string.dialog_Updating_Calendar));
-                        customProgressDialog.show();
-                    }
-
-                    @Override
-                    protected Object doInBackground(Object... params) {
-                        try {
-                            horaireManager.updateCalendar();
-                        } catch (Exception e) {
-                            exception = e;
-                        }
-                        return null;
-                    }
-
-                    protected void onPostExecute(Object result) {
-
-                        customProgressDialog.dismiss();
-                        if (exception != null) {
-                            Toast.makeText(getActivity(), getString(R.string.toast_Calendar_Update_Error), Toast.LENGTH_SHORT).show();
-                        } else {
-
-                            //Launch native calendar app
-                            long startMillis = java.lang.System.currentTimeMillis();
-                            Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
-                            builder.appendPath("time");
-                            ContentUris.appendId(builder, startMillis);
-
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(builder.build());
-
-                            startActivity(intent);
-
-                        }
-                    }
-
-                }.execute();
-
-
+                showCalendarPickerDialog();
                 return true;
             case R.id.calendar_display_toggle:
                 if(listDisplay){
 
                     item.setIcon(R.drawable.list_icon);
+                    item.setTitle(R.string.list);
                     listDisplay = false;
                 }else{
                     item.setIcon(R.drawable.icon_calendar);
+                    item.setTitle(R.string.calendar);
                     listDisplay = true;
                 }
                 horraireViewSwitcher.showNext();
@@ -166,6 +128,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.calendar_horaire_layout, container, false);
         ButterKnife.bind(this, v);
+        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
 
         databaseHelper = new DatabaseHelper(getActivity());
 
@@ -212,6 +175,11 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
         return v;
 
+    }
+
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_1_horaire);
     }
 
     @Override
@@ -326,7 +294,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     }
 
     public void openCourseListDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.dialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         if (seanceAdapter.getCount() > 0) {
             builder.setAdapter(seanceAdapter, null);
             builder.setTitle(R.string.today_course);
@@ -377,4 +345,105 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
         openCourseListDialog();
     }
+
+    /**
+     * Shows a dialog to the user inviting him/her to select a type of calendar. It is based between
+     * three choices:
+     *
+     * Replaced days (Jours remplacés)
+     * Courses (Séances)
+     * ETS public calendar (Calendrier public ÉTS)
+     */
+
+    public void showCalendarPickerDialog() {
+
+         /*
+          Not sure if replaced days is even needed but let's leave it here since it has been
+          given to us by the Signets API.
+          */
+
+        String[] eventsTypes = {getString(R.string.export_replaced_days_calendar), getString(R.string.export_courses_calendar), getString(R.string.export_public_events_calendar)};
+        final boolean[] eventsSelection = {true, true, true};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.export_calendar_dialog_title);
+        builder.setMultiChoiceItems(eventsTypes, eventsSelection, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                eventsSelection[i] = b;
+            }
+        });
+
+        builder.setPositiveButton(R.string.export_calendar_dialog_positive_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                new AsyncUpdateCalendar(eventsSelection[0], eventsSelection[1], eventsSelection[2]).execute();
+            }
+        });
+
+        builder.setNegativeButton(R.string.export_calendar_dialog_negative_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
+    private class AsyncUpdateCalendar extends AsyncTask<Object, Void, Object> {
+
+        /**
+         *  Async class responsible for synchronizing the calendar in the background so the user
+         *  experience isn't affected.
+         */
+
+        private boolean isJoursRemplacesSelected;
+        private boolean isSeancesSelected;
+        private boolean isCalPublicSelected;
+        private Exception exception = null;
+
+        public AsyncUpdateCalendar(boolean tempJoursRemplacesEvent, boolean tempSeancesEvent, boolean tempCalPublicEvent) {
+            isJoursRemplacesSelected = tempJoursRemplacesEvent;
+            isSeancesSelected = tempSeancesEvent;
+            isCalPublicSelected = tempCalPublicEvent;
+        }
+
+        protected void onPreExecute() {
+            customProgressDialog = new CustomProgressDialog(getActivity(), R.drawable.loading_spinner, getString(R.string.dialog_Updating_Calendar));
+            customProgressDialog.show();
+        }
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            try {
+                horaireManager.updateCalendar(isJoursRemplacesSelected, isSeancesSelected, isCalPublicSelected);
+            } catch (Exception e) {
+                exception = e;
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Object result) {
+
+            customProgressDialog.dismiss();
+            if (exception != null) {
+                Toast.makeText(getActivity(), getString(R.string.toast_Calendar_Update_Error), Toast.LENGTH_SHORT).show();
+            } else {
+
+                //Launch native calendar app
+                long startMillis = java.lang.System.currentTimeMillis();
+                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                builder.appendPath("time");
+                ContentUris.appendId(builder, startMillis);
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(builder.build());
+
+                startActivity(intent);
+
+            }
+        }
+    }
+    
 }

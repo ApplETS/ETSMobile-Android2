@@ -25,8 +25,6 @@ import java.util.List;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -35,6 +33,8 @@ import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -46,7 +46,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 
-public class UrgenceActivity extends Activity {
+public class UrgenceActivity extends AppCompatActivity {
 
 	private static final String APPLICATION_PDF = "application/pdf";
 	private static final String SDCARD = Environment
@@ -57,6 +57,7 @@ public class UrgenceActivity extends Activity {
 
 	private String[] urgence;
 	private WebView webView;
+	private Toolbar toolbar;
 
 	private void copyAssets() {
 		final AssetManager assetManager = getAssets();
@@ -105,10 +106,14 @@ public class UrgenceActivity extends Activity {
 		setContentView(R.layout.urgence);
 		id = getIntent().getExtras().getInt("id");
 		webView = (WebView) findViewById(R.id.web_view);
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setDisplayShowHomeEnabled(false);		
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		getSupportActionBar().setTitle("");
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 		urgence = getResources().getStringArray(R.array.secu_urgence);
+
+		getSupportActionBar().setTitle(urgence[id]);
 		String url = "";
 		
 		switch (--id) {
@@ -152,7 +157,6 @@ public class UrgenceActivity extends Activity {
 		
 		webView.requestFocus();
 
-		actionBar.setTitle(urgence[id]);
 		findViewById(R.id.voirPDF_button).setOnClickListener(
 				new OnClickListener() {
 
@@ -194,7 +198,7 @@ public class UrgenceActivity extends Activity {
 				+ pdf_raw));
 		intent.setDataAndType(data, UrgenceActivity.APPLICATION_PDF);
 		if (isCallable(intent)) {
-			startActivityForResult(intent, Activity.RESULT_OK);
+			startActivityForResult(intent, AppCompatActivity.RESULT_OK);
 		}
 	}
 	

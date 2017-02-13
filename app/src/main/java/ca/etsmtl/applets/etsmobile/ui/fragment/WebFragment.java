@@ -17,7 +17,12 @@ public class WebFragment extends BaseFragment {
 		super.onCreateView(inflater, container, savedInstanceState);
 		return container;
 	}
-	
+
+	@Override
+	public String getFragmentTitle() {
+		return "";
+	}
+
 	@Override
 	public void onResume() {
 		super.onResume();
