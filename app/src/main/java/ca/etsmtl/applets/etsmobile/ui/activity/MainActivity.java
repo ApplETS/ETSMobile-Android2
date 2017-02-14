@@ -337,6 +337,7 @@ public class MainActivity extends AppCompatActivity {
                             prefs.edit().putString("language", "fr").apply();
 //                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
                             recreate();
+                            TodayWidgetProvider.updateAllWidgets(MainActivity.this);
                         }
                     });
             builder.setNegativeButton(getResources().getString(R.string.lang_choix_negatif),
@@ -346,10 +347,10 @@ public class MainActivity extends AppCompatActivity {
                             prefs.edit().putString("language", "en").apply();
 //                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
                             recreate();
+                            TodayWidgetProvider.updateAllWidgets(MainActivity.this);
                         }
                     });
             builder.show();
-            TodayWidgetProvider.updateAllWidgets(this);
         }
 
         // Pass the event to ActionBarDrawerToggle, if it returns
