@@ -19,6 +19,11 @@ public class Utils {
         NodeApi.GetConnectedNodesResult nodesResult =
                 Wearable.NodeApi.getConnectedNodes(googleApiClient).await();
         List<Node> nodes = nodesResult.getNodes();
+        for (Node node : nodes) {
+            if(node.isNearby()) {
+                return node.getId();
+            }
+        }
         if (nodes.size() > 0) {
             return nodes.get(0).getId();
         }
