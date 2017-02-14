@@ -45,6 +45,7 @@ import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
+import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
@@ -156,7 +157,9 @@ public class MainActivity extends AppCompatActivity {
         String studentName = "";
         String codeUniversel = "";
         ProfilManager profilManager = new ProfilManager(this);
-        if(profilManager.getEtudiant() != null){
+        Etudiant etudiant = profilManager.getEtudiant();
+        if(etudiant != null){
+
             studentName = profilManager.getEtudiant().prenom.replace("  ","") +" "+ profilManager.getEtudiant().nom.replace(" ","");
             codeUniversel= profilManager.getEtudiant().codePerm;
         }

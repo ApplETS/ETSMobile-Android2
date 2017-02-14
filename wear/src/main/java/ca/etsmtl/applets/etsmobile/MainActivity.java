@@ -1,133 +1,227 @@
 package ca.etsmtl.applets.etsmobile;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageApi;
-import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends WearableActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, DataApi.DataListener{
+import ca.etsmtl.applets.etsmobile.service.Utils;
 
-    TextView mClock, mText;
+public class MainActivity extends WearableActivity {
+
+    TextView mClock;
     ListView listView;
-    GoogleApiClient googleClient;
-    ArrayList<Seances> seanceList = new ArrayList<Seances>();
+    TodayAdapter todayAdapter;
     private static final SimpleDateFormat AMBIENT_DATE_FORMAT =
             new SimpleDateFormat("HH:mm", Locale.US);
+
+    BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mClock = (TextView) findViewById(R.id.clock);
-        listView = (ListView) findViewById(R.id.list);
+        listView = (ListView) findViewById(R.id.listview_wear);
 
+        todayAdapter = new TodayAdapter(this, R.layout.row_today_courses, new ArrayList<Seances>());
+        listView.setAdapter(todayAdapter);
 
-        googleClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        googleClient.connect();
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                ArrayList<Seances> seances = intent.getParcelableArrayListExtra("seances");
+
+                todayAdapter.clear();
+                todayAdapter.addAll(seances);
+                todayAdapter.notifyDataSetChanged();
+
+            }
+        };
 
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         mClock.setText(AMBIENT_DATE_FORMAT.format(new Date()));
+
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(broadcastReceiver, new IntentFilter("seances_update"));
+
+        new SendMessageAsyncTask(this).execute();
     }
 
     @Override
-    public void onDataChanged(DataEventBuffer dataEvents)
-    {
-        Log.v("onDataChanged", "entered successfully" );
-        for (DataEvent event : dataEvents)
-        {
-            Log.v("onDataChanged", "entered for with " + event.getType() );
-
-            DataItem item = event.getDataItem();
-            DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-            if(!dataMap.get("map").equals("nothing to show!")) {
-                DataMap mMap = dataMap.getDataMap("map");
-                String itemPath = item.getUri().getPath();
-                    Seances seances = new Seances();
-                    seances.getData(mMap);
-                    seanceList.add(seances);
-                Collections.sort(seanceList, new SeanceComparator());
-                listView.setAdapter(new TodayAdapter(this,R.layout.row_today_courses,seanceList));
-            }else{
-                mText.setText(dataMap.get("map").toString());
-            }
-        }
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this)
+                .unregisterReceiver(broadcastReceiver);
     }
 
-    class SendToDataLayerThread extends Thread {
-        String path;
-        String message;
 
-        // Constructor to send a message to the data layer
-        SendToDataLayerThread(String p, String msg) {
-            path = p;
-            message = msg;
+    /**
+     * Used to notify ETSMobile on the cellphone that we want to receive seances
+     */
+    private class SendMessageAsyncTask extends
+            AsyncTask<Void, Void, Void> {
+
+        private Context mContext;
+
+        SendMessageAsyncTask(Context context) {
+            mContext = context;
         }
 
-        public void run() {
-            NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(googleClient).await();
-            for (Node node : nodes.getNodes()) {
-                MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(googleClient, node.getId(), path, message.getBytes()).await();
-                if (result.getStatus().isSuccess()) {
-                    Log.v("wearThread", "Message: {" + message + "} sent to: " + node.getDisplayName());
-                } else {
-                    // Log an error
-                    Log.v("wearThread", "ERROR: failed to send Message");
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            GoogleApiClient googleApiClient = new GoogleApiClient.Builder(mContext)
+                    .addApi(Wearable.API)
+                    .build();
+
+            ConnectionResult connectionResult = googleApiClient.blockingConnect(
+                    Constants.GOOGLE_API_CLIENT_TIMEOUT_S, TimeUnit.SECONDS);
+
+            if (!connectionResult.isSuccess() || !googleApiClient.isConnected()) {
+                Log.e("ETSMobile-Wear", connectionResult.getErrorMessage());
+                return null;
+            }
+
+            MessageApi.SendMessageResult result =
+                    Wearable.MessageApi.sendMessage(
+                            googleApiClient,
+                            Utils.getRemoteNodeId(googleApiClient),
+                            "/today_req",
+                            null)
+                            .await();
+
+            if (result.getStatus().isSuccess()) {
+                Log.d("wearThread", "SUCCESS : Message sent");
+            } else {
+                Log.d("wearThread", "ERROR: failed to send Message");
+            }
+
+            return null;
+
+        }
+
+    }
+
+    /* NOT USED AS onDataChanged ALWAYS EXECUTED (new instance of object in WearService)
+    // This is used to access the data layer api and retrieve previously stored data
+    private class FetchDataAsyncTask extends
+            AsyncTask<Void, Void, ArrayList<Seances>> {
+
+        private Context mContext;
+
+        public FetchDataAsyncTask(Context context) {
+            mContext = context;
+        }
+
+        private String getLocalNodeId(GoogleApiClient googleApiClient) {
+            NodeApi.GetLocalNodeResult nodeResult = Wearable.NodeApi.getLocalNode(googleApiClient).await();
+            return nodeResult.getNode().getId();
+        }
+
+        private String getRemoteNodeId(GoogleApiClient googleApiClient) {
+            HashSet<String> results = new HashSet<String>();
+            NodeApi.GetConnectedNodesResult nodesResult =
+                    Wearable.NodeApi.getConnectedNodes(googleApiClient).await();
+            List<Node> nodes = nodesResult.getNodes();
+            if (nodes.size() > 0) {
+                return nodes.get(0).getId();
+            }
+            return null;
+        }
+
+        @Override
+        protected ArrayList<Seances> doInBackground(Void... params) {
+
+            ArrayList<Seances> seances = new ArrayList<>();
+
+            // Connect to Play Services and the Wearable API
+            GoogleApiClient googleApiClient = new GoogleApiClient.Builder(mContext)
+                    .addApi(Wearable.API)
+                    .build();
+
+            ConnectionResult connectionResult = googleApiClient.blockingConnect(
+                    Constants.GOOGLE_API_CLIENT_TIMEOUT_S, TimeUnit.SECONDS);
+
+            if (!connectionResult.isSuccess() || !googleApiClient.isConnected()) {
+                Log.e("ETSMobile-Wear", connectionResult.getErrorMessage());
+                return null;
+            }
+
+//            Uri uri = params[0];
+
+            Uri uri = new Uri.Builder()
+                    .scheme(PutDataRequest.WEAR_URI_SCHEME)
+                    .authority(getRemoteNodeId(googleApiClient))
+                    .path("/today_req")
+                    .build();
+
+            // /today_req
+            DataApi.DataItemResult dataItemResult = Wearable.DataApi
+                    .getDataItem(googleApiClient, uri).await();
+
+            if (dataItemResult.getStatus().isSuccess() && dataItemResult.getDataItem() != null) {
+                DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItemResult.getDataItem());
+
+                try {
+                    List<DataMap> listSeancesDataMap = new ArrayList<>(
+                            dataMapItem.getDataMap()
+                                    .getDataMapArrayList("list_seances")
+                    );
+
+                    // Loop through each attraction, adding them to the list
+                    for (DataMap seanceDataMap : listSeancesDataMap) {
+                        Seances seance = new Seances();
+                        seance.getData(seanceDataMap);
+                        seances.add(seance);
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
                 }
             }
+
+            return seances;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Seances> seances) {
+
+            Log.d("FetchDataAsyncTask", "seances.size():" + seances.size());
+            if (seances != null && seances.size() > 0) {
+                // Update UI based on the result of the background processing
+                Log.d("FetchDataAsyncTask", "result:" + seances);
+                todayAdapter.clear();
+                todayAdapter.addAll(seances);
+                todayAdapter.notifyDataSetChanged();
+            } else {
+                Log.e("FetchDataAsyncTask", "No seances returned");
+            }
         }
     }
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        Wearable.DataApi.addListener(googleClient, this);
-        Log.d("wearMainAct", "Request sent");
-        new SendToDataLayerThread("/today_req", "value_requested").start();
-    }
 
-    @Override
-    public void onConnectionSuspended(int cause) {
+    //*/
 
-    }
 
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d("wearMainAct", connectionResult.getErrorMessage());}
-
-    @Override
-    protected void onStop() {
-        if (null != googleClient && googleClient.isConnected()) {
-            googleClient.disconnect();
-        }
-        Wearable.DataApi.removeListener(googleClient, this);
-        super.onStop();
-    }
 }
