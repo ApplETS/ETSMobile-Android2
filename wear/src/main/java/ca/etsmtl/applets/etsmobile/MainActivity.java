@@ -8,9 +8,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
+import android.support.wearable.view.GridViewPager;
+import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -19,7 +19,6 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -27,32 +26,39 @@ import ca.etsmtl.applets.etsmobile.service.Utils;
 
 public class MainActivity extends WearableActivity {
 
-    TextView mClock;
-    ListView listView;
-    TodayAdapter todayAdapter;
+    SeancesPagerAdapter adapter;
     private static final SimpleDateFormat AMBIENT_DATE_FORMAT =
             new SimpleDateFormat("HH:mm", Locale.US);
 
     BroadcastReceiver broadcastReceiver;
+    private GridViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mClock = (TextView) findViewById(R.id.clock);
-        listView = (ListView) findViewById(R.id.listview_wear);
 
-        todayAdapter = new TodayAdapter(this, R.layout.row_today_courses, new ArrayList<Seances>());
-        listView.setAdapter(todayAdapter);
+
+        final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
+        stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
+            @Override
+            public void onLayoutInflated(WatchViewStub stub) {
+
+                pager = (GridViewPager) findViewById(R.id.pager);
+
+                adapter = new SeancesPagerAdapter(MainActivity.this, new ArrayList<Seances>());
+
+                pager.setAdapter(adapter);
+
+            }
+        });
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 ArrayList<Seances> seances = intent.getParcelableArrayListExtra("seances");
 
-                todayAdapter.clear();
-                todayAdapter.addAll(seances);
-                todayAdapter.notifyDataSetChanged();
+                adapter.setSeances(seances);
 
             }
         };
@@ -62,7 +68,6 @@ public class MainActivity extends WearableActivity {
     @Override
     public void onResume() {
         super.onResume();
-        mClock.setText(AMBIENT_DATE_FORMAT.format(new Date()));
 
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(broadcastReceiver, new IntentFilter("seances_update"));

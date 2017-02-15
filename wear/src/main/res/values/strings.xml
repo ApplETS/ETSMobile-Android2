@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ÉTSMobile Wearable</string>
+    <string name="horaire">%1$s %2$s %3$s</string>
 </resources>
