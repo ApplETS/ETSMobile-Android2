@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
+import android.support.wearable.view.DotsPageIndicator;
 import android.support.wearable.view.GridViewPager;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
@@ -49,6 +50,8 @@ public class MainActivity extends WearableActivity {
                 adapter = new SeancesPagerAdapter(MainActivity.this, new ArrayList<Seances>());
 
                 pager.setAdapter(adapter);
+                DotsPageIndicator dotsPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
+                dotsPageIndicator.setPager(pager);
 
             }
         });

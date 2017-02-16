@@ -16,31 +16,9 @@
         android:id="@+id/page_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom">
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="50dp"
+        android:layout_centerHorizontal="true">
     </android.support.wearable.view.DotsPageIndicator>
-
-
-
-    <!--<TextView-->
-        <!--android:id="@+id/clock"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="top|center_horizontal"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--tools:text="time" />-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:orientation="vertical"-->
-        <!--android:padding="5dp">-->
-
-        <!--<ListView-->
-            <!--android:id="@+id/listview_wear"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_horizontal" />-->
-
-    <!--</LinearLayout>-->
 
 </RelativeLayout>
