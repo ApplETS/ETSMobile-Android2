@@ -45,6 +45,7 @@ public class WearService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
+
         if (messageEvent.getPath().equals("/today_req")) {
 
             final String message = new String(messageEvent.getData());
@@ -63,7 +64,6 @@ public class WearService extends WearableListenerService {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
 
             new SendToDataLayerThread("/today_req", seances, this).start();
 
