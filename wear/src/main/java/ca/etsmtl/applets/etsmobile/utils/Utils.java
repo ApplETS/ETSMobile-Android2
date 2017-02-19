@@ -1,4 +1,4 @@
-package ca.etsmtl.applets.etsmobile.service;
+package ca.etsmtl.applets.etsmobile.utils;
 
 
 import com.google.android.gms.common.api.GoogleApiClient;

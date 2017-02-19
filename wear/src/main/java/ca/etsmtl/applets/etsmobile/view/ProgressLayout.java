@@ -23,6 +23,8 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.drawable.Animatable;
 import android.os.Build;
@@ -38,7 +40,7 @@ public class ProgressLayout extends View implements Animatable {
 
     private static final int COLOR_EMPTY_DEFAULT = 0x00000000;
     private static final int COLOR_LOADED_DEFAULT = 0x11FFFFFF;
-    private static final int COLOR_LOADING_DEFAULT = 0x11424C54;
+    private static final int COLOR_LOADING_DEFAULT = 0xFF757575;
     private static final int PROGRESS_SECOND_MS = 1000;
 
     private static Paint paintProgressLoaded;
@@ -58,6 +60,7 @@ public class ProgressLayout extends View implements Animatable {
     private ProgressLayoutListener progressLayoutListener;
     private DateTime startDate;
     private DateTime endDate;
+    private boolean isSquare = false;
 
     public ProgressLayout(Context context) {
         this(context, null);
@@ -112,33 +115,59 @@ public class ProgressLayout extends View implements Animatable {
         canvas.drawRect(0, 0, mWidth, mHeight, paintProgressLoading);
 
 
-//        path.lineTo(mWidth, mHeight);
-//        path.lineTo(mWidth, mHeight/2);
-//        path.lineTo(mWidth / 2, mHeight/2);
-        RectF oval = new RectF(0, 0, mWidth, mHeight);
+        if (isSquare) {
 
-        int angle = calculateAngle(currentProgress);
-        Path path = new Path();
-        path.setFillType(Path.FillType.EVEN_ODD);
+            Path path = new Path();
 
-        if (angle == 360) {
-            path.addCircle(mWidth / 2, mHeight / 2, mWidth / 2, Path.Direction.CCW);
-            path.close();
+
+            RectF square = new RectF(-mWidth, -mHeight, mWidth * 2, mHeight * 2);
+            int angle = calculateAngle(currentProgress);
+            path.setFillType(Path.FillType.EVEN_ODD);
+
+            if (angle == 360) {
+                path.addRect(0, 0, mWidth, mHeight, Path.Direction.CCW);
+                path.close();
+            } else {
+
+
+                path.moveTo(mWidth / 2, mHeight / 2);
+                path.lineTo(mWidth / 2, 0);
+
+                path.arcTo(square, -90, calculateAngle(currentProgress));
+                path.lineTo(mWidth / 2, mHeight / 2);
+                path.close();
+
+            }
+            canvas.drawPath(path, paintProgressLoaded);
+
+            canvas.drawRoundRect(20, 20, mWidth - 20, mHeight - 20, 10, 10, paintProgressEmpty);
+
         } else {
+            RectF oval = new RectF(0, 0, mWidth, mHeight);
+            int angle = calculateAngle(currentProgress);
+            Path path = new Path();
+            path.setFillType(Path.FillType.EVEN_ODD);
 
-            path.moveTo(mWidth / 2, mHeight / 2);
-            path.lineTo(mWidth / 2, 0);
-            path.arcTo(oval, -90, calculateAngle(currentProgress));
-            path.lineTo(mWidth / 2, mHeight / 2);
-            path.close();
+            if (angle == 360) {
+                path.addCircle(mWidth / 2, mHeight / 2, mWidth / 2, Path.Direction.CCW);
+                path.close();
+            } else {
 
+                path.moveTo(mWidth / 2, mHeight / 2);
+                path.lineTo(mWidth / 2, 0);
+                path.arcTo(oval, -90, calculateAngle(currentProgress));
+                path.lineTo(mWidth / 2, mHeight / 2);
+                path.close();
+
+            }
+            canvas.drawPath(path, paintProgressLoaded);
+
+            canvas.drawOval(20, 20, mWidth - 20, mHeight - 20, paintProgressEmpty);
         }
-        canvas.drawPath(path, paintProgressLoaded);
 
 
 //        canvas.drawArc(oval, 0, 90, true, paintProgressLoaded);
 
-        canvas.drawOval(20, 20, mWidth - 20, mHeight - 20, paintProgressEmpty);
 
 //        canvas.drawRect(0, 0, calculatePositionIndex(currentProgress), mHeight, paintProgressLoaded);
     }
@@ -158,6 +187,7 @@ public class ProgressLayout extends View implements Animatable {
         paintProgressEmpty.setColor(emptyColor);
         paintProgressEmpty.setStyle(Paint.Style.FILL);
         paintProgressEmpty.setAntiAlias(true);
+//        paintProgressEmpty.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 
         paintProgressLoading = new Paint();
         paintProgressLoading.setColor(loadingColor);
@@ -170,6 +200,10 @@ public class ProgressLayout extends View implements Animatable {
         paintProgressLoaded.setAntiAlias(true);
 
         handlerProgress = new Handler();
+    }
+
+    public void setSquareDisplay(boolean isSquare) {
+        this.isSquare = isSquare;
     }
 
     private int calculatePositionIndex(int currentProgress) {

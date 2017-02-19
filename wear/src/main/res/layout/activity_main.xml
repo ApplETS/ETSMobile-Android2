@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.wearable.view.WatchViewStub xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/watch_view_stub"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:rectLayout="@layout/rect_activity_main"
-    app:roundLayout="@layout/round_activity_main"
-    tools:context=".MainActivity"
-    tools:deviceIds="wear" />
+    tools:deviceIds="wear">
+
+    <android.support.wearable.view.GridViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:keepScreenOn="true" />
+
+    <android.support.wearable.view.DotsPageIndicator
+        android:id="@+id/page_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="50dp"
+        android:layout_centerHorizontal="true">
+    </android.support.wearable.view.DotsPageIndicator>
+
+    <ImageView
+        android:id="@+id/imageview_no_courses"
+        android:src="@drawable/nothing"
+        android:layout_centerInParent="true"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="No courses" />
+
+</RelativeLayout>

@@ -13,6 +13,7 @@ import org.joda.time.DateTime;
 import java.util.List;
 import java.util.Locale;
 
+import ca.etsmtl.applets.etsmobile.utils.ShapeWear;
 import ca.etsmtl.applets.etsmobile.view.ProgressLayout;
 
 public class SeancesPagerAdapter extends GridPagerAdapter {
@@ -24,6 +25,7 @@ public class SeancesPagerAdapter extends GridPagerAdapter {
         mContext = context;
         this.mSeances = seancesList;
         this.inflater = LayoutInflater.from(context);
+        ShapeWear.initShapeWear(mContext);
     }
 
     @Override
@@ -62,6 +64,12 @@ public class SeancesPagerAdapter extends GridPagerAdapter {
 
         DateTime dateTime = new DateTime();
 
+        if (ShapeWear.getShape() == ShapeWear.ScreenShape.RECTANGLE) {
+            progressLayout.setSquareDisplay(true);
+        } else {
+            progressLayout.setSquareDisplay(false);
+        }
+
         //currently during the course
         if (dateTime.isBefore(endDateTime) && dateTime.isAfter(startDateTime)) {
             progressLayout.setBoundsCourse(startDateTime, endDateTime);
@@ -72,9 +80,9 @@ public class SeancesPagerAdapter extends GridPagerAdapter {
         }
 
 
-        DateTime.Property pDoW = dateTime.dayOfWeek();
-        DateTime.Property pDoM = dateTime.dayOfMonth();
-        DateTime.Property pMoY = dateTime.monthOfYear();
+        DateTime.Property pDoW = startDateTime.dayOfWeek();
+        DateTime.Property pDoM = startDateTime.dayOfMonth();
+        DateTime.Property pMoY = startDateTime.monthOfYear();
 
         Locale currentLocale = mContext.getResources().getConfiguration().locale;
 
@@ -111,4 +119,5 @@ public class SeancesPagerAdapter extends GridPagerAdapter {
         mSeances = seances;
         notifyDataSetChanged();
     }
+
 }

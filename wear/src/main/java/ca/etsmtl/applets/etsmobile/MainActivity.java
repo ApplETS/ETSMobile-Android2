@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -12,18 +13,31 @@ import android.support.wearable.view.DotsPageIndicator;
 import android.support.wearable.view.GridViewPager;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import ca.etsmtl.applets.etsmobile.service.Utils;
+import ca.etsmtl.applets.etsmobile.utils.Utils;
 
 public class MainActivity extends WearableActivity {
 
@@ -33,6 +47,7 @@ public class MainActivity extends WearableActivity {
 
     BroadcastReceiver broadcastReceiver;
     private GridViewPager pager;
+    private ImageView imageViewNoCourses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,28 +55,23 @@ public class MainActivity extends WearableActivity {
         setContentView(R.layout.activity_main);
 
 
-        final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
-        stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
-            @Override
-            public void onLayoutInflated(WatchViewStub stub) {
+        pager = (GridViewPager) findViewById(R.id.pager);
 
-                pager = (GridViewPager) findViewById(R.id.pager);
+        imageViewNoCourses = (ImageView) findViewById(R.id.imageview_no_courses);
 
-                adapter = new SeancesPagerAdapter(MainActivity.this, new ArrayList<Seances>());
+        adapter = new SeancesPagerAdapter(MainActivity.this, new ArrayList<Seances>());
 
-                pager.setAdapter(adapter);
-                DotsPageIndicator dotsPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
-                dotsPageIndicator.setPager(pager);
+        pager.setAdapter(adapter);
 
-            }
-        });
+        DotsPageIndicator dotsPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
+        dotsPageIndicator.setPager(pager);
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 ArrayList<Seances> seances = intent.getParcelableArrayListExtra("seances");
 
-                adapter.setSeances(seances);
+                loadSeances(seances);
 
             }
         };
@@ -72,8 +82,10 @@ public class MainActivity extends WearableActivity {
     public void onResume() {
         super.onResume();
 
+        new FetchDataAsyncTask(this).execute();
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(broadcastReceiver, new IntentFilter("seances_update"));
+
 
         new SendMessageAsyncTask(this).execute();
     }
@@ -83,6 +95,24 @@ public class MainActivity extends WearableActivity {
         super.onPause();
         LocalBroadcastManager.getInstance(this)
                 .unregisterReceiver(broadcastReceiver);
+    }
+
+    public void loadSeances(List<Seances> seances) {
+        for (int i = 0; i < seances.size(); i++) {
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss");
+            DateTime seanceDateFin = formatter.parseDateTime(seances.get(i).dateFin);
+            if (DateTime.now().isAfter(seanceDateFin)) {
+                seances.remove(i);
+            }
+        }
+
+        adapter.setSeances(seances);
+
+        if (seances.size() == 0) {
+            imageViewNoCourses.setVisibility(View.VISIBLE);
+        } else {
+            imageViewNoCourses.setVisibility(View.GONE);
+        }
     }
 
 
@@ -133,7 +163,6 @@ public class MainActivity extends WearableActivity {
 
     }
 
-    /* NOT USED AS onDataChanged ALWAYS EXECUTED (new instance of object in WearService)
     // This is used to access the data layer api and retrieve previously stored data
     private class FetchDataAsyncTask extends
             AsyncTask<Void, Void, ArrayList<Seances>> {
@@ -150,7 +179,6 @@ public class MainActivity extends WearableActivity {
         }
 
         private String getRemoteNodeId(GoogleApiClient googleApiClient) {
-            HashSet<String> results = new HashSet<String>();
             NodeApi.GetConnectedNodesResult nodesResult =
                     Wearable.NodeApi.getConnectedNodes(googleApiClient).await();
             List<Node> nodes = nodesResult.getNodes();
@@ -216,13 +244,10 @@ public class MainActivity extends WearableActivity {
         @Override
         protected void onPostExecute(ArrayList<Seances> seances) {
 
-            Log.d("FetchDataAsyncTask", "seances.size():" + seances.size());
             if (seances != null && seances.size() > 0) {
                 // Update UI based on the result of the background processing
                 Log.d("FetchDataAsyncTask", "result:" + seances);
-                todayAdapter.clear();
-                todayAdapter.addAll(seances);
-                todayAdapter.notifyDataSetChanged();
+                loadSeances(seances);
             } else {
                 Log.e("FetchDataAsyncTask", "No seances returned");
             }
