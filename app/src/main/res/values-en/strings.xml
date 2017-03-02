@@ -28,7 +28,7 @@
     <string name="menu_section_1_horaire">Schedule</string>
     <string name="menu_section_1_notes">Grades</string>
     <string name="menu_section_1_stages">Internships</string>
-    <string name="menu_section_1_profil">Profile</string>
+    <string name="menu_section_1_profil"> My profile</string>
     <string name="menu_section_1_monETS">MonETS</string>
     <string name="menu_section_1_bandwith">Bandwidth</string>
 
@@ -194,4 +194,6 @@
     <string name="erreur_lien">Unfortunately, there is no external link for this article</string>
     <string name="erreur_chargement">Unfortunately, there was a problem loading the news items</string>
 
-</resources>
+
+    <!-- Showcase -->
+    <string name="new_future_message">Tap the profile image in the menu to access the Profile(when logged in)</string></resources>

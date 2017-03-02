@@ -28,7 +28,7 @@
     <string name="menu_section_1_horaire">Horaire</string>
     <string name="menu_section_1_notes">Notes</string>
     <string name="menu_section_1_stages">Stages</string>
-    <string name="menu_section_1_profil">Profil</string>
+    <string name="menu_section_1_profil">Mon profil</string>
     <string name="menu_section_1_monETS">MonETS</string>
     <string name="menu_section_1_bandwith">Bande Passante</string>
 
@@ -301,6 +301,7 @@
     <string name="others_notifications">+ %1$s autre%2$s</string>
     <string name="title_bottin">Bottin</string>
 
-    <!-- -->
-    <string name="new_future_message">Tap the profile image in the menu to access the Profile(when logged in)</string>
+    <!-- Showcase -->
+    <string name="new_future_message">Appuyer sur l\'image de proile pour acceder à votre profile (lorsque vous êtes connecté)</string>
+
 </resources>

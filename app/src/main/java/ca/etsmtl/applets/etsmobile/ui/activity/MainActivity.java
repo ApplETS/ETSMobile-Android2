@@ -181,19 +181,19 @@ public class MainActivity extends AppCompatActivity {
     private void initDrawer() {
         final boolean isUserLoggedIn = ApplicationManager.userCredentials != null;
         String studentName = getString(R.string.action_login);
-        String codeUniversel = "";
+        String myProfileText = "";
         ProfilManager profilManager = new ProfilManager(this);
         if(profilManager.getEtudiant() != null){
             studentName = profilManager.getEtudiant().prenom.replace("  ","") +" "+ profilManager.getEtudiant().nom.replace(" ","");
-            codeUniversel= profilManager.getEtudiant().codePerm;
+            myProfileText= getString(R.string.menu_section_1_profil);
         }
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.profile_header_background)
                 .addProfiles(
                         new ProfileDrawerItem()
-                                .withName(codeUniversel)
-                                .withEmail(studentName)
+                                .withName(studentName)
+                                .withEmail(myProfileText)
                                 .withIcon(R.drawable.ic_user)
                 ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
