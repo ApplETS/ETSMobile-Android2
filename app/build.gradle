@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
+
     }
 
     dependencies {
@@ -13,6 +14,8 @@ apply plugin: 'com.android.application'
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     maven { url 'https://github.com/leonardocardoso/mvn-repo/raw/master/maven-deploy' }
+    maven { url "https://jitpack.io" }
+
 }
 
 
@@ -99,6 +102,8 @@ dependencies {
         transitive = true
     }
     compile 'com.github.markushi:circlebutton:1.1'
+
+    compile 'uk.co.samuelwall:material-tap-target-prompt:1.9.3'
 
 
 }

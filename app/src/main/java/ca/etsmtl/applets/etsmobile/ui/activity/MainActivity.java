@@ -12,21 +12,19 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
@@ -45,15 +43,10 @@ import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BaseFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.CommentairesFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.EventsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment;
@@ -71,6 +64,7 @@ import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.supportkit.core.User;
 import io.supportkit.ui.ConversationActivity;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 /**
  * Main Activity for �TSMobile, handles the login and the Navigation Drawer (menu)
@@ -98,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final long LOGIN = 18;
     public static final long LOGOUT = 19;
+    public static final String FIRST_LAUNCH_PREF = "firstLauch";
 
 
     private String TAG = "MainActivity";
@@ -134,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         setLocale();
         initDrawer();
 
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
 //
@@ -149,11 +145,42 @@ public class MainActivity extends AppCompatActivity {
 
         securePreferences = new SecurePreferences(this);
 
+        if(prefs.getBoolean(FIRST_LAUNCH_PREF, true) && ApplicationManager.userCredentials != null )
+            showCaseProfile();
+
+    }
+
+    private void showCaseProfile(){
+        final MaterialTapTargetPrompt.Builder tapTargetPromptBuilder = new MaterialTapTargetPrompt.Builder(this)
+                .setPrimaryText(getString(R.string.menu_section_2_news))
+                .setSecondaryText(getString(R.string.new_future_message))
+                .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                .setIcon(R.drawable.ic_menu_black_24dp)
+                .setBackgroundColourFromRes(R.color.ColorPrimary)
+                .setTarget(toolbar.getChildAt(1));
+
+        tapTargetPromptBuilder.setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+        {
+            @Override
+            public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+            {
+                //Do something such as storing a value so that this prompt is never shown again
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean(FIRST_LAUNCH_PREF, false);
+                editor.commit();            }
+
+            @Override
+            public void onHidePromptComplete()
+            {
+
+            }
+        });
+        tapTargetPromptBuilder.show();
     }
 
     private void initDrawer() {
-        boolean isUserLoggedIn = ApplicationManager.userCredentials != null;
-        String studentName = "";
+        final boolean isUserLoggedIn = ApplicationManager.userCredentials != null;
+        String studentName = getString(R.string.action_login);
         String codeUniversel = "";
         ProfilManager profilManager = new ProfilManager(this);
         if(profilManager.getEtudiant() != null){
@@ -162,13 +189,19 @@ public class MainActivity extends AppCompatActivity {
         }
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.drawable.ets_background_grayscale)
+                .withHeaderBackground(R.drawable.profile_header_background)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(codeUniversel).withEmail(studentName).withSelectedTextColor(ContextCompat.getColor(this,R.color.red)).withIcon(R.drawable.ic_user)
+                        new ProfileDrawerItem()
+                                .withName(codeUniversel)
+                                .withEmail(studentName)
+                                .withIcon(R.drawable.ic_user)
                 ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
-                        goToFragment(new ProfilFragment(), ProfilFragment.getClassName());
+                        if(isUserLoggedIn)
+                            goToFragment(new ProfilFragment(), ProfilFragment.getClassName());
+                        else
+                            login();
                         return false;
                     }
                 }).build();
@@ -177,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
-                .withSelectedItem(TODAY_FRAGMENT)
+                .withSelectedItem(ABOUT_FRAGMENT)
                 .withDisplayBelowStatusBar(true)
                 //                .withActionBarDrawerToggle(true)
                 .addDrawerItems(
@@ -441,12 +474,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (drawerItem.getIdentifier() == COMMENTS_FRAGMENT) {
                     selectAccount();
                 } else if (drawerItem.getIdentifier() == LOGIN) {
-                    final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
-                        @Override
-                        public void run(AccountManagerFuture<Bundle> future) {
-                            //Login successful
-                        }
-                    }, null);
+                   login();
                 } else if (drawerItem.getIdentifier() == LOGOUT) {
                     openLogoutDialogAlert();
                 }
@@ -497,6 +525,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void setTitle(String title){
         getSupportActionBar().setTitle(title);
+    }
+
+    public void login(){
+        final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
+            @Override
+            public void run(AccountManagerFuture<Bundle> future) {
+                //Login successful
+
+            }
+        }, null);
+
     }
 
 }

@@ -301,4 +301,6 @@
     <string name="others_notifications">+ %1$s autre%2$s</string>
     <string name="title_bottin">Bottin</string>
 
+    <!-- -->
+    <string name="new_future_message">Tap the profile image in the menu to access the Profile(when logged in)</string>
 </resources>
