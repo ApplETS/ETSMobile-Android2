@@ -175,7 +175,6 @@ public class NoteManager extends Observable implements RequestListener<Object> {
                     coursDao.deleteById(coursNew.id);
 
                     deleteExpiredListeDesElementsEvaluation(coursNew.id);
-                    Log.v("Supression", coursNew.id + " supprimé");
                 }
             }
 
@@ -206,7 +205,6 @@ public class NoteManager extends Observable implements RequestListener<Object> {
                     Dao<Trimestre, String> trimestreDao = dbHelper.getDao(Trimestre.class);
                     trimestreDao.deleteById(trimestreNew.abrege);
 
-                    Log.v("Supression", trimestreNew.abrege + " supprimé");
                 }
             }
 
@@ -241,7 +239,6 @@ public class NoteManager extends Observable implements RequestListener<Object> {
 
             listeDesElementsEvaluationDao.deleteById(id);
 
-            Log.v("Supression", id + " supprimé");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -276,7 +273,6 @@ public class NoteManager extends Observable implements RequestListener<Object> {
                 if (!elementEvaluationHashMap.containsKey(element.id))
                     elementsEvaluationDao.deleteById(element.id);
 
-                Log.v("Supression", element.id + " supprimé");
             }
         } catch (SQLException e) {
             e.printStackTrace();
