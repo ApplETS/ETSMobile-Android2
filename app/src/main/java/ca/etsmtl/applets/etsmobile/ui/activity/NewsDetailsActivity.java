@@ -46,6 +46,11 @@ public class NewsDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_details);
 
 
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(name);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (savedInstanceState == null) {
 
             Bundle extras = getIntent().getExtras();
@@ -57,13 +62,8 @@ public class NewsDetailsActivity extends AppCompatActivity {
             type = extras.getString("type");
             urlImage = extras.getString("urlImage");
             value = extras.getString("value");
-            setTitle(name);
+            toolbar.setTitle(name);
         }
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(name);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         listView = (ListView) findViewById(R.id.list_news_details);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

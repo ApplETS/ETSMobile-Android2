@@ -41,7 +41,7 @@ public class NotesDetailsActivity extends AppCompatActivity {
             String groupe = extras.getString("groupe");
             String titreCours = extras.getString("titreCours");
 
-            setTitle(sigle);
+
 
             Fragment fragment = NotesDetailsFragment.newInstance(sigle, sessionName, abrege, cote, groupe, titreCours);
 
@@ -53,6 +53,8 @@ public class NotesDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 //            getSupportActionBar().setTitle(titreCours);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            toolbar.setTitle(String.format("%s - %s", sigle, groupe));
 
         }
 

@@ -33,7 +33,7 @@ public class BottinDetailsActivity extends AppCompatActivity {
                 return;
             }
 
-            setTitle("Details");
+
             String nom = extras.getString("nom");
             String prenom = extras.getString("prenom");
             String telBureau = extras.getString("telBureau");
@@ -41,7 +41,7 @@ public class BottinDetailsActivity extends AppCompatActivity {
             String courriel = extras.getString("courriel");
             String service = extras.getString("service");
             String titre = extras.getString("titre");
-
+            toolbar.setTitle("Details");
 
             Fragment fragment = BottinDetailsFragment.newInstance(nom, prenom, telBureau, emplacement, courriel, service, titre);
             getSupportFragmentManager().beginTransaction()
