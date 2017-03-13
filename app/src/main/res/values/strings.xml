@@ -87,6 +87,7 @@
     <string name="ponderation">Pondération</string>
     <string name="noteOnPourcent">%1$s/%2$s (%3$s%%)</string>
     <string name="toast_Sync_Fail">La synchronisation a échoué.</string>
+    <string name="notes_details_sigle_groupe">%s - %s</string>
 
     <!-- Profil Page -->
     <string name="profil_nom_prenom">Nom, Prénom</string>

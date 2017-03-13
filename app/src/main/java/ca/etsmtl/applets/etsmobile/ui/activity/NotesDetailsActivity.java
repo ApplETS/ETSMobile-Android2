@@ -54,7 +54,7 @@ public class NotesDetailsActivity extends AppCompatActivity {
 //            getSupportActionBar().setTitle(titreCours);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-            toolbar.setTitle(String.format("%s - %s", sigle, groupe));
+            toolbar.setTitle(String.format(getString(R.string.notes_details_sigle_groupe), sigle, groupe));
 
         }
 
