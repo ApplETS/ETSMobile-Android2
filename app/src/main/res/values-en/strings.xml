@@ -143,10 +143,10 @@
     <string name="lundi_le_26_avril">Monday, April 26</string>
     <string name="menu_botin_search_title">search</string>
     <string name="categories">Categories</string>
-    <string name="title_activity_moodle_course">MoodleCourseActivity</string>
-    <string name="title_activity_news_details">NewsDetailsActivity</string>
-    <string name="title_activity_bottin_details">BottinDetailsActivity</string>
-    <string name="title_activity_notes_details">NotesDetailsActivity</string>
+    <string name="title_activity_moodle_course">Moodle</string>
+    <string name="title_activity_news_details">News</string>
+    <string name="title_activity_bottin_details">Directory</string>
+    <string name="title_activity_notes_details">Grades</string>
 
 
     <!--Today  -->
