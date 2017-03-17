@@ -3,6 +3,7 @@ package ca.etsmtl.applets.etsmobile.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RemoteViews;
@@ -20,6 +21,7 @@ import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
+import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -48,11 +50,13 @@ public class TodayWidgetService extends RemoteViewsService {
         private Context context;
         private int appWidgetId;
         private DatabaseHelper databaseHelper;
+        private int textColor;
 
         public ListRemoteViewFactory(Context context, Intent intent) {
             this.context = context;
             this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
+            this.textColor = intent.getIntExtra(Constants.TEXT_COLOR, Color.WHITE);
             listeDataRowItems = new ArrayList<TodayDataRowItem>();
 
         }
@@ -184,12 +188,24 @@ public class TodayWidgetService extends RemoteViewsService {
                         mDateDebut.getMinuteOfHour());
                 String dateFinStr = String.format("%d h %02d", mDateFin.getHourOfDay(),
                         mDateFin.getMinuteOfHour());
+
                 rv.setTextViewText(R.id.tv_today_heure_debut, dateDebutStr);
+                rv.setTextColor(R.id.tv_today_heure_debut, textColor);
+
                 rv.setTextViewText(R.id.tv_today_heure_fin, dateFinStr);
+                rv.setTextColor(R.id.tv_today_heure_fin, textColor);
+
                 rv.setTextViewText(R.id.tv_today_cours_groupe, seance.coursGroupe);
+                rv.setTextColor(R.id.tv_today_cours_groupe, textColor);
+
                 rv.setTextViewText(R.id.tv_today_nom_activite, seance.nomActivite);
+                rv.setTextColor(R.id.tv_today_nom_activite, textColor);
+
                 rv.setTextViewText(R.id.tv_today_libelle_cours, seance.libelleCours);
+                rv.setTextColor(R.id.tv_today_libelle_cours, textColor);
+
                 rv.setTextViewText(R.id.tv_today_local, seance.local);
+                rv.setTextColor(R.id.tv_today_local, textColor);
             }
 
             return rv;

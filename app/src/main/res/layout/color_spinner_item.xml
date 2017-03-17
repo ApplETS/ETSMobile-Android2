@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:id="@+id/color_spinner_item_tv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="45dp"
+    android:gravity="center"
+    android:textColor="@color/black"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

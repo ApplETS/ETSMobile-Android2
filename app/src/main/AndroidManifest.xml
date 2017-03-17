@@ -229,6 +229,12 @@
         <service android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
+        <activity android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

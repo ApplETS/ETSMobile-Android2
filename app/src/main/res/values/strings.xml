@@ -302,4 +302,11 @@
     <string name="others_notifications">+ %1$s autre%2$s</string>
     <string name="title_bottin">Bottin</string>
 
+    <!--Widget-->
+    <string name="appwidget_text">Widget</string>
+    <string name="configure">Configurer</string>
+    <string name="config_bg_color">Couleur de fond</string>
+    <string name="config_text_color">Couleur de police</string>
+    <string name="config_translucent_bg">Fond translucide</string>
+
 </resources>

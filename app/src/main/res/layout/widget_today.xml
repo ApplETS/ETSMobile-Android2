@@ -3,8 +3,7 @@
     android:id="@+id/today_widget"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/widget_margin"
-    android:background="@drawable/widget_today_layer_list_logged_in">
+    android:padding="@dimen/widget_margin">
 
     <RelativeLayout
         android:id="@+id/widget_title_bar"
@@ -35,7 +34,7 @@
                 android:layout_alignParentRight="true"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
-                android:drawableLeft="@drawable/ic_sync"
+                android:drawableLeft="@drawable/ic_sync_style"
                 android:background="?android:attr/selectableItemBackground"
                 android:visibility="gone" />
 
@@ -66,6 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/today_no_classes"
+        android:textColor="@color/white"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:visibility="gone"
         android:layout_centerInParent="true"

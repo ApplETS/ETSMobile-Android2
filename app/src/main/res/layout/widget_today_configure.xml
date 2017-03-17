@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/config_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Configuration"
+        android:textColor="@color/black"
+        android:textSize="22sp"/>
+
+    <RelativeLayout
+        android:id="@+id/layout_option_bg_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/config_title">
+
+        <Spinner
+            android:id="@+id/bg_color_spinner"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
+        </Spinner>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/config_bg_color"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/bg_color_spinner"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_option_text_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_option_bg_color">
+
+        <Spinner
+            android:id="@+id/bg_text_color_spinner"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
+        </Spinner>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/config_text_color"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/bg_text_color_spinner"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_option_translucent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_option_text_color">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/config_translucent_bg"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true"/>
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/translucent_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            app:buttonTint="@color/ets_red_fonce"
+            android:layout_centerVertical="true"
+            android:checked="true"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/ok_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:background="@color/ets_red_fonce"/>
+
+</RelativeLayout>

@@ -6,7 +6,9 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -39,7 +41,8 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class TodayWidgetProvider extends AppWidgetProvider implements RequestListener<Object>, Observer {
 
-    private static int widgetLayoutId = R.layout.widget_today;
+    private static int widgetInitialLayoutId = R.layout.widget_today;
+    private static int widgetLayoutId = R.id.today_widget;
     private static int syncBtnId = R.id.widget_sync_btn;
     private static int progressBarId = R.id.widget_progress_bar;
     private static int todayListId = R.id.widget_todays_list;
@@ -57,7 +60,17 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     private void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), widgetLayoutId);
+        RemoteViews views = new RemoteViews(context.getPackageName(), widgetInitialLayoutId);
+        int textColor = Color.WHITE;
+
+        // TODO get user colors prefs
+        if (TodayWidgetConfigureActivity.loadTranslucentPref(context, appWidgetId)) {
+            views.setInt(widgetLayoutId, "setBackgroundColor", Color.parseColor("#"+Integer.toHexString(ContextCompat.getColor(context, R.color.noir_pale))));
+        } else {
+            views.setInt(widgetLayoutId, "setBackgroundColor", Color.parseColor("#"+Integer.toHexString(ContextCompat.getColor(context, R.color.blanc_pale))));
+            textColor = Color.BLACK;
+            views.setTextColor(todayNameTvId, textColor);
+        }
 
         if (!syncEnCours && mUserLoggedIn) {
             views.setViewVisibility(syncBtnId, View.VISIBLE);
@@ -74,6 +87,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         if (mUserLoggedIn) {
             Intent intent = new Intent(context, TodayWidgetService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            intent.putExtra(Constants.TEXT_COLOR, textColor);
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
             views.setTextViewText(emptyViewId, context.getString(R.string.today_no_classes));
             views.setRemoteAdapter(appWidgetId, todayListId, intent);
@@ -130,6 +144,15 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     }
 
     @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        // When the user deletes the widget, delete the preference associated with it.
+        for (int appWidgetId : appWidgetIds) {
+            //TodayWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
+            TodayWidgetConfigureActivity.deleteTranslucentPref(context, appWidgetId);
+        }
+    }
+
+    @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         String actionStr = intent.getAction();
@@ -143,28 +166,6 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
             onUpdate(context, appWidgetManager, widgetsIds);
         }
-    }
-
-    /**
-     * <h1>Mise à jour de tous les widgets</h1>
-     *
-     * Procédure pouvant être appelée dans l'application principale afin de déclencher la mise à
-     * jour de tous les widgets
-     *
-     * @param context
-     */
-    public static void updateAllWidgets(Context context) {
-        Intent intent = new Intent(context, TodayWidgetProvider.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetsIds(context));
-        context.sendBroadcast(intent);
-    }
-
-    private static int[] allWidgetsIds(Context context) {
-        ComponentName componentName = new ComponentName(context, TodayWidgetProvider.class);
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-
-        return appWidgetManager.getAppWidgetIds(componentName);
     }
 
     private void setUpLoginBtn(Context context, RemoteViews views) {
@@ -300,6 +301,28 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
+    }
+
+    /**
+     * <h1>Mise à jour de tous les widgets</h1>
+     *
+     * Procédure pouvant être appelée dans l'application principale afin de déclencher la mise à
+     * jour de tous les widgets
+     *
+     * @param context
+     */
+    public static void updateAllWidgets(Context context) {
+        Intent intent = new Intent(context, TodayWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetsIds(context));
+        context.sendBroadcast(intent);
+    }
+
+    private static int[] allWidgetsIds(Context context) {
+        ComponentName componentName = new ComponentName(context, TodayWidgetProvider.class);
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+        return appWidgetManager.getAppWidgetIds(componentName);
     }
 }
 

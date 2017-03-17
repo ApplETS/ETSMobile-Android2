@@ -8,5 +8,6 @@
     android:previewImage="@drawable/widget_today_preview"
     android:updatePeriodMillis="10800000"
     android:widgetCategory="home_screen"
-    android:resizeMode="horizontal|vertical">
+    android:resizeMode="horizontal|vertical"
+    android:configure="ca.etsmtl.applets.etsmobile.widget.TodayWidgetConfigureActivity">
 </appwidget-provider>

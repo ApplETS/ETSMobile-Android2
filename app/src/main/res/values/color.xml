@@ -85,4 +85,21 @@
     <color name="ColorSecondaryText">#757575</color>
     <color name="ColorIcons">#FFFFFF</color>
     <color name="ColorDivider">#BDBDBD</color>
+
+    <array name="widget_bg_colors">
+        <item>@color/black</item>
+        <item>@color/white</item>
+        <item>@color/ets_red</item>
+        <item>@color/bright_pink</item>
+        <item>@color/orange</item>
+        <item>@color/yellow</item>
+        <item>@color/chartreuse</item>
+        <item>@color/green</item>
+        <item>@color/spring_green</item>
+        <item>@color/cyan</item>
+        <item>@color/azure</item>
+        <item>@color/blue</item>
+        <item>@color/violet</item>
+        <item>@color/magenta</item>
+    </array>
 </resources>
