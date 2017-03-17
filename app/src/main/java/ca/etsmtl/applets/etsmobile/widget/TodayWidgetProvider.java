@@ -91,7 +91,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             views.setRemoteAdapter(appWidgetId, todayListId, intent);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, todayListId);
             views.setViewVisibility(emptyViewId, View.VISIBLE);
-            setUpSyncBtn(context, views);
+            setUpSyncBtn(context, views, textColor);
         } else {
             views.setViewVisibility(syncBtnId, View.GONE);
             views.setViewVisibility(progressBarId, View.GONE);
@@ -100,7 +100,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
 
         setUpTodayDateTv(context, views);
-        setUpLoginBtn(context, views);
+        setUpLoginBtn(context, views, textColor);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -165,7 +165,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
     }
 
-    private void setUpLoginBtn(Context context, RemoteViews views) {
+    private void setUpLoginBtn(Context context, RemoteViews views, int textColor) {
         int loginBtnId = R.id.widget_login_btn;
 
         if (mUserLoggedIn) {
@@ -176,6 +176,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intentLogin, 0);
             views.setOnClickPendingIntent(loginBtnId, pendingIntent);
             views.setTextViewText(loginBtnId, context.getString(R.string.touch_login));
+            views.setTextColor(loginBtnId, textColor);
             views.setViewVisibility(loginBtnId, View.VISIBLE);
         }
     }
@@ -197,14 +198,14 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
     }
 
-    private void setUpSyncBtn(Context context, RemoteViews views) {
+    private void setUpSyncBtn(Context context, RemoteViews views, int color) {
         Intent intentRefresh = new Intent(context,  TodayWidgetProvider.class);
         intentRefresh.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         intentRefresh.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetsIds(context));
         PendingIntent pendingIntentRefresh = PendingIntent.getBroadcast(context, 0, intentRefresh,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        views.setOnClickPendingIntent(syncBtnId, pendingIntentRefresh);
+        //TODO change color
     }
 
     private boolean userLoggedIn() {
