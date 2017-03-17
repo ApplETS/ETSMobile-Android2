@@ -6,9 +6,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -61,16 +60,15 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
                                 int appWidgetId) {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), widgetInitialLayoutId);
-        int textColor = Color.WHITE;
+        int bgColor = TodayWidgetConfigureActivity.loadBgColorPref(context, appWidgetId);
+        int textColor = TodayWidgetConfigureActivity.loadTextColorPref(context, appWidgetId);
 
-        // TODO get user colors prefs
         if (TodayWidgetConfigureActivity.loadTranslucentPref(context, appWidgetId)) {
-            views.setInt(widgetLayoutId, "setBackgroundColor", Color.parseColor("#"+Integer.toHexString(ContextCompat.getColor(context, R.color.noir_pale))));
-        } else {
-            views.setInt(widgetLayoutId, "setBackgroundColor", Color.parseColor("#"+Integer.toHexString(ContextCompat.getColor(context, R.color.blanc_pale))));
-            textColor = Color.BLACK;
-            views.setTextColor(todayNameTvId, textColor);
+            bgColor = ColorUtils.setAlphaComponent(bgColor, 155);
         }
+
+        views.setInt(widgetLayoutId, "setBackgroundColor", bgColor);
+        views.setTextColor(todayNameTvId, textColor);
 
         if (!syncEnCours && mUserLoggedIn) {
             views.setViewVisibility(syncBtnId, View.VISIBLE);
@@ -145,10 +143,9 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        // When the user deletes the widget, delete the preference associated with it.
+        // When the user deletes the widget, delete the preferences associated with it.
         for (int appWidgetId : appWidgetIds) {
-            //TodayWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
-            TodayWidgetConfigureActivity.deleteTranslucentPref(context, appWidgetId);
+            TodayWidgetConfigureActivity.deleteAllPreferences(context, appWidgetId);
         }
     }
 

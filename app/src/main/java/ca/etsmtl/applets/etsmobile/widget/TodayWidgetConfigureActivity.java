@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -19,27 +20,25 @@ import ca.etsmtl.applets.etsmobile2.R;
 public class TodayWidgetConfigureActivity extends Activity {
 
     private static final String PREFS_NAME = "ca.etsmtl.applets.etsmobile.TodayWidget";
-    private static final String PREF_PREFIX_KEY = "appwidget_";
-    private static final String PREF_TRANSLUCENT_PREFIX_KEY = "translucent_widget_";
     private static final String PREF_BG_COLOR_PREFIX_KEY = "bg_color_widget_";
+    private static final String PREF_TEXT_COLOR_PREFIX_KEY = "text_color_widget_";
+    private static final String PREF_TRANSLUCENT_PREFIX_KEY = "translucent_widget_";
+
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    //EditText mAppWidgetText;
     CheckBox mTranslucentCheckBox;
-    Spinner mColorSpinner;
+    Spinner mBgColorSpinner;
     Spinner mTextColorSpinner;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = TodayWidgetConfigureActivity.this;
 
-            // When the button is clicked, store the string locally
-            //String widgetText = mAppWidgetText.getText().toString();
-            //saveTitlePref(context, mAppWidgetId, widgetText);
-
+            int bgColor = Integer.parseInt(mBgColorSpinner.getSelectedItem().toString());
+            saveBgColorPref(context, mAppWidgetId, bgColor);
+            int textColor = Integer.parseInt(mTextColorSpinner.getSelectedItem().toString());
+            saveTextColorPref(context, mAppWidgetId, textColor);
             saveTranslucentPref(context, mAppWidgetId, mTranslucentCheckBox.isChecked());
 
             // It is the responsibility of the configuration activity to update the app widget
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            //TodayWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
             TodayWidgetProvider.updateAllWidgets(context);
 
             // Make sure we pass back the original appWidgetId
@@ -54,6 +53,42 @@ public class TodayWidgetConfigureActivity extends Activity {
         super();
     }
 
+    static void saveBgColorPref(Context context, int appWidgetId, int value) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putInt(PREF_BG_COLOR_PREFIX_KEY + appWidgetId, value);
+        prefs.apply();
+    }
+
+    static int loadBgColorPref(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+
+        return prefs.getInt(PREF_BG_COLOR_PREFIX_KEY + appWidgetId, Color.BLACK);
+    }
+
+    private static void deleteBgColorPref(Context context, int appWidgetId) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.remove(PREF_BG_COLOR_PREFIX_KEY + appWidgetId);
+        prefs.apply();
+    }
+
+    static void saveTextColorPref(Context context, int appWidgetId, int value) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putInt(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId, value);
+        prefs.apply();
+    }
+
+    static int loadTextColorPref(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+
+        return prefs.getInt(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId, Color.WHITE);
+    }
+
+    private static void deleteTextColorPref(Context context, int appWidgetId) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.remove(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId);
+        prefs.apply();
+    }
+
     static void saveTranslucentPref(Context context, int appWidgetId, boolean value) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putBoolean(PREF_TRANSLUCENT_PREFIX_KEY + appWidgetId, value);
@@ -66,8 +101,16 @@ public class TodayWidgetConfigureActivity extends Activity {
         return prefs.getBoolean(PREF_TRANSLUCENT_PREFIX_KEY + appWidgetId, false);
     }
 
-    static void deleteTranslucentPref(Context context, int appWidgetId) {
+    private static void deleteTranslucentPref(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.remove(PREF_TRANSLUCENT_PREFIX_KEY + appWidgetId);
+        prefs.apply();
+    }
+
+    static void deleteAllPreferences(Context context, int appWidgetId) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.remove(PREF_BG_COLOR_PREFIX_KEY + appWidgetId);
+        prefs.remove(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId);
         prefs.remove(PREF_TRANSLUCENT_PREFIX_KEY + appWidgetId);
         prefs.apply();
     }
@@ -81,21 +124,23 @@ public class TodayWidgetConfigureActivity extends Activity {
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.widget_today_configure);
-        //mAppWidgetText = (EditText) findViewById(R.id.appwidget_text);
+
         mTranslucentCheckBox = (CheckBox) findViewById(R.id.translucent_checkbox);
+
         int[] colorsArray = getResources().getIntArray(R.array.widget_bg_colors);
         Integer[] colors = new Integer[colorsArray.length];
         for (int i = 0; i < colorsArray.length; i++) {
             colors[i] = Integer.valueOf(colorsArray[i]);
         }
         ColorSpinnerAdapter colorSpinnerAdapter = new ColorSpinnerAdapter(this, colors);
-        // TODO save colors prefs listen select
-        mColorSpinner = (Spinner) findViewById(R.id.bg_color_spinner);
-        mColorSpinner.setAdapter(colorSpinnerAdapter);
-        mColorSpinner.setSelection(0);
+
+        mBgColorSpinner = (Spinner) findViewById(R.id.bg_color_spinner);
+        mBgColorSpinner.setAdapter(colorSpinnerAdapter);
+        mBgColorSpinner.setSelection(0);
         mTextColorSpinner = (Spinner) findViewById(R.id.bg_text_color_spinner);
         mTextColorSpinner.setAdapter(colorSpinnerAdapter);
         mTextColorSpinner.setSelection(0);
+
         findViewById(R.id.ok_btn).setOnClickListener(mOnClickListener);
 
         // Find the widget id from the intent.
@@ -111,9 +156,6 @@ public class TodayWidgetConfigureActivity extends Activity {
             finish();
             return;
         }
-
-        //mAppWidgetText.setText(loadTitlePref(TodayWidgetConfigureActivity.this, mAppWidgetId));
-
     }
 }
 
