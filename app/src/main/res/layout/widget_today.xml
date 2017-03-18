@@ -27,16 +27,15 @@
             android:layout_height="30dp"
             android:layout_alignParentRight="true">
 
-            <Button
+            <ImageButton
                 android:id="@+id/widget_sync_btn"
+                android:contentDescription="Sync"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
-                android:drawableLeft="@drawable/ic_sync"
-                android:background="?android:attr/selectableItemBackground"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <ProgressBar
                 android:id="@+id/widget_progress_bar"

@@ -6,6 +6,14 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.net.Uri;
 import android.support.v4.graphics.ColorUtils;
 import android.view.View;
@@ -60,14 +68,6 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
                                 int appWidgetId) {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), widgetInitialLayoutId);
-        int bgColor = TodayWidgetConfigureActivity.loadBgColorPref(context, appWidgetId);
-        int textColor = TodayWidgetConfigureActivity.loadTextColorPref(context, appWidgetId);
-        int bgOpacity = TodayWidgetConfigureActivity.loadOpacityPref(context, appWidgetId);
-
-        bgColor = ColorUtils.setAlphaComponent(bgColor, bgOpacity);
-
-        views.setInt(widgetLayoutId, "setBackgroundColor", bgColor);
-        views.setTextColor(todayNameTvId, textColor);
 
         if (!syncEnCours && mUserLoggedIn) {
             views.setViewVisibility(syncBtnId, View.VISIBLE);
@@ -78,11 +78,16 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             views.setViewVisibility(syncBtnId, View.GONE);
         }
 
+        int bgColor = TodayWidgetConfigureActivity.loadBgColorPref(context, appWidgetId);
+        int textColor = TodayWidgetConfigureActivity.loadTextColorPref(context, appWidgetId);
+        int bgOpacity = TodayWidgetConfigureActivity.loadOpacityPref(context, appWidgetId);
+
         // Vue affichée lorsque la liste est vide
         views.setTextColor(emptyViewId, textColor);
         views.setEmptyView(todayListId, emptyViewId);
 
         if (mUserLoggedIn) {
+            views.setTextColor(todayNameTvId, textColor);
             Intent intent = new Intent(context, TodayWidgetService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             intent.putExtra(Constants.TEXT_COLOR, textColor);
@@ -101,6 +106,9 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
         setUpTodayDateTv(context, views);
         setUpLoginBtn(context, views, textColor);
+
+        bgColor = ColorUtils.setAlphaComponent(bgColor, bgOpacity);
+        views.setInt(widgetLayoutId, "setBackgroundColor", bgColor);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -198,13 +206,25 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
     }
 
-    private void setUpSyncBtn(Context context, RemoteViews views, int color) {
+    private void setUpSyncBtn(Context context, RemoteViews views, int textColor) {
         Intent intentRefresh = new Intent(context,  TodayWidgetProvider.class);
         intentRefresh.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         intentRefresh.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetsIds(context));
         PendingIntent pendingIntentRefresh = PendingIntent.getBroadcast(context, 0, intentRefresh,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_sync);
+
+        // Copie mutable de l'icône
+        icon = icon.copy(Bitmap.Config.ARGB_8888, true);
+        Paint paint = new Paint();
+        ColorFilter filter = new PorterDuffColorFilter(textColor, PorterDuff.Mode.SRC_IN);
+        paint.setColorFilter(filter);
+        Canvas canvas = new Canvas(icon);
+        canvas.drawBitmap(icon, 0, 0, paint);
+
+        views.setImageViewBitmap(syncBtnId, icon);
+        views.setInt(syncBtnId, "setBackgroundColor", Color.TRANSPARENT);
         views.setOnClickPendingIntent(syncBtnId, pendingIntentRefresh);
     }
 

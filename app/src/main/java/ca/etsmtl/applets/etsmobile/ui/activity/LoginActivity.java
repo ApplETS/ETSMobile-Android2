@@ -219,10 +219,8 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 mPasswordView.setError(getString(R.string.error_invalid_pwd));
                 mPasswordView.requestFocus();
             } else {
-                TodayWidgetProvider.updateAllWidgets(this);
-
                 ApplicationManager.userCredentials = userCredentials;
-
+                TodayWidgetProvider.updateAllWidgets(this);
 
                 String accountName = userCredentials.getUsername();
                 String accountPassword = userCredentials.getPassword();
