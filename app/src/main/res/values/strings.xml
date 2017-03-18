@@ -303,10 +303,9 @@
     <string name="title_bottin">Bottin</string>
 
     <!--Widget-->
-    <string name="appwidget_text">Widget</string>
-    <string name="configure">Configurer</string>
+    <string name="widget_configure">Configuration du widget</string>
     <string name="config_bg_color">Couleur de fond</string>
     <string name="config_text_color">Couleur de police</string>
-    <string name="config_translucent_bg">Fond translucide</string>
+    <string name="config_bg_opacity">Opacité du fond</string>
 
 </resources>

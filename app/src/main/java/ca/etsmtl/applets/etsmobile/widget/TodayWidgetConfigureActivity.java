@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import ca.etsmtl.applets.etsmobile.ui.adapter.ColorSpinnerAdapter;
@@ -22,10 +22,10 @@ public class TodayWidgetConfigureActivity extends Activity {
     private static final String PREFS_NAME = "ca.etsmtl.applets.etsmobile.TodayWidget";
     private static final String PREF_BG_COLOR_PREFIX_KEY = "bg_color_widget_";
     private static final String PREF_TEXT_COLOR_PREFIX_KEY = "text_color_widget_";
-    private static final String PREF_TRANSLUCENT_PREFIX_KEY = "translucent_widget_";
+    private static final String PREF_OPACITY_PREFIX_KEY = "opacity_widget_";
 
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    CheckBox mTranslucentCheckBox;
+    SeekBar mOpacitySeekBar;
     Spinner mBgColorSpinner;
     Spinner mTextColorSpinner;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -36,10 +36,10 @@ public class TodayWidgetConfigureActivity extends Activity {
             saveBgColorPref(context, mAppWidgetId, bgColor);
             int textColor = Integer.parseInt(mTextColorSpinner.getSelectedItem().toString());
             saveTextColorPref(context, mAppWidgetId, textColor);
-            saveTranslucentPref(context, mAppWidgetId, mTranslucentCheckBox.isChecked());
+            saveOpacityPref(context, mAppWidgetId, mOpacitySeekBar.getProgress());
 
             // It is the responsibility of the configuration activity to update the app widget
-            TodayWidgetProvider.updateAllWidgets(context);
+            TodayWidgetProvider.updateWidget(context, mAppWidgetId);
 
             // Make sure we pass back the original appWidgetId
             Intent resultValue = new Intent();
@@ -65,12 +65,6 @@ public class TodayWidgetConfigureActivity extends Activity {
         return prefs.getInt(PREF_BG_COLOR_PREFIX_KEY + appWidgetId, Color.BLACK);
     }
 
-    private static void deleteBgColorPref(Context context, int appWidgetId) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_BG_COLOR_PREFIX_KEY + appWidgetId);
-        prefs.apply();
-    }
-
     static void saveTextColorPref(Context context, int appWidgetId, int value) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putInt(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId, value);
@@ -83,35 +77,23 @@ public class TodayWidgetConfigureActivity extends Activity {
         return prefs.getInt(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId, Color.WHITE);
     }
 
-    private static void deleteTextColorPref(Context context, int appWidgetId) {
+    static void saveOpacityPref(Context context, int appWidgetId, int value) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId);
+        prefs.putInt(PREF_OPACITY_PREFIX_KEY + appWidgetId, value);
         prefs.apply();
     }
 
-    static void saveTranslucentPref(Context context, int appWidgetId, boolean value) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putBoolean(PREF_TRANSLUCENT_PREFIX_KEY + appWidgetId, value);
-        prefs.apply();
-    }
-
-    static boolean loadTranslucentPref(Context context, int appWidgetId) {
+    static int loadOpacityPref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
 
-        return prefs.getBoolean(PREF_TRANSLUCENT_PREFIX_KEY + appWidgetId, false);
-    }
-
-    private static void deleteTranslucentPref(Context context, int appWidgetId) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_TRANSLUCENT_PREFIX_KEY + appWidgetId);
-        prefs.apply();
+        return prefs.getInt(PREF_OPACITY_PREFIX_KEY + appWidgetId, 155);
     }
 
     static void deleteAllPreferences(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.remove(PREF_BG_COLOR_PREFIX_KEY + appWidgetId);
         prefs.remove(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId);
-        prefs.remove(PREF_TRANSLUCENT_PREFIX_KEY + appWidgetId);
+        prefs.remove(PREF_OPACITY_PREFIX_KEY + appWidgetId);
         prefs.apply();
     }
 
@@ -125,7 +107,7 @@ public class TodayWidgetConfigureActivity extends Activity {
 
         setContentView(R.layout.widget_today_configure);
 
-        mTranslucentCheckBox = (CheckBox) findViewById(R.id.translucent_checkbox);
+        mOpacitySeekBar = (SeekBar) findViewById(R.id.opacity_seekbar);
 
         int[] colorsArray = getResources().getIntArray(R.array.widget_bg_colors);
         Integer[] colors = new Integer[colorsArray.length];

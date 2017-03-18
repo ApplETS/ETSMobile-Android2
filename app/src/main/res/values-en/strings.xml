@@ -196,10 +196,9 @@
     <string name="erreur_chargement">Unfortunately, there was a problem loading the news items</string>
 
     <!--Widget-->
-    <string name="appwidget_text">Widget</string>
-    <string name="configure">Configure</string>
+    <string name="widget_configure">Widget Configuration</string>
     <string name="config_bg_color">Background color</string>
     <string name="config_text_color">Font color</string>
-    <string name="config_translucent_bg">Translucent background</string>
+    <string name="config_bg_opacity">Background opacity</string>
 
 </resources>

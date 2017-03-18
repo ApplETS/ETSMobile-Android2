@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Configuration"
+        android:text="@string/widget_configure"
         android:textColor="@color/black"
         android:textSize="22sp"/>
 
@@ -27,7 +27,9 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true">
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            style="@android:style/Widget.Holo.Light.Spinner">
         </Spinner>
 
         <TextView
@@ -37,7 +39,8 @@
             android:text="@string/config_bg_color"
             android:textColor="@color/black"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/bg_color_spinner"/>
+            android:layout_toLeftOf="@id/bg_color_spinner"
+            android:layout_toStartOf="@id/bg_color_spinner"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -51,7 +54,9 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true">
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            style="@android:style/Widget.Holo.Light.Spinner">
         </Spinner>
 
         <TextView
@@ -61,30 +66,39 @@
             android:text="@string/config_text_color"
             android:textColor="@color/black"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/bg_text_color_spinner"/>
+            android:layout_toLeftOf="@id/bg_text_color_spinner"
+            android:layout_toStartOf="@id/bg_text_color_spinner"/>
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/layout_option_translucent"
+        android:id="@+id/layout_option_opacity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/layout_option_text_color">
         <TextView
-            android:layout_width="fill_parent"
+            android:id="@+id/option_opacity_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="@string/config_translucent_bg"
+            android:text="@string/config_bg_opacity"
             android:textColor="@color/black"
             android:layout_centerVertical="true"/>
 
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/translucent_checkbox"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/opacity_seekbar"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            app:buttonTint="@color/ets_red_fonce"
+            android:layout_toRightOf="@id/option_opacity_tv"
+            android:layout_toEndOf="@id/option_opacity_tv"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:max="255"
+            android:progress="155"
+            android:hapticFeedbackEnabled="true"
             android:layout_centerVertical="true"
-            android:checked="true"/>
+            style="@android:style/Widget.Holo.Light.SeekBar"
+            android:progressTint="@color/ets_red_fonce"
+            android:thumbTint="@color/ets_red_fonce"/>
 
     </RelativeLayout>
 

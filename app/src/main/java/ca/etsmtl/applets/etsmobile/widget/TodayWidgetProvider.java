@@ -62,10 +62,9 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         RemoteViews views = new RemoteViews(context.getPackageName(), widgetInitialLayoutId);
         int bgColor = TodayWidgetConfigureActivity.loadBgColorPref(context, appWidgetId);
         int textColor = TodayWidgetConfigureActivity.loadTextColorPref(context, appWidgetId);
+        int bgOpacity = TodayWidgetConfigureActivity.loadOpacityPref(context, appWidgetId);
 
-        if (TodayWidgetConfigureActivity.loadTranslucentPref(context, appWidgetId)) {
-            bgColor = ColorUtils.setAlphaComponent(bgColor, 155);
-        }
+        bgColor = ColorUtils.setAlphaComponent(bgColor, bgOpacity);
 
         views.setInt(widgetLayoutId, "setBackgroundColor", bgColor);
         views.setTextColor(todayNameTvId, textColor);
@@ -80,6 +79,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
 
         // Vue affichée lorsque la liste est vide
+        views.setTextColor(emptyViewId, textColor);
         views.setEmptyView(todayListId, emptyViewId);
 
         if (mUserLoggedIn) {
@@ -205,7 +205,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         PendingIntent pendingIntentRefresh = PendingIntent.getBroadcast(context, 0, intentRefresh,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        //TODO change color
+        views.setOnClickPendingIntent(syncBtnId, pendingIntentRefresh);
     }
 
     private boolean userLoggedIn() {
@@ -299,6 +299,21 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
+    }
+
+    /**
+     * <h1>Mise à jour d'un widget</h1>
+     *
+     * Procédure pouvant être appelée dans l'application principale afin de déclencher la mise à
+     * jour d'un widget
+     *
+     * @param context
+     */
+    public static void updateWidget(Context context, int appWidgetId) {
+        Intent intent = new Intent(context, TodayWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[] {appWidgetId});
+        context.sendBroadcast(intent);
     }
 
     /**
