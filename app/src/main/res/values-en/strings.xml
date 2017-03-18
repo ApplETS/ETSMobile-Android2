@@ -86,8 +86,8 @@
     <string name="rangCentile">Percentile rank</string>
     <string name="ponderation">Relative weight</string>
     <string name="noteOnPourcent">%1$s/%2$s (%3$s%%)</string>
-    <string name="toast_Sync_Fail">Syncronization failed</string>
-    <string name="notes_details_sigle_groupe">%s - %s</string>
+    <string name="toast_Sync_Fail">Synchronization failed</string>
+    <string name="notes_details_sigle_groupe">%1$s - %2$s</string>
 
     <!-- Profil Page -->
     <string name="profil_nom_prenom">Name, First name</string>
