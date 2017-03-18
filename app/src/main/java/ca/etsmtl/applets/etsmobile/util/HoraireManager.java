@@ -121,7 +121,6 @@ public class HoraireManager extends Observable implements RequestListener<Object
                 if (!dbEvents.contains(eventsNew.getId())) {
                     Dao<Event, String> eventDao = dbHelper.getDao(Event.class);
                     eventDao.deleteById(eventsNew.getId());
-                    Log.v("Supression", eventsNew.getId() + " supprimé");
                 }
             }
         } catch (SQLException e) {
@@ -174,7 +173,6 @@ public class HoraireManager extends Observable implements RequestListener<Object
                     Dao<JoursRemplaces, String> JoursRemplacesDao = dbHelper.getDao(JoursRemplaces.class);
 
                     JoursRemplacesDao.deleteById(JoursRemplacesInDB.dateOrigine);
-                    Log.v("Supression", JoursRemplacesInDB.dateOrigine + " supprimé");
                 }
 
             }
@@ -352,7 +350,6 @@ public class HoraireManager extends Observable implements RequestListener<Object
                     Dao<HoraireActivite, String> horaireActiviteDao = dbHelper.getDao(HoraireActivite.class);
 
                     horaireActiviteDao.deleteById(horaireActiviteInDB.id);
-                    Log.v("Supression", horaireActiviteInDB.id + " supprimé");
                 }
 
             }

@@ -87,6 +87,7 @@
     <string name="ponderation">Relative weight</string>
     <string name="noteOnPourcent">%1$s/%2$s (%3$s%%)</string>
     <string name="toast_Sync_Fail">Syncronization failed</string>
+    <string name="notes_details_sigle_groupe">%s - %s</string>
 
     <!-- Profil Page -->
     <string name="profil_nom_prenom">Name, First name</string>
@@ -143,10 +144,10 @@
     <string name="lundi_le_26_avril">Monday, April 26</string>
     <string name="menu_botin_search_title">search</string>
     <string name="categories">Categories</string>
-    <string name="title_activity_moodle_course">MoodleCourseActivity</string>
-    <string name="title_activity_news_details">NewsDetailsActivity</string>
-    <string name="title_activity_bottin_details">BottinDetailsActivity</string>
-    <string name="title_activity_notes_details">NotesDetailsActivity</string>
+    <string name="title_activity_moodle_course">Moodle</string>
+    <string name="title_activity_news_details">News</string>
+    <string name="title_activity_bottin_details">Directory</string>
+    <string name="title_activity_notes_details">Grades</string>
 
 
     <!--Today  -->

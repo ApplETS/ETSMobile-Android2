@@ -30,7 +30,7 @@ public class FAQFragment extends WebFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_faq, container, false);
-        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+        ((MainActivity) getActivity()).setTitle(getFragmentTitle());
 
         final WebView faqWebView = (WebView) v.findViewById(R.id.faq_webview);
         faqWebView.getSettings().setJavaScriptEnabled(true);
@@ -55,4 +55,8 @@ public class FAQFragment extends WebFragment {
         return v;
     }
 
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_3_faq);
+    }
 }

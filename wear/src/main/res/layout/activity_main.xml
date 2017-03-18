@@ -1,41 +1,33 @@
-<android.support.wearable.view.BoxInsetLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.Activity.MainActivity"
     tools:deviceIds="wear">
 
-    <LinearLayout
+    <android.support.wearable.view.GridViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/ets_red_darker"
-        app:layout_box="all">
+        android:keepScreenOn="true" />
 
-        <TextView
-            android:id="@+id/clock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center_horizontal"
-            android:textColor="@android:color/white"
-            tools:text="time" />
+    <android.support.wearable.view.DotsPageIndicator
+        android:id="@+id/page_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="50dp"
+        android:layout_centerHorizontal="true">
+    </android.support.wearable.view.DotsPageIndicator>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/ets_red"
-            android:orientation="vertical"
-            android:padding="5dp">
+    <ImageView
+        android:id="@+id/imageview_no_courses"
+        android:src="@drawable/nothing"
+        android:layout_centerInParent="true"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="No courses" />
 
-            <ListView
-                android:id="@+id/list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
-
-        </LinearLayout>
-    </LinearLayout>
-</android.support.wearable.view.BoxInsetLayout>
+</RelativeLayout>

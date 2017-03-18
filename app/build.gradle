@@ -18,7 +18,7 @@ repositories {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    buildToolsVersion '25.0.0'
     useLibrary 'org.apache.http.legacy'
 
     lintOptions {
@@ -72,11 +72,11 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
         transitive = true;
     }
-    compile 'com.google.android.gms:play-services-gcm:10.0.0'
-    compile 'com.google.android.gms:play-services-wearable:10.0.0'
-    compile 'com.google.android.gms:play-services-analytics:10.0.0'
+    compile 'com.google.android.gms:play-services-gcm:10.0.1'
+    compile 'com.google.android.gms:play-services-wearable:10.0.1'
+    compile 'com.google.android.gms:play-services-analytics:10.0.1'
 
-    compile 'com.google.android.gms:play-services-base:10.0.0'
+    compile 'com.google.android.gms:play-services-base:10.0.1'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'io.supportkit:core:latest.release'
