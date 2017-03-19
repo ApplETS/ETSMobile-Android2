@@ -308,5 +308,6 @@
     <string name="config_bg_color">Couleur de fond</string>
     <string name="config_text_color">Couleur de police</string>
     <string name="config_bg_opacity">Opacité du fond</string>
+    <string name="config_widget_preview">Aperçu du widget</string>
 
 </resources>

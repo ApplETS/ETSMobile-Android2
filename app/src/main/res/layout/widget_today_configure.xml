@@ -14,7 +14,7 @@
         android:layout_marginBottom="8dp"
         android:text="@string/widget_configure"
         android:textColor="@color/black"
-        android:textSize="22sp"/>
+        android:textSize="25sp"/>
 
     <RelativeLayout
         android:id="@+id/layout_option_bg_color"
@@ -110,5 +110,32 @@
         android:textColor="@color/white"
         android:layout_alignParentBottom="true"
         android:background="@color/ets_red_fonce"/>
+
+    <RelativeLayout
+        android:id="@+id/layout_widget_preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_option_opacity"
+        android:layout_marginTop="5dp"
+        android:layout_above="@id/ok_btn">
+
+        <TextView
+            android:id="@+id/widget_preview_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/config_widget_preview"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <include
+            android:layout_below="@id/widget_preview_tv"
+            android:layout_width="@dimen/widget_preview_min_width"
+            android:layout_height="@dimen/widget_preview_min_height"
+            android:minHeight="@dimen/widget_min_height"
+            android:layout_centerHorizontal="true"
+            layout="@layout/widget_today" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

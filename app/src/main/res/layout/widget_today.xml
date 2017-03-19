@@ -42,7 +42,8 @@
                 android:indeterminateDrawable="@drawable/widget_today_progress_bar_style"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true" />
+                android:layout_alignParentRight="true"
+                android:visibility="invisible"/>
         </FrameLayout>
 
     </RelativeLayout>
