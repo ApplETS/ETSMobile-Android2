@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.widget;
 
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -13,8 +12,12 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -33,7 +36,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 /**
  * The configuration screen for the {@link TodayWidgetProvider TodayWidget} AppWidget.
  */
-public class TodayWidgetConfigureActivity extends Activity {
+public class TodayWidgetConfigureActivity extends AppCompatActivity {
 
     //******************************
     //CONSTANTES
@@ -219,6 +222,9 @@ public class TodayWidgetConfigureActivity extends Activity {
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.widget_today_configure);
+
+        setUpActionBar();
+
         mWidgetPreviewLayout = (RelativeLayout) findViewById(R.id.today_widget);
         mWidgetTodaysNameTv = (TextView) findViewById(R.id.widget_todays_name);
         syncBtn = (ImageButton) findViewById(R.id.widget_sync_btn);
@@ -229,8 +235,7 @@ public class TodayWidgetConfigureActivity extends Activity {
         mTextColorSpinner = (Spinner) findViewById(R.id.bg_text_color_spinner);
         setUpColorSpinner(mTextColorSpinner, mTextColorSpinnerListener);
 
-        mOpacitySeekBar = (SeekBar) findViewById(R.id.opacity_seekbar);
-        mOpacitySeekBar.setOnSeekBarChangeListener(mOpacityListener);
+        setUpOpacitySeekBar();
 
         findViewById(R.id.ok_btn).setOnClickListener(mOkBtnOnClickListener);
 
@@ -249,6 +254,13 @@ public class TodayWidgetConfigureActivity extends Activity {
         }
     }
 
+    private void setUpActionBar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.widget_config_toolbar);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.widget_configure));
+    }
+
     private void setUpColorSpinner(Spinner spinner, AdapterView.OnItemSelectedListener onItemSelectedListener) {
         if (mColorSpinnerAdapter == null) {
             int[] colorsArray = getResources().getIntArray(R.array.widget_bg_colors);
@@ -262,6 +274,26 @@ public class TodayWidgetConfigureActivity extends Activity {
         spinner.setAdapter(mColorSpinnerAdapter);
         spinner.setOnItemSelectedListener(onItemSelectedListener);
         spinner.setSelection(0);
+    }
+
+    private void setUpOpacitySeekBar() {
+        int mOpacitySeekBarColor = ContextCompat.getColor(this, R.color.ets_red_fonce);
+        mOpacitySeekBar = (SeekBar) findViewById(R.id.opacity_seekbar);
+
+        mOpacitySeekBar.setOnSeekBarChangeListener(mOpacityListener);
+
+        mOpacitySeekBar.getProgressDrawable().setColorFilter(mOpacitySeekBarColor,
+                PorterDuff.Mode.SRC_IN);
+
+        if (android.os.Build.VERSION.SDK_INT < 16) {
+            GradientDrawable gradientDrawable = new GradientDrawable();
+            gradientDrawable.setShape(GradientDrawable.OVAL);
+            gradientDrawable.setSize(50, 50);
+            gradientDrawable.setColor(mOpacitySeekBarColor);
+            mOpacitySeekBar.setThumb(gradientDrawable);
+        } else {
+            mOpacitySeekBar.getThumb().setColorFilter(mOpacitySeekBarColor, PorterDuff.Mode.SRC_IN);
+        }
     }
 }
 
