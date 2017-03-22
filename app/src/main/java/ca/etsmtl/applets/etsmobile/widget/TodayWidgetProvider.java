@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -16,6 +17,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.net.Uri;
 import android.support.v4.graphics.ColorUtils;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -132,9 +134,11 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             appWidgetsToBeUpdatedIds = appWidgetIds.clone();
         }
 
+        String lang = TodayWidgetConfigureActivity.loadLanguagePref(context, appWidgetIds[0]);
+        setAllWidgetsLocale(context, lang);
+
         // Mise à jour de chaque widget avec les données locales en attendant les données distantes
         for (int appWidgetId : appWidgetIds) {
-
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
@@ -226,6 +230,23 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         views.setImageViewBitmap(syncBtnId, icon);
         views.setInt(syncBtnId, "setBackgroundColor", Color.TRANSPARENT);
         views.setOnClickPendingIntent(syncBtnId, pendingIntentRefresh);
+    }
+
+    private void setAllWidgetsLocale(Context context, String language) {
+        Configuration configuration = new Configuration();
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        Locale locale;
+
+        if (language.equalsIgnoreCase("en")) {
+            locale = Locale.ENGLISH;
+        } else if (language.equalsIgnoreCase("fr"))
+            locale = Locale.CANADA_FRENCH;
+        else
+            locale = Locale.getDefault();
+
+        Locale.setDefault(locale);
+        configuration.locale = locale;
+        context.getResources().updateConfiguration(configuration, displayMetrics);
     }
 
     private boolean userLoggedIn() {
@@ -349,6 +370,12 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetsIds(context));
         context.sendBroadcast(intent);
+    }
+
+    public static void setAllWidgetsLanguage(Context context, String language) {
+        for (int id : allWidgetsIds(context)) {
+            TodayWidgetConfigureActivity.saveLanguagePref(context, id, language);
+        }
     }
 
     private static int[] allWidgetsIds(Context context) {

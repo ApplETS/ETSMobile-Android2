@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -45,6 +47,7 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
     private static final String PREF_BG_COLOR_PREFIX_KEY = "bg_color_widget_";
     private static final String PREF_TEXT_COLOR_PREFIX_KEY = "text_color_widget_";
     private static final String PREF_OPACITY_PREFIX_KEY = "opacity_widget_";
+    private static final String PREF_LANGUAGE_PREFIX_KEY = "language_widget_";
 
     //******************************
     //ATTRIBUTS
@@ -205,11 +208,24 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
         return prefs.getInt(PREF_OPACITY_PREFIX_KEY + appWidgetId, 155);
     }
 
+    static void saveLanguagePref(Context context, int appWidgetId, String value) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putString(PREF_LANGUAGE_PREFIX_KEY + appWidgetId, value);
+        prefs.apply();
+    }
+
+    static String loadLanguagePref(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+
+        return prefs.getString(PREF_LANGUAGE_PREFIX_KEY + appWidgetId, "fr");
+    }
+
     static void deleteAllPreferences(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.remove(PREF_BG_COLOR_PREFIX_KEY + appWidgetId);
         prefs.remove(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId);
         prefs.remove(PREF_OPACITY_PREFIX_KEY + appWidgetId);
+        prefs.remove(PREF_LANGUAGE_PREFIX_KEY + appWidgetId);
         prefs.apply();
     }
 
