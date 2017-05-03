@@ -42,6 +42,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 public class TodayFragment extends HttpFragment implements Observer {
 
+    private static final long JOUR_EN_MS =  86400000;
 
     private ListView todaysList;
     private HoraireManager horaireManager;
@@ -129,8 +130,8 @@ public class TodayFragment extends HttpFragment implements Observer {
             for (int i = listeDeSessions.liste.size() - 1; i > 0; i-- ) {
                 dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
                 dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
+                setSemesterProgressBarText(dateStart, dateEnd);
                 if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
-                    setSemesterProgressBarText(dateStart, dateEnd);
                     String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
                     String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
                     //todo dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateStartString, dateEndString), TodayFragment.this);
@@ -142,25 +143,30 @@ public class TodayFragment extends HttpFragment implements Observer {
         }
     }
 
-    private void setSemesterProgressBarText(Date dateStart, Date dateEnd) {
+    private void setSemesterProgressBarText(Date dateDebut, Date dateFin) {
         Date dateActuelle = new Date();
+        long dureeTotaleMs;
+        long nbJoursTotal;
+        long progressionMs;
+        long progressionJour;
 
-        if (dateActuelle.before(dateStart) || dateActuelle.after(dateEnd)) {
-            semesterProgressBar.setVisibility(View.INVISIBLE);
-            semesterProgressBarText.setVisibility(View.INVISIBLE);
-            return;
+        if (dateActuelle.after(dateDebut) && dateActuelle.before(dateFin)) {
+            dureeTotaleMs = dateFin.getTime() - dateDebut.getTime() + JOUR_EN_MS;
+            nbJoursTotal = TimeUnit.MILLISECONDS.toDays(dureeTotaleMs);
+            progressionMs = dateActuelle.getTime() - dateDebut.getTime();
+            progressionJour = TimeUnit.MILLISECONDS.toDays(progressionMs);
+            semesterProgressBar.setMax((int) nbJoursTotal);
+            semesterProgressBar.setProgress((int) progressionJour);
+            semesterProgressBarText.setText(getString(R.string.semester_progression) + getString(R.string.deux_points)
+                    + String.valueOf(progressionJour) + "/" + String.valueOf(nbJoursTotal)
+                    + getString(R.string.days));
+            semesterProgressBarText.setVisibility(View.VISIBLE);
+        } else if (dateActuelle.before(dateDebut)) {
+            progressionMs = dateDebut.getTime() - dateActuelle.getTime() + JOUR_EN_MS;
+            progressionJour = TimeUnit.MILLISECONDS.toDays(progressionMs) ;
+            semesterProgressBarText.setText(String.format(getString(R.string.days_before_session_start), String.valueOf(progressionJour)));
+            semesterProgressBarText.setVisibility(View.VISIBLE);
         }
-
-        long dureeTotaleMs = dateEnd.getTime() - dateStart.getTime();
-        long nbJoursTotal = TimeUnit.MILLISECONDS.toDays(dureeTotaleMs);
-        long progressionMs = dateActuelle.getTime() - dateStart.getTime();
-        long progressionJour = TimeUnit.MILLISECONDS.toDays(progressionMs);
-        semesterProgressBar.setMax((int) nbJoursTotal);
-        semesterProgressBar.setProgress((int) progressionJour);
-        semesterProgressBarText.setText(getString(R.string.semester_progression)
-                + getString(R.string.deux_points) + String.valueOf(progressionJour) + "/"
-                + String.valueOf(nbJoursTotal) + " " + getString(R.string.days));
-        semesterProgressBarText.setVisibility(View.VISIBLE);
     }
 
     @Override

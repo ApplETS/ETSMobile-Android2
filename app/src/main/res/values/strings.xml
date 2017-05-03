@@ -160,7 +160,8 @@
     <string name="deux_points">" : "</string>
     <string name="semester_progression">Progression de la session</string>
     <string name="days">jours</string>
-
+    <string name="days_before_session_start">%1$s jours avant le début de la prochaine session</string>
+    
     <!-- Horaire -->
     <string name="toast_Calendar_Update_Error">Une erreur est survenue lors de la mise à jour du calendrier.</string>
     <string name="dialog_Updating_Calendar">Mise à jour du calendrier en cours</string>
