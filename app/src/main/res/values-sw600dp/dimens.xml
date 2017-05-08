@@ -4,5 +4,8 @@
          Customize dimensions originally defined in res/values/dimens.xml (such as
          screen margins) for sw600dp devices (e.g. 7" tablets) here.
     -->
-
+    <dimen name="widget_min_height">60dp</dimen>
+    <dimen name="widget_min_width">250dp</dimen>
+    <dimen name="widget_preview_min_height">220dp</dimen>
+    <dimen name="widget_preview_min_width">500dp</dimen>
 </resources>

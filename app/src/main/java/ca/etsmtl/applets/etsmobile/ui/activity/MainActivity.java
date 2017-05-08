@@ -12,7 +12,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -25,8 +24,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
@@ -46,15 +43,10 @@ import java.util.Locale;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
-import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BaseFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.CommentairesFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.EventsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment;
@@ -69,12 +61,13 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
+import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
-import io.supportkit.core.User;
-import io.supportkit.ui.ConversationActivity;
+import io.smooch.core.User;
+import io.smooch.ui.ConversationActivity;
 
 /**
- * Main Activity for �TSMobile, handles the login and the Navigation Drawer (menu)
+ * Main Activity for ÉTSMobile, handles the login and the Navigation Drawer (menu)
  *
  * @author Philippe David
  */
@@ -299,7 +292,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void deconnexion() {
+
         ApplicationManager.deconnexion(this);
+        TodayWidgetProvider.updateAllWidgets(this);
     }
 
     @Override
@@ -337,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
                             prefs.edit().putString("language", "fr").apply();
 //                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
                             recreate();
+                            TodayWidgetProvider.updateAllWidgets(MainActivity.this);
                         }
                     });
             builder.setNegativeButton(getResources().getString(R.string.lang_choix_negatif),
@@ -346,6 +342,7 @@ public class MainActivity extends AppCompatActivity {
                             prefs.edit().putString("language", "en").apply();
 //                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
                             recreate();
+                            TodayWidgetProvider.updateAllWidgets(MainActivity.this);
                         }
                     });
             builder.show();
@@ -367,6 +364,7 @@ public class MainActivity extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         prefs = this.getSharedPreferences("Language", 0);
         String restoredText = prefs.getString("language", "");
+        TodayWidgetProvider.setAllWidgetsLanguage(this, restoredText);
         if (restoredText.equalsIgnoreCase("en")) {
             locale = Locale.ENGLISH;
         } else if (restoredText.equalsIgnoreCase("fr"))

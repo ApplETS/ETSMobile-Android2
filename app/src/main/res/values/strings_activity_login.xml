@@ -13,4 +13,6 @@
     <string name="error_invalid_email">Le code universel est invalide</string>
     <string name="error_invalid_pwd">Le mot de passe est invalide</string>
     <string name="error_field_required">Ce champ est requis</string>
+
+    <string name="touch_login">Veuillez toucher pour vous connecter</string>
 </resources>

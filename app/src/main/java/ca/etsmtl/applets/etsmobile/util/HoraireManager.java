@@ -1,6 +1,7 @@
 package ca.etsmtl.applets.etsmobile.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -29,7 +30,7 @@ import ca.etsmtl.applets.etsmobile.model.listeSeances;
 
 public class HoraireManager extends Observable implements RequestListener<Object> {
 
-    private Activity activity;
+    private Context context;
     private boolean syncSeancesEnded = false;
     private boolean syncJoursRemplacesEnded = false;
     private boolean syncEventListEnded = false;
@@ -37,8 +38,8 @@ public class HoraireManager extends Observable implements RequestListener<Object
     private String calendarName = "Mes cours";
 
 
-    public HoraireManager(final RequestListener<Object> listener, Activity activity) {
-        this.activity = activity;
+    public HoraireManager(final RequestListener<Object> listener, Context context) {
+        this.context = context;
 
     }
 
@@ -110,7 +111,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      */
     private void deleteExpiredEvent(EventList envEventList) {
 
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         ArrayList<Event> dbEvents = new ArrayList<Event>();
         try {
@@ -133,7 +134,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param eventList
      */
     private void createOrUpdateEventListInBD(EventList eventList) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         try {
             for (Event event : eventList) {
@@ -152,7 +153,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeJoursRemplaces
      */
     private void deleteExpiredJoursRemplaces(listeJoursRemplaces listeJoursRemplaces) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
         HashMap<String, JoursRemplaces> listeJoursRemplacesInAPI = new HashMap<String, JoursRemplaces>();
 
         //Building the list of entries in API
@@ -186,7 +187,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeJoursRemplaces
      */
     private void createOrUpdateJoursRemplacesInDB(listeJoursRemplaces listeJoursRemplaces) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         try {
             for (JoursRemplaces JoursRemplaces : listeJoursRemplaces.listeJours) {
@@ -204,7 +205,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeSeances
      */
     private void deleteExpiredSeances(listeSeances listeSeances) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         HashMap<String, Seances> listeSeancesInAPI = new HashMap<String, Seances>();
 
@@ -245,7 +246,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeSeances
      */
     private void createOrUpdateSeancesInDB(listeSeances listeSeances) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         try {
             for (Seances Seances : listeSeances.ListeDesSeances) {
@@ -263,7 +264,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeHoraireExamensFinaux
      */
     private void deleteExpiredExamensFinaux(listeHoraireExamensFinaux listeHoraireExamensFinaux) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         HashMap<String, HoraireExamenFinal> listeHoraireExamenFinalInAPI = new HashMap<String, HoraireExamenFinal>();
 
@@ -304,7 +305,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeHoraireExamensFinaux
      */
     private void createOrUpdateExamensFinauxInDB(listeHoraireExamensFinaux listeHoraireExamensFinaux) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         try {
             for (HoraireExamenFinal horaireExamenFinal : listeHoraireExamensFinaux.listeHoraire) {
@@ -322,7 +323,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeDesActivitesEtProf API list
      */
     private void deleteExpiredHoraireActivite(listeDesActivitesEtProf listeDesActivitesEtProf) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         HashMap<String, HoraireActivite> listeHoraireActiviteInAPI = new HashMap<String, HoraireActivite>();
 
@@ -364,7 +365,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeDesActivitesEtProf API list
      */
     private void createOrUpdateHoraireActiviteInDB(listeDesActivitesEtProf listeDesActivitesEtProf) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         try {
             for (HoraireActivite horaireActivite : listeDesActivitesEtProf.listeActivites) {
@@ -386,8 +387,8 @@ public class HoraireManager extends Observable implements RequestListener<Object
      */
     public void updateCalendar(boolean joursRemplacesSelected, boolean seancesSelected, boolean calPublicSelected) throws Exception {
 
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
-        AndroidCalendarManager androidCalendarManager = new AndroidCalendarManager(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+        AndroidCalendarManager androidCalendarManager = new AndroidCalendarManager(context);
 
         androidCalendarManager.deleteCalendar(calendarName);
         androidCalendarManager.createCalendar(calendarName);

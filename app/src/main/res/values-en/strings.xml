@@ -157,7 +157,8 @@
     <string name="horaire">Schedule for %1$s %3$s %2$s</string>
     <string name="date_text">%1$s %3$s %2$s</string>
     <string name="export_calendar">Export</string>
-    <string name="semester_progression">Semester\'s progression:</string>
+    <string name="deux_points">": "</string>
+    <string name="semester_progression">Semester\'s progression</string>
     <string name="days">days</string>
     <string name="days_before_session_start">%1$s days before the start of the next semester</string>
 
@@ -196,4 +197,13 @@
     <string name="erreur_lien">Unfortunately, there is no external link for this article</string>
     <string name="erreur_chargement">Unfortunately, there was a problem loading the news items</string>
 
+    <!--Widget-->
+    <string name="widget_configure">Widget Configuration</string>
+    <string name="config_bg_color">Background color</string>
+    <string name="config_text_color">Font color</string>
+    <string name="config_bg_opacity">Background opacity</string>
+    <string name="config_widget_preview">Preview widget</string>
+
+    <!-- Showcase -->
+    <string name="new_future_message">Tap the profile image in the menu to access the Profile(when logged in)</string>
 </resources>

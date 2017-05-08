@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/widget_config_toolbar"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"></include>
+
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:id="@+id/layout_option_bg_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:id="@+id/bg_color_spinner"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                style="@android:style/Widget.Holo.Light.Spinner">
+            </Spinner>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/config_bg_color"
+                android:textColor="@color/black"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/bg_color_spinner"
+                android:layout_toStartOf="@id/bg_color_spinner"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_option_text_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_option_bg_color">
+
+            <Spinner
+                android:id="@+id/bg_text_color_spinner"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                style="@android:style/Widget.Holo.Light.Spinner">
+            </Spinner>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/config_text_color"
+                android:textColor="@color/black"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/bg_text_color_spinner"
+                android:layout_toStartOf="@id/bg_text_color_spinner"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_option_opacity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_option_text_color">
+            <TextView
+                android:id="@+id/option_opacity_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/config_bg_opacity"
+                android:textColor="@color/black"
+                android:layout_centerVertical="true"/>
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:id="@+id/opacity_seekbar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/option_opacity_tv"
+                android:layout_toEndOf="@id/option_opacity_tv"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:max="255"
+                android:progress="155"
+                android:hapticFeedbackEnabled="true"
+                android:layout_centerVertical="true"
+                style="@android:style/Widget.Holo.Light.SeekBar" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/ok_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="OK"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:background="@color/ets_red_fonce"/>
+
+        <RelativeLayout
+            android:id="@+id/layout_widget_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_option_opacity"
+            android:layout_marginTop="5dp"
+            android:layout_above="@id/ok_btn">
+
+            <TextView
+                android:id="@+id/widget_preview_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/config_widget_preview"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
+
+            <include
+                android:layout_below="@id/widget_preview_tv"
+                android:layout_width="@dimen/widget_preview_min_width"
+                android:layout_height="@dimen/widget_preview_min_height"
+                android:minHeight="@dimen/widget_min_height"
+                android:layout_centerHorizontal="true"
+                layout="@layout/widget_today" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="50dp"
+        android:layout_height="match_parent">
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_vertical_separator"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="6dp"
+        android:layout_marginStart="6dp"
+        android:background="@color/blanc_pale" />
+
+    <TextView
+        android:id="@+id/event_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:textSize="14sp"
+        tools:text="Congé"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

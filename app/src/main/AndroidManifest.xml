@@ -201,7 +201,7 @@
         <!-- [END instanceId_listener] -->
         <service
             android:name="ca.etsmtl.applets.etsmobile.service.RegistrationIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -220,8 +220,30 @@
                     android:scheme="wear" />
 
             </intent-filter>
-
         </service>
+
+        <receiver
+            android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/today_widget_info" />
+        </receiver>
+
+        <service android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetConfigureActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

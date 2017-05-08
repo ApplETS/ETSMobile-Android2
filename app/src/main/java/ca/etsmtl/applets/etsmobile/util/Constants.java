@@ -24,5 +24,6 @@ public class Constants {
     public static final String EXP_DATE_COOKIE = "EXP_DATE_COOKIE";
     public static final String ALL_NOTIFS_LOADED = "ALL_NOTIFS_LOADED";
     public static final String RECEIVED_NOTIF = "RECEIVED_NOTIF";
-    public static final long GOOGLE_API_CLIENT_TIMEOUT_S = 10;
+	public static final String TEXT_COLOR = "TEXT_COLOR";
+	public static final long GOOGLE_API_CLIENT_TIMEOUT_S = 10;
 }
