@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,11 +17,6 @@ import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import java.util.ArrayList;
 
 import ca.etsmtl.applets.etsmobile.http.AppletsApiEvenementsRequest;
@@ -32,7 +26,6 @@ import ca.etsmtl.applets.etsmobile.model.applets_events.EvenementCommunaute;
 import ca.etsmtl.applets.etsmobile.model.applets_events.EvenementCommunauteList;
 import ca.etsmtl.applets.etsmobile.model.applets_events.SourceEvenement;
 import ca.etsmtl.applets.etsmobile.model.applets_events.SourceEvenementList;
-import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.EvenementCommunauteAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.views.AnimatedExpandableListView;
@@ -172,5 +165,9 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
         }
     }
 
+    @Override
+    public String getFragmentTitle() {
+        return "EventsFragment";
+    }
 }
 

@@ -1,13 +1,11 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.internal.widget.AdapterViewCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.URLUtil;
@@ -21,39 +19,38 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import ca.etsmtl.applets.etsmobile.model.NewsSource;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
-import ca.etsmtl.applets.etsmobile.model.Sponsor;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
-import ca.etsmtl.applets.etsmobile.ui.adapter.NewsSourceAdapter;
-import ca.etsmtl.applets.etsmobile.ui.fragment.NewsDetailsFragment;
 import ca.etsmtl.applets.etsmobile.util.NewsComparator;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
  * Created by gnut3ll4 on 12/19/14.
  */
-public class NewsDetailsActivity extends Activity {
+public class NewsDetailsActivity extends AppCompatActivity {
     ListView listView;
     String key;
     String name;
     String type;
     String urlImage;
     String value;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
 
+
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(name);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (savedInstanceState == null) {
 
             Bundle extras = getIntent().getExtras();
@@ -65,7 +62,7 @@ public class NewsDetailsActivity extends Activity {
             type = extras.getString("type");
             urlImage = extras.getString("urlImage");
             value = extras.getString("value");
-            setTitle(name);
+            toolbar.setTitle(name);
         }
         listView = (ListView) findViewById(R.id.list_news_details);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

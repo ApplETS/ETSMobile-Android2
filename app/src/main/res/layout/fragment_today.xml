@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:max="100"
-        android:progress="11"
         android:progressDrawable="@drawable/semester_progress_bar_layer_list">
     </ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar>
 
@@ -38,6 +37,7 @@
         android:paddingTop="@dimen/activity_horizontal_margin"
         android:textStyle="bold"
         tools:text="@string/lundi_le_26_avril"
+        android:textColor="@color/black"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ListView

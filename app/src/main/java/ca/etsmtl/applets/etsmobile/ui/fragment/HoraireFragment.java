@@ -49,6 +49,7 @@ import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseTodayDecorator;
@@ -63,6 +64,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 public class HoraireFragment extends HttpFragment implements Observer, OnDateSelectedListener {
 
+    public static final String TAG = "HoraireFragment";
     private HoraireManager horaireManager;
     private CustomProgressDialog customProgressDialog;
     private DateTime dateTime = new DateTime();
@@ -101,9 +103,11 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
                 if(listDisplay){
 
                     item.setIcon(R.drawable.list_icon);
+                    item.setTitle(R.string.list);
                     listDisplay = false;
                 }else{
                     item.setIcon(R.drawable.icon_calendar);
+                    item.setTitle(R.string.calendar);
                     listDisplay = true;
                 }
                 horraireViewSwitcher.showNext();
@@ -124,6 +128,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.calendar_horaire_layout, container, false);
         ButterKnife.bind(this, v);
+        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
 
         databaseHelper = new DatabaseHelper(getActivity());
 
@@ -170,6 +175,11 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
         return v;
 
+    }
+
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_1_horaire);
     }
 
     @Override
@@ -284,7 +294,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     }
 
     public void openCourseListDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.dialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         if (seanceAdapter.getCount() > 0) {
             builder.setAdapter(seanceAdapter, null);
             builder.setTitle(R.string.today_course);

@@ -38,7 +38,11 @@ public class AboutFragment extends WebFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_about, container, false);
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
+        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
         return v;
     }
-
+    public String getFragmentTitle(){
+        return getString(R.string.menu_section_3_about);
+    }
 }

@@ -20,6 +20,8 @@
     <color name="green_bandwith">#4CAF50</color>
     <color name="purple_bandwith">#9C27B0</color>
     <color name="grey_bandwith">#9E9E9E</color>
+    <color name="noir_pale">#4D000000</color>
+    <color name="blanc_pale">#A6ffffff</color>
 
 
     <color name="bright_pink">#FF007F</color>
@@ -49,7 +51,6 @@
         <item>@color/violet</item>
         <item>@color/magenta</item>
     </array>
-
     <color name="SupportKit_accent">@color/ets_red</color>
     <color name="SupportKit_accentDark">@color/ets_red_darker</color>
     <color name="SupportKit_accentLight">@color/red_light</color>
@@ -74,4 +75,31 @@
     <color name="SupportKit_userMessageFailedBackground">@color/red_light</color>
     <color name="SupportKit_userMessageText">#ffffff</color>
 
+
+    <!-- Material-->
+    <color name="ColorPrimary">@color/ets_red</color>
+    <color name="ColorPrimaryDark">@color/ets_red_darker</color>
+    <color name="ColorPrimaryLight">@color/ets_red_pale</color>
+    <color name="ColorAccent">@color/black</color>
+    <color name="ColorPrimaryText">#212121</color>
+    <color name="ColorSecondaryText">#757575</color>
+    <color name="ColorIcons">#FFFFFF</color>
+    <color name="ColorDivider">#BDBDBD</color>
+
+    <array name="widget_bg_colors">
+        <item>@color/black</item>
+        <item>@color/white</item>
+        <item>@color/ets_red</item>
+        <item>@color/bright_pink</item>
+        <item>@color/orange</item>
+        <item>@color/yellow</item>
+        <item>@color/chartreuse</item>
+        <item>@color/green</item>
+        <item>@color/spring_green</item>
+        <item>@color/cyan</item>
+        <item>@color/azure</item>
+        <item>@color/blue</item>
+        <item>@color/violet</item>
+        <item>@color/magenta</item>
+    </array>
 </resources>

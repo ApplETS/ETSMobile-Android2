@@ -6,48 +6,24 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
-import android.util.Log;
-
-import com.crashlytics.android.Crashlytics;
 
 import java.sql.SQLException;
-import java.util.LinkedHashMap;
-import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
-import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
-import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.CommentairesFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.OtherAppsFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.ProfilFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
-import ca.etsmtl.applets.etsmobile2.R;
-import io.fabric.sdk.android.Fabric;
-import io.supportkit.core.SupportKit;
+import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 
 public class ApplicationManager extends Application {
 
@@ -68,7 +44,7 @@ public class ApplicationManager extends Application {
         createDatabaseTables();
 
 //        SupportKit.init(this, getString(R.string.credentials_supportkit));
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
 
         AccountManager accountManager = AccountManager.get(this);
         Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
