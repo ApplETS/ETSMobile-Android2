@@ -63,11 +63,11 @@ import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
-import io.supportkit.core.User;
-import io.supportkit.ui.ConversationActivity;
+import io.smooch.core.User;
+import io.smooch.ui.ConversationActivity;
 
 /**
- * Main Activity for �TSMobile, handles the login and the Navigation Drawer (menu)
+ * Main Activity for ÉTSMobile, handles the login and the Navigation Drawer (menu)
  *
  * @author Philippe David
  */
@@ -442,12 +442,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (drawerItem.getIdentifier() == COMMENTS_FRAGMENT) {
                     selectAccount();
                 } else if (drawerItem.getIdentifier() == LOGIN) {
-                    final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
-                        @Override
-                        public void run(AccountManagerFuture<Bundle> future) {
-                            //Login successful
-                        }
-                    }, null);
+                   login();
                 } else if (drawerItem.getIdentifier() == LOGOUT) {
                     openLogoutDialogAlert();
                 }

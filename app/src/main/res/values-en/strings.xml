@@ -204,4 +204,6 @@
     <string name="config_bg_opacity">Background opacity</string>
     <string name="config_widget_preview">Preview widget</string>
 
+    <!-- Showcase -->
+    <string name="new_future_message">Tap the profile image in the menu to access the Profile(when logged in)</string>
 </resources>
