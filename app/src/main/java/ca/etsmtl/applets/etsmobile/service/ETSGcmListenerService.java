@@ -6,42 +6,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
-import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.EmptyStackException;
-import java.util.LinkedList;
-import java.util.Random;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
-import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
-import io.supportkit.core.GcmService;
 
 /**
  * Created by gnut3ll4 on 16/10/15.
  */
-public class ETSGcmListenerService extends GcmService {
+public class ETSGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
     private static final int NUMBER_OF_NOTIF_TO_DISPLAY = 5;
@@ -121,7 +109,7 @@ public class ETSGcmListenerService extends GcmService {
 
         // Sets a title for the Inbox in expanded layout
         String bigContentTitle = getString(R.string.notification_content_title,
-                numberOfNotifications,
+                numberOfNotifications+"",
                 (numberOfNotifications == 1 ? "" : "s"),
                 (numberOfNotifications == 1 ? "" : "s"));
         inBoxStyle.setBigContentTitle(bigContentTitle);
@@ -148,7 +136,7 @@ public class ETSGcmListenerService extends GcmService {
         if (numberOfNotifications > NUMBER_OF_NOTIF_TO_DISPLAY) {
 
             int plusOthers = (numberOfNotifications - NUMBER_OF_NOTIF_TO_DISPLAY);
-            String plusOthersString = getString(R.string.others_notifications, plusOthers, (plusOthers == 1 ? "" : "s"));
+            String plusOthersString = getString(R.string.others_notifications, plusOthers+"", (plusOthers == 1 ? "" : "s"));
             Spannable others = new SpannableString(plusOthersString);
             others.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, others.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             inBoxStyle.addLine(others);

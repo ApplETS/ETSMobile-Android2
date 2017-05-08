@@ -62,8 +62,8 @@ import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
-import io.supportkit.core.User;
-import io.supportkit.ui.ConversationActivity;
+import io.smooch.core.User;
+import io.smooch.ui.ConversationActivity;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 /**
