@@ -442,7 +442,12 @@ public class MainActivity extends AppCompatActivity {
                 } else if (drawerItem.getIdentifier() == COMMENTS_FRAGMENT) {
                     selectAccount();
                 } else if (drawerItem.getIdentifier() == LOGIN) {
-                   login();
+                    final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
+                        @Override
+                        public void run(AccountManagerFuture<Bundle> future) {
+                            //Login successful
+                        }
+                    }, null);
                 } else if (drawerItem.getIdentifier() == LOGOUT) {
                     openLogoutDialogAlert();
                 }
