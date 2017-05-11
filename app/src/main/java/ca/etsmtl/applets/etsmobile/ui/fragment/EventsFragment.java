@@ -167,7 +167,7 @@ public class EventsFragment extends BaseFragment implements RequestListener<Even
 
     @Override
     public String getFragmentTitle() {
-        return "EventsFragment";
+        return getString(R.string.menu_section_2_events);
     }
 }
 

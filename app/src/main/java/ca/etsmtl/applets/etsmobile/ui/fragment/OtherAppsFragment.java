@@ -55,8 +55,6 @@ public class OtherAppsFragment extends WebFragment {
 
         otherAppsAdapter.notifyDataSetChanged();
 
-
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -64,11 +62,6 @@ public class OtherAppsFragment extends WebFragment {
                 openApp(app);
             }
         });
-
-
-
-
-
 
         return v;
 	}
@@ -88,4 +81,8 @@ public class OtherAppsFragment extends WebFragment {
         }
     }
 
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_3_apps);
+    }
 }
