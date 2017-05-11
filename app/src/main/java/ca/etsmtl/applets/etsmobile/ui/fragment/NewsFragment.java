@@ -52,7 +52,7 @@ public class NewsFragment extends HttpFragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_news, container, false);
-        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
 
         newsListView = (ListView) v.findViewById(R.id.listView_news);
 

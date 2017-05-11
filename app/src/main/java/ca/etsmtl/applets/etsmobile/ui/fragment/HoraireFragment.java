@@ -128,7 +128,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.calendar_horaire_layout, container, false);
         ButterKnife.bind(this, v);
-        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
 
         databaseHelper = new DatabaseHelper(getActivity());
 

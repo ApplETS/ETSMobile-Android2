@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
-        setTitle(((BaseFragment)fragment).getFragmentTitle());
+        setTitle(((BaseFragment) fragment).getFragmentTitle());
     }
 
     @Override
@@ -491,14 +491,9 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void openLogoutDialogAlert() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                this);
 
-        // set title
-        alertDialogBuilder.setTitle(getString(R.string.action_logout));
-
-        // set dialog message
-        alertDialogBuilder
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.action_logout))
                 .setMessage(R.string.logout_confirmation)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -512,13 +507,9 @@ public class MainActivity extends AppCompatActivity {
 
                         dialog.dismiss();
                     }
-                });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
+                })
+                .create()
+                .show();
     }
 
     public void goToFragment(Fragment fragment, String tag) {
@@ -531,7 +522,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setTitle(String title) {
-        getSupportActionBar().setTitle(title);
+        if (getSupportActionBar() != null) // Small fix : null when changing language
+            getSupportActionBar().setTitle(title);
     }
 
 }
