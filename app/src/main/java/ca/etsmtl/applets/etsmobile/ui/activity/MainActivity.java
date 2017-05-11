@@ -47,6 +47,7 @@ import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.EventsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment;
@@ -89,9 +90,10 @@ public class MainActivity extends AppCompatActivity {
     public static final int FAQ_FRAGMENT = 15;
     public static final int SPONSOR_FRAGMENT = 16;
     public static final int TODAY_FRAGMENT = 17;
+    public static final int EVENTS_FRAGMENT = 20;
 
-    public static final long LOGIN = 18;
-    public static final long LOGOUT = 19;
+    public static final int LOGIN = 18;
+    public static final int LOGOUT = 19;
 
 
     private String TAG = "MainActivity";
@@ -151,16 +153,16 @@ public class MainActivity extends AppCompatActivity {
         String codeUniversel = "";
         ProfilManager profilManager = new ProfilManager(this);
         Etudiant etudiant = profilManager.getEtudiant();
-        if(etudiant != null){
+        if (etudiant != null) {
 
-            studentName = profilManager.getEtudiant().prenom.replace("  ","") +" "+ profilManager.getEtudiant().nom.replace(" ","");
-            codeUniversel= profilManager.getEtudiant().codePerm;
+            studentName = profilManager.getEtudiant().prenom.replace("  ", "") + " " + profilManager.getEtudiant().nom.replace(" ", "");
+            codeUniversel = profilManager.getEtudiant().codePerm;
         }
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.ets_background_grayscale)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(codeUniversel).withEmail(studentName).withSelectedTextColor(ContextCompat.getColor(this,R.color.red)).withIcon(R.drawable.ic_user)
+                        new ProfileDrawerItem().withName(codeUniversel).withEmail(studentName).withSelectedTextColor(ContextCompat.getColor(this, R.color.red)).withIcon(R.drawable.ic_user)
                 ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
@@ -187,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
                         ).withIsExpanded(true),
                         new ExpandableDrawerItem().withName(R.string.menu_section_2_ets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_events).withIdentifier(EVENTS_FRAGMENT).withIcon(R.drawable.ic_event_available),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin).withSelectable(false),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_biblio).withIdentifier(LIBRARY_FRAGMENT).withIcon(R.drawable.ic_ico_library),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_securite).withIdentifier(SECURITY_FRAGMENT).withIcon(R.drawable.ic_ico_security)
@@ -409,54 +412,77 @@ public class MainActivity extends AppCompatActivity {
 
             if (drawerItem != null) {
 
-                if (drawerItem.getIdentifier() == SCHEDULE_FRAGMENT) {
-                    goToFragment(new HoraireFragment(), HoraireFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == TODAY_FRAGMENT) {
-                    goToFragment(new TodayFragment(), TodayFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == MOODLE_FRAGMENT) {
-                    goToFragment(new MoodleFragment(), MoodleFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == COURSE_FRAGMENT) {
-                    goToFragment(new NotesFragment(), NotesFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == PROFILE_FRAGMENT) {
-                    goToFragment(new ProfilFragment(), ProfilFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == MONETS_FRAGMENT) {
-                    goToFragment(new MonETSFragment(), MonETSFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == BANDWIDTH_FRAGMENT) {
-                    goToFragment(new BandwithFragment(), BandwithFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == NEWS_FRAGMENT) {
-                    goToFragment(new NewsFragment(), NewsFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == LIBRARY_FRAGMENT) {
-                    goToFragment(new BiblioFragment(), BiblioFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == DIRECTORY_FRAGMENT) {
-                    startActivity(new Intent(getApplicationContext(),BotinActivity.class));
-                } else if (drawerItem.getIdentifier() == SECURITY_FRAGMENT) {
-                    goToFragment(new SecuriteFragment(), SecuriteFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == FAQ_FRAGMENT) {
-                    goToFragment(new FAQFragment(), FAQFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == ACHIEVEMENTS_FRAGMENT) {
-                    goToFragment(new OtherAppsFragment(), OtherAppsFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == ABOUT_FRAGMENT) {
-                    goToFragment(new AboutFragment(), AboutFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == SPONSOR_FRAGMENT) {
-                    goToFragment(new SponsorsFragment(), SponsorsFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == COMMENTS_FRAGMENT) {
-                    selectAccount();
-                } else if (drawerItem.getIdentifier() == LOGIN) {
-                    final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
-                        @Override
-                        public void run(AccountManagerFuture<Bundle> future) {
-                            //Login successful
-                        }
-                    }, null);
-                } else if (drawerItem.getIdentifier() == LOGOUT) {
-                    openLogoutDialogAlert();
+                switch ((int) drawerItem.getIdentifier()) {
+                    case SCHEDULE_FRAGMENT:
+                        goToFragment(new HoraireFragment(), HoraireFragment.getClassName());
+                        break;
+                    case TODAY_FRAGMENT:
+                        goToFragment(new TodayFragment(), TodayFragment.getClassName());
+                        break;
+                    case MOODLE_FRAGMENT:
+                        goToFragment(new MoodleFragment(), MoodleFragment.getClassName());
+                        break;
+                    case COURSE_FRAGMENT:
+                        goToFragment(new NotesFragment(), NotesFragment.getClassName());
+                        break;
+                    case PROFILE_FRAGMENT:
+                        goToFragment(new ProfilFragment(), ProfilFragment.getClassName());
+                        break;
+                    case MONETS_FRAGMENT:
+                        goToFragment(new MonETSFragment(), MonETSFragment.getClassName());
+                        break;
+                    case BANDWIDTH_FRAGMENT:
+                        goToFragment(new BandwithFragment(), BandwithFragment.getClassName());
+                        break;
+                    case NEWS_FRAGMENT:
+                        goToFragment(new NewsFragment(), NewsFragment.getClassName());
+                        break;
+                    case EVENTS_FRAGMENT:
+                        goToFragment(new EventsFragment(), EventsFragment.getClassName());
+                        break;
+                    case LIBRARY_FRAGMENT:
+                        goToFragment(new BiblioFragment(), BiblioFragment.getClassName());
+                        break;
+                    case DIRECTORY_FRAGMENT:
+                        startActivity(new Intent(getApplicationContext(), BotinActivity.class));
+                        break;
+                    case SECURITY_FRAGMENT:
+                        goToFragment(new SecuriteFragment(), SecuriteFragment.getClassName());
+                        break;
+                    case FAQ_FRAGMENT:
+                        goToFragment(new FAQFragment(), FAQFragment.getClassName());
+                        break;
+                    case ACHIEVEMENTS_FRAGMENT:
+                        goToFragment(new OtherAppsFragment(), OtherAppsFragment.getClassName());
+                        break;
+                    case ABOUT_FRAGMENT:
+                        goToFragment(new AboutFragment(), AboutFragment.getClassName());
+                        break;
+                    case SPONSOR_FRAGMENT:
+                        goToFragment(new SponsorsFragment(), SponsorsFragment.getClassName());
+                        break;
+                    case COMMENTS_FRAGMENT:
+                        selectAccount();
+                        break;
+                    case LOGIN:
+                        final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
+                            @Override
+                            public void run(AccountManagerFuture<Bundle> future) {
+                                //Login successful
+                            }
+                        }, null);
+                        break;
+                    case LOGOUT:
+                        openLogoutDialogAlert();
+                        break;
                 }
 
             }
             return false;
         }
     };
-    public void openLogoutDialogAlert(){
+
+    public void openLogoutDialogAlert() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 this);
 
@@ -466,15 +492,15 @@ public class MainActivity extends AppCompatActivity {
         // set dialog message
         alertDialogBuilder
                 .setMessage(R.string.logout_confirmation)
-                .setPositiveButton(android.R.string.yes,new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
                         deconnexion();
                         dialog.dismiss();
 
                     }
                 })
-                .setNegativeButton(android.R.string.cancel,new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
 
                         dialog.dismiss();
                     }
@@ -486,6 +512,7 @@ public class MainActivity extends AppCompatActivity {
         // show it
         alertDialog.show();
     }
+
     public void goToFragment(Fragment fragment, String tag) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
@@ -496,7 +523,7 @@ public class MainActivity extends AppCompatActivity {
         this.invalidateOptionsMenu();
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
 
