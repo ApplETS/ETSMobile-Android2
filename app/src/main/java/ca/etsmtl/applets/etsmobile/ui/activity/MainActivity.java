@@ -46,7 +46,9 @@ import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.BaseFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.EventsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
@@ -249,6 +251,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        setTitle(((BaseFragment)fragment).getFragmentTitle());
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -444,7 +452,7 @@ public class MainActivity extends AppCompatActivity {
                         goToFragment(new BiblioFragment(), BiblioFragment.getClassName());
                         break;
                     case DIRECTORY_FRAGMENT:
-                        startActivity(new Intent(getApplicationContext(), BotinActivity.class));
+                        goToFragment(new BottinFragment(), BottinFragment.class.getName());
                         break;
                     case SECURITY_FRAGMENT:
                         goToFragment(new SecuriteFragment(), SecuriteFragment.getClassName());
@@ -519,7 +527,6 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(tag)
                 .commit();
 
-//        setTitle(((BaseFragment)fragment).getFragmentTitle());
         this.invalidateOptionsMenu();
     }
 
