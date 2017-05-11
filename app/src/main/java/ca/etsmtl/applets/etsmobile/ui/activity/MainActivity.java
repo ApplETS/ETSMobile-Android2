@@ -155,8 +155,14 @@ public class MainActivity extends AppCompatActivity {
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.ets_background_grayscale)
+                .withSelectionListEnabledForSingleProfile(false)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(codeUniversel).withEmail(studentName).withSelectedTextColor(ContextCompat.getColor(this, R.color.red)).withIcon(R.drawable.ic_user)
+                        new ProfileDrawerItem()
+                                .withName(codeUniversel)
+                                .withEmail(studentName)
+                                .withSelectedTextColor(ContextCompat.getColor(this, R.color.red))
+                                .withIcon(R.drawable.ic_user)
+                                .withSelectable(isUserLoggedIn)
                 ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
