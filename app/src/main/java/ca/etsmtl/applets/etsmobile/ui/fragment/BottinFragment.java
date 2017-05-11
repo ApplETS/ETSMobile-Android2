@@ -64,9 +64,19 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     private HashMap<String, List<FicheEmploye>> listDataChild;
     private ProgressDialog mProgressDialog;
 
-    private static BottinFragment instance;
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_bottin, menu);
 
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.menuitem_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setOnQueryTextListener(this);
 
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
 
     @Override
     public String getFragmentTitle() {
@@ -135,8 +145,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_bottin, container, false);
-        super.onCreateView(inflater, v, savedInstanceState);
-
 
         // get the listview
         expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
@@ -296,17 +304,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     @Override
     public void onRequestFailure(SpiceException e) {
         super.onRequestFailure(e);
-    }
-
-    private void showFragment(final Fragment fragment) {
-        if (fragment == null)
-            return;
-
-        final FragmentManager fm = getActivity().getFragmentManager();
-        final FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.content_frame, fragment);
-//		ft.addToBackStack(null);
-        ft.commit();
     }
 
     @Override
