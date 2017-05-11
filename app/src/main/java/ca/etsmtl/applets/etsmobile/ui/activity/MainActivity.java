@@ -63,7 +63,6 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
-import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.smooch.core.User;
@@ -71,8 +70,6 @@ import io.smooch.ui.ConversationActivity;
 
 /**
  * Main Activity for ÉTSMobile, handles the login and the Navigation Drawer (menu)
- *
- * @author Philippe David
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -102,11 +99,9 @@ public class MainActivity extends AppCompatActivity {
     private AccountManager accountManager;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private boolean isGCMTokenSent;
-    private SecurePreferences securePreferences;
     public SharedPreferences prefs;
 
     private AccountHeader headerResult = null;
-    private Drawer result = null;
 
 
     private Toolbar toolbar;
@@ -119,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            goToFragment(new TodayFragment(), TodayFragment.getClassName());
+            goToFragment(new TodayFragment(), TodayFragment.class.getName());
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -134,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
-//
 
         isGCMTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
@@ -144,8 +138,6 @@ public class MainActivity extends AppCompatActivity {
                 isGCMTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
             }
         };
-
-        securePreferences = new SecurePreferences(this);
 
     }
 
@@ -168,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
-                        goToFragment(new ProfilFragment(), ProfilFragment.getClassName());
+                        goToFragment(new ProfilFragment(), ProfilFragment.class.getName());
                         return false;
                     }
                 }).build();
@@ -179,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
                 .withAccountHeader(headerResult)
                 .withSelectedItem(TODAY_FRAGMENT)
                 .withDisplayBelowStatusBar(true)
-                //                .withActionBarDrawerToggle(true)
                 .addDrawerItems(
                         new ExpandableDrawerItem().withName(R.string.menu_section_1_moi).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_ajd).withIdentifier(TODAY_FRAGMENT).withIcon(R.drawable.ic_ico_aujourdhui).withEnabled(isUserLoggedIn),
@@ -192,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                         new ExpandableDrawerItem().withName(R.string.menu_section_2_ets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_events).withIdentifier(EVENTS_FRAGMENT).withIcon(R.drawable.ic_event_available),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin).withSelectable(false),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_biblio).withIdentifier(LIBRARY_FRAGMENT).withIcon(R.drawable.ic_ico_library),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_securite).withIdentifier(SECURITY_FRAGMENT).withIcon(R.drawable.ic_ico_security)
                         ),
@@ -213,8 +204,7 @@ public class MainActivity extends AppCompatActivity {
 
         drawerBuilder.withOnDrawerItemClickListener(drawerItemClickListener);
 
-
-        result = drawerBuilder.build();
+        drawerBuilder.build();
 
     }
 
@@ -230,12 +220,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onPrepareOptionsMenu(menu);
         return true;
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
     }
 
     @Override
@@ -341,7 +325,6 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             prefs.edit().remove("language").apply();
                             prefs.edit().putString("language", "fr").apply();
-//                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
                             recreate();
                             TodayWidgetProvider.updateAllWidgets(MainActivity.this);
                         }
@@ -351,19 +334,12 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             prefs.edit().remove("language").apply();
                             prefs.edit().putString("language", "en").apply();
-//                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
                             recreate();
                             TodayWidgetProvider.updateAllWidgets(MainActivity.this);
                         }
                     });
             builder.show();
         }
-
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-//        else if (mDrawerToggle.onOptionsItemSelected(item)) {
-//            return true;
-//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -389,7 +365,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     /**
      * Asks the user to pick a Google account so that we can have his email in slack support with
      * SupportKit
@@ -398,14 +373,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = AccountPicker.newChooseAccountIntent(null, null,
                 new String[]{"com.google"}, false, null, null, null, null);//TODO get the actual GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE ASAP!!!
 
-
         startActivityForResult(intent, Constants.REQUEST_CODE_EMAIL);
-    }
-
-    @Override
-    public void setTitle(CharSequence title) {
-//        mTitle = title;
-//        getActionBar().setTitle(mTitle);
     }
 
     @Override
@@ -422,63 +390,64 @@ public class MainActivity extends AppCompatActivity {
 
                 switch ((int) drawerItem.getIdentifier()) {
                     case SCHEDULE_FRAGMENT:
-                        goToFragment(new HoraireFragment(), HoraireFragment.getClassName());
+                        goToFragment(new HoraireFragment(), HoraireFragment.class.getName());
                         break;
                     case TODAY_FRAGMENT:
-                        goToFragment(new TodayFragment(), TodayFragment.getClassName());
+                        goToFragment(new TodayFragment(), TodayFragment.class.getName());
                         break;
                     case MOODLE_FRAGMENT:
-                        goToFragment(new MoodleFragment(), MoodleFragment.getClassName());
+                        goToFragment(new MoodleFragment(), MoodleFragment.class.getName());
                         break;
                     case COURSE_FRAGMENT:
-                        goToFragment(new NotesFragment(), NotesFragment.getClassName());
+                        goToFragment(new NotesFragment(), NotesFragment.class.getName());
                         break;
                     case PROFILE_FRAGMENT:
-                        goToFragment(new ProfilFragment(), ProfilFragment.getClassName());
+                        goToFragment(new ProfilFragment(), ProfilFragment.class.getName());
                         break;
                     case MONETS_FRAGMENT:
-                        goToFragment(new MonETSFragment(), MonETSFragment.getClassName());
+                        goToFragment(new MonETSFragment(), MonETSFragment.class.getName());
                         break;
                     case BANDWIDTH_FRAGMENT:
-                        goToFragment(new BandwithFragment(), BandwithFragment.getClassName());
+                        goToFragment(new BandwithFragment(), BandwithFragment.class.getName());
                         break;
                     case NEWS_FRAGMENT:
-                        goToFragment(new NewsFragment(), NewsFragment.getClassName());
+                        goToFragment(new NewsFragment(), NewsFragment.class.getName());
                         break;
                     case EVENTS_FRAGMENT:
-                        goToFragment(new EventsFragment(), EventsFragment.getClassName());
+                        goToFragment(new EventsFragment(), EventsFragment.class.getName());
                         break;
                     case LIBRARY_FRAGMENT:
-                        goToFragment(new BiblioFragment(), BiblioFragment.getClassName());
+                        goToFragment(new BiblioFragment(), BiblioFragment.class.getName());
                         break;
                     case DIRECTORY_FRAGMENT:
                         goToFragment(new BottinFragment(), BottinFragment.class.getName());
                         break;
                     case SECURITY_FRAGMENT:
-                        goToFragment(new SecuriteFragment(), SecuriteFragment.getClassName());
+                        goToFragment(new SecuriteFragment(), SecuriteFragment.class.getName());
                         break;
                     case FAQ_FRAGMENT:
-                        goToFragment(new FAQFragment(), FAQFragment.getClassName());
+                        goToFragment(new FAQFragment(), FAQFragment.class.getName());
                         break;
                     case ACHIEVEMENTS_FRAGMENT:
-                        goToFragment(new OtherAppsFragment(), OtherAppsFragment.getClassName());
+                        goToFragment(new OtherAppsFragment(), OtherAppsFragment.class.getName());
                         break;
                     case ABOUT_FRAGMENT:
-                        goToFragment(new AboutFragment(), AboutFragment.getClassName());
+                        goToFragment(new AboutFragment(), AboutFragment.class.getName());
                         break;
                     case SPONSOR_FRAGMENT:
-                        goToFragment(new SponsorsFragment(), SponsorsFragment.getClassName());
+                        goToFragment(new SponsorsFragment(), SponsorsFragment.class.getName());
                         break;
                     case COMMENTS_FRAGMENT:
                         selectAccount();
                         break;
                     case LOGIN:
-                        final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
-                            @Override
-                            public void run(AccountManagerFuture<Bundle> future) {
-                                //Login successful
-                            }
-                        }, null);
+                        final AccountManagerFuture<Bundle> future =
+                                accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
+                                    @Override
+                                    public void run(AccountManagerFuture<Bundle> future) {
+                                        //Login successful
+                                    }
+                                }, null);
                         break;
                     case LOGOUT:
                         openLogoutDialogAlert();

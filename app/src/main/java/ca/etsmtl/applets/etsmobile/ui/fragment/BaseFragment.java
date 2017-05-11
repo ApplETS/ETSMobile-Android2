@@ -33,10 +33,6 @@ public abstract class BaseFragment extends Fragment {
 		return container;
 	}
 
-	public static String getClassName(){
-		return  BaseFragment.class.getSimpleName();
-	}
-
 	public abstract String getFragmentTitle();
 
 }
