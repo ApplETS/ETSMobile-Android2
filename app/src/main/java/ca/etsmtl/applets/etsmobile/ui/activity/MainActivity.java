@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
-                .withSelectedItem(TODAY_FRAGMENT)
+                .withSelectedItem(isUserLoggedIn ? TODAY_FRAGMENT : ABOUT_FRAGMENT)
                 .withDisplayBelowStatusBar(true)
                 .addDrawerItems(
                         new ExpandableDrawerItem().withName(R.string.menu_section_1_moi).withSelectable(false).withSubItems(
