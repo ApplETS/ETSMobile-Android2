@@ -25,7 +25,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">16dp</item>
     </style>
-    
+
     <!--  Transparent dialog -->
     <style name="CustomProgressDialog" parent="MaterialDrawerTheme.Light.DarkToolbar">
         <item name="android:windowFrame">@null</item>
@@ -79,4 +79,14 @@
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>
     </style>
+
+
+    <style name="WalkthroughTheme" parent="Theme.AppCompat">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
 </resources>

@@ -4,6 +4,7 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +13,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
@@ -139,6 +142,30 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        boolean firstLogin = prefs.getBoolean(Constants.FIRST_LOGIN, true);
+        if (firstLogin) {
+            prefs.edit().putBoolean(Constants.FIRST_LOGIN, false).commit();
+            onCoachMark();
+        }
+
+    }
+
+    public void onCoachMark() {
+        final Dialog dialog = new Dialog(this, R.style.WalkthroughTheme);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.coachmark);
+        dialog.setCanceledOnTouchOutside(true);
+        //for dismissing anywhere you touch
+        View masterView = dialog.findViewById(R.id.coach_mark_master_view);
+        View.OnClickListener dismissOnClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        };
+        masterView.setOnClickListener(dismissOnClick);
+        dialog.show();
     }
 
     private void initDrawer() {
@@ -177,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
                 .withAccountHeader(headerResult)
                 .withSelectedItem(isUserLoggedIn ? TODAY_FRAGMENT : ABOUT_FRAGMENT)
                 .withDisplayBelowStatusBar(true)
+                .withShowDrawerOnFirstLaunch(true)
                 .addDrawerItems(
                         new ExpandableDrawerItem().withName(R.string.menu_section_1_moi).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_ajd).withIdentifier(TODAY_FRAGMENT).withIcon(R.drawable.ic_ico_aujourdhui).withEnabled(isUserLoggedIn),
