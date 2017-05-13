@@ -165,4 +165,9 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
                 refresh();
             }
     }
+
+    @Override
+    public String getFragmentTitle() {
+        return "";
+    }
 }

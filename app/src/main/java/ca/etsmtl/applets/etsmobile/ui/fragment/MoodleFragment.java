@@ -24,6 +24,7 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MoodleCoursesAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
@@ -54,6 +55,7 @@ public class MoodleFragment extends HttpFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_moodle, container, false);
 
+
         super.onCreateView(inflater, v, savedInstanceState);
         moodleCoursesListView = (ListView) v.findViewById(R.id.listView_moodle_courses);
         Log.d("MoodleFragment", "Moodle course list fragment is instantiated");
@@ -65,6 +67,11 @@ public class MoodleFragment extends HttpFragment {
 
 		return v;
 	}
+
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_2_moodle);
+    }
 
     @Override
     void updateUI() {

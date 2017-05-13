@@ -18,6 +18,7 @@ import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.Programme;
 import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ProfileAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
@@ -43,6 +44,8 @@ public class ProfilFragment extends HttpFragment {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_profil, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
 
+        ( (MainActivity )getActivity()).setTitle(getFragmentTitle());
+
         loadingView.showLoadingView();
 
         dataManager.getDataFromSignet(SignetMethods.INFO_ETUDIANT, ApplicationManager.userCredentials, this, "");
@@ -56,6 +59,11 @@ public class ProfilFragment extends HttpFragment {
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
+    }
+
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_1_profil);
     }
 
     @Override

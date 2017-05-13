@@ -4,17 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar
+        android:id="@+id/semester_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:max="100"
+        android:progressDrawable="@drawable/semester_progress_bar_layer_list">
+    </ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar>
+
+    <TextView
+        android:id="@+id/semester_progress_bar_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignLeft="@+id/semester_progress_bar"
+        android:layout_alignRight="@+id/semester_progress_bar"
+        android:layout_alignTop="@+id/semester_progress_bar"
+        android:layout_alignBottom="@id/semester_progress_bar"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        android:text="@string/semester_progression"/>
 
     <TextView
         android:id="@+id/todays_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/semester_progress_bar"
         android:paddingBottom="@dimen/activity_horizontal_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="0dp"
         android:paddingTop="@dimen/activity_horizontal_margin"
         android:textStyle="bold"
         tools:text="@string/lundi_le_26_avril"
+        android:textColor="@color/black"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ListView

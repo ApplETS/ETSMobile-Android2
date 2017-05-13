@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -21,6 +22,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
@@ -28,6 +30,7 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
@@ -39,6 +42,8 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 public class TodayFragment extends HttpFragment implements Observer {
 
+    private static final long JOUR_EN_MS =  86400000;
+
     private ListView todaysList;
     private HoraireManager horaireManager;
     private TextView todaysTv;
@@ -48,6 +53,8 @@ public class TodayFragment extends HttpFragment implements Observer {
     private ArrayList<Seances> listSeances;
     private ArrayList<Event> events;
     private TodayAdapter adapter;
+    private ProgressBar semesterProgressBar;
+    private TextView semesterProgressBarText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,10 @@ public class TodayFragment extends HttpFragment implements Observer {
                              Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_today, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
+
+
+        semesterProgressBar = (ProgressBar) v.findViewById(R.id.semester_progress_bar);
+        semesterProgressBarText = (TextView) v.findViewById(R.id.semester_progress_bar_text);
         todaysList = (ListView) v.findViewById(R.id.todays_list);
 
         todaysTv = (TextView) v.findViewById(R.id.todays_name);
@@ -75,6 +86,11 @@ public class TodayFragment extends HttpFragment implements Observer {
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
+    }
+
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_1_ajd);
     }
 
     @Override
@@ -114,6 +130,7 @@ public class TodayFragment extends HttpFragment implements Observer {
             for (int i = listeDeSessions.liste.size() - 1; i > 0; i-- ) {
                 dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
                 dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
+                setSemesterProgressBarText(dateStart, dateEnd);
                 if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
                     String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
                     String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
@@ -123,6 +140,34 @@ public class TodayFragment extends HttpFragment implements Observer {
             }
         } else {
             horaireManager.onRequestSuccess(o);
+        }
+    }
+
+    private void setSemesterProgressBarText(Date dateDebut, Date dateFin) {
+        Date dateActuelle = new Date();
+        long dureeTotaleMs;
+        long nbJoursTotal;
+        long progressionMs;
+        long progressionJour;
+
+        if (dateActuelle.after(dateDebut) && dateActuelle.before(dateFin)) {
+            dureeTotaleMs = dateFin.getTime() - dateDebut.getTime() + JOUR_EN_MS;
+            nbJoursTotal = TimeUnit.MILLISECONDS.toDays(dureeTotaleMs);
+            progressionMs = dateActuelle.getTime() - dateDebut.getTime();
+            progressionJour = TimeUnit.MILLISECONDS.toDays(progressionMs);
+
+            semesterProgressBar.setMax((int) nbJoursTotal);
+            semesterProgressBar.setProgress((int) progressionJour);
+            semesterProgressBarText.setText(getString(R.string.semester_progression)
+                    + getString(R.string.deux_points) + String.valueOf(progressionJour) + "/"
+                    + String.valueOf(nbJoursTotal) + " " + getString(R.string.days));
+            semesterProgressBarText.setVisibility(View.VISIBLE);
+        } else if (dateActuelle.before(dateDebut)) {
+            progressionMs = dateDebut.getTime() - dateActuelle.getTime() + JOUR_EN_MS;
+            progressionJour = TimeUnit.MILLISECONDS.toDays(progressionMs);
+
+            semesterProgressBarText.setText(String.format(getString(R.string.days_before_session_start), String.valueOf(progressionJour)));
+            semesterProgressBarText.setVisibility(View.VISIBLE);
         }
     }
 
@@ -172,6 +217,7 @@ public class TodayFragment extends HttpFragment implements Observer {
             }
             adapter = new TodayAdapter(getActivity(), dataRowItems);
             todaysList.setAdapter(adapter);
+
         }
     }
 

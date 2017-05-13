@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:progressDrawable="@drawable/progress_bar_layer_list">
+    </ProgressBar>
+
+    <ca.etsmtl.applets.etsmobile.views.AnimatedExpandableListView
+        android:id="@+id/expandable_list_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:groupIndicator="@null"
+        android:childDivider="#00000000" />
+
+
+</LinearLayout>

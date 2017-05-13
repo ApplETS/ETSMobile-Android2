@@ -42,6 +42,7 @@ import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
+import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -219,7 +220,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 mPasswordView.requestFocus();
             } else {
                 ApplicationManager.userCredentials = userCredentials;
-
+                TodayWidgetProvider.updateAllWidgets(this);
 
                 String accountName = userCredentials.getUsername();
                 String accountPassword = userCredentials.getPassword();

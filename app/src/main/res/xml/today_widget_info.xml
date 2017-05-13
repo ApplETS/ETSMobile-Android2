@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialKeyguardLayout="@layout/widget_today"
+    android:initialLayout="@layout/widget_today"
+    android:minHeight="@dimen/widget_min_height"
+    android:minWidth="@dimen/widget_min_width"
+    android:minResizeWidth="250dp"
+    android:previewImage="@drawable/widget_today_preview"
+    android:updatePeriodMillis="10800000"
+    android:widgetCategory="home_screen"
+    android:resizeMode="horizontal|vertical"
+    android:configure="ca.etsmtl.applets.etsmobile.widget.TodayWidgetConfigureActivity">
+</appwidget-provider>

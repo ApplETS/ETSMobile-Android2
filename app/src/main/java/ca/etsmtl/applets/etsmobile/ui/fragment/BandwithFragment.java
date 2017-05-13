@@ -1,7 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -9,6 +7,8 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -35,6 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ca.etsmtl.applets.etsmobile.model.ConsommationBandePassante;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
@@ -48,7 +49,7 @@ import lecho.lib.hellocharts.view.PieChartView;
 /**
  * Created by Phil on 17/11/13. Coded by Laurence 26/03/14
  */
-public class BandwithFragment extends Fragment {
+public class BandwithFragment extends BaseFragment {
 
     private PieChartView chart;
     private PieChartData data;
@@ -80,6 +81,7 @@ public class BandwithFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_bandwith, container, false);
+
         progressBar = (MultiColorProgressBar) v.findViewById(R.id.bandwith_progress);
         editTextApp = (EditText) v.findViewById(R.id.bandwith_editText_app);
         editTextPhase = (EditText) v.findViewById(R.id.bandwith_editText_phase);
@@ -161,9 +163,14 @@ public class BandwithFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_1_bandwith);
+    }
+
     private void setError(final EditText edit, final String messageError) {
 
-        Activity activity = getActivity();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null) {
             activity.runOnUiThread(new Runnable() {
 
@@ -204,7 +211,7 @@ public class BandwithFragment extends Fragment {
     private void updateProgressBarColorItems(double bandwidthQuota) {
         final int[] colorChoice = new int[]{R.color.red_bandwith, R.color.blue_bandwith, R.color.green_bandwith, R.color.purple_bandwith};
         int[] legendColors = new int[values.length];
-        final Activity activity = getActivity();
+        final AppCompatActivity activity = (AppCompatActivity)getActivity();
 
         progressBar.clearProgressItems();
         bandwidthQuota = bandwidthQuota / 1024;
@@ -241,7 +248,7 @@ public class BandwithFragment extends Fragment {
     }
 
     private void setProgressBar(final double total, final double quota) {
-        Activity activity = getActivity();
+        AppCompatActivity activity =(AppCompatActivity) getActivity();
         if (activity != null) {
             activity.runOnUiThread(new Runnable() {
 

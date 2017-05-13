@@ -146,6 +146,11 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     }
 
     @Override
+    public String getFragmentTitle() {
+        return "";
+    }
+
+    @Override
     public void onRequestFailure(SpiceException e) {
         super.onRequestFailure(e);
     }

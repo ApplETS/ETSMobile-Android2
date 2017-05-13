@@ -127,6 +127,11 @@ public class NewsDetailsFragment extends HttpFragment {
         return v;
     }
 
+    @Override
+    public String getFragmentTitle() {
+        return "";
+    }
+
 
     @Override
     void updateUI() {

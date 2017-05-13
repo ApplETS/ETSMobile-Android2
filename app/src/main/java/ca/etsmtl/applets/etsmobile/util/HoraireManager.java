@@ -1,6 +1,7 @@
 package ca.etsmtl.applets.etsmobile.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -29,7 +30,7 @@ import ca.etsmtl.applets.etsmobile.model.listeSeances;
 
 public class HoraireManager extends Observable implements RequestListener<Object> {
 
-    private Activity activity;
+    private Context context;
     private boolean syncSeancesEnded = false;
     private boolean syncJoursRemplacesEnded = false;
     private boolean syncEventListEnded = false;
@@ -37,8 +38,8 @@ public class HoraireManager extends Observable implements RequestListener<Object
     private String calendarName = "Mes cours";
 
 
-    public HoraireManager(final RequestListener<Object> listener, Activity activity) {
-        this.activity = activity;
+    public HoraireManager(final RequestListener<Object> listener, Context context) {
+        this.context = context;
 
     }
 
@@ -110,7 +111,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      */
     private void deleteExpiredEvent(EventList envEventList) {
 
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         ArrayList<Event> dbEvents = new ArrayList<Event>();
         try {
@@ -120,7 +121,6 @@ public class HoraireManager extends Observable implements RequestListener<Object
                 if (!dbEvents.contains(eventsNew.getId())) {
                     Dao<Event, String> eventDao = dbHelper.getDao(Event.class);
                     eventDao.deleteById(eventsNew.getId());
-                    Log.v("Supression", eventsNew.getId() + " supprimé");
                 }
             }
         } catch (SQLException e) {
@@ -134,7 +134,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param eventList
      */
     private void createOrUpdateEventListInBD(EventList eventList) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         try {
             for (Event event : eventList) {
@@ -153,7 +153,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeJoursRemplaces
      */
     private void deleteExpiredJoursRemplaces(listeJoursRemplaces listeJoursRemplaces) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
         HashMap<String, JoursRemplaces> listeJoursRemplacesInAPI = new HashMap<String, JoursRemplaces>();
 
         //Building the list of entries in API
@@ -173,7 +173,6 @@ public class HoraireManager extends Observable implements RequestListener<Object
                     Dao<JoursRemplaces, String> JoursRemplacesDao = dbHelper.getDao(JoursRemplaces.class);
 
                     JoursRemplacesDao.deleteById(JoursRemplacesInDB.dateOrigine);
-                    Log.v("Supression", JoursRemplacesInDB.dateOrigine + " supprimé");
                 }
 
             }
@@ -188,7 +187,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeJoursRemplaces
      */
     private void createOrUpdateJoursRemplacesInDB(listeJoursRemplaces listeJoursRemplaces) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         try {
             for (JoursRemplaces JoursRemplaces : listeJoursRemplaces.listeJours) {
@@ -206,7 +205,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeSeances
      */
     private void deleteExpiredSeances(listeSeances listeSeances) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         HashMap<String, Seances> listeSeancesInAPI = new HashMap<String, Seances>();
 
@@ -247,7 +246,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeSeances
      */
     private void createOrUpdateSeancesInDB(listeSeances listeSeances) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         try {
             for (Seances Seances : listeSeances.ListeDesSeances) {
@@ -265,7 +264,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeHoraireExamensFinaux
      */
     private void deleteExpiredExamensFinaux(listeHoraireExamensFinaux listeHoraireExamensFinaux) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         HashMap<String, HoraireExamenFinal> listeHoraireExamenFinalInAPI = new HashMap<String, HoraireExamenFinal>();
 
@@ -306,7 +305,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeHoraireExamensFinaux
      */
     private void createOrUpdateExamensFinauxInDB(listeHoraireExamensFinaux listeHoraireExamensFinaux) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         try {
             for (HoraireExamenFinal horaireExamenFinal : listeHoraireExamensFinaux.listeHoraire) {
@@ -324,7 +323,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeDesActivitesEtProf API list
      */
     private void deleteExpiredHoraireActivite(listeDesActivitesEtProf listeDesActivitesEtProf) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         HashMap<String, HoraireActivite> listeHoraireActiviteInAPI = new HashMap<String, HoraireActivite>();
 
@@ -351,7 +350,6 @@ public class HoraireManager extends Observable implements RequestListener<Object
                     Dao<HoraireActivite, String> horaireActiviteDao = dbHelper.getDao(HoraireActivite.class);
 
                     horaireActiviteDao.deleteById(horaireActiviteInDB.id);
-                    Log.v("Supression", horaireActiviteInDB.id + " supprimé");
                 }
 
             }
@@ -367,7 +365,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
      * @param listeDesActivitesEtProf API list
      */
     private void createOrUpdateHoraireActiviteInDB(listeDesActivitesEtProf listeDesActivitesEtProf) {
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         try {
             for (HoraireActivite horaireActivite : listeDesActivitesEtProf.listeActivites) {
@@ -379,61 +377,68 @@ public class HoraireManager extends Observable implements RequestListener<Object
         }
     }
 
+    /**
+     * Creates/Updates a new calendar on the user's device
+     *
+     * @param joursRemplacesSelected true if the "Jours remplacés" calendar was selected
+     * @param seancesSelected true if the "Séances" calendar was selected
+     * @param calPublicSelected true if the "Calendrier public ÉTS" was selected
+     * @throws Exception if there is an SQL when checking the replaced days (Jours remplacés)
+     */
+    public void updateCalendar(boolean joursRemplacesSelected, boolean seancesSelected, boolean calPublicSelected) throws Exception {
 
-    public void updateCalendar() throws Exception {
-
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
-        AndroidCalendarManager androidCalendarManager = new AndroidCalendarManager(activity);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+        AndroidCalendarManager androidCalendarManager = new AndroidCalendarManager(context);
 
         androidCalendarManager.deleteCalendar(calendarName);
         androidCalendarManager.createCalendar(calendarName);
 
-
-        //Inserting JoursRemplaces in local calendar
         SimpleDateFormat joursRemplacesFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA_FRENCH);
-        ArrayList<JoursRemplaces> listeJoursRemplaces = (ArrayList<JoursRemplaces>) dbHelper.getDao(JoursRemplaces.class).queryForAll();
+
+        if (joursRemplacesSelected) {
+            //Inserting JoursRemplaces in local calendar
+            ArrayList<JoursRemplaces> listeJoursRemplaces = (ArrayList<JoursRemplaces>) dbHelper.getDao(JoursRemplaces.class).queryForAll();
 
 
-        for (JoursRemplaces joursRemplaces : listeJoursRemplaces) {
-            androidCalendarManager.insertEventInCalendar(calendarName,
-                    joursRemplaces.description,
-                    joursRemplaces.description,
-                    "",
-                    joursRemplacesFormatter.parse(joursRemplaces.dateOrigine),
-                    joursRemplacesFormatter.parse(joursRemplaces.dateOrigine));
+            for (JoursRemplaces joursRemplaces : listeJoursRemplaces) {
+                androidCalendarManager.insertEventInCalendar(calendarName,
+                        joursRemplaces.description,
+                        joursRemplaces.description,
+                        "",
+                        joursRemplacesFormatter.parse(joursRemplaces.dateOrigine),
+                        joursRemplacesFormatter.parse(joursRemplaces.dateOrigine));
+            }
         }
 
-
-        //Inserting Seances in local calendar
-        SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.CANADA_FRENCH);
-        ArrayList<Seances> seances = (ArrayList<Seances>) dbHelper.getDao(Seances.class).queryForAll();
-
-
-        for (Seances seance : seances) {
+        if (seancesSelected) {
+            //Inserting Seances in local calendar
+            SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.CANADA_FRENCH);
+            ArrayList<Seances> seances = (ArrayList<Seances>) dbHelper.getDao(Seances.class).queryForAll();
 
 
-            androidCalendarManager.insertEventInCalendar(calendarName,
-                    seance.descriptionActivite.equals("Examen final") ? "Examen final " + seance.coursGroupe : seance.coursGroupe,
-                    seance.libelleCours + " - " + seance.descriptionActivite,
-                    seance.local,
-                    seancesFormatter.parse(seance.dateDebut),
-                    seancesFormatter.parse(seance.dateFin));
+            for (Seances seance : seances) {
+
+                androidCalendarManager.insertEventInCalendar(calendarName,
+                        seance.descriptionActivite.equals("Examen final") ? "Examen final " + seance.coursGroupe : seance.coursGroupe,
+                        seance.libelleCours + " - " + seance.descriptionActivite,
+                        seance.local,
+                        seancesFormatter.parse(seance.dateDebut),
+                        seancesFormatter.parse(seance.dateFin));
+            }
         }
 
-
-        //Inserting public calendar ETS
-
-        ArrayList<Event> events = (ArrayList<Event>) dbHelper.getDao(Event.class).queryForAll();
-        for (Event event : events) {
-            androidCalendarManager.insertEventInCalendar(calendarName,
-                    event.getTitle(),
-                    "",
-                    ""
-                    ,
-                    joursRemplacesFormatter.parse(event.getDateDebut()),
-                    joursRemplacesFormatter.parse(event.getDateFin()));
+        if (calPublicSelected) {
+            //Inserting public calendar ETS
+            ArrayList<Event> events = (ArrayList<Event>) dbHelper.getDao(Event.class).queryForAll();
+            for (Event event : events) {
+                androidCalendarManager.insertEventInCalendar(calendarName,
+                        event.getTitle(),
+                        "",
+                        ""
+                        ,
+                        joursRemplacesFormatter.parse(event.getDateDebut()),
+                        joursRemplacesFormatter.parse(event.getDateFin()));
+            }
         }
-
-
     }
 }

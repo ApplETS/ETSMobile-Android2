@@ -10,7 +10,7 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black_gray">
+        android:background="@color/black">
 
         <me.grantland.widget.AutofitTextView
             android:layout_width="match_parent"
@@ -32,8 +32,8 @@
         android:id="@android:id/list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/notes_framgent_sigle_layout"
         android:divider="@color/black_gray"
+        android:layout_below="@id/notes_framgent_sigle_layout"
         android:dividerHeight="1dp"/>
 
     <ProgressBar

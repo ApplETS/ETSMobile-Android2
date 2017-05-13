@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -8,8 +7,12 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +25,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.SearchView;
+
 import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
@@ -40,6 +43,7 @@ import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
@@ -50,7 +54,7 @@ import ca.etsmtl.applets.etsmobile2.R;
  * @author Thibaut
  */
 public class BottinFragment extends HttpFragment implements SearchView.OnQueryTextListener  {
-
+    //TODO Change to activity to be able to search
     private SearchView searchView;
     private ExpandableListAdapter listAdapter;
 
@@ -59,9 +63,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     private List<String> listDataHeader;
     private HashMap<String, List<FicheEmploye>> listDataChild;
     private ProgressDialog mProgressDialog;
-
-    private static BottinFragment instance;
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -77,6 +78,10 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 
     }
 
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_2_bottin);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -84,52 +89,45 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         switch (item.getItemId()) {
 
             case R.id.menu_item_update:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.menu_bottin_refresh)
+                        .setView(getActivity().getLayoutInflater().inflate(R.layout.dialog_bottin,null))
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Suppression du bottin
+                                DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+                                try {
+                                    Dao<FicheEmploye, ?> ficheEmployeDao = dbHelper.getDao(FicheEmploye.class);
+                                    List<FicheEmploye> ficheEmployeList = ficheEmployeDao.queryForAll();
+                                    for (FicheEmploye ficheEmploye : ficheEmployeList) {
+                                        ficheEmployeDao.delete(ficheEmploye);
+                                    }
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
 
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_bottin);
-                Button btn_yes = (Button)dialog.findViewById(R.id.btn_dialog_bottin_yes);
+                                //Mise à jour de la liste
+                                listDataHeader = new ArrayList<>();
+                                listDataChild = new HashMap<>();
 
-                //Rechargement du bottin
-                btn_yes.setOnClickListener(new OnClickListener() {
+                                listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
 
-                    @Override
-                    public void onClick(View v) {
 
-                        //Suppression du bottin
-                        DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-                        try {
-                            Dao<FicheEmploye, ?> ficheEmployeDao = dbHelper.getDao(FicheEmploye.class);
-                            List<FicheEmploye> ficheEmployeList = ficheEmployeDao.queryForAll();
-                            for (FicheEmploye ficheEmploye : ficheEmployeList) {
-                                ficheEmployeDao.delete(ficheEmploye);
+
+                                expListView.setAdapter(listAdapter);
+                                updateUI();
+                                dialogInterface.dismiss();
                             }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                builder.create().show();
 
-                        //Mise à jour de la liste
-                        listDataHeader = new ArrayList<>();
-                        listDataChild = new HashMap<>();
-
-                        listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
-
-                        dialog.dismiss();
-                        expListView.setAdapter(listAdapter);
-                        updateUI();
-
-                    }
-                });
-
-                Button btn_no = (Button) dialog.findViewById(R.id.btn_dialog_bottin_no);
-                btn_no.setOnClickListener(new OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
 
                 return true;
         }
@@ -147,7 +145,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_bottin, container, false);
-        super.onCreateView(inflater, v, savedInstanceState);
+
         // get the listview
         expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
 
@@ -197,7 +195,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     @Override
     void updateUI() {
         // Get le contenu dans la bd
-        Activity activity = getActivity();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
         DatabaseHelper dbHelper = new DatabaseHelper(activity);
 
         try {
@@ -306,17 +304,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     @Override
     public void onRequestFailure(SpiceException e) {
         super.onRequestFailure(e);
-    }
-
-    private void showFragment(final Fragment fragment) {
-        if (fragment == null)
-            return;
-
-        final FragmentManager fm = getActivity().getFragmentManager();
-        final FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.content_frame, fragment);
-//		ft.addToBackStack(null);
-        ft.commit();
     }
 
     @Override

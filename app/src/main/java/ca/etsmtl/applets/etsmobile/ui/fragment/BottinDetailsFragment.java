@@ -1,10 +1,11 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.text.util.Linkify;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -82,13 +83,13 @@ public class BottinDetailsFragment extends HttpFragment {
 			
 				
 		}
-		
+
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
 		View v = inflater.inflate(R.layout.bottin_detail_fragment, container, false);
-		
+
 		tv_nom_prenom = (TextView) v.findViewById(R.id.tv_nom_prenom_bottin);
 		tv_titre = (TextView) v.findViewById(R.id.tv_titre_bottin);
 		tv_service = (TextView) v.findViewById(R.id.tv_service_bottin);
@@ -102,7 +103,7 @@ public class BottinDetailsFragment extends HttpFragment {
 		tv_service.setText(service);
 		tv_emplacement.setText(emplacement);
 		tv_telbureau.setText(telbureau);
-		Linkify.addLinks(tv_telbureau, Linkify.PHONE_NUMBERS);
+		Linkify.addLinks(tv_telbureau, Patterns.PHONE, "tel:", Linkify.sPhoneNumberMatchFilter, Linkify.sPhoneNumberTransformFilter);
 		tv_courriel.setText(courriel);
 		Linkify.addLinks(tv_courriel, Linkify.EMAIL_ADDRESSES);
 		
@@ -128,7 +129,12 @@ public class BottinDetailsFragment extends HttpFragment {
 		
 		return v;
 	}
-	
+
+	@Override
+	public String getFragmentTitle() {
+		return getString(R.string.menu_section_2_bottin);
+	}
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -138,19 +144,12 @@ public class BottinDetailsFragment extends HttpFragment {
 	private void showFragment(final Fragment fragment) {
 		if (fragment == null)
 			return;
-
-		// Begin a fragment transaction.
-		final FragmentManager fm = getActivity().getFragmentManager();
-		final FragmentTransaction ft = fm.beginTransaction();
-		// We can also animate the changing of fragment.
-//		ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-		// Replace current fragment by the new one.
+// Begin the transaction
+		FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+// Replace the contents of the container with the new fragment
 		ft.replace(R.id.container, fragment);
-		// Null on the back stack to return on the previous fragment when user
-		// press on back button.
-//		ft.addToBackStack(null);
-
-		// Commit changes.
+// or ft.add(R.id.your_placeholder, new FooFragment());
+// Complete the changes added above
 		ft.commit();
 	}
 

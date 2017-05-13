@@ -40,5 +40,7 @@ public class AboutFragment extends WebFragment {
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
         return v;
     }
-
+    public String getFragmentTitle(){
+        return getString(R.string.menu_section_3_about);
+    }
 }

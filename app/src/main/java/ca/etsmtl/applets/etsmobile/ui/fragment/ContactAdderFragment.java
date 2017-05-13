@@ -221,6 +221,11 @@ public class ContactAdderFragment extends HttpFragment implements
 		return v;
 	}
 
+	@Override
+	public String getFragmentTitle() {
+		return "";
+	}
+
 	/**
 	 * Actions for when the Save button is clicked. Creates a contact entry and
 	 * terminates the activity.

@@ -3,10 +3,8 @@ package ca.etsmtl.applets.etsmobile.ui.activity;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,39 +13,46 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.net.Uri;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.view.Window;
 
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
+import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
-import ca.etsmtl.applets.etsmobile.ui.adapter.MenuAdapter;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.BaseFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.CommentairesFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.EventsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment;
@@ -60,31 +65,49 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
-import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
+import ca.etsmtl.applets.etsmobile.util.ProfilManager;
+import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
-import io.supportkit.core.User;
-import io.supportkit.ui.ConversationActivity;
+import io.smooch.core.User;
+import io.smooch.ui.ConversationActivity;
 
 /**
- * Main Activity for �TSMobile, handles the login and the menu
- *
- * @author Philippe David
+ * Main Activity for ÉTSMobile, handles the login and the Navigation Drawer (menu)
  */
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
-    public static LinkedHashMap<String, MyMenuItem> mMenu = new LinkedHashMap<String, MyMenuItem>(17);
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private CharSequence mTitle;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private Fragment mfragment;
-    private String TAG = "FRAGMENTTAG";
+    public static final int SCHEDULE_FRAGMENT = 1;
+    public static final int COURSE_FRAGMENT = 2;
+    public static final int MOODLE_FRAGMENT = 3;
+    public static final int PROFILE_FRAGMENT = 4;
+    public static final int MONETS_FRAGMENT = 5;
+    public static final int BANDWIDTH_FRAGMENT = 7;
+    public static final int NEWS_FRAGMENT = 8;
+    public static final int DIRECTORY_FRAGMENT = 9;
+    public static final int LIBRARY_FRAGMENT = 10;
+    public static final int SECURITY_FRAGMENT = 11;
+    public static final int ACHIEVEMENTS_FRAGMENT = 12;
+    public static final int ABOUT_FRAGMENT = 13;
+    public static final int COMMENTS_FRAGMENT = 14;
+    public static final int FAQ_FRAGMENT = 15;
+    public static final int SPONSOR_FRAGMENT = 16;
+    public static final int TODAY_FRAGMENT = 17;
+    public static final int EVENTS_FRAGMENT = 20;
+
+    public static final int LOGIN = 18;
+    public static final int LOGOUT = 19;
+
+
+    private String TAG = "MainActivity";
     private AccountManager accountManager;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private boolean isGCMTokenSent;
-    private SecurePreferences securePreferences;
     public SharedPreferences prefs;
 
+    private AccountHeader headerResult = null;
+
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,14 +115,21 @@ public class MainActivity extends Activity {
 
 
         setContentView(R.layout.activity_main);
+
+        if (savedInstanceState == null) {
+            goToFragment(new TodayFragment(), TodayFragment.class.getName());
+        }
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         checkPlayServices();
         setLocale();
-        setTitles();
-        if (savedInstanceState != null) {
-            instantiateFragments(savedInstanceState);
-        }
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        initDrawer();
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
 
@@ -112,42 +142,103 @@ public class MainActivity extends Activity {
             }
         };
 
+        boolean firstLogin = prefs.getBoolean(Constants.FIRST_LOGIN, true);
+        if (firstLogin) {
+            prefs.edit().putBoolean(Constants.FIRST_LOGIN, false).commit();
+            onCoachMark();
+        }
 
+    }
 
-        // Set the adapter for the list view
-        int stringSet = mMenu.keySet().size();
-        final Collection<MyMenuItem> myMenuItems = mMenu.values();
-
-        MyMenuItem[] menuItems = new MyMenuItem[stringSet];
-        mDrawerList.setAdapter(new MenuAdapter(this, myMenuItems.toArray(menuItems)));
-
-        // Set the list's click listener
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-                mDrawerLayout, /* DrawerLayout object */
-                //R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
-                R.string.drawer_open, /* "open drawer" description */
-                R.string.drawer_close /* "close drawer" description */
-        ) {
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                getActionBar().setTitle(mTitle);
-            }
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(getString(R.string.drawer_title));
+    public void onCoachMark() {
+        final Dialog dialog = new Dialog(this, R.style.WalkthroughTheme);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.coachmark);
+        dialog.setCanceledOnTouchOutside(true);
+        //for dismissing anywhere you touch
+        View masterView = dialog.findViewById(R.id.coach_mark_master_view);
+        View.OnClickListener dismissOnClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
             }
         };
+        masterView.setOnClickListener(dismissOnClick);
+        dialog.show();
+    }
 
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+    private void initDrawer() {
+        boolean isUserLoggedIn = ApplicationManager.userCredentials != null;
+        String studentName = "";
+        String codeUniversel = "";
+        ProfilManager profilManager = new ProfilManager(this);
+        Etudiant etudiant = profilManager.getEtudiant();
+        if (etudiant != null) {
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+            studentName = profilManager.getEtudiant().prenom.replace("  ", "") + " " + profilManager.getEtudiant().nom.replace(" ", "");
+            codeUniversel = profilManager.getEtudiant().codePerm;
+        }
+        headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.ets_background_grayscale)
+                .withSelectionListEnabledForSingleProfile(false)
+                .addProfiles(
+                        new ProfileDrawerItem()
+                                .withName(codeUniversel)
+                                .withEmail(studentName)
+                                .withSelectedTextColor(ContextCompat.getColor(this, R.color.red))
+                                .withIcon(R.drawable.ic_user)
+                                .withSelectable(isUserLoggedIn)
+                ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean current) {
+                        goToFragment(new ProfilFragment(), ProfilFragment.class.getName());
+                        return false;
+                    }
+                }).build();
 
-        securePreferences = new SecurePreferences(this);
+        DrawerBuilder drawerBuilder = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withAccountHeader(headerResult)
+                .withSelectedItem(isUserLoggedIn ? TODAY_FRAGMENT : ABOUT_FRAGMENT)
+                .withDisplayBelowStatusBar(true)
+                .withShowDrawerOnFirstLaunch(true)
+                .addDrawerItems(
+                        new ExpandableDrawerItem().withName(R.string.menu_section_1_moi).withSelectable(false).withSubItems(
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_ajd).withIdentifier(TODAY_FRAGMENT).withIcon(R.drawable.ic_ico_aujourdhui).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_horaire).withIdentifier(SCHEDULE_FRAGMENT).withIcon(R.drawable.ic_ico_schedule).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_notes).withIdentifier(COURSE_FRAGMENT).withIcon(R.drawable.ic_ico_notes).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_moodle).withIdentifier(MOODLE_FRAGMENT).withIcon(R.drawable.ic_moodle_icon_small).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_monETS).withIdentifier(MONETS_FRAGMENT).withIcon(R.drawable.ic_monets).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_bandwith).withIdentifier(BANDWIDTH_FRAGMENT).withIcon(R.drawable.ic_ico_internet)
+                        ).withIsExpanded(true),
+                        new ExpandableDrawerItem().withName(R.string.menu_section_2_ets).withSelectable(false).withSubItems(
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_events).withIdentifier(EVENTS_FRAGMENT).withIcon(R.drawable.ic_event_available),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_biblio).withIdentifier(LIBRARY_FRAGMENT).withIcon(R.drawable.ic_ico_library),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_securite).withIdentifier(SECURITY_FRAGMENT).withIcon(R.drawable.ic_ico_security)
+                        ),
+                        new ExpandableDrawerItem().withName(R.string.menu_section_3_applets).withSelectable(false).withSubItems(
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_apps).withIdentifier(ACHIEVEMENTS_FRAGMENT).withIcon(R.drawable.ic_star_60x60),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_about).withIdentifier(ABOUT_FRAGMENT).withIcon(R.drawable.ic_logo_icon_final),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_comms).withIdentifier(COMMENTS_FRAGMENT).withIcon(R.drawable.ic_ico_comment),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_sponsors).withIdentifier(SPONSOR_FRAGMENT).withIcon(R.drawable.ic_ico_partners),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_faq).withIdentifier(FAQ_FRAGMENT).withIcon(R.drawable.ic_ico_faq)
+                        )
+
+
+                );
+        if (isUserLoggedIn)
+            drawerBuilder.addStickyDrawerItems(new SecondaryDrawerItem().withName(R.string.action_logout).withIdentifier(LOGOUT).withTextColorRes(R.color.red));
+        else
+            drawerBuilder.addStickyDrawerItems(new SecondaryDrawerItem().withName(R.string.action_login).withIdentifier(LOGIN));
+
+        drawerBuilder.withOnDrawerItemClickListener(drawerItemClickListener);
+
+        drawerBuilder.build();
 
     }
 
@@ -160,19 +251,9 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(ApplicationManager.userCredentials == null){
-            menu.findItem(R.id.action_logout).setVisible(false);
-        }
+
         super.onPrepareOptionsMenu(menu);
         return true;
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-
     }
 
     @Override
@@ -185,6 +266,12 @@ public class MainActivity extends Activity {
     protected void onStop() {
         DataManager.getInstance(this).stop();
         super.onStop();
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        setTitle(((BaseFragment) fragment).getFragmentTitle());
     }
 
     @Override
@@ -202,21 +289,9 @@ public class MainActivity extends Activity {
                 new IntentFilter(Constants.REGISTRATION_COMPLETE));
 
         if (ApplicationManager.userCredentials == null) {
-            if (mfragment == null) {
-                selectItem(AboutFragment.class.getName());
-            } else {
-                MyMenuItem myMenuItem = mMenu.get(mfragment.getTag());
-                if (myMenuItem.hasToBeLoggedOn()) {
-                    selectItem(AboutFragment.class.getName());
-                }
-                selectItem(mfragment.getTag());
-            }
-        } else {
-            if (mfragment == null) {
-                selectItem(TodayFragment.class.getName());
-            }
-
+            goToFragment(new AboutFragment(), AboutFragment.class.getName());
         }
+
     }
 
     @Override
@@ -245,40 +320,16 @@ public class MainActivity extends Activity {
         return true;
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        FragmentManager manager = getFragmentManager();
-        if (mfragment != null || mfragment.isAdded()) {
-            manager.putFragment(outState, mfragment.getTag(), mfragment);
-            outState.putString(TAG, mfragment.getTag());
-        }
-        super.onSaveInstanceState(outState);
-    }
+    public void deconnexion() {
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        instantiateFragments(savedInstanceState);
-    }
-
-    private void instantiateFragments(Bundle savedInstanceState) {
-        MyMenuItem ajdItem = mMenu.get(TodayFragment.class.getName());
-
-        // Select Aujourd'Hui
-        if (savedInstanceState != null) {
-            FragmentManager fragmentManager = getFragmentManager();
-            String tag = savedInstanceState.getString(TAG);
-            mfragment = fragmentManager.getFragment(savedInstanceState, tag);
-
-        } else {
-            selectItem(ajdItem.mClass.getName());
-        }
-
+        ApplicationManager.deconnexion(this);
+        TodayWidgetProvider.updateAllWidgets(this);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+//
         if (requestCode == Constants.REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
             String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 
@@ -293,44 +344,35 @@ public class MainActivity extends Activity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_logout) {
-            ApplicationManager.deconnexion(this);
-        }
-        if (id == R.id.action_language){
+
+        if (id == R.id.action_language) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle(getResources().getString(R.string.lang_title));
             builder.setMessage(getResources().getString(R.string.lang_description));
             builder.setPositiveButton(getResources().getString(R.string.lang_choix_positif),
                     new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    prefs.edit().remove("language").apply();
-                    prefs.edit().putString("language", "fr").apply();
-                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
-                    recreate();
-                }
-            });
+                        public void onClick(DialogInterface dialog, int id) {
+                            prefs.edit().remove("language").apply();
+                            prefs.edit().putString("language", "fr").apply();
+                            recreate();
+                            TodayWidgetProvider.updateAllWidgets(MainActivity.this);
+                        }
+                    });
             builder.setNegativeButton(getResources().getString(R.string.lang_choix_negatif),
                     new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    prefs.edit().remove("language").apply();
-                    prefs.edit().putString("language", "en").apply();
-                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
-                    recreate();
-                }
-            });
+                        public void onClick(DialogInterface dialog, int id) {
+                            prefs.edit().remove("language").apply();
+                            prefs.edit().putString("language", "en").apply();
+                            recreate();
+                            TodayWidgetProvider.updateAllWidgets(MainActivity.this);
+                        }
+                    });
             builder.show();
-        }
-
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        else if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -343,85 +385,17 @@ public class MainActivity extends Activity {
         Configuration conf = res.getConfiguration();
         prefs = this.getSharedPreferences("Language", 0);
         String restoredText = prefs.getString("language", "");
+        TodayWidgetProvider.setAllWidgetsLanguage(this, restoredText);
         if (restoredText.equalsIgnoreCase("en")) {
             locale = Locale.ENGLISH;
-        }
-        else if(restoredText.equalsIgnoreCase("fr"))
+        } else if (restoredText.equalsIgnoreCase("fr"))
             locale = Locale.CANADA_FRENCH;
         else
-        locale = Locale.getDefault();
+            locale = Locale.getDefault();
         Locale.setDefault(locale);
-        //conf = new Configuration();
+        conf = new Configuration();
         conf.locale = locale;
         res.updateConfiguration(conf, dm);
-
-    }
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @SuppressWarnings("rawtypes")
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            MyMenuItem myMenuItem = (MyMenuItem) parent.getItemAtPosition(position);
-
-            if (myMenuItem.resId == R.drawable.ic_ico_comment) {
-                // Opens SupportKit with selected user account
-                selectAccount();
-            } else {
-                selectItem(myMenuItem.mClass.getName());
-            }
-        }
-    }
-
-    /**
-     * Swaps fragments in the main content view
-     */
-    @SuppressWarnings("rawtypes")
-    private void selectItem(String key) {
-        Fragment fragment = null;
-        MyMenuItem myMenuItem = mMenu.get(key);
-
-
-        if (myMenuItem.hasToBeLoggedOn() && ApplicationManager.userCredentials == null) {
-
-            final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
-                @Override
-                public void run(AccountManagerFuture<Bundle> future) {
-                    //Login successful
-                }
-            }, null);
-
-        } else {
-            Class aClass = myMenuItem.mClass;
-            try {
-                fragment = (Fragment) aClass.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // Insert the fragment by replacing any existing fragment
-            String biblio = "ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment";
-            String monETS = "ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment";
-
-            if(aClass.getName().equals(biblio)) {
-                String url = getString(R.string.url_biblio);
-                Intent internetIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(url));
-                startActivity(internetIntent);
-            }else if(aClass.getName().equals(monETS)){
-                String url = "https://portail.etsmtl.ca/";
-                Intent internetIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(url));
-                startActivity(internetIntent);
-
-            } else{
-                mfragment = fragment;
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, mfragment, aClass.getName())
-                        .addToBackStack(aClass.getName()).commit();
-
-                // Update the title, and close the drawer
-                setTitle(mMenu.get(key).title);
-                mDrawerLayout.closeDrawer(mDrawerList);
-            }
-        }
 
     }
 
@@ -431,14 +405,9 @@ public class MainActivity extends Activity {
      */
     private void selectAccount() {
         Intent intent = AccountPicker.newChooseAccountIntent(null, null,
-                new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
-        startActivityForResult(intent, Constants.REQUEST_CODE_EMAIL);
-    }
+                new String[]{"com.google"}, false, null, null, null, null);//TODO get the actual GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE ASAP!!!
 
-    @Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        getActionBar().setTitle(mTitle);
+        startActivityForResult(intent, Constants.REQUEST_CODE_EMAIL);
     }
 
     @Override
@@ -446,157 +415,118 @@ public class MainActivity extends Activity {
         this.finish();
     }
 
+    private Drawer.OnDrawerItemClickListener drawerItemClickListener = new Drawer.OnDrawerItemClickListener() {
+        @Override
+        public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
 
-    public void setTitles(){
-        // Section 1 - Moi
-        mMenu.put(getString(R.string.menu_section_1_moi),
-                new MyMenuItem(
-                        getString(R.string.menu_section_1_moi),
-                        null
-                ));
+            if (drawerItem != null) {
 
-        mMenu.put(TodayFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_1_ajd),
-                        TodayFragment.class,
-                        R.drawable.ic_ico_aujourdhui,
-                        true
-                ));
+                switch ((int) drawerItem.getIdentifier()) {
+                    case SCHEDULE_FRAGMENT:
+                        goToFragment(new HoraireFragment(), HoraireFragment.class.getName());
+                        break;
+                    case TODAY_FRAGMENT:
+                        goToFragment(new TodayFragment(), TodayFragment.class.getName());
+                        break;
+                    case MOODLE_FRAGMENT:
+                        goToFragment(new MoodleFragment(), MoodleFragment.class.getName());
+                        break;
+                    case COURSE_FRAGMENT:
+                        goToFragment(new NotesFragment(), NotesFragment.class.getName());
+                        break;
+                    case PROFILE_FRAGMENT:
+                        goToFragment(new ProfilFragment(), ProfilFragment.class.getName());
+                        break;
+                    case MONETS_FRAGMENT:
+                        goToFragment(new MonETSFragment(), MonETSFragment.class.getName());
+                        break;
+                    case BANDWIDTH_FRAGMENT:
+                        goToFragment(new BandwithFragment(), BandwithFragment.class.getName());
+                        break;
+                    case NEWS_FRAGMENT:
+                        goToFragment(new NewsFragment(), NewsFragment.class.getName());
+                        break;
+                    case EVENTS_FRAGMENT:
+                        goToFragment(new EventsFragment(), EventsFragment.class.getName());
+                        break;
+                    case LIBRARY_FRAGMENT:
+                        goToFragment(new BiblioFragment(), BiblioFragment.class.getName());
+                        break;
+                    case DIRECTORY_FRAGMENT:
+                        goToFragment(new BottinFragment(), BottinFragment.class.getName());
+                        break;
+                    case SECURITY_FRAGMENT:
+                        goToFragment(new SecuriteFragment(), SecuriteFragment.class.getName());
+                        break;
+                    case FAQ_FRAGMENT:
+                        goToFragment(new FAQFragment(), FAQFragment.class.getName());
+                        break;
+                    case ACHIEVEMENTS_FRAGMENT:
+                        goToFragment(new OtherAppsFragment(), OtherAppsFragment.class.getName());
+                        break;
+                    case ABOUT_FRAGMENT:
+                        goToFragment(new AboutFragment(), AboutFragment.class.getName());
+                        break;
+                    case SPONSOR_FRAGMENT:
+                        goToFragment(new SponsorsFragment(), SponsorsFragment.class.getName());
+                        break;
+                    case COMMENTS_FRAGMENT:
+                        selectAccount();
+                        break;
+                    case LOGIN:
+                        final AccountManagerFuture<Bundle> future =
+                                accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
+                                    @Override
+                                    public void run(AccountManagerFuture<Bundle> future) {
+                                        //Login successful
+                                    }
+                                }, null);
+                        break;
+                    case LOGOUT:
+                        openLogoutDialogAlert();
+                        break;
+                }
 
-        mMenu.put(HoraireFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_1_horaire),
-                        HoraireFragment.class,
-                        R.drawable.ic_ico_schedule,
-                        true
-                ));
+            }
+            return false;
+        }
+    };
 
-        mMenu.put(NotesFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_1_notes),
-                        NotesFragment.class,
-                        R.drawable.ic_ico_notes,
-                        true
-                ));
+    public void openLogoutDialogAlert() {
 
-        mMenu.put(MoodleFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_2_moodle),
-                        MoodleFragment.class,
-                        R.drawable.ic_moodle_icon_small,
-                        true
-                ));
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.action_logout))
+                .setMessage(R.string.logout_confirmation)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        deconnexion();
+                        dialog.dismiss();
 
-        mMenu.put(ProfilFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_1_profil),
-                        ProfilFragment.class,
-                        R.drawable.ic_ico_profil,
-                        true
-                ));
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
 
-        mMenu.put(MonETSFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_1_monETS),
-                        MonETSFragment.class,
-                        R.drawable.ic_monets,
-                        true
-                ));
-
-        mMenu.put(BandwithFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_1_bandwith),
-                        BandwithFragment.class,
-                        R.drawable.ic_ico_internet,
-                        false
-                ));
-
-
-        // Section 2 - ÉTS
-        mMenu.put(getString(R.string.menu_section_2_ets),
-                new MyMenuItem(
-                        getString(R.string.menu_section_2_ets),
-                        null
-                ));
-
-        mMenu.put(NewsFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_2_news),
-                        NewsFragment.class,
-                        R.drawable.ic_ico_news,
-                        false
-                ));
-
-
-        mMenu.put(BottinFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_2_bottin),
-                        BottinFragment.class,
-                        R.drawable.ic_ico_bottin,
-                        false
-                ));
-
-        mMenu.put(BiblioFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_2_biblio),
-                        BiblioFragment.class,
-                        R.drawable.ic_ico_library,
-                        false
-                ));
-
-        mMenu.put(SecuriteFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_2_securite),
-                        SecuriteFragment.class,
-                        R.drawable.ic_ico_security,
-                        false
-                ));
-
-        // Section 3 - ApplETS
-        mMenu.put(getString(R.string.menu_section_3_applets),
-                new MyMenuItem(
-                        getString(R.string.menu_section_3_applets),
-                        null
-                ));
-
-        mMenu.put(OtherAppsFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_3_apps),
-                        OtherAppsFragment.class,
-                        R.drawable.ic_star_60x60,
-                        false
-                ));
-
-        mMenu.put(AboutFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_3_about),
-                        AboutFragment.class,
-                        R.drawable.ic_logo_icon_final,
-                        false
-                ));
-
-        mMenu.put(CommentairesFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_3_comms),
-                        CommentairesFragment.class,
-                        R.drawable.ic_ico_comment,
-                        false
-                ));
-
-        mMenu.put(SponsorsFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_3_sponsors),
-                        SponsorsFragment.class,
-                        R.drawable.ic_ico_partners,
-                        false
-                ));
-
-        mMenu.put(FAQFragment.class.getName(),
-                new MyMenuItem(
-                        getString(R.string.menu_section_3_faq),
-                        FAQFragment.class,
-                        R.drawable.ic_ico_faq,
-                        false
-                ));
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
     }
+
+    public void goToFragment(Fragment fragment, String tag) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack(tag)
+                .commit();
+
+        this.invalidateOptionsMenu();
+    }
+
+    public void setTitle(String title) {
+        if (getSupportActionBar() != null) // Small fix : null when changing language
+            getSupportActionBar().setTitle(title);
+    }
+
 }

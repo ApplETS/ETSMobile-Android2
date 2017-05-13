@@ -3,14 +3,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "ca.etsmtl.applets.etsmobile"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
     }
     buildTypes {
         release {
@@ -22,7 +22,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.google.android.support:wearable:1.3.0'
-    compile 'com.google.android.gms:play-services-wearable:8.4.0'
+    compile 'com.google.android.support:wearable:2.0.0'
+    compile 'com.google.android.gms:play-services-wearable:9.4.0'
+    provided 'com.google.android.wearable:wearable:2.0.0'
     compile 'joda-time:joda-time:2.3'
 }

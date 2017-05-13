@@ -47,31 +47,18 @@ public class AppletsApiCalendarRequest extends SpringAndroidSpiceRequest<EventLi
     public EventList loadDataFromNetwork() throws Exception {
 
         String url = context.getString(R.string.applets_api_calendar, "ets", startDate, endDate);
-        // Instantiate the custom HttpClient to call Https request
-
-        String apiCredentials = context.getString(R.string.credentials_api);
-        String basicAuth = "Basic " + Base64.encode(apiCredentials.getBytes());
 
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
                 .url(url)
                 .get()
-                .addHeader("content-type", "multipart/form-data; boundary=---011000010111000001101001")
-                .addHeader("authorization", basicAuth)
                 .build();
 
         Response response = client.newCall(request).execute();
 
-        JSONObject result = new JSONObject(response.body().string());
-        // If the returned value of "data" returned by the API becomes an Array,
-        // change the type of JSONObject to JSONArray
-        JSONArray data = result.getJSONObject("data").getJSONArray("ets");
+        String calendarJson = response.body().string();
 
-        String s = data.toString();
-
-        EventList eventList = new Gson().fromJson(s, EventList.class);
-
-        return eventList;
+        return new Gson().fromJson(calendarJson, EventList.class);
     }
 }

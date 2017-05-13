@@ -21,6 +21,7 @@ import java.util.Observer;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiSponsorRequest;
 import ca.etsmtl.applets.etsmobile.model.Sponsor;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SponsorAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.SponsorManager;
@@ -44,6 +45,8 @@ public class SponsorsFragment extends HttpFragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_sponsors, container, false);
+
+
         loadingView = (LoadingView) v.findViewById(R.id.loadingView_sponsor);
         sponsorGridView = (GridView) v.findViewById(R.id.gridView_sponsor);
         sponsorList = new ArrayList<Sponsor>();
@@ -56,6 +59,11 @@ public class SponsorsFragment extends HttpFragment implements Observer {
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
+    }
+
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_3_sponsors);
     }
 
     @Override
