@@ -175,9 +175,10 @@ public class MainActivity extends AppCompatActivity {
         ProfilManager profilManager = new ProfilManager(this);
         Etudiant etudiant = profilManager.getEtudiant();
         if (etudiant != null) {
-
-            studentName = profilManager.getEtudiant().prenom.replace("  ", "") + " " + profilManager.getEtudiant().nom.replace(" ", "");
-            codeUniversel = profilManager.getEtudiant().codePerm;
+            String prenom = etudiant.prenom != null ? etudiant.prenom.trim() : "";
+            String nom = etudiant.nom != null ? etudiant.nom.trim() : "";
+            studentName = prenom + " " + nom;
+            codeUniversel = etudiant.codePerm != null ? etudiant.codePerm : "";
         }
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
