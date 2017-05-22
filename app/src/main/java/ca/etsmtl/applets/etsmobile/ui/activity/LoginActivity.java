@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -49,6 +50,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
     private View mLoginFormView;
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
+    private ProgressBar mLoginStatusProgressBar;
 
     private DataManager dataManager;
     private UserCredentials userCredentials;
@@ -88,6 +90,9 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+        mLoginStatusProgressBar = (ProgressBar) findViewById(R.id.login_status_progress);
+        mLoginStatusProgressBar.getIndeterminateDrawable().setColorFilter(getResources().
+                getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,14 +103,20 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
     }
 
     private void setUpBackground() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = displayMetrics.widthPixels;
-        int height = displayMetrics.heightPixels;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int width = displayMetrics.widthPixels;
+                int height = displayMetrics.heightPixels;
 
-        ImageView bgEtsIv = (ImageView) findViewById(R.id.bg_image_view);
+                ImageView bgEtsIv = (ImageView) findViewById(R.id.bg_image_view);
 
-        Picasso.with(getApplicationContext()).load(R.drawable.bg_ets).resize(width, height).onlyScaleDown().centerCrop().into(bgEtsIv);
+                Picasso.with(getApplicationContext()).load(R.drawable.bg_ets).resize(width, height).
+                        onlyScaleDown().centerCrop().into(bgEtsIv);
+            }
+        });
     }
 
     /**
