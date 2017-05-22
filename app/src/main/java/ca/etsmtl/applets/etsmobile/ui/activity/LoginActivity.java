@@ -7,41 +7,30 @@ import android.accounts.AccountManager;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.URL;
+import com.squareup.picasso.Picasso;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.AuthentificationPortailTask;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
-import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.util.Constants;
-import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -61,6 +50,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
     private View mLoginFormView;
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
+    private ProgressBar mLoginStatusProgressBar;
 
     private DataManager dataManager;
     private UserCredentials userCredentials;
@@ -75,6 +65,8 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
         dataManager = DataManager.getInstance(getApplicationContext());
 
         setContentView(R.layout.activity_login);
+
+        setUpBackground();
 
         accountManager = AccountManager.get(getBaseContext());
 
@@ -98,11 +90,31 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+        mLoginStatusProgressBar = (ProgressBar) findViewById(R.id.login_status_progress);
+        mLoginStatusProgressBar.getIndeterminateDrawable().setColorFilter(getResources().
+                getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+    }
+
+    private void setUpBackground() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int width = displayMetrics.widthPixels;
+                int height = displayMetrics.heightPixels;
+
+                ImageView bgEtsIv = (ImageView) findViewById(R.id.bg_image_view);
+
+                Picasso.with(getApplicationContext()).load(R.drawable.bg_ets).resize(width, height).
+                        onlyScaleDown().centerCrop().into(bgEtsIv);
             }
         });
     }
