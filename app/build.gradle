@@ -103,5 +103,6 @@ dependencies {
         transitive = true
     }
     compile 'com.github.markushi:circlebutton:1.1'
-    compile 'com.flaviofaria:kenburnsview:1.0.7'
+
+
 }
