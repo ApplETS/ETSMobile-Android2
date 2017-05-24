@@ -70,6 +70,7 @@
             android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity"
+            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity"
