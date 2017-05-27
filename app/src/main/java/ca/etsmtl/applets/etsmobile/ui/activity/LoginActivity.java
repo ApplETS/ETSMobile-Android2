@@ -8,7 +8,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -113,8 +112,13 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
 
                 ImageView bgEtsIv = (ImageView) findViewById(R.id.bg_image_view);
 
-                Picasso.with(getApplicationContext()).load(R.drawable.bg_ets).resize(width, height).
-                        onlyScaleDown().centerCrop().into(bgEtsIv);
+                Picasso.with(getApplicationContext())
+                        .load(R.drawable.bg_ets)
+                        .error(R.drawable.ets_background)
+                        .resize(width, height)
+                        .onlyScaleDown()
+                        .centerCrop()
+                        .into(bgEtsIv);
             }
         });
     }
