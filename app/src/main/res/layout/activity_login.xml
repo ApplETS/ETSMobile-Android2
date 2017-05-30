@@ -1,6 +1,11 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".LoginActivity" >
+    tools:context="ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity" >
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/bg_view"/>
 
     <!-- Login progress -->
 
@@ -14,10 +19,13 @@
         android:visibility="gone" >
 
         <ProgressBar
+            android:id="@+id/login_status_progress"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/login_status_message"
@@ -29,19 +37,10 @@
     </LinearLayout>
     <!--  android:fontFamily="sans-serif-light" -->
     <!-- Login form -->
-
-<!--     <ScrollView -->
-<!--         android:id="@+id/login_form" -->
-<!--         android:layout_width="match_parent" -->
-<!--         android:layout_height="match_parent" > -->
-
-	
-	
         <LinearLayout
             android:id="@+id/login_form"
             style="@style/LoginFormContainer"
             android:layout_gravity="top|center"
-            android:background="@drawable/background_ets"
             android:orientation="vertical" >
 
             <EditText
@@ -81,6 +80,4 @@
                 android:text="@string/action_sign_in_register"
                 android:textColor="@android:color/white" />
         </LinearLayout>
-<!--     </ScrollView> -->
-
 </merge>
