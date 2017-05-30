@@ -54,7 +54,7 @@ public class MoodleFragment extends HttpFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_moodle, container, false);
-        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
 
         super.onCreateView(inflater, v, savedInstanceState);
         moodleCoursesListView = (ListView) v.findViewById(R.id.listView_moodle_courses);

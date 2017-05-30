@@ -81,7 +81,6 @@ public class BandwithFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_bandwith, container, false);
-        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
 
         progressBar = (MultiColorProgressBar) v.findViewById(R.id.bandwith_progress);
         editTextApp = (EditText) v.findViewById(R.id.bandwith_editText_app);

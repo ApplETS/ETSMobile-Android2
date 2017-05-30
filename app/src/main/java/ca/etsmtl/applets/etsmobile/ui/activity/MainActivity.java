@@ -4,6 +4,7 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +13,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
@@ -46,7 +49,10 @@ import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.BaseFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.EventsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment;
@@ -60,7 +66,6 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
-import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.smooch.core.User;
@@ -68,8 +73,6 @@ import io.smooch.ui.ConversationActivity;
 
 /**
  * Main Activity for ÉTSMobile, handles the login and the Navigation Drawer (menu)
- *
- * @author Philippe David
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -89,20 +92,19 @@ public class MainActivity extends AppCompatActivity {
     public static final int FAQ_FRAGMENT = 15;
     public static final int SPONSOR_FRAGMENT = 16;
     public static final int TODAY_FRAGMENT = 17;
+    public static final int EVENTS_FRAGMENT = 20;
 
-    public static final long LOGIN = 18;
-    public static final long LOGOUT = 19;
+    public static final int LOGIN = 18;
+    public static final int LOGOUT = 19;
 
 
     private String TAG = "MainActivity";
     private AccountManager accountManager;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private boolean isGCMTokenSent;
-    private SecurePreferences securePreferences;
     public SharedPreferences prefs;
 
     private AccountHeader headerResult = null;
-    private Drawer result = null;
 
 
     private Toolbar toolbar;
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            goToFragment(new TodayFragment(), TodayFragment.getClassName());
+            goToFragment(new TodayFragment(), TodayFragment.class.getName());
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -130,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
-//
 
         isGCMTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
@@ -141,8 +142,30 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        securePreferences = new SecurePreferences(this);
+        boolean firstLogin = prefs.getBoolean(Constants.FIRST_LOGIN, true);
+        if (firstLogin) {
+            prefs.edit().putBoolean(Constants.FIRST_LOGIN, false).commit();
+            onCoachMark();
+        }
 
+    }
+
+    public void onCoachMark() {
+        final Dialog dialog = new Dialog(this, R.style.WalkthroughTheme);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.coachmark);
+        dialog.setCanceledOnTouchOutside(true);
+        //for dismissing anywhere you touch
+        View masterView = dialog.findViewById(R.id.coach_mark_master_view);
+        View.OnClickListener dismissOnClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        };
+        masterView.setOnClickListener(dismissOnClick);
+        dialog.show();
     }
 
     private void initDrawer() {
@@ -151,20 +174,27 @@ public class MainActivity extends AppCompatActivity {
         String codeUniversel = "";
         ProfilManager profilManager = new ProfilManager(this);
         Etudiant etudiant = profilManager.getEtudiant();
-        if(etudiant != null){
-
-            studentName = profilManager.getEtudiant().prenom.replace("  ","") +" "+ profilManager.getEtudiant().nom.replace(" ","");
-            codeUniversel= profilManager.getEtudiant().codePerm;
+        if (etudiant != null) {
+            String prenom = etudiant.prenom != null ? etudiant.prenom.trim() : "";
+            String nom = etudiant.nom != null ? etudiant.nom.trim() : "";
+            studentName = prenom + " " + nom;
+            codeUniversel = etudiant.codePerm != null ? etudiant.codePerm : "";
         }
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.ets_background_grayscale)
+                .withSelectionListEnabledForSingleProfile(false)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(codeUniversel).withEmail(studentName).withSelectedTextColor(ContextCompat.getColor(this,R.color.red)).withIcon(R.drawable.ic_user)
+                        new ProfileDrawerItem()
+                                .withName(codeUniversel)
+                                .withEmail(studentName)
+                                .withSelectedTextColor(ContextCompat.getColor(this, R.color.red))
+                                .withIcon(R.drawable.ic_user)
+                                .withSelectable(isUserLoggedIn)
                 ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
-                        goToFragment(new ProfilFragment(), ProfilFragment.getClassName());
+                        goToFragment(new ProfilFragment(), ProfilFragment.class.getName());
                         return false;
                     }
                 }).build();
@@ -173,9 +203,9 @@ public class MainActivity extends AppCompatActivity {
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
-                .withSelectedItem(TODAY_FRAGMENT)
+                .withSelectedItem(isUserLoggedIn ? TODAY_FRAGMENT : ABOUT_FRAGMENT)
                 .withDisplayBelowStatusBar(true)
-                //                .withActionBarDrawerToggle(true)
+                .withShowDrawerOnFirstLaunch(true)
                 .addDrawerItems(
                         new ExpandableDrawerItem().withName(R.string.menu_section_1_moi).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_ajd).withIdentifier(TODAY_FRAGMENT).withIcon(R.drawable.ic_ico_aujourdhui).withEnabled(isUserLoggedIn),
@@ -187,7 +217,8 @@ public class MainActivity extends AppCompatActivity {
                         ).withIsExpanded(true),
                         new ExpandableDrawerItem().withName(R.string.menu_section_2_ets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin).withSelectable(false),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_events).withIdentifier(EVENTS_FRAGMENT).withIcon(R.drawable.ic_event_available),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_biblio).withIdentifier(LIBRARY_FRAGMENT).withIcon(R.drawable.ic_ico_library),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_securite).withIdentifier(SECURITY_FRAGMENT).withIcon(R.drawable.ic_ico_security)
                         ),
@@ -208,8 +239,7 @@ public class MainActivity extends AppCompatActivity {
 
         drawerBuilder.withOnDrawerItemClickListener(drawerItemClickListener);
 
-
-        result = drawerBuilder.build();
+        drawerBuilder.build();
 
     }
 
@@ -228,12 +258,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         DataManager.getInstance(this).start();
@@ -243,6 +267,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         DataManager.getInstance(this).stop();
         super.onStop();
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        setTitle(((BaseFragment) fragment).getFragmentTitle());
     }
 
     @Override
@@ -330,7 +360,6 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             prefs.edit().remove("language").apply();
                             prefs.edit().putString("language", "fr").apply();
-//                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
                             recreate();
                             TodayWidgetProvider.updateAllWidgets(MainActivity.this);
                         }
@@ -340,19 +369,12 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             prefs.edit().remove("language").apply();
                             prefs.edit().putString("language", "en").apply();
-//                    mMenu = new LinkedHashMap<String, MyMenuItem>(17);
                             recreate();
                             TodayWidgetProvider.updateAllWidgets(MainActivity.this);
                         }
                     });
             builder.show();
         }
-
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-//        else if (mDrawerToggle.onOptionsItemSelected(item)) {
-//            return true;
-//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -378,7 +400,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     /**
      * Asks the user to pick a Google account so that we can have his email in slack support with
      * SupportKit
@@ -387,14 +408,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = AccountPicker.newChooseAccountIntent(null, null,
                 new String[]{"com.google"}, false, null, null, null, null);//TODO get the actual GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE ASAP!!!
 
-
         startActivityForResult(intent, Constants.REQUEST_CODE_EMAIL);
-    }
-
-    @Override
-    public void setTitle(CharSequence title) {
-//        mTitle = title;
-//        getActionBar().setTitle(mTitle);
     }
 
     @Override
@@ -409,95 +423,111 @@ public class MainActivity extends AppCompatActivity {
 
             if (drawerItem != null) {
 
-                if (drawerItem.getIdentifier() == SCHEDULE_FRAGMENT) {
-                    goToFragment(new HoraireFragment(), HoraireFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == TODAY_FRAGMENT) {
-                    goToFragment(new TodayFragment(), TodayFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == MOODLE_FRAGMENT) {
-                    goToFragment(new MoodleFragment(), MoodleFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == COURSE_FRAGMENT) {
-                    goToFragment(new NotesFragment(), NotesFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == PROFILE_FRAGMENT) {
-                    goToFragment(new ProfilFragment(), ProfilFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == MONETS_FRAGMENT) {
-                    goToFragment(new MonETSFragment(), MonETSFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == BANDWIDTH_FRAGMENT) {
-                    goToFragment(new BandwithFragment(), BandwithFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == NEWS_FRAGMENT) {
-                    goToFragment(new NewsFragment(), NewsFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == LIBRARY_FRAGMENT) {
-                    goToFragment(new BiblioFragment(), BiblioFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == DIRECTORY_FRAGMENT) {
-                    startActivity(new Intent(getApplicationContext(),BotinActivity.class));
-                } else if (drawerItem.getIdentifier() == SECURITY_FRAGMENT) {
-                    goToFragment(new SecuriteFragment(), SecuriteFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == FAQ_FRAGMENT) {
-                    goToFragment(new FAQFragment(), FAQFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == ACHIEVEMENTS_FRAGMENT) {
-                    goToFragment(new OtherAppsFragment(), OtherAppsFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == ABOUT_FRAGMENT) {
-                    goToFragment(new AboutFragment(), AboutFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == SPONSOR_FRAGMENT) {
-                    goToFragment(new SponsorsFragment(), SponsorsFragment.getClassName());
-                } else if (drawerItem.getIdentifier() == COMMENTS_FRAGMENT) {
-                    selectAccount();
-                } else if (drawerItem.getIdentifier() == LOGIN) {
-                    final AccountManagerFuture<Bundle> future = accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
-                        @Override
-                        public void run(AccountManagerFuture<Bundle> future) {
-                            //Login successful
-                        }
-                    }, null);
-                } else if (drawerItem.getIdentifier() == LOGOUT) {
-                    openLogoutDialogAlert();
+                switch ((int) drawerItem.getIdentifier()) {
+                    case SCHEDULE_FRAGMENT:
+                        goToFragment(new HoraireFragment(), HoraireFragment.class.getName());
+                        break;
+                    case TODAY_FRAGMENT:
+                        goToFragment(new TodayFragment(), TodayFragment.class.getName());
+                        break;
+                    case MOODLE_FRAGMENT:
+                        goToFragment(new MoodleFragment(), MoodleFragment.class.getName());
+                        break;
+                    case COURSE_FRAGMENT:
+                        goToFragment(new NotesFragment(), NotesFragment.class.getName());
+                        break;
+                    case PROFILE_FRAGMENT:
+                        goToFragment(new ProfilFragment(), ProfilFragment.class.getName());
+                        break;
+                    case MONETS_FRAGMENT:
+                        goToFragment(new MonETSFragment(), MonETSFragment.class.getName());
+                        break;
+                    case BANDWIDTH_FRAGMENT:
+                        goToFragment(new BandwithFragment(), BandwithFragment.class.getName());
+                        break;
+                    case NEWS_FRAGMENT:
+                        goToFragment(new NewsFragment(), NewsFragment.class.getName());
+                        break;
+                    case EVENTS_FRAGMENT:
+                        goToFragment(new EventsFragment(), EventsFragment.class.getName());
+                        break;
+                    case LIBRARY_FRAGMENT:
+                        goToFragment(new BiblioFragment(), BiblioFragment.class.getName());
+                        break;
+                    case DIRECTORY_FRAGMENT:
+                        goToFragment(new BottinFragment(), BottinFragment.class.getName());
+                        break;
+                    case SECURITY_FRAGMENT:
+                        goToFragment(new SecuriteFragment(), SecuriteFragment.class.getName());
+                        break;
+                    case FAQ_FRAGMENT:
+                        goToFragment(new FAQFragment(), FAQFragment.class.getName());
+                        break;
+                    case ACHIEVEMENTS_FRAGMENT:
+                        goToFragment(new OtherAppsFragment(), OtherAppsFragment.class.getName());
+                        break;
+                    case ABOUT_FRAGMENT:
+                        goToFragment(new AboutFragment(), AboutFragment.class.getName());
+                        break;
+                    case SPONSOR_FRAGMENT:
+                        goToFragment(new SponsorsFragment(), SponsorsFragment.class.getName());
+                        break;
+                    case COMMENTS_FRAGMENT:
+                        selectAccount();
+                        break;
+                    case LOGIN:
+                        final AccountManagerFuture<Bundle> future =
+                                accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
+                                    @Override
+                                    public void run(AccountManagerFuture<Bundle> future) {
+                                        //Login successful
+                                    }
+                                }, null);
+                        break;
+                    case LOGOUT:
+                        openLogoutDialogAlert();
+                        break;
                 }
 
             }
             return false;
         }
     };
-    public void openLogoutDialogAlert(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                this);
 
-        // set title
-        alertDialogBuilder.setTitle(getString(R.string.action_logout));
+    public void openLogoutDialogAlert() {
 
-        // set dialog message
-        alertDialogBuilder
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.action_logout))
                 .setMessage(R.string.logout_confirmation)
-                .setPositiveButton(android.R.string.yes,new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
                         deconnexion();
                         dialog.dismiss();
 
                     }
                 })
-                .setNegativeButton(android.R.string.cancel,new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
 
                         dialog.dismiss();
                     }
-                });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
+                })
+                .create()
+                .show();
     }
+
     public void goToFragment(Fragment fragment, String tag) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .addToBackStack(tag)
                 .commit();
 
-//        setTitle(((BaseFragment)fragment).getFragmentTitle());
         this.invalidateOptionsMenu();
     }
 
-    public void setTitle(String title){
-        getSupportActionBar().setTitle(title);
+    public void setTitle(String title) {
+        if (getSupportActionBar() != null) // Small fix : null when changing language
+            getSupportActionBar().setTitle(title);
     }
 
 }

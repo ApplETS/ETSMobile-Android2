@@ -63,7 +63,7 @@ public class NotesFragment extends HttpFragment implements Observer {
 
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_note, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
-        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
 
         mListView = (ListView) v.findViewById(R.id.activity_note_listview);
 

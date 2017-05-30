@@ -118,28 +118,30 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        this.context = context;
-        horaireManager = new HoraireManager(this, context);
-        horaireManager.addObserver(this);
+        if (appWidgetIds.length > 0) {
+            this.context = context;
+            horaireManager = new HoraireManager(this, context);
+            horaireManager.addObserver(this);
 
-        mUserLoggedIn = userLoggedIn();
+            mUserLoggedIn = userLoggedIn();
 
-        this.appWidgetManager = appWidgetManager;
+            this.appWidgetManager = appWidgetManager;
 
-        if (mUserLoggedIn && !syncEnCours) {
-            dataManager = DataManager.getInstance(context);
-            sync();
-            syncEnCours = true;
-            // Sauvegarde des ids pour une mise à jour ultérieure à la suite de la synchronisation
-            appWidgetsToBeUpdatedIds = appWidgetIds.clone();
-        }
+            if (mUserLoggedIn && !syncEnCours) {
+                dataManager = DataManager.getInstance(context);
+                sync();
+                syncEnCours = true;
+                // Sauvegarde des ids pour une mise à jour ultérieure à la suite de la synchronisation
+                appWidgetsToBeUpdatedIds = appWidgetIds.clone();
+            }
 
-        String lang = TodayWidgetConfigureActivity.loadLanguagePref(context, appWidgetIds[0]);
-        setAllWidgetsLocale(context, lang);
+            String lang = TodayWidgetConfigureActivity.loadLanguagePref(context, appWidgetIds[0]);
+            setAllWidgetsLocale(context, lang);
 
-        // Mise à jour de chaque widget avec les données locales en attendant les données distantes
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            // Mise à jour de chaque widget avec les données locales en attendant les données distantes
+            for (int appWidgetId : appWidgetIds) {
+                updateAppWidget(context, appWidgetManager, appWidgetId);
+            }
         }
     }
 

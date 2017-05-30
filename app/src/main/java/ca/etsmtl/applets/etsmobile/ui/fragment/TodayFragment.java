@@ -67,7 +67,7 @@ public class TodayFragment extends HttpFragment implements Observer {
                              Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_today, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
-        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
 
         semesterProgressBar = (ProgressBar) v.findViewById(R.id.semester_progress_bar);
         semesterProgressBarText = (TextView) v.findViewById(R.id.semester_progress_bar_text);
@@ -130,7 +130,8 @@ public class TodayFragment extends HttpFragment implements Observer {
             for (int i = listeDeSessions.liste.size() - 1; i > 0; i-- ) {
                 dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
                 dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
-                setSemesterProgressBarText(dateStart, dateEnd);
+                if (isAdded())
+                    setSemesterProgressBarText(dateStart, dateEnd);
                 if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
                     String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
                     String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);

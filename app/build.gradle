@@ -41,8 +41,8 @@ android {
         applicationId "ca.etsmtl.applets.etsmobile"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 22
-        versionName "2.11"
+        versionCode 23
+        versionName "2.20"
         multiDexEnabled true
     }
 
@@ -51,6 +51,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 }
 

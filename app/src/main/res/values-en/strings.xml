@@ -65,7 +65,7 @@
     <string name="activity_moodle_pwd_instruc">University password</string>
     <string name="activity_moodle_app">Moodle App</string>
     <string name="applets_about">ÉTSMobile was conceived by the ApplETS scientific club from the École de technologie supérieure.\n\nApplets is, most importantly, a gathering of students who share a typical enthusiasm for the field of telecommunications and mobile applications.
-        The mission of ApplETS is to train students in mobile development and promote the production of mobile applications within the student community.\n\nFor more information, please consult our website : \n\nhttp://clubapplets.ca</string>
+        The mission of ApplETS is to train students in mobile development and promote the production of mobile applications within the student community.\n\nFor more information, please consult our website : \n\nhttp://clubapplets.ca\n\nWant to contribute? Check the Github repo :\nhttp://github.com/ApplETS/ETSMobile-Android2 </string>
     <string name="applets_ens_etsmtl_ca">applets@ens.etsmtl.ca</string>
     <string name="etsmobile_android_commentaire">ETSMobile-Android : Comments</string>
     <string name="default_comment"></string>
@@ -206,4 +206,6 @@
 
     <!-- Showcase -->
     <string name="new_future_message">Tap the profile image in the menu to access the Profile(when logged in)</string>
+    <string name="coachmark_hint_profile">Use the icon above to access your Profile</string>
+    <string name="coachmark_hint_login">Use the button below to Login/Logout</string>
 </resources>

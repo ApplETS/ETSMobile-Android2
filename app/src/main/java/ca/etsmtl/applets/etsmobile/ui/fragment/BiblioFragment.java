@@ -26,7 +26,6 @@ public class BiblioFragment extends WebFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_web_view, container, false);
-        ((MainActivity) getActivity()).setTitle(getFragmentTitle());
 
         super.onCreateView(inflater, v, savedInstanceState);
 

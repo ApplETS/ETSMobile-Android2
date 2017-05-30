@@ -43,7 +43,7 @@ public class SecuriteFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.security, container, false);
-		( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
 
 //		mapView = (MapView) v.findViewById(R.id.map);
 //	    mapView.onCreate(savedInstanceState);

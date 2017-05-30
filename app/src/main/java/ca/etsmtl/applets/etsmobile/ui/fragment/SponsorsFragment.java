@@ -45,7 +45,7 @@ public class SponsorsFragment extends HttpFragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_sponsors, container, false);
-        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
 
         loadingView = (LoadingView) v.findViewById(R.id.loadingView_sponsor);
         sponsorGridView = (GridView) v.findViewById(R.id.gridView_sponsor);

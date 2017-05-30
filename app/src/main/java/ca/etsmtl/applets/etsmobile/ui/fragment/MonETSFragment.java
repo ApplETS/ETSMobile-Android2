@@ -36,7 +36,7 @@ public class MonETSFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_web_view, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
-        ( (MainActivity)getActivity()).setTitle(getFragmentTitle());
+
 
         webView = (WebView) v.findViewById(R.id.webView);
 
