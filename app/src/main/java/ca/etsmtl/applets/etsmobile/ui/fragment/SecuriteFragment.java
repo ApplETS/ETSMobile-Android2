@@ -23,96 +23,70 @@ import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class SecuriteFragment extends BaseFragment {
-	
-	
-	private ListView listView;
-//	private MapView mapView;
-//	GoogleMap map;
-	
-	double lat = 45.494498;
-	double lng = -73.563124;
-
-	
-	@Override
-	public void onCreate(final Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
 
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.security, container, false);
+    private ListView listView;
+
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
 
-//		mapView = (MapView) v.findViewById(R.id.map);
-//	    mapView.onCreate(savedInstanceState);
-//	    map = mapView.getMap();
-//	    map.getUiSettings().setMyLocationButtonEnabled(false);
-//        map.setMyLocationEnabled(true);
-//
-//        MapsInitializer.initialize(this.getActivity());
-// 
-        // Updates the location and zoom of the MapView 
-       
-//        CameraUpdate cameraUpdate =  CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 17);
-//        map.animateCamera(cameraUpdate);
-//
-//        final MarkerOptions etsMarker = new MarkerOptions();
-//		etsMarker.position(new LatLng(lat, lng));
-//		etsMarker.icon(BitmapDescriptorFactory
-//				.fromResource(R.drawable.ets));
-//		map.addMarker(etsMarker);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.security, container, false);
 
-		final AppCompatActivity activity = (AppCompatActivity) getActivity();
+        final AppCompatActivity activity = (AppCompatActivity) getActivity();
 
-		listView = (ListView) v.findViewById(android.R.id.list);
+        listView = (ListView) v.findViewById(android.R.id.list);
 
-		final ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-				R.layout.secu_list_header,
-				(ViewGroup) v.findViewById(R.id.secu_list_header_layout));
-		listView.addHeaderView(viewGroup, null, false);
+        final ViewGroup viewGroup = (ViewGroup) inflater.inflate(
+                R.layout.secu_list_header,
+                (ViewGroup) v.findViewById(R.id.secu_list_header_layout));
+        listView.addHeaderView(viewGroup, null, false);
 
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(final AdapterView<?> arg0, final View arg1,
-					final int arg2, final long arg3) {
-				final Intent intent = new Intent(activity,
-						UrgenceActivity.class);
-				intent.putExtra("id", arg2);
-				startActivity(intent);
+        listView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> arg0, final View arg1,
+                                    final int arg2, final long arg3) {
+                final Intent intent = new Intent(activity,
+                        UrgenceActivity.class);
+                intent.putExtra("id", arg2);
+                startActivity(intent);
 
-			}
-		});
+            }
+        });
 
-		listView.setAdapter(new ArrayAdapter<String>(activity,R.layout.row_text_with_arrow, R.id.titleTextView, activity.getResources().getStringArray(R.array.secu_urgence)));
+        listView.setAdapter(new ArrayAdapter<String>(activity, R.layout.row_text_with_arrow, R.id.titleTextView, activity.getResources().getStringArray(R.array.secu_urgence)));
 
-		viewGroup.findViewById(R.id.secu_list_header_phone).setOnClickListener(
-				new OnClickListener() {
+        viewGroup.findViewById(R.id.secu_list_header_phone).setOnClickListener(
+                new OnClickListener() {
 
-					@Override
-					public void onClick(final View v) {
-						final String phoneNumber = ((TextView) v).getText()
-								.toString();
-						final String uri = "tel:" + phoneNumber.trim();
-						final Intent intent = new Intent(Intent.ACTION_DIAL);
-						intent.setData(Uri.parse(uri));
+                    @Override
+                    public void onClick(final View v) {
+                        final String phoneNumber = ((TextView) v).getText()
+                                .toString();
+                        final String uri = "tel:" + phoneNumber.trim();
+                        final Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.parse(uri));
 
-						AnalyticsHelper.getInstance(getActivity())
-								.sendActionEvent(getClass()
-										.getSimpleName(), UrgenceActivity.APPEL_D_URGENCE);
+                        AnalyticsHelper.getInstance(getActivity())
+                                .sendActionEvent(getClass()
+                                        .getSimpleName(), UrgenceActivity.APPEL_D_URGENCE);
 
-						startActivity(intent);
-					}
-				});
+                        startActivity(intent);
+                    }
+                });
 
-		AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
-		return v; 
-	}
+        return v;
+    }
 
-	@Override
-	public String getFragmentTitle() {
-		return getString(R.string.menu_section_2_securite);
-	}
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.menu_section_2_securite);
+    }
 }

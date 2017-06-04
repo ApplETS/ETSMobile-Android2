@@ -173,6 +173,7 @@ public class TodayWidgetService extends RemoteViewsService {
                 Event event = (Event) item.data;
                 rv = new RemoteViews(packageName, R.layout.widget_today_row_event);
                 rv.setTextViewText(R.id.event_text, event.getTitle());
+                rv.setTextColor(R.id.event_text, textColor);
 
             } else if (viewType == TodayDataRowItem.viewType.VIEW_TYPE_TITLE_SEANCE.getValue()) {
                 rv = new RemoteViews(packageName, R.layout.row_today_title);

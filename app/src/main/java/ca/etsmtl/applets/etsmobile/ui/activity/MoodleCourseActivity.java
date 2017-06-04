@@ -28,7 +28,6 @@ public class MoodleCourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("MoodleActivity", "entered onCreate");
         setContentView(R.layout.activity_moodle_course);
 
 
@@ -79,9 +78,7 @@ public class MoodleCourseActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("idCours", idCours);
-        Log.d("onSaveInstanceState", "registering idCours value = " + idCours);
         outState.putString("nameCours", nameCours);
-        Log.d("onSaveInstanceState", "registering nameCours = " + nameCours);
     }
 
     @Override
