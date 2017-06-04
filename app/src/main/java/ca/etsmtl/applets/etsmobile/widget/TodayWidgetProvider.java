@@ -67,14 +67,14 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     private AppWidgetManager appWidgetManager;
 
     private void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+                                 int appWidgetId) {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), widgetInitialLayoutId);
 
         if (!syncEnCours && mUserLoggedIn) {
             views.setViewVisibility(syncBtnId, View.VISIBLE);
             views.setViewVisibility(progressBarId, View.GONE);
-        } else if (syncEnCours && mUserLoggedIn){
+        } else if (syncEnCours && mUserLoggedIn) {
             views.setViewVisibility(progressBarId, View.VISIBLE);
             views.setProgressBar(progressBarId, 0, 0, true);
             views.setViewVisibility(syncBtnId, View.GONE);
@@ -213,7 +213,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     }
 
     private void setUpSyncBtn(Context context, RemoteViews views, int textColor) {
-        Intent intentRefresh = new Intent(context,  TodayWidgetProvider.class);
+        Intent intentRefresh = new Intent(context, TodayWidgetProvider.class);
         intentRefresh.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         intentRefresh.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetsIds(context));
         PendingIntent pendingIntentRefresh = PendingIntent.getBroadcast(context, 0, intentRefresh,
@@ -274,7 +274,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         syncEnCours = false;
 
         Toast toast = Toast.makeText(context, "ÉTSMobile" + context.getString(R.string.deux_points)
-                + context.getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT);
+                + spiceException.getLocalizedMessage(), Toast.LENGTH_SHORT);
         toast.show();
 
         // Mise à jour avec les données locales
@@ -293,7 +293,11 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     @Override
     public void onRequestSuccess(Object o) {
         if (o instanceof ListeDeSessions) {
-            requestEventList((ListeDeSessions) o);
+            if (((ListeDeSessions) o).liste.size() > 0)
+                requestEventList((ListeDeSessions) o);
+            else {
+                onRequestFailure(new SpiceException("La liste de sessions est vide."));
+            }
         } else {
             // Mise à jour de la BD contenant les données locales
             horaireManager.onRequestSuccess(o);
@@ -313,7 +317,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
         DateTime dateDebut = new DateTime(derniereSession.dateDebut);
 
-        if(DateTime.now().isBefore(dateDebut)) {
+        if (DateTime.now().isBefore(dateDebut)) {
             dateDebut = DateTime.now();
         }
 
@@ -329,7 +333,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
     /**
      * <h1>Mise à jour des widgets</h1>
-     *
+     * <p>
      * À cette étape, les données distantes ont été obtenues et la BD locale a été mise à jour dans
      * {@link ca.etsmtl.applets.etsmobile.util.HoraireManager#onRequestSuccess(Object)} permettant
      * ainsi de déclencher la mise la jour des widgets
@@ -346,7 +350,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
     /**
      * <h1>Mise à jour d'un widget</h1>
-     *
+     * <p>
      * Procédure pouvant être appelée dans l'application principale afin de déclencher la mise à
      * jour d'un widget
      *
@@ -355,13 +359,13 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     public static void updateWidget(Context context, int appWidgetId) {
         Intent intent = new Intent(context, TodayWidgetProvider.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[] {appWidgetId});
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[]{appWidgetId});
         context.sendBroadcast(intent);
     }
 
     /**
      * <h1>Mise à jour de tous les widgets</h1>
-     *
+     * <p>
      * Procédure pouvant être appelée dans l'application principale afin de déclencher la mise à
      * jour de tous les widgets
      *
