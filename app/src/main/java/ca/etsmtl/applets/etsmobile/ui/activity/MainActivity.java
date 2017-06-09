@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = "MainActivity";
     private AccountManager accountManager;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private Drawer activityDrawer;
     private boolean isGCMTokenSent;
     public SharedPreferences prefs;
 
@@ -195,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
                         goToFragment(new ProfilFragment(), ProfilFragment.class.getName());
+                        activityDrawer.deselect();
                         return false;
                     }
                 }).build();
@@ -239,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
 
         drawerBuilder.withOnDrawerItemClickListener(drawerItemClickListener);
 
-        drawerBuilder.build();
+        activityDrawer = drawerBuilder.build();
 
     }
 
@@ -435,9 +437,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case COURSE_FRAGMENT:
                         goToFragment(new NotesFragment(), NotesFragment.class.getName());
-                        break;
-                    case PROFILE_FRAGMENT:
-                        goToFragment(new ProfilFragment(), ProfilFragment.class.getName());
                         break;
                     case MONETS_FRAGMENT:
                         goToFragment(new MonETSFragment(), MonETSFragment.class.getName());
