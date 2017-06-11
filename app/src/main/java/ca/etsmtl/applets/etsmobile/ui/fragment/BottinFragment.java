@@ -1,16 +1,12 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -19,13 +15,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-
 import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
@@ -43,17 +35,15 @@ import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity;
-import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
- *
  * @author Thibaut
  */
-public class BottinFragment extends HttpFragment implements SearchView.OnQueryTextListener  {
+public class BottinFragment extends HttpFragment implements SearchView.OnQueryTextListener {
     //TODO Change to activity to be able to search
     private SearchView searchView;
     private ExpandableListAdapter listAdapter;
@@ -62,7 +52,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 
     private List<String> listDataHeader;
     private HashMap<String, List<FicheEmploye>> listDataChild;
-    private ProgressDialog mProgressDialog;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -75,7 +65,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         searchView.setOnQueryTextListener(this);
 
         super.onCreateOptionsMenu(menu, inflater);
-
     }
 
     @Override
@@ -89,51 +78,30 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         switch (item.getItemId()) {
 
             case R.id.menu_item_update:
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.menu_bottin_refresh)
-                        .setView(getActivity().getLayoutInflater().inflate(R.layout.dialog_bottin,null))
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //Suppression du bottin
-                                DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-                                try {
-                                    Dao<FicheEmploye, ?> ficheEmployeDao = dbHelper.getDao(FicheEmploye.class);
-                                    List<FicheEmploye> ficheEmployeList = ficheEmployeDao.queryForAll();
-                                    for (FicheEmploye ficheEmploye : ficheEmployeList) {
-                                        ficheEmployeDao.delete(ficheEmploye);
-                                    }
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }
-
-                                //Mise à jour de la liste
-                                listDataHeader = new ArrayList<>();
-                                listDataChild = new HashMap<>();
-
-                                listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
-
-
-
-                                expListView.setAdapter(listAdapter);
-                                updateUI();
-                                dialogInterface.dismiss();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-                builder.create().show();
-
+                if (!Utility.isNetworkAvailable(getActivity())) {
+                    afficherMsgHorsLigne();
+                } else {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    rechargerBottin();
+                }
 
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
 
+    private void supprimerBottin() {
+        DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+        try {
+            Dao<FicheEmploye, ?> ficheEmployeDao = dbHelper.getDao(FicheEmploye.class);
+            List<FicheEmploye> ficheEmployeList = ficheEmployeDao.queryForAll();
+            for (FicheEmploye ficheEmploye : ficheEmployeList) {
+                ficheEmployeDao.delete(ficheEmploye);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -144,7 +112,16 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_bottin, container, false);
+        ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_bottin, container, false);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v;
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                rechargerBottin();
+            }
+        });
 
         // get the listview
         expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
@@ -191,10 +168,9 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         return v;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     void updateUI() {
-        // Get le contenu dans la bd
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         DatabaseHelper dbHelper = new DatabaseHelper(activity);
 
@@ -234,76 +210,102 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
                 // Pour les derniers éléments dans la liste
                 listDataChild.put(previousNomService, listEmployesOfService);
 
-                listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
-                expListView.setAdapter(listAdapter);
-
                 if (activity != null) {
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
+                            listAdapter = new ExpandableListAdapter(getActivity(),
+                                    listDataHeader, listDataChild);
+                            expListView.setAdapter(listAdapter);
                             listAdapter.notifyDataSetChanged();
                         }
                     });
                 }
                 // Si le contenu est vide, télécharger le bottin
             } else {
-                // Si l'appareil est connecté sur internet, télécharger le bottin en ligne
-                if (Utility.isNetworkAvailable(getActivity())) {
-                    try {
-                        mProgressDialog = ProgressDialog.show(getActivity(), null, getString(R.string.dialog_Loading_Directory), true);
-                        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                        DataManager datamanager = DataManager.getInstance(getActivity());
-                        datamanager.getDataFromSignet(
-                                DataManager.SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
-                                ApplicationManager.userCredentials, this);
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                    // Si l'appareil n'est pas connecté sur internet, envoyer un message
-                } else {
-                    Toast.makeText(getActivity(), getString(R.string.toast_Connection_Required), Toast.LENGTH_LONG).show();
-                }
+                mSwipeRefreshLayout.setRefreshing(true);
+                rechargerBottin();
             }
         } catch (Exception e) {
             Log.e("BD FicheEmploye", e.getMessage());
         }
     }
 
+    private void rechargerBottin() {
+        // Si l'appareil est connecté sur internet, télécharger le bottin en ligne
+        if (Utility.isNetworkAvailable(getActivity())) {
+            try {
+                DataManager datamanager = DataManager.getInstance(getActivity());
+                datamanager.getDataFromSignet(
+                        DataManager.SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
+                        ApplicationManager.userCredentials, this);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        } else {
+            afficherMsgHorsLigne();
+        }
+    }
+
+    private void afficherMsgHorsLigne() {
+        if (isVisible()) {
+            Toast.makeText(getActivity(), getString(R.string.toast_Connection_Required),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
     @Override
-    public void onRequestSuccess(Object o) {
+    public void onRequestSuccess(final Object o) {
         super.onRequestSuccess(o);
         if (o instanceof HashMap<?, ?>) {
-            mProgressDialog.hide();
-            @SuppressWarnings("unchecked")
-            HashMap<String, List<FicheEmploye>> listeEmployeByService = (HashMap<String, List<FicheEmploye>>) o;
 
-            // Écriture dans la base de données
-            DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+            // Exécution dans un autre fil afin d'éviter les sauts d'image (blocage du UI)
+            new AsyncTask<Void, Void, Void>() {
 
-            for (String nomService : listeEmployeByService.keySet()) {
+                protected Void doInBackground(Void... params) {
+                    @SuppressWarnings("unchecked")
+                    HashMap<String, List<FicheEmploye>> listeEmployeByService = (HashMap<String, List<FicheEmploye>>) o;
 
-                List<FicheEmploye> listeEmployes = listeEmployeByService.get(nomService);
+                    // Écriture dans la base de données
+                    DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
 
-                if (listeEmployes.size() > 0) {
-                    for (FicheEmploye ficheEmploye : listeEmployeByService.get(nomService)) {
-                        try {
-                            dbHelper.getDao(FicheEmploye.class).createOrUpdate(ficheEmploye);
-                        } catch (SQLException e) {
-                            Log.e(DatabaseHelper.class.getName(), "SQLException", e);
-                            throw new RuntimeException(e);
+                    for (String nomService : listeEmployeByService.keySet()) {
+
+                        List<FicheEmploye> listeEmployes = listeEmployeByService.get(nomService);
+
+                        if (listeEmployes.size() > 0) {
+                            for (FicheEmploye ficheEmploye : listeEmployeByService.get(nomService)) {
+                                try {
+                                    dbHelper.getDao(FicheEmploye.class).createOrUpdate(ficheEmploye);
+                                } catch (SQLException e) {
+                                    Log.e(DatabaseHelper.class.getName(), "SQLException", e);
+                                    throw new RuntimeException(e);
+                                }
+                            }
                         }
                     }
+                    return null;
                 }
-            }
 
-            updateUI();
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+
+                    updateUI();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }.execute();
         }
 
     }
 
-
     @Override
     public void onRequestFailure(SpiceException e) {
         super.onRequestFailure(e);
+
+        if (!Utility.isNetworkAvailable(getActivity()))
+            afficherMsgHorsLigne();
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
