@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +26,8 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -89,19 +90,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void supprimerBottin() {
-        DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-        try {
-            Dao<FicheEmploye, ?> ficheEmployeDao = dbHelper.getDao(FicheEmploye.class);
-            List<FicheEmploye> ficheEmployeList = ficheEmployeDao.queryForAll();
-            for (FicheEmploye ficheEmploye : ficheEmployeList) {
-                ficheEmployeDao.delete(ficheEmploye);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -201,6 +189,12 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
                     nomService = employe.Service;
                     if (!listDataHeader.contains(nomService)) {
                         listDataHeader.add(nomService);
+                        Collections.sort(listEmployesOfService, new Comparator<FicheEmploye>() {
+                            @Override
+                            public int compare(FicheEmploye f1, FicheEmploye f2) {
+                                return f1.Nom.compareTo(f2.Nom);
+                            }
+                        });
                         listDataChild.put(previousNomService, listEmployesOfService);
                         listEmployesOfService = new ArrayList<>();
                         previousNomService = nomService;
@@ -268,21 +262,29 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
                     // Écriture dans la base de données
                     DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
 
-                    for (String nomService : listeEmployeByService.keySet()) {
+                    try {
+                        Dao<FicheEmploye, ?> ficheEmployeDao = dbHelper.getDao(FicheEmploye.class);
 
-                        List<FicheEmploye> listeEmployes = listeEmployeByService.get(nomService);
+                        for (FicheEmploye ficheEmploye : ficheEmployeDao.queryForAll()) {
+                            ficheEmployeDao.delete(ficheEmploye);
+                        }
 
-                        if (listeEmployes.size() > 0) {
-                            for (FicheEmploye ficheEmploye : listeEmployeByService.get(nomService)) {
-                                try {
+                        for (String nomService : listeEmployeByService.keySet()) {
+
+                            List<FicheEmploye> listeEmployes = listeEmployeByService.get(nomService);
+
+                            if (listeEmployes.size() > 0) {
+                                for (FicheEmploye ficheEmploye : listeEmployeByService.get(nomService)) {
                                     dbHelper.getDao(FicheEmploye.class).createOrUpdate(ficheEmploye);
-                                } catch (SQLException e) {
-                                    Log.e(DatabaseHelper.class.getName(), "SQLException", e);
-                                    throw new RuntimeException(e);
                                 }
                             }
                         }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        Log.e(DatabaseHelper.class.getName(), "SQLException", e);
+                        throw new RuntimeException(e);
                     }
+
                     return null;
                 }
 
