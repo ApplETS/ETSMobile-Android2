@@ -82,8 +82,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
                 if (!Utility.isNetworkAvailable(getActivity())) {
                     afficherMsgHorsLigne();
                 } else {
-                    mSwipeRefreshLayout.setRefreshing(true);
-                    rechargerBottin();
+                    afficherRafraichissementEtRechargerBottin();
                 }
 
                 return true;
@@ -106,8 +105,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mSwipeRefreshLayout.setRefreshing(true);
-                rechargerBottin();
+                afficherRafraichissementEtRechargerBottin();
             }
         });
 
@@ -214,10 +212,15 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
                         }
                     });
                 }
+
+                // Rétablissement du filtre de recherche
+                CharSequence searchText = searchView.getQuery();
+                if (searchText.length() != 0)
+                    onQueryTextChange(searchText.toString());
+
                 // Si le contenu est vide, télécharger le bottin
             } else {
-                mSwipeRefreshLayout.setRefreshing(true);
-                rechargerBottin();
+                afficherRafraichissementEtRechargerBottin();
             }
         } catch (Exception e) {
             Log.e("BD FicheEmploye", e.getMessage());
@@ -240,6 +243,11 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         }
     }
 
+    private void afficherRafraichissementEtRechargerBottin() {
+        mSwipeRefreshLayout.setRefreshing(true);
+        rechargerBottin();
+    }
+
     private void afficherMsgHorsLigne() {
         if (isVisible()) {
             Toast.makeText(getActivity(), getString(R.string.toast_Connection_Required),
@@ -251,7 +259,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     public void onRequestSuccess(final Object o) {
         super.onRequestSuccess(o);
         if (o instanceof HashMap<?, ?>) {
-
             // Exécution dans un autre fil afin d'éviter les sauts d'image (blocage du UI)
             new AsyncTask<Void, Void, Void>() {
 
@@ -280,6 +287,12 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
                             }
                         }
                     } catch (SQLException e) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
                         e.printStackTrace();
                         Log.e(DatabaseHelper.class.getName(), "SQLException", e);
                         throw new RuntimeException(e);
@@ -293,6 +306,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
                     super.onPostExecute(aVoid);
 
                     updateUI();
+
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             }.execute();
@@ -325,6 +339,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
             listAdapter.filterDataWithOneHeader(newText);
             expListView.expandGroup(0);
         }
+
         return true;
     }
 }
