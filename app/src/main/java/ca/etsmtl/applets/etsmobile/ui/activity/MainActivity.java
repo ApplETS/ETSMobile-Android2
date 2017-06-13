@@ -78,23 +78,22 @@ public class MainActivity extends AppCompatActivity {
     public static final int SCHEDULE_ITEM = 1;
     public static final int COURSE_ITEM = 2;
     public static final int MOODLE_ITEM = 3;
-    public static final int PROFILE_FRAGMENT = 4;
-    public static final int MONETS_ITEM = 5;
-    public static final int BANDWIDTH_ITEM = 7;
-    public static final int NEWS_ITEM = 8;
-    public static final int DIRECTORY_ITEM = 9;
-    public static final int LIBRARY_ITEM = 10;
-    public static final int SECURITY_ITEM = 11;
-    public static final int ACHIEVEMENTS_ITEM = 12;
-    public static final int ABOUT_ITEM = 13;
-    public static final int COMMENTS_ITEM = 14;
-    public static final int FAQ_ITEM = 15;
-    public static final int SPONSOR_ITEM = 16;
-    public static final int TODAY_ITEM = 17;
-    public static final int EVENTS_ITEM = 20;
+    public static final int MONETS_ITEM = 4;
+    public static final int BANDWIDTH_ITEM = 5;
+    public static final int NEWS_ITEM = 6;
+    public static final int DIRECTORY_ITEM = 7;
+    public static final int LIBRARY_ITEM = 8;
+    public static final int SECURITY_ITEM = 9;
+    public static final int ACHIEVEMENTS_ITEM = 10;
+    public static final int ABOUT_ITEM = 11;
+    public static final int COMMENTS_ITEM = 12;
+    public static final int FAQ_ITEM = 13;
+    public static final int SPONSOR_ITEM = 14;
+    public static final int TODAY_ITEM = 15;
+    public static final int EVENTS_ITEM = 16;
 
-    public static final int LOGIN = 18;
-    public static final int LOGOUT = 19;
+    public static final int LOGIN = 17;
+    public static final int LOGOUT = 18;
 
 
     private String TAG = "MainActivity";
