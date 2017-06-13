@@ -2,10 +2,15 @@ package ca.etsmtl.applets.etsmobile.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import com.j256.ormlite.dao.Dao;
@@ -27,6 +32,10 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.MonETSNotificationsRequest;
 import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
 import ca.etsmtl.applets.etsmobile.model.MonETSNotificationList;
+import ca.etsmtl.applets.etsmobile2.R;
+
+import static ca.etsmtl.applets.etsmobile.util.Constants.EXTRA_CUSTOM_TABS_SESSION;
+import static ca.etsmtl.applets.etsmobile.util.Constants.EXTRA_CUSTOM_TABS_TOOLBAR_COLOR;
 
 public class Utility {
 
@@ -190,6 +199,28 @@ public class Utility {
         int b = hash & 0x0000FF;
 
         return Color.argb(transparency, r, g, b);
+    }
+
+    public static void openChromeCustomTabs(Context context, String url) {
+        openChromeCustomTabs(context, url, true);
+    }
+
+    public static void openChromeCustomTabs(Context context, String url, boolean showTitle) {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        Bundle extras = new Bundle();
+
+        // Something needs to be done about the min SDK...
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            extras.putBinder(Constants.EXTRA_CUSTOM_TABS_SESSION, null);
+            extras.putInt(Constants.EXTRA_CUSTOM_TABS_TOOLBAR_COLOR, ContextCompat.getColor(context, R.color.ets_red_fonce));
+
+            if (showTitle) {
+                extras.putInt(Constants.EXTRA_CUSTOM_TABS_TITLE_VISIBILITY_STATE, Constants.EXTRA_CUSTOM_TABS_SHOW_TITLE);
+            }
+        }
+        intent.putExtras(extras);
+        context.startActivity(intent);
     }
 
 }

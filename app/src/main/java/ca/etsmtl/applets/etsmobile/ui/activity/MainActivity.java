@@ -50,12 +50,10 @@ import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BaseFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BiblioFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.EventsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.MonETSFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
@@ -66,6 +64,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
 import io.smooch.core.User;
@@ -76,23 +75,23 @@ import io.smooch.ui.ConversationActivity;
  */
 public class MainActivity extends AppCompatActivity {
 
-    public static final int SCHEDULE_FRAGMENT = 1;
-    public static final int COURSE_FRAGMENT = 2;
-    public static final int MOODLE_FRAGMENT = 3;
+    public static final int SCHEDULE_ITEM = 1;
+    public static final int COURSE_ITEM = 2;
+    public static final int MOODLE_ITEM = 3;
     public static final int PROFILE_FRAGMENT = 4;
-    public static final int MONETS_FRAGMENT = 5;
-    public static final int BANDWIDTH_FRAGMENT = 7;
-    public static final int NEWS_FRAGMENT = 8;
-    public static final int DIRECTORY_FRAGMENT = 9;
-    public static final int LIBRARY_FRAGMENT = 10;
-    public static final int SECURITY_FRAGMENT = 11;
-    public static final int ACHIEVEMENTS_FRAGMENT = 12;
-    public static final int ABOUT_FRAGMENT = 13;
-    public static final int COMMENTS_FRAGMENT = 14;
-    public static final int FAQ_FRAGMENT = 15;
-    public static final int SPONSOR_FRAGMENT = 16;
-    public static final int TODAY_FRAGMENT = 17;
-    public static final int EVENTS_FRAGMENT = 20;
+    public static final int MONETS_ITEM = 5;
+    public static final int BANDWIDTH_ITEM = 7;
+    public static final int NEWS_ITEM = 8;
+    public static final int DIRECTORY_ITEM = 9;
+    public static final int LIBRARY_ITEM = 10;
+    public static final int SECURITY_ITEM = 11;
+    public static final int ACHIEVEMENTS_ITEM = 12;
+    public static final int ABOUT_ITEM = 13;
+    public static final int COMMENTS_ITEM = 14;
+    public static final int FAQ_ITEM = 15;
+    public static final int SPONSOR_ITEM = 16;
+    public static final int TODAY_ITEM = 17;
+    public static final int EVENTS_ITEM = 20;
 
     public static final int LOGIN = 18;
     public static final int LOGOUT = 19;
@@ -205,31 +204,31 @@ public class MainActivity extends AppCompatActivity {
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
-                .withSelectedItem(isUserLoggedIn ? TODAY_FRAGMENT : ABOUT_FRAGMENT)
+                .withSelectedItem(isUserLoggedIn ? TODAY_ITEM : ABOUT_ITEM)
                 .withDisplayBelowStatusBar(true)
                 .withShowDrawerOnFirstLaunch(true)
                 .addDrawerItems(
                         new ExpandableDrawerItem().withName(R.string.menu_section_1_moi).withSelectable(false).withSubItems(
-                                new SecondaryDrawerItem().withName(R.string.menu_section_1_ajd).withIdentifier(TODAY_FRAGMENT).withIcon(R.drawable.ic_ico_aujourdhui).withEnabled(isUserLoggedIn),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_1_horaire).withIdentifier(SCHEDULE_FRAGMENT).withIcon(R.drawable.ic_ico_schedule).withEnabled(isUserLoggedIn),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_1_notes).withIdentifier(COURSE_FRAGMENT).withIcon(R.drawable.ic_ico_notes).withEnabled(isUserLoggedIn),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_2_moodle).withIdentifier(MOODLE_FRAGMENT).withIcon(R.drawable.ic_moodle_icon_small).withEnabled(isUserLoggedIn),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_1_monETS).withIdentifier(MONETS_FRAGMENT).withIcon(R.drawable.ic_monets).withEnabled(isUserLoggedIn),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_1_bandwith).withIdentifier(BANDWIDTH_FRAGMENT).withIcon(R.drawable.ic_ico_internet)
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_ajd).withIdentifier(TODAY_ITEM).withIcon(R.drawable.ic_ico_aujourdhui).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_horaire).withIdentifier(SCHEDULE_ITEM).withIcon(R.drawable.ic_ico_schedule).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_notes).withIdentifier(COURSE_ITEM).withIcon(R.drawable.ic_ico_notes).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_moodle).withIdentifier(MOODLE_ITEM).withIcon(R.drawable.ic_moodle_icon_small).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_monETS).withIdentifier(MONETS_ITEM).withSelectable(false).withIcon(R.drawable.ic_monets).withEnabled(isUserLoggedIn),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_bandwith).withIdentifier(BANDWIDTH_ITEM).withIcon(R.drawable.ic_ico_internet)
                         ).withIsExpanded(true),
                         new ExpandableDrawerItem().withName(R.string.menu_section_2_ets).withSelectable(false).withSubItems(
-                                new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_FRAGMENT).withIcon(R.drawable.ic_ico_news),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_2_events).withIdentifier(EVENTS_FRAGMENT).withIcon(R.drawable.ic_event_available),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_FRAGMENT).withIcon(R.drawable.ic_ico_bottin),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_2_biblio).withIdentifier(LIBRARY_FRAGMENT).withIcon(R.drawable.ic_ico_library),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_2_securite).withIdentifier(SECURITY_FRAGMENT).withIcon(R.drawable.ic_ico_security)
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_ITEM).withIcon(R.drawable.ic_ico_news),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_events).withIdentifier(EVENTS_ITEM).withIcon(R.drawable.ic_event_available),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_ITEM).withIcon(R.drawable.ic_ico_bottin),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_biblio).withIdentifier(LIBRARY_ITEM).withSelectable(false).withIcon(R.drawable.ic_ico_library),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_2_securite).withIdentifier(SECURITY_ITEM).withIcon(R.drawable.ic_ico_security)
                         ),
                         new ExpandableDrawerItem().withName(R.string.menu_section_3_applets).withSelectable(false).withSubItems(
-                                new SecondaryDrawerItem().withName(R.string.menu_section_3_apps).withIdentifier(ACHIEVEMENTS_FRAGMENT).withIcon(R.drawable.ic_star_60x60),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_3_about).withIdentifier(ABOUT_FRAGMENT).withIcon(R.drawable.ic_logo_icon_final),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_3_comms).withIdentifier(COMMENTS_FRAGMENT).withIcon(R.drawable.ic_ico_comment),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_3_sponsors).withIdentifier(SPONSOR_FRAGMENT).withIcon(R.drawable.ic_ico_partners),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_3_faq).withIdentifier(FAQ_FRAGMENT).withIcon(R.drawable.ic_ico_faq)
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_apps).withIdentifier(ACHIEVEMENTS_ITEM).withIcon(R.drawable.ic_star_60x60),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_about).withIdentifier(ABOUT_ITEM).withIcon(R.drawable.ic_logo_icon_final),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_comms).withIdentifier(COMMENTS_ITEM).withIcon(R.drawable.ic_ico_comment),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_sponsors).withIdentifier(SPONSOR_ITEM).withIcon(R.drawable.ic_ico_partners),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_faq).withIdentifier(FAQ_ITEM).withIcon(R.drawable.ic_ico_faq)
                         )
 
 
@@ -324,7 +323,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void deconnexion() {
-
         ApplicationManager.deconnexion(this);
         TodayWidgetProvider.updateAllWidgets(this);
     }
@@ -426,52 +424,52 @@ public class MainActivity extends AppCompatActivity {
             if (drawerItem != null) {
 
                 switch ((int) drawerItem.getIdentifier()) {
-                    case SCHEDULE_FRAGMENT:
+                    case SCHEDULE_ITEM:
                         goToFragment(new HoraireFragment(), HoraireFragment.class.getName());
                         break;
-                    case TODAY_FRAGMENT:
+                    case TODAY_ITEM:
                         goToFragment(new TodayFragment(), TodayFragment.class.getName());
                         break;
-                    case MOODLE_FRAGMENT:
+                    case MOODLE_ITEM:
                         goToFragment(new MoodleFragment(), MoodleFragment.class.getName());
                         break;
-                    case COURSE_FRAGMENT:
+                    case COURSE_ITEM:
                         goToFragment(new NotesFragment(), NotesFragment.class.getName());
                         break;
-                    case MONETS_FRAGMENT:
-                        goToFragment(new MonETSFragment(), MonETSFragment.class.getName());
+                    case MONETS_ITEM:
+                        Utility.openChromeCustomTabs(MainActivity.this, getString(R.string.url_mon_ets));
                         break;
-                    case BANDWIDTH_FRAGMENT:
+                    case BANDWIDTH_ITEM:
                         goToFragment(new BandwithFragment(), BandwithFragment.class.getName());
                         break;
-                    case NEWS_FRAGMENT:
+                    case NEWS_ITEM:
                         goToFragment(new NewsFragment(), NewsFragment.class.getName());
                         break;
-                    case EVENTS_FRAGMENT:
+                    case EVENTS_ITEM:
                         goToFragment(new EventsFragment(), EventsFragment.class.getName());
                         break;
-                    case LIBRARY_FRAGMENT:
-                        goToFragment(new BiblioFragment(), BiblioFragment.class.getName());
+                    case LIBRARY_ITEM:
+                        Utility.openChromeCustomTabs(MainActivity.this, getString(R.string.url_biblio));
                         break;
-                    case DIRECTORY_FRAGMENT:
+                    case DIRECTORY_ITEM:
                         goToFragment(new BottinFragment(), BottinFragment.class.getName());
                         break;
-                    case SECURITY_FRAGMENT:
+                    case SECURITY_ITEM:
                         goToFragment(new SecuriteFragment(), SecuriteFragment.class.getName());
                         break;
-                    case FAQ_FRAGMENT:
+                    case FAQ_ITEM:
                         goToFragment(new FAQFragment(), FAQFragment.class.getName());
                         break;
-                    case ACHIEVEMENTS_FRAGMENT:
+                    case ACHIEVEMENTS_ITEM:
                         goToFragment(new OtherAppsFragment(), OtherAppsFragment.class.getName());
                         break;
-                    case ABOUT_FRAGMENT:
+                    case ABOUT_ITEM:
                         goToFragment(new AboutFragment(), AboutFragment.class.getName());
                         break;
-                    case SPONSOR_FRAGMENT:
+                    case SPONSOR_ITEM:
                         goToFragment(new SponsorsFragment(), SponsorsFragment.class.getName());
                         break;
-                    case COMMENTS_FRAGMENT:
+                    case COMMENTS_ITEM:
                         selectAccount();
                         break;
                     case LOGIN:
@@ -507,7 +505,6 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
                         dialog.dismiss();
                     }
                 })
