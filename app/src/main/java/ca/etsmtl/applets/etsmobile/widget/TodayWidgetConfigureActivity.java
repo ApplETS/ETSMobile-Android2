@@ -176,73 +176,73 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
     //PROCÉDURES DE PRÉFÉRENCES
     //******************************
     static void saveBgColorPref(Context context, int appWidgetId, int value) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
         prefs.putInt(PREF_BG_COLOR_PREFIX_KEY + appWidgetId, value);
         prefs.putInt(PREF_BG_COLOR_DEFAULT_PREFIX_KEY, value);
         prefs.apply();
     }
 
     static int loadBgColorPref(Context context, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         return prefs.getInt(PREF_BG_COLOR_PREFIX_KEY + appWidgetId, Color.BLACK);
     }
 
     private int loadBgColorDefaultPref() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return prefs.getInt(PREF_BG_COLOR_DEFAULT_PREFIX_KEY, Color.BLACK);
     }
 
     static void saveTextColorPref(Context context, int appWidgetId, int value) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
         prefs.putInt(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId, value);
         prefs.putInt(PREF_TEXT_COLOR_DEFAULT_PREFIX_KEY, value);
         prefs.apply();
     }
 
     static int loadTextColorPref(Context context, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         return prefs.getInt(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId, Color.WHITE);
     }
 
     private int loadTextColorDefaultPref() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return prefs.getInt(PREF_TEXT_COLOR_DEFAULT_PREFIX_KEY, Color.WHITE);
     }
 
     static void saveOpacityPref(Context context, int appWidgetId, int value) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
         prefs.putInt(PREF_OPACITY_PREFIX_KEY + appWidgetId, value);
         prefs.putInt(PREF_OPACITY_DEFAULT_PREFIX_KEY, value);
         prefs.apply();
     }
 
     static int loadOpacityPref(Context context, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         return prefs.getInt(PREF_OPACITY_PREFIX_KEY + appWidgetId, 155);
     }
 
     private int loadOpacityDefaultPref() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return prefs.getInt(PREF_OPACITY_DEFAULT_PREFIX_KEY, 155);
     }
 
     static void saveLanguagePref(Context context, int appWidgetId, String value) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
         prefs.putString(PREF_LANGUAGE_PREFIX_KEY + appWidgetId, value);
         prefs.apply();
     }
 
     static String loadLanguagePref(Context context, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         return prefs.getString(PREF_LANGUAGE_PREFIX_KEY + appWidgetId, "fr");
     }
 
     static void deleteAllPreferences(Context context, int appWidgetId) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
         prefs.remove(PREF_BG_COLOR_PREFIX_KEY + appWidgetId);
         prefs.remove(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId);
         prefs.remove(PREF_OPACITY_PREFIX_KEY + appWidgetId);
