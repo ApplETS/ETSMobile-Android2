@@ -52,6 +52,8 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
     private static final String PREF_OPACITY_DEFAULT_PREFIX_KEY = "opacity_widget";
     private static final String PREF_LANGUAGE_PREFIX_KEY = "language_widget_";
 
+    private static final int OPACITY_LEVEL_DEFAULT = 155;
+
     //******************************
     //ATTRIBUTS
     //******************************
@@ -221,12 +223,12 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
     static int loadOpacityPref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        return prefs.getInt(PREF_OPACITY_PREFIX_KEY + appWidgetId, 155);
+        return prefs.getInt(PREF_OPACITY_PREFIX_KEY + appWidgetId, OPACITY_LEVEL_DEFAULT);
     }
 
     private int loadOpacityDefaultPref() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        return prefs.getInt(PREF_OPACITY_DEFAULT_PREFIX_KEY, 155);
+        return prefs.getInt(PREF_OPACITY_DEFAULT_PREFIX_KEY, OPACITY_LEVEL_DEFAULT);
     }
 
     static void saveLanguagePref(Context context, int appWidgetId, String value) {
