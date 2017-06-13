@@ -45,8 +45,11 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
     //******************************
     private static final String PREFS_NAME = "ca.etsmtl.applets.etsmobile.TodayWidget";
     private static final String PREF_BG_COLOR_PREFIX_KEY = "bg_color_widget_";
+    private static final String PREF_BG_COLOR_DEFAULT_PREFIX_KEY = "bg_color_widget";
     private static final String PREF_TEXT_COLOR_PREFIX_KEY = "text_color_widget_";
+    private static final String PREF_TEXT_COLOR_DEFAULT_PREFIX_KEY = "text_color_widget";
     private static final String PREF_OPACITY_PREFIX_KEY = "opacity_widget_";
+    private static final String PREF_OPACITY_DEFAULT_PREFIX_KEY = "opacity_widget";
     private static final String PREF_LANGUAGE_PREFIX_KEY = "language_widget_";
 
     //******************************
@@ -175,6 +178,7 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
     static void saveBgColorPref(Context context, int appWidgetId, int value) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putInt(PREF_BG_COLOR_PREFIX_KEY + appWidgetId, value);
+        prefs.putInt(PREF_BG_COLOR_DEFAULT_PREFIX_KEY, value);
         prefs.apply();
     }
 
@@ -184,9 +188,15 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
         return prefs.getInt(PREF_BG_COLOR_PREFIX_KEY + appWidgetId, Color.BLACK);
     }
 
+    private int loadBgColorDefaultPref() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+        return prefs.getInt(PREF_BG_COLOR_DEFAULT_PREFIX_KEY, Color.BLACK);
+    }
+
     static void saveTextColorPref(Context context, int appWidgetId, int value) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putInt(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId, value);
+        prefs.putInt(PREF_TEXT_COLOR_DEFAULT_PREFIX_KEY, value);
         prefs.apply();
     }
 
@@ -196,9 +206,15 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
         return prefs.getInt(PREF_TEXT_COLOR_PREFIX_KEY + appWidgetId, Color.WHITE);
     }
 
+    private int loadTextColorDefaultPref() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+        return prefs.getInt(PREF_TEXT_COLOR_DEFAULT_PREFIX_KEY, Color.WHITE);
+    }
+
     static void saveOpacityPref(Context context, int appWidgetId, int value) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putInt(PREF_OPACITY_PREFIX_KEY + appWidgetId, value);
+        prefs.putInt(PREF_OPACITY_DEFAULT_PREFIX_KEY, value);
         prefs.apply();
     }
 
@@ -206,6 +222,11 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
 
         return prefs.getInt(PREF_OPACITY_PREFIX_KEY + appWidgetId, 155);
+    }
+
+    private int loadOpacityDefaultPref() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+        return prefs.getInt(PREF_OPACITY_DEFAULT_PREFIX_KEY, 155);
     }
 
     static void saveLanguagePref(Context context, int appWidgetId, String value) {
@@ -247,9 +268,11 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
 
         mBgColorSpinner = (Spinner) findViewById(R.id.bg_color_spinner);
         setUpColorSpinner(mBgColorSpinner, mBgColorSpinnerListener);
+        mBgColorSpinner.setSelection(getSpinnerAdapterPosition(loadBgColorDefaultPref()));
 
         mTextColorSpinner = (Spinner) findViewById(R.id.bg_text_color_spinner);
         setUpColorSpinner(mTextColorSpinner, mTextColorSpinnerListener);
+        mTextColorSpinner.setSelection(getSpinnerAdapterPosition(loadTextColorDefaultPref()));
 
         setUpOpacitySeekBar();
 
@@ -292,9 +315,22 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
         spinner.setSelection(0);
     }
 
+    private int getSpinnerAdapterPosition(int color) {
+        int[] colorsArray = getResources().getIntArray(R.array.widget_bg_colors);
+
+        for (int i = 0; i < colorsArray.length; i++) {
+            if (colorsArray[i] == color) {
+                return (i);
+            }
+        }
+        return (0);
+    }
+
     private void setUpOpacitySeekBar() {
         int mOpacitySeekBarColor = ContextCompat.getColor(this, R.color.ets_red_fonce);
         mOpacitySeekBar = (SeekBar) findViewById(R.id.opacity_seekbar);
+
+        mOpacitySeekBar.setProgress(loadOpacityDefaultPref());
 
         mOpacitySeekBar.setOnSeekBarChangeListener(mOpacityListener);
 
