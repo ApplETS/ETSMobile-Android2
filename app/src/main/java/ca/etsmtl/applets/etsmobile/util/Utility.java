@@ -12,6 +12,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
+import android.webkit.URLUtil;
 
 import com.j256.ormlite.dao.Dao;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -206,6 +208,12 @@ public class Utility {
     }
 
     public static void openChromeCustomTabs(Context context, String url, boolean showTitle) {
+
+        if (!URLUtil.isValidUrl(url)) {
+            Log.w("Utility", "Url not valid!");
+            Log.w("Utility", url);
+            return;
+        }
 
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         Bundle extras = new Bundle();
