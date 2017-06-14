@@ -20,7 +20,7 @@ import ca.etsmtl.applets.etsmobile.model.Apps;
 import ca.etsmtl.applets.etsmobile.ui.adapter.OtherAppsAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 
-public class OtherAppsFragment extends WebFragment {
+public class OtherAppsFragment extends BaseFragment {
 
 
     private GridView gridView;

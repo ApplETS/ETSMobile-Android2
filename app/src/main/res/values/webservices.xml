@@ -6,6 +6,7 @@
     <string name="url_mon_ets">https://portail.etsmtl.ca/</string>
     <string name="url_biblio">http://bibliotheque.etsmtl.ca</string>
     <string name="url_email_ets">https://etscourriel.etsmtl.ca/OWA/auth/logon.aspx</string>
+    <string name="url_applets_faq">http://www.clubapplets.ca/faq/</string>
     
     <string name="moodle">com.moodle.moodlemobile</string>
 

@@ -61,9 +61,7 @@ public class NotificationActivity extends Activity implements RequestListener<Ob
                 MonETSNotification item = notificationsAdapter.getItem(position);
                 String url = item.getUrl();
                 if (URLUtil.isValidUrl(url)) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
+                    Utility.openChromeCustomTabs(NotificationActivity.this, url);
                 }
             }
         });

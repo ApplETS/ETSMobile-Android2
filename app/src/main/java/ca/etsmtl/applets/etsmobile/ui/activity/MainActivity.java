@@ -52,7 +52,6 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BaseFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.EventsFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.FAQFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
@@ -457,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
                         goToFragment(new SecuriteFragment(), SecuriteFragment.class.getName());
                         break;
                     case FAQ_ITEM:
-                        goToFragment(new FAQFragment(), FAQFragment.class.getName());
+                        Utility.openChromeCustomTabs(MainActivity.this, getString(R.string.url_applets_faq));
                         break;
                     case ACHIEVEMENTS_ITEM:
                         goToFragment(new OtherAppsFragment(), OtherAppsFragment.class.getName());

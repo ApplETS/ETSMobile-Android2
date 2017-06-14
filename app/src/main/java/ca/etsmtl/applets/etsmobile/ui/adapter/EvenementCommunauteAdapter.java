@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import at.markushi.ui.CircleButton;
 import ca.etsmtl.applets.etsmobile.model.applets_events.EvenementCommunaute;
 import ca.etsmtl.applets.etsmobile.util.AndroidCalendarManager;
 import ca.etsmtl.applets.etsmobile.util.EventsComparator;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.AnimatedExpandableListView;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -109,11 +111,11 @@ public class EvenementCommunauteAdapter extends AnimatedExpandableListView.Anima
             public void onClick(View v) {
                 String url = getFacebookEventURL(item.getId());
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                try {
-                    v.getContext().startActivity(intent);
-                } catch (ActivityNotFoundException e) {
-                    url = "http://facebook.com/events/" + item.getId();
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
+                // Verify if the link is one to use Facebook first. If not, open a webpage.
+                if (URLUtil.isHttpUrl(url) || URLUtil.isHttpsUrl(url)) {
+                    Utility.openChromeCustomTabs(v.getContext(), url);
+                } else {
                     v.getContext().startActivity(intent);
                 }
             }
