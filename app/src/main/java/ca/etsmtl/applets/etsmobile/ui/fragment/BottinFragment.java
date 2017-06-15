@@ -105,7 +105,12 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                afficherRafraichissementEtRechargerBottin();
+                if (!Utility.isNetworkAvailable(getActivity())) {
+                    afficherMsgHorsLigne();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                } else {
+                    afficherRafraichissementEtRechargerBottin();
+                }
             }
         });
 
@@ -158,9 +163,10 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     @Override
     void updateUI() {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
 
         try {
+            DatabaseHelper dbHelper = new DatabaseHelper(activity);
+
             // Création du queryBuilder, permettant de lister les employés par leur nom de service
             QueryBuilder<FicheEmploye, String> queryBuilder = (QueryBuilder<FicheEmploye, String>) dbHelper.getDao(FicheEmploye.class).queryBuilder();
 
@@ -258,60 +264,59 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     @Override
     public void onRequestSuccess(final Object o) {
         super.onRequestSuccess(o);
+
         if (o instanceof HashMap<?, ?>) {
-            // Exécution dans un autre fil afin d'éviter les sauts d'image (blocage du UI)
-            new AsyncTask<Void, Void, Void>() {
+            @SuppressWarnings("unchecked")
+            HashMap<String, List<FicheEmploye>> listeEmployeByService = (HashMap<String, List<FicheEmploye>>) o;
 
-                protected Void doInBackground(Void... params) {
-                    @SuppressWarnings("unchecked")
-                    HashMap<String, List<FicheEmploye>> listeEmployeByService = (HashMap<String, List<FicheEmploye>>) o;
+            updateDb(listeEmployeByService);
 
-                    // Écriture dans la base de données
-                    DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-
-                    try {
-                        Dao<FicheEmploye, ?> ficheEmployeDao = dbHelper.getDao(FicheEmploye.class);
-
-                        for (FicheEmploye ficheEmploye : ficheEmployeDao.queryForAll()) {
-                            ficheEmployeDao.delete(ficheEmploye);
-                        }
-
-                        for (String nomService : listeEmployeByService.keySet()) {
-
-                            List<FicheEmploye> listeEmployes = listeEmployeByService.get(nomService);
-
-                            if (listeEmployes.size() > 0) {
-                                for (FicheEmploye ficheEmploye : listeEmployeByService.get(nomService)) {
-                                    dbHelper.getDao(FicheEmploye.class).createOrUpdate(ficheEmploye);
-                                }
-                            }
-                        }
-                    } catch (SQLException e) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            }
-                        });
-                        e.printStackTrace();
-                        Log.e(DatabaseHelper.class.getName(), "SQLException", e);
-                        throw new RuntimeException(e);
-                    }
-
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
-
-                    updateUI();
-
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }.execute();
+            updateUI();
+            mSwipeRefreshLayout.setRefreshing(false);
         }
 
+    }
+
+    private void updateDb(final HashMap<String, List<FicheEmploye>> listeEmployeByService) {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                // Écriture dans la base de données
+                DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+
+                try {
+                    Dao<FicheEmploye, ?> ficheEmployeDao = dbHelper.getDao(FicheEmploye.class);
+
+                    for (FicheEmploye ficheEmploye : ficheEmployeDao.queryForAll()) {
+                        ficheEmployeDao.delete(ficheEmploye);
+                    }
+
+                    for (String nomService : listeEmployeByService.keySet()) {
+
+                        List<FicheEmploye> listeEmployes = listeEmployeByService.get(nomService);
+
+                        if (listeEmployes.size() > 0) {
+                            for (FicheEmploye ficheEmploye : listeEmployeByService.get(nomService)) {
+                                dbHelper.getDao(FicheEmploye.class).create(ficheEmploye);
+                            }
+                        }
+                    }
+                } catch (SQLException e) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+                    e.printStackTrace();
+                    Log.e(DatabaseHelper.class.getName(), "SQLException", e);
+                    throw new RuntimeException(e);
+                }
+
+                return null;
+            }
+        }.execute();
     }
 
     @Override
