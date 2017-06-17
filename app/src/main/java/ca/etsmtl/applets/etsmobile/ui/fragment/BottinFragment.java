@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -21,12 +20,9 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Toast;
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
-import com.octo.android.robospice.persistence.exception.SpiceException;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,7 +41,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 /**
  * @author Thibaut
  */
-public class BottinFragment extends HttpFragment implements SearchView.OnQueryTextListener {
+public class BottinFragment extends BaseFragment implements SearchView.OnQueryTextListener {
     //TODO Change to activity to be able to search
     private SearchView searchView;
     private ExpandableListAdapter listAdapter;
@@ -56,6 +52,10 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     private HashMap<String, List<FicheEmploye>> listDataChild;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    /**
+     * Récepteur attendant un intent de {@link ca.etsmtl.applets.etsmobile.service.BottinService}
+     * signalant la fin de la synchronisation
+     */
     private BottinReceiver receiver;
 
     @Override
@@ -99,7 +99,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        // Initialisatioin du receiver
+        // Initialisatioin du récepteur
         receiver = new BottinReceiver();
     }
 
@@ -115,6 +115,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     @Override
     public void onPause() {
         super.onPause();
+
         getActivity().unregisterReceiver(receiver);
     }
 
@@ -123,6 +124,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_bottin, container, false);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) v;
+        mSwipeRefreshLayout.setColorSchemeColors(getContext().getColor(R.color.ets_red));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -177,11 +179,12 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
+        updateUI();
+
         return v;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    @Override
     void updateUI() {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
 
@@ -259,7 +262,7 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         if (Utility.isNetworkAvailable(getActivity())) {
             mSwipeRefreshLayout.setRefreshing(true);
 
-            // Lancement du service afin d'obtenir les données distantes
+            // Lancement du service permettant de synchroniser le bottin
             Intent intent = new Intent(getContext(), BottinService.class);
             getActivity().startService(intent);
         } else {
@@ -268,78 +271,8 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     }
 
     private void afficherMsgHorsLigne() {
-        if (isVisible()) {
-            Toast.makeText(getActivity(), getString(R.string.toast_Connection_Required),
-                    Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void onRequestSuccess(final Object o) {
-        super.onRequestSuccess(o);
-
-        if (o instanceof HashMap<?, ?>) {
-            @SuppressWarnings("unchecked")
-            HashMap<String, List<FicheEmploye>> listeEmployeByService = (HashMap<String, List<FicheEmploye>>) o;
-
-            updateDb(listeEmployeByService);
-
-            updateUI();
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-
-    }
-
-    private void updateDb(final HashMap<String, List<FicheEmploye>> listeEmployeByService) {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                // Écriture dans la base de données
-                DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-
-                try {
-                    Dao<FicheEmploye, ?> ficheEmployeDao = dbHelper.getDao(FicheEmploye.class);
-
-                    for (FicheEmploye ficheEmploye : ficheEmployeDao.queryForAll()) {
-                        ficheEmployeDao.delete(ficheEmploye);
-                    }
-
-                    for (String nomService : listeEmployeByService.keySet()) {
-
-                        List<FicheEmploye> listeEmployes = listeEmployeByService.get(nomService);
-
-                        if (listeEmployes.size() > 0) {
-                            for (FicheEmploye ficheEmploye : listeEmployeByService.get(nomService)) {
-                                dbHelper.getDao(FicheEmploye.class).create(ficheEmploye);
-                            }
-                        }
-                    }
-                } catch (SQLException e) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mSwipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
-                    e.printStackTrace();
-                    Log.e(DatabaseHelper.class.getName(), "SQLException", e);
-                    throw new RuntimeException(e);
-                }
-
-                return null;
-            }
-        }.execute();
-    }
-
-    @Override
-    public void onRequestFailure(SpiceException e) {
-        super.onRequestFailure(e);
-
-        if (!Utility.isNetworkAvailable(getActivity()))
-            afficherMsgHorsLigne();
-
-        mSwipeRefreshLayout.setRefreshing(false);
+        Toast.makeText(getActivity(), getString(R.string.toast_Connection_Required),
+                Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -363,10 +296,25 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 
     public class BottinReceiver extends BroadcastReceiver {
         public static final String ACTION_SYNC_BOTTIN = "SYNC_BOTTIN";
+        public static final String EXCEPTION = "ERREUR_SYNC_BOTTIN";
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateUI();
+            // Obtention de l'exception
+            Bundle extras = intent.getExtras();
+
+            Exception e = null;
+            if (extras != null)
+                e = (Exception) extras.getSerializable(EXCEPTION);
+
+            if (e == null)
+                // S'il n'y a pas d'exception...
+                updateUI();
+            else {
+                if (!Utility.isNetworkAvailable(getActivity()))
+                    afficherMsgHorsLigne();
+            }
+
             mSwipeRefreshLayout.setRefreshing(false);
         }
     }
