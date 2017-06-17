@@ -123,8 +123,8 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_bottin, container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v;
-        mSwipeRefreshLayout.setColorSchemeColors(getContext().getColor(R.color.ets_red));
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.ets_red));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
