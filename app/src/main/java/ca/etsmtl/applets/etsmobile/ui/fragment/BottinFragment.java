@@ -1,8 +1,10 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -31,10 +33,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
+import ca.etsmtl.applets.etsmobile.service.BottinService;
 import ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
@@ -54,6 +55,8 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     private List<String> listDataHeader;
     private HashMap<String, List<FicheEmploye>> listDataChild;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private BottinReceiver receiver;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -95,6 +98,24 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        // Initialisatioin du receiver
+        receiver = new BottinReceiver();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        IntentFilter filter = new IntentFilter(BottinReceiver.ACTION_SYNC_BOTTIN);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        getActivity().registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(receiver);
     }
 
     @Override
@@ -233,25 +254,17 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         }
     }
 
-    private void rechargerBottin() {
+    private void afficherRafraichissementEtRechargerBottin() {
         // Si l'appareil est connecté sur internet, télécharger le bottin en ligne
         if (Utility.isNetworkAvailable(getActivity())) {
-            try {
-                DataManager datamanager = DataManager.getInstance(getActivity());
-                datamanager.getDataFromSignet(
-                        DataManager.SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
-                        ApplicationManager.userCredentials, this);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+            mSwipeRefreshLayout.setRefreshing(true);
+
+            // Lancement du service afin d'obtenir les données distantes
+            Intent intent = new Intent(getContext(), BottinService.class);
+            getActivity().startService(intent);
         } else {
             afficherMsgHorsLigne();
         }
-    }
-
-    private void afficherRafraichissementEtRechargerBottin() {
-        mSwipeRefreshLayout.setRefreshing(true);
-        rechargerBottin();
     }
 
     private void afficherMsgHorsLigne() {
@@ -346,5 +359,15 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         }
 
         return true;
+    }
+
+    public class BottinReceiver extends BroadcastReceiver {
+        public static final String ACTION_SYNC_BOTTIN = "SYNC_BOTTIN";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateUI();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 }
