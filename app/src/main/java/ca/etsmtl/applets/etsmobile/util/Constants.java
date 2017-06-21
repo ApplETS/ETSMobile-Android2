@@ -27,4 +27,5 @@ public class Constants {
 	public static final String TEXT_COLOR = "TEXT_COLOR";
 	public static final long GOOGLE_API_CLIENT_TIMEOUT_S = 10;
     public static final String FIRST_LOGIN = "FIRST_LOGIN";
+    public static final int REQUEST_CODE_SYNC_BOTTIN_BROADCAST = 2;
 }
