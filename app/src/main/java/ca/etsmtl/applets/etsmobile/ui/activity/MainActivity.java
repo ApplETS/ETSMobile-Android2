@@ -3,8 +3,10 @@ package ca.etsmtl.applets.etsmobile.ui.activity;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -64,6 +66,7 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.ProfilFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
+import ca.etsmtl.applets.etsmobile.util.BottinReceiver;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
@@ -149,6 +152,16 @@ public class MainActivity extends AppCompatActivity {
             onCoachMark();
         }
 
+        scheduleAlarmBottinService();
+
+    }
+
+    private void scheduleAlarmBottinService() {
+        Intent intent = new Intent(this, BottinReceiver.class);
+        final PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 123, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent);
     }
 
     public void onCoachMark() {

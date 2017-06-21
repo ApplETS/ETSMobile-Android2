@@ -19,7 +19,7 @@ import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment.BottinReceiver;
+import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment.BottinFragmentReceiver;
 
 /**
  * <h1>BottinService</h1>
@@ -45,7 +45,7 @@ public class BottinService extends IntentService implements RequestListener<Obje
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         broadcastIntent = new Intent();
-        broadcastIntent.setAction(BottinReceiver.ACTION_SYNC_BOTTIN);
+        broadcastIntent.setAction(BottinFragmentReceiver.ACTION_SYNC_BOTTIN);
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
 
         rechargerBottin();
@@ -91,7 +91,7 @@ public class BottinService extends IntentService implements RequestListener<Obje
     @Override
     public void onRequestFailure(SpiceException spiceException) {
         Bundle extras = new Bundle();
-        extras.putSerializable(BottinReceiver.EXCEPTION, spiceException);
+        extras.putSerializable(BottinFragmentReceiver.EXCEPTION, spiceException);
         broadcastIntent.putExtras(extras);
 
         // Envoi d'un intent incluant une exception à BottinFragment

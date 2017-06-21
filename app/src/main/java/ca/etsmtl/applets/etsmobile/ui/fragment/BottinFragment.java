@@ -57,7 +57,7 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
      * Récepteur attendant un intent de {@link ca.etsmtl.applets.etsmobile.service.BottinService}
      * signalant la fin de la synchronisation
      */
-    private BottinReceiver receiver;
+    private BottinFragmentReceiver receiver;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -101,14 +101,14 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
         setHasOptionsMenu(true);
 
         // Initialisatioin du récepteur
-        receiver = new BottinReceiver();
+        receiver = new BottinFragmentReceiver();
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        IntentFilter filter = new IntentFilter(BottinReceiver.ACTION_SYNC_BOTTIN);
+        IntentFilter filter = new IntentFilter(BottinFragmentReceiver.ACTION_SYNC_BOTTIN);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
         getActivity().registerReceiver(receiver, filter);
     }
@@ -295,7 +295,10 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
         return true;
     }
 
-    public class BottinReceiver extends BroadcastReceiver {
+    /**
+     * Callback when the bottin service is done.
+     */
+    public class BottinFragmentReceiver extends BroadcastReceiver {
         public static final String ACTION_SYNC_BOTTIN = "SYNC_BOTTIN";
         public static final String EXCEPTION = "ERREUR_SYNC_BOTTIN";
 

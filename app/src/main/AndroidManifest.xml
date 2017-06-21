@@ -227,7 +227,12 @@
 
         <service
             android:name="ca.etsmtl.applets.etsmobile.service.BottinService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <receiver
+            android:name="ca.etsmtl.applets.etsmobile.util.BottinReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>
