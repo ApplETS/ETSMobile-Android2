@@ -51,7 +51,7 @@ public class BottinSyncJob extends Job {
 
     public static int scheduleJob() {
         int jobId = new JobRequest.Builder(TAG)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(20))
+                .setPeriodic(TimeUnit.DAYS.toMillis(1))
                 .setPersisted(true)
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                 .setRequirementsEnforced(true)
