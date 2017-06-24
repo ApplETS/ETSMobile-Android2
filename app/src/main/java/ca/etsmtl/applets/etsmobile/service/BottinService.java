@@ -32,6 +32,11 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment.BottinFragmentRece
 
 public class BottinService extends IntentService implements RequestListener<Object> {
 
+    private static final String TAG = "Bottin_Service";
+
+    public static boolean syncEnCours;
+    public static boolean syncReussie;
+
     private Intent broadcastIntent;
 
     public BottinService() {
@@ -52,6 +57,9 @@ public class BottinService extends IntentService implements RequestListener<Obje
     }
 
     private void rechargerBottin() {
+        syncEnCours = true;
+        syncReussie = false;
+
         try {
             DataManager datamanager = DataManager.getInstance(this);
             datamanager.getDataFromSignet(DataManager.SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
@@ -94,6 +102,9 @@ public class BottinService extends IntentService implements RequestListener<Obje
         extras.putSerializable(BottinFragmentReceiver.EXCEPTION, spiceException);
         broadcastIntent.putExtras(extras);
 
+        syncEnCours = false;
+        syncReussie = false;
+
         // Envoi d'un intent incluant une exception à BottinFragment
         sendBroadcast(broadcastIntent);
     }
@@ -116,6 +127,9 @@ public class BottinService extends IntentService implements RequestListener<Obje
                 @Override
                 protected void onPostExecute(Void aVoid) {
                     super.onPostExecute(aVoid);
+
+                    syncEnCours = false;
+                    syncReussie = true;
 
                     // Envoi d'un intent à BottinFragment
                     sendBroadcast(broadcastIntent);

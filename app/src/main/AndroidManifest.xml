@@ -230,18 +230,6 @@
             android:name="ca.etsmtl.applets.etsmobile.service.BottinService"
             android:exported="false" />
 
-        <receiver
-            android:name="ca.etsmtl.applets.etsmobile.util.BottinReceiver"
-            android:enabled="true"
-            android:exported="true" />
-        <receiver
-            android:name="ca.etsmtl.applets.etsmobile.util.BootReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

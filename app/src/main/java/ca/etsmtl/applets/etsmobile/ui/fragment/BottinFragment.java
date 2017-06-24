@@ -259,13 +259,19 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
     }
 
     private void afficherRafraichissementEtRechargerBottin() {
-        // Si l'appareil est connecté sur internet, télécharger le bottin en ligne
         if (Utility.isNetworkAvailable(getActivity())) {
             mSwipeRefreshLayout.setRefreshing(true);
 
-            // Lancement du service permettant de synchroniser le bottin
-            Intent intent = new Intent(getContext(), BottinService.class);
-            getActivity().startService(intent);
+            /*
+            Lancement du service permettant de synchroniser le bottin si celui-ci n'est pas en cours
+            de synchronisation. Si c'est le cas, cela signifie que la job est est en cours
+            d'exécution.
+             */
+            if (!BottinService.syncEnCours) {
+                // Lancement du service permettant de synchroniser le bottin
+                Intent intent = new Intent(getContext(), BottinService.class);
+                getActivity().startService(intent);
+            }
         } else {
             afficherMsgHorsLigne();
         }

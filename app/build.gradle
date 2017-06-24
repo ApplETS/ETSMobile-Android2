@@ -104,6 +104,5 @@ dependencies {
     }
     compile 'com.github.markushi:circlebutton:1.1'
     compile 'com.flaviofaria:kenburnsview:1.0.7'
-
-
+    compile 'com.evernote:android-job:1.1.11'
 }
