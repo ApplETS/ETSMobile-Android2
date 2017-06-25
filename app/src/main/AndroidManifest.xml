@@ -23,6 +23,7 @@
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <permission
         android:name="ca.etsmtl.applets.etsmobile.permission.C2D_MESSAGE"
@@ -38,7 +39,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -48,7 +48,6 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/ETSMobileTheme">
-
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
             android:configChanges="locale|layoutDirection"
@@ -90,7 +89,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
-
         <activity
             android:name="ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity"
             android:label="@string/title_activity_bottin_details"
@@ -193,9 +191,7 @@
             android:name="io.fabric.ApiKey"
             android:value="" />
 
-        <service
-            android:name="ca.etsmtl.applets.etsmobile.service.WearService">
-
+        <service android:name="ca.etsmtl.applets.etsmobile.service.WearService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
@@ -204,15 +200,13 @@
                     android:host="*"
                     android:pathPrefix="/today_req"
                     android:scheme="wear" />
-
             </intent-filter>
         </service>
 
-        <receiver
-            android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider">
+        <receiver android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_ENABLED"/>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
@@ -220,15 +214,21 @@
                 android:resource="@xml/today_widget_info" />
         </receiver>
 
-        <service android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetService"
+        <service
+            android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <activity android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetConfigureActivity"
+        <activity
+            android:name="ca.etsmtl.applets.etsmobile.widget.TodayWidgetConfigureActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="ca.etsmtl.applets.etsmobile.service.BottinService"
+            android:exported="false" />
 
     </application>
 

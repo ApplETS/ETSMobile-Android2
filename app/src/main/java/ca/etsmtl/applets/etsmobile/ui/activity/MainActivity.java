@@ -28,6 +28,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
+import com.evernote.android.job.Job;
+import com.evernote.android.job.JobCreator;
+import com.evernote.android.job.JobManager;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -46,6 +49,7 @@ import java.util.Locale;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
+import ca.etsmtl.applets.etsmobile.service.BottinSyncJob;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
@@ -149,6 +153,20 @@ public class MainActivity extends AppCompatActivity {
             onCoachMark();
         }
 
+        initJobManager();
+        BottinSyncJob.scheduleJob();
+    }
+
+    private void initJobManager() {
+        JobManager.create(this).addJobCreator(new JobCreator() {
+            @Override
+            public Job create(String tag) {
+                if (tag.equals(BottinSyncJob.TAG))
+                    return new BottinSyncJob();
+                else
+                    return null;
+            }
+        });
     }
 
     public void onCoachMark() {
