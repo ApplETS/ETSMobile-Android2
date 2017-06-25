@@ -34,8 +34,8 @@ public class BottinService extends IntentService implements RequestListener<Obje
 
     private static final String TAG = "Bottin_Service";
 
-    public static boolean syncEnCours;
-    public static boolean syncReussie;
+    private static boolean syncEnCours;
+    private static boolean syncReussie;
 
     private Intent broadcastIntent;
 
@@ -47,8 +47,19 @@ public class BottinService extends IntentService implements RequestListener<Obje
         super(name);
     }
 
+    public static boolean isSyncEnCours() {
+        return syncEnCours;
+    }
+
+    public static boolean isSyncReussie() {
+        return syncReussie;
+    }
+
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        syncEnCours = true;
+        syncReussie = false;
+
         broadcastIntent = new Intent();
         broadcastIntent.setAction(BottinFragmentReceiver.ACTION_SYNC_BOTTIN);
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -57,9 +68,6 @@ public class BottinService extends IntentService implements RequestListener<Obje
     }
 
     private void rechargerBottin() {
-        syncEnCours = true;
-        syncReussie = false;
-
         try {
             DataManager datamanager = DataManager.getInstance(this);
             datamanager.getDataFromSignet(DataManager.SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
