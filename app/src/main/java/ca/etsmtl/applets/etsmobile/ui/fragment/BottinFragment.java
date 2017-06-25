@@ -1,16 +1,13 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -19,41 +16,33 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-
 import android.widget.Toast;
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
-import com.octo.android.robospice.persistence.exception.SpiceException;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
+import ca.etsmtl.applets.etsmobile.service.BottinService;
 import ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity;
-import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
- *
  * @author Thibaut
  */
-public class BottinFragment extends HttpFragment implements SearchView.OnQueryTextListener  {
+public class BottinFragment extends BaseFragment implements SearchView.OnQueryTextListener {
     //TODO Change to activity to be able to search
     private SearchView searchView;
     private ExpandableListAdapter listAdapter;
@@ -62,7 +51,13 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 
     private List<String> listDataHeader;
     private HashMap<String, List<FicheEmploye>> listDataChild;
-    private ProgressDialog mProgressDialog;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    /**
+     * Récepteur attendant un intent de {@link ca.etsmtl.applets.etsmobile.service.BottinService}
+     * signalant la fin de la synchronisation
+     */
+    private BottinFragmentReceiver receiver;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -75,7 +70,6 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         searchView.setOnQueryTextListener(this);
 
         super.onCreateOptionsMenu(menu, inflater);
-
     }
 
     @Override
@@ -89,62 +83,60 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
         switch (item.getItemId()) {
 
             case R.id.menu_item_update:
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.menu_bottin_refresh)
-                        .setView(getActivity().getLayoutInflater().inflate(R.layout.dialog_bottin,null))
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //Suppression du bottin
-                                DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-                                try {
-                                    Dao<FicheEmploye, ?> ficheEmployeDao = dbHelper.getDao(FicheEmploye.class);
-                                    List<FicheEmploye> ficheEmployeList = ficheEmployeDao.queryForAll();
-                                    for (FicheEmploye ficheEmploye : ficheEmployeList) {
-                                        ficheEmployeDao.delete(ficheEmploye);
-                                    }
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }
-
-                                //Mise à jour de la liste
-                                listDataHeader = new ArrayList<>();
-                                listDataChild = new HashMap<>();
-
-                                listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
-
-
-
-                                expListView.setAdapter(listAdapter);
-                                updateUI();
-                                dialogInterface.dismiss();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-                builder.create().show();
-
+                if (!Utility.isNetworkAvailable(getActivity())) {
+                    afficherMsgHorsLigne();
+                } else {
+                    afficherRafraichissementEtRechargerBottin();
+                }
 
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
-
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        // Initialisatioin du récepteur
+        receiver = new BottinFragmentReceiver();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        IntentFilter filter = new IntentFilter(BottinFragmentReceiver.ACTION_SYNC_BOTTIN);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        getActivity().registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        getActivity().unregisterReceiver(receiver);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_bottin, container, false);
+        ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_bottin, container, false);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.ets_red));
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!Utility.isNetworkAvailable(getActivity())) {
+                    afficherMsgHorsLigne();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                } else {
+                    afficherRafraichissementEtRechargerBottin();
+                }
+            }
+        });
 
         // get the listview
         expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
@@ -188,17 +180,18 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
+        updateUI();
+
         return v;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
     void updateUI() {
-        // Get le contenu dans la bd
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        DatabaseHelper dbHelper = new DatabaseHelper(activity);
 
         try {
+            DatabaseHelper dbHelper = new DatabaseHelper(activity);
+
             // Création du queryBuilder, permettant de lister les employés par leur nom de service
             QueryBuilder<FicheEmploye, String> queryBuilder = (QueryBuilder<FicheEmploye, String>) dbHelper.getDao(FicheEmploye.class).queryBuilder();
 
@@ -225,6 +218,12 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
                     nomService = employe.Service;
                     if (!listDataHeader.contains(nomService)) {
                         listDataHeader.add(nomService);
+                        Collections.sort(listEmployesOfService, new Comparator<FicheEmploye>() {
+                            @Override
+                            public int compare(FicheEmploye f1, FicheEmploye f2) {
+                                return f1.Nom.compareTo(f2.Nom);
+                            }
+                        });
                         listDataChild.put(previousNomService, listEmployesOfService);
                         listEmployesOfService = new ArrayList<>();
                         previousNomService = nomService;
@@ -234,76 +233,53 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
                 // Pour les derniers éléments dans la liste
                 listDataChild.put(previousNomService, listEmployesOfService);
 
-                listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
-                expListView.setAdapter(listAdapter);
-
                 if (activity != null) {
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
+                            listAdapter = new ExpandableListAdapter(getActivity(),
+                                    listDataHeader, listDataChild);
+                            expListView.setAdapter(listAdapter);
                             listAdapter.notifyDataSetChanged();
                         }
                     });
                 }
+
+                // Rétablissement du filtre de recherche
+                CharSequence searchText = searchView.getQuery();
+                if (searchText.length() != 0)
+                    onQueryTextChange(searchText.toString());
+
                 // Si le contenu est vide, télécharger le bottin
             } else {
-                // Si l'appareil est connecté sur internet, télécharger le bottin en ligne
-                if (Utility.isNetworkAvailable(getActivity())) {
-                    try {
-                        mProgressDialog = ProgressDialog.show(getActivity(), null, getString(R.string.dialog_Loading_Directory), true);
-                        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                        DataManager datamanager = DataManager.getInstance(getActivity());
-                        datamanager.getDataFromSignet(
-                                DataManager.SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
-                                ApplicationManager.userCredentials, this);
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                    // Si l'appareil n'est pas connecté sur internet, envoyer un message
-                } else {
-                    Toast.makeText(getActivity(), getString(R.string.toast_Connection_Required), Toast.LENGTH_LONG).show();
-                }
+                afficherRafraichissementEtRechargerBottin();
             }
         } catch (Exception e) {
             Log.e("BD FicheEmploye", e.getMessage());
         }
     }
 
-    @Override
-    public void onRequestSuccess(Object o) {
-        super.onRequestSuccess(o);
-        if (o instanceof HashMap<?, ?>) {
-            mProgressDialog.hide();
-            @SuppressWarnings("unchecked")
-            HashMap<String, List<FicheEmploye>> listeEmployeByService = (HashMap<String, List<FicheEmploye>>) o;
+    private void afficherRafraichissementEtRechargerBottin() {
+        if (Utility.isNetworkAvailable(getActivity())) {
+            mSwipeRefreshLayout.setRefreshing(true);
 
-            // Écriture dans la base de données
-            DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-
-            for (String nomService : listeEmployeByService.keySet()) {
-
-                List<FicheEmploye> listeEmployes = listeEmployeByService.get(nomService);
-
-                if (listeEmployes.size() > 0) {
-                    for (FicheEmploye ficheEmploye : listeEmployeByService.get(nomService)) {
-                        try {
-                            dbHelper.getDao(FicheEmploye.class).createOrUpdate(ficheEmploye);
-                        } catch (SQLException e) {
-                            Log.e(DatabaseHelper.class.getName(), "SQLException", e);
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
+            /*
+            Lancement du service permettant de synchroniser le bottin si celui-ci n'est pas en cours
+            de synchronisation. Si c'est le cas, cela signifie que la job est est en cours
+            d'exécution.
+             */
+            if (!BottinService.isSyncEnCours()) {
+                // Lancement du service permettant de synchroniser le bottin
+                Intent intent = new Intent(getContext(), BottinService.class);
+                getActivity().startService(intent);
             }
-
-            updateUI();
+        } else {
+            afficherMsgHorsLigne();
         }
-
     }
 
-
-    @Override
-    public void onRequestFailure(SpiceException e) {
-        super.onRequestFailure(e);
+    private void afficherMsgHorsLigne() {
+        Toast.makeText(getActivity(), getString(R.string.toast_Connection_Required),
+                Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -321,6 +297,35 @@ public class BottinFragment extends HttpFragment implements SearchView.OnQueryTe
             listAdapter.filterDataWithOneHeader(newText);
             expListView.expandGroup(0);
         }
+
         return true;
+    }
+
+    /**
+     * Récepteur recevant un intent lorsque {@link BottinService} a terminé la synchronisation
+     */
+    public class BottinFragmentReceiver extends BroadcastReceiver {
+        public static final String ACTION_SYNC_BOTTIN = "SYNC_BOTTIN";
+        public static final String EXCEPTION = "ERREUR_SYNC_BOTTIN";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Obtention de l'exception
+            Bundle extras = intent.getExtras();
+
+            Exception e = null;
+            if (extras != null)
+                e = (Exception) extras.getSerializable(EXCEPTION);
+
+            if (e == null)
+                // S'il n'y a pas d'exception...
+                updateUI();
+            else {
+                if (!Utility.isNetworkAvailable(getActivity()))
+                    afficherMsgHorsLigne();
+            }
+
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 }
