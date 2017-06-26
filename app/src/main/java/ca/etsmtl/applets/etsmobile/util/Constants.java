@@ -27,4 +27,8 @@ public class Constants {
 	public static final String TEXT_COLOR = "TEXT_COLOR";
 	public static final long GOOGLE_API_CLIENT_TIMEOUT_S = 10;
     public static final String FIRST_LOGIN = "FIRST_LOGIN";
+    public static final String EXTRA_CUSTOM_TABS_SESSION = "android.support.customtabs.extra.SESSION";
+    public static final String EXTRA_CUSTOM_TABS_TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR";
+    public static final String EXTRA_CUSTOM_TABS_TITLE_VISIBILITY_STATE = "android.support.customtabs.extra.TITLE_VISIBILITY";
+    public static final int EXTRA_CUSTOM_TABS_SHOW_TITLE = 1;
 }

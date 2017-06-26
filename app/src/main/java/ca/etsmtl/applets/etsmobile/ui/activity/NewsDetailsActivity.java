@@ -26,6 +26,7 @@ import java.util.List;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
 import ca.etsmtl.applets.etsmobile.util.NewsComparator;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -71,9 +72,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
                 Nouvelle item = (Nouvelle) parent.getItemAtPosition(position);
                 String url = item.getLink();
                 if (URLUtil.isValidUrl(url)) {
-                    Intent internetIntent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(url));
-                    startActivity(internetIntent);
+                    Utility.openChromeCustomTabs(NewsDetailsActivity.this, url);
                 } else {
                     Toast.makeText(NewsDetailsActivity.this, getString(R.string.erreur_lien), Toast.LENGTH_SHORT).show();
                 }

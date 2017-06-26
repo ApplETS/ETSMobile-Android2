@@ -25,6 +25,7 @@ import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SponsorAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.SponsorManager;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -106,9 +107,7 @@ public class SponsorsFragment extends HttpFragment implements Observer {
                 Sponsor item = sponsorList.get(position);
                 String url = item.getUrl();
                 if (URLUtil.isValidUrl(url)) {
-                    Intent internetIntent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(url));
-                    startActivity(internetIntent);
+                    Utility.openChromeCustomTabs(getActivity(), url);
                 }
             }
         });

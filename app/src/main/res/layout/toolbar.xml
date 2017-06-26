@@ -9,4 +9,5 @@
     android:layout_height="wrap_content"
     android:elevation="4dp"
     android:padding="0dp"
-    app:theme="@style/ToolbarTheme"/>
+    app:theme="@style/ToolbarTheme"
+    app:popupTheme="@style/ToolbarPopupTheme"/>

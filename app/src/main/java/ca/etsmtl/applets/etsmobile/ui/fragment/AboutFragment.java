@@ -26,7 +26,7 @@ import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile2.R;
 
-public class AboutFragment extends WebFragment {
+public class AboutFragment extends BaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
