@@ -108,6 +108,8 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
     public void onResume() {
         super.onResume();
 
+        mSwipeRefreshLayout.setRefreshing(BottinService.isSyncEnCours());
+
         IntentFilter filter = new IntentFilter(BottinFragmentReceiver.ACTION_SYNC_BOTTIN);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
         getActivity().registerReceiver(receiver, filter);
@@ -250,7 +252,7 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
                     onQueryTextChange(searchText.toString());
 
                 // Si le contenu est vide, télécharger le bottin
-            } else {
+            } else { // Le contenu est vide.
                 afficherRafraichissementEtRechargerBottin();
             }
         } catch (Exception e) {
