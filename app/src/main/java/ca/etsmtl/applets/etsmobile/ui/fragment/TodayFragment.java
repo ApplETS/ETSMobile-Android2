@@ -1,6 +1,8 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,7 +32,6 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
-import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
@@ -43,6 +44,9 @@ import ca.etsmtl.applets.etsmobile2.R;
 public class TodayFragment extends HttpFragment implements Observer {
 
     private static final long JOUR_EN_MS =  86400000;
+    private static final String TODAY_PREFS = "TodayPrefs";
+    private static final String DATE_DEBUT_PREF = "DateDebutPref";
+    private static final String DATE_FIN_PREF = "DateFinPref";
 
     private ListView todaysList;
     private HoraireManager horaireManager;
@@ -130,11 +134,14 @@ public class TodayFragment extends HttpFragment implements Observer {
             for (int i = listeDeSessions.liste.size() - 1; i > 0; i-- ) {
                 dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
                 dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
-                if (isAdded())
+                if (isAdded()) {
+                    saveSemesterProgressBarDatesToPrefs(listeDeSessions.liste.get(i).dateDebut, listeDeSessions.liste.get(i).dateFin);
                     setSemesterProgressBarText(dateStart, dateEnd);
+                }
                 if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
                     String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
                     String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
+
                     //todo dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateStartString, dateEndString), TodayFragment.this);
                     break;
                 }
@@ -142,6 +149,27 @@ public class TodayFragment extends HttpFragment implements Observer {
         } else {
             horaireManager.onRequestSuccess(o);
         }
+    }
+
+    private void saveSemesterProgressBarDatesToPrefs(String dateStartStr, String dateEndStr) {
+        if (isAdded()) {
+            SharedPreferences settings = getContext().getSharedPreferences(TODAY_PREFS, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(DATE_DEBUT_PREF, dateStartStr);
+            editor.putString(DATE_FIN_PREF, dateEndStr);
+            editor.commit();
+        }
+    }
+
+    private void restoreSemesterProgressBarDatesFromPrefs() {
+        SharedPreferences settings = getContext().getSharedPreferences(TODAY_PREFS, Context.MODE_PRIVATE);
+        String dateStartStr = settings.getString(DATE_DEBUT_PREF, null);
+        String dateEndStr = settings.getString(DATE_FIN_PREF, null);
+        Date dateStart = Utility.getDateFromString(dateStartStr);
+        Date dateEnd = Utility.getDateFromString(dateEndStr);
+
+        if (dateStart != null && dateEnd != null)
+            setSemesterProgressBarText(dateStart, dateEnd);
     }
 
     private void setSemesterProgressBarText(Date dateDebut, Date dateFin) {
@@ -174,6 +202,7 @@ public class TodayFragment extends HttpFragment implements Observer {
 
     @Override
     public void onRequestFailure(SpiceException e) {
+        restoreSemesterProgressBarDatesFromPrefs();
     }
 
     @Override
