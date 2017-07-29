@@ -75,6 +75,9 @@ public class TodayFragment extends HttpFragment implements Observer {
 
         semesterProgressBar = (ProgressBar) v.findViewById(R.id.semester_progress_bar);
         semesterProgressBarText = (TextView) v.findViewById(R.id.semester_progress_bar_text);
+
+        restoreSemesterProgressBarDatesFromPrefs();
+
         todaysList = (ListView) v.findViewById(R.id.todays_list);
 
         todaysTv = (TextView) v.findViewById(R.id.todays_name);
@@ -157,7 +160,7 @@ public class TodayFragment extends HttpFragment implements Observer {
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(DATE_DEBUT_PREF, dateStartStr);
             editor.putString(DATE_FIN_PREF, dateEndStr);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -202,7 +205,7 @@ public class TodayFragment extends HttpFragment implements Observer {
 
     @Override
     public void onRequestFailure(SpiceException e) {
-        restoreSemesterProgressBarDatesFromPrefs();
+
     }
 
     @Override
