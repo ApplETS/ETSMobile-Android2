@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
     
     <ListView 
         android:id="@+id/activity_note_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" 
-        android:padding="10dp"
         android:dividerHeight="2dp"
-        android:divider="@color/gray"/>   
+        android:divider="@color/gray"
+        tools:listitem="@layout/row_note_menu"/>
         
   <ca.etsmtl.applets.etsmobile.views.LoadingView
       android:id="@+id/loadingView"
