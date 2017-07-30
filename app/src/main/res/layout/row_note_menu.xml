@@ -3,7 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" 
-    android:paddingBottom="20dp">
+    android:paddingBottom="20dp"
+    android:padding="10dp">
     
     <TextView 
         android:id="@+id/row_note_menu_session_text"   
