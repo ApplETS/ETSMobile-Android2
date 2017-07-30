@@ -168,11 +168,13 @@ public class TodayFragment extends HttpFragment implements Observer {
         SharedPreferences settings = getContext().getSharedPreferences(TODAY_PREFS, Context.MODE_PRIVATE);
         String dateStartStr = settings.getString(DATE_DEBUT_PREF, null);
         String dateEndStr = settings.getString(DATE_FIN_PREF, null);
-        Date dateStart = Utility.getDateFromString(dateStartStr);
-        Date dateEnd = Utility.getDateFromString(dateEndStr);
+        if (dateStartStr != null && dateEndStr != null) {
+            Date dateStart = Utility.getDateFromString(dateStartStr);
+            Date dateEnd = Utility.getDateFromString(dateEndStr);
 
-        if (dateStart != null && dateEnd != null)
-            setSemesterProgressBarText(dateStart, dateEnd);
+            if (dateStart != null && dateEnd != null)
+                setSemesterProgressBarText(dateStart, dateEnd);
+        }
     }
 
     private void setSemesterProgressBarText(Date dateDebut, Date dateFin) {
