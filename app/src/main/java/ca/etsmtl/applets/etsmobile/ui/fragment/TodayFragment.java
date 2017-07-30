@@ -43,7 +43,6 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 public class TodayFragment extends HttpFragment implements Observer {
 
-    private static final long JOUR_EN_MS =  86400000;
     private static final String TODAY_PREFS = "TodayPrefs";
     private static final String DATE_DEBUT_PREF = "DateDebutPref";
     private static final String DATE_FIN_PREF = "DateFinPref";
@@ -185,7 +184,7 @@ public class TodayFragment extends HttpFragment implements Observer {
         long progressionJour;
 
         if (dateActuelle.after(dateDebut) && dateActuelle.before(dateFin)) {
-            dureeTotaleMs = dateFin.getTime() - dateDebut.getTime() + JOUR_EN_MS;
+            dureeTotaleMs = dateFin.getTime() - dateDebut.getTime() + TimeUnit.DAYS.toMillis(1);
             nbJoursTotal = TimeUnit.MILLISECONDS.toDays(dureeTotaleMs);
             progressionMs = dateActuelle.getTime() - dateDebut.getTime();
             progressionJour = TimeUnit.MILLISECONDS.toDays(progressionMs);
@@ -197,7 +196,7 @@ public class TodayFragment extends HttpFragment implements Observer {
                     + String.valueOf(nbJoursTotal) + " " + getString(R.string.days));
             semesterProgressBarText.setVisibility(View.VISIBLE);
         } else if (dateActuelle.before(dateDebut)) {
-            progressionMs = dateDebut.getTime() - dateActuelle.getTime() + JOUR_EN_MS;
+            progressionMs = dateDebut.getTime() - dateActuelle.getTime() + TimeUnit.DAYS.toMillis(1);
             progressionJour = TimeUnit.MILLISECONDS.toDays(progressionMs);
 
             semesterProgressBarText.setText(String.format(getString(R.string.days_before_session_start), String.valueOf(progressionJour)));
