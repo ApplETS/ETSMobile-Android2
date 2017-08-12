@@ -5,6 +5,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,12 +27,11 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
-import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
+import ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MoodleCoursesAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.CourseComparator;
-import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -44,11 +46,16 @@ public class MoodleFragment extends HttpFragment {
 
     ListView moodleCoursesListView;
     private MoodleCoursesAdapter moodleCoursesAdapter;
-    private String lastInserted;
+    private String firstSemesterInserted;
+    private String lastSemesterInserted;
+    private List<MoodleCourse> firstSemesterInsertedCourses;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+        firstSemesterInsertedCourses = new ArrayList<>();
 	}
 
 	@Override
@@ -67,6 +74,32 @@ public class MoodleFragment extends HttpFragment {
 
 		return v;
 	}
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_moodle, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_moodle_assignments:
+                Intent intent = new Intent(getActivity(), MoodleAssignmentsActivity.class);
+                intent.putExtra(MoodleAssignmentsActivity.SEMESTER_KEY, firstSemesterInserted);
+                int size = firstSemesterInsertedCourses.size();
+                int[] coursesIds = new int[size];
+                for (int i = 0; i < size; i++)
+                    coursesIds[i] = firstSemesterInsertedCourses.get(i).getId();
+                intent.putExtra(MoodleAssignmentsActivity.COURSES_KEY, coursesIds);
+                getActivity().startActivity(intent);
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public String getFragmentTitle() {
@@ -116,22 +149,33 @@ public class MoodleFragment extends HttpFragment {
                 Collections.reverse(moodleCourses); // To get the most current semester first
                 String semesterString;
                 List<String> semesterList = new ArrayList<>();
-                for(MoodleCourse moodleCourse : moodleCourses) {
+                boolean insertingFirstSemester = true;
+                for (int i = 0; i < moodleCourses.size(); i++) {
+                    MoodleCourse moodleCourse = moodleCourses.get(i);
 
-                    if(moodleCourse.getFullname().matches("(.*)([AÉH](\\d){4})(.*)"))
+                    if(moodleCourse.getFullname().matches("(.*)([AÉH](\\d){4})(.*)")) {
                         semesterString = moodleCourse.getFullname().replace("(", "{").split("\\{")[1].replace(")", "");
+                    }
                     else
                         semesterString = null;
                     semesterString = convertSemesterString(semesterString);
-                    if(!semesterList.contains(semesterString)) {
+                    if (i == 0)
+                        firstSemesterInserted = semesterString;
+                    if (!semesterList.contains(semesterString)) {
                         semesterList.add(semesterString);
                         MoodleCourse courseSemesterSeparator = new MoodleCourse();
                         courseSemesterSeparator.setCourseSemester(semesterString);
                         moodleCoursesAdapter.addSectionHeader(courseSemesterSeparator);
                         moodleCoursesAdapter.addCourse(moodleCourse);
-                    }
-                    else
+                        if (semesterString.equals(firstSemesterInserted))
+                            firstSemesterInsertedCourses.add(moodleCourse);
+                        else
+                            insertingFirstSemester = false;
+                    } else {
                         moodleCoursesAdapter.addCourse(moodleCourse);
+                        if (insertingFirstSemester)
+                            firstSemesterInsertedCourses.add(moodleCourse);
+                    }
                 }
 
                 moodleCoursesListView.setAdapter(moodleCoursesAdapter);
@@ -242,24 +286,24 @@ public class MoodleFragment extends HttpFragment {
     private String convertSemesterString(String semester) {
 
         if(semester == null)
-            return lastInserted;
+            return lastSemesterInserted;
         else
             switch(semester.charAt(0)) {
                 case 'A':
-                    lastInserted = "Automne " + semester.replace("A", "");
+                    lastSemesterInserted = "Automne " + semester.replace("A", "");
                     return "Automne " + semester.replace("A", "");
 
                 case 'E':
                 case 'É':
-                    lastInserted = "Été " + semester.replace("É", "");
+                    lastSemesterInserted = "Été " + semester.replace("É", "");
                     return "Été " + semester.replace("É", "");
 
                 case 'H':
-                    lastInserted = "Hiver " + semester.replace("H", "");
+                    lastSemesterInserted = "Hiver " + semester.replace("H", "");
                     return "Hiver " + semester.replace("H", "");
 
                 default:
-                    return lastInserted;
+                    return lastSemesterInserted;
 
             }
 

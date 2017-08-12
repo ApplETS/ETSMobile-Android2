@@ -69,6 +69,7 @@
     <string name="applets_ens_etsmtl_ca">applets@ens.etsmtl.ca</string>
     <string name="etsmobile_android_commentaire">ETSMobile-Android : Commentaire</string>
     <string name="default_comment"></string>
+    <string name="moodle_assignments_title">Devoirs</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, la radio étudiante de l\'ÉTS.</string>

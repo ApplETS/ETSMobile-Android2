@@ -230,6 +230,12 @@
             android:name="ca.etsmtl.applets.etsmobile.service.BottinService"
             android:exported="false" />
 
+        <activity android:name="ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity"
+            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
