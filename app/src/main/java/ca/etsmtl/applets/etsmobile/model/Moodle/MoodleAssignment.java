@@ -41,4 +41,8 @@ public class MoodleAssignment {
     private int teamSubmissionGroupingId;
     @JsonProperty("maxattempts")
     private int maxAttempts;
+
+    public String getName() {
+        return name;
+    }
 }

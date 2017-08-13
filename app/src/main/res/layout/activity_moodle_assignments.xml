@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity">
     <include
         android:id="@+id/toolbar"
@@ -12,15 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/current_semester_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <ExpandableListView
         android:id="@+id/assignments_elv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:groupIndicator="@null"
+        tools:listheader="@layout/list_separator_moodle"
+        tools:listitem="@layout/row_moodle_assignment">
 
     </ExpandableListView>
-</LinearLayout>
+
+    <ca.etsmtl.applets.etsmobile.views.LoadingView
+        android:id="@+id/loading_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

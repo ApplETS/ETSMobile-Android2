@@ -6,19 +6,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourses;
+import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAssignmentsAdapter;
+import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -32,8 +35,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
     private static final String TAG = "MoodleAssignments";
 
     private DataManager dataManager;
-    private TextView currentSemesterTv;
     private ExpandableListView assignmentsElv;
+    private LoadingView loadingView;
     private int[] coursesIds;
 
     @Override
@@ -42,10 +45,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
         setContentView(R.layout.activity_moodle_assignments);
         setUpTitleBar();
 
-        currentSemesterTv = (TextView) findViewById(R.id.current_semester_tv);
-        currentSemesterTv.setText(getIntent().getStringExtra(SEMESTER_KEY));
-
         assignmentsElv = (ExpandableListView) findViewById(R.id.assignments_elv);
+        loadingView = (LoadingView) findViewById(R.id.loading_view);
 
         coursesIds = getIntent().getIntArrayExtra(COURSES_KEY);
 
@@ -68,6 +69,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
     }
 
     private void quueryAssignments() {
+        loadingView.showLoadingView();
         SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
             @Override
             public MoodleAssignmentCourses loadDataFromNetwork() throws Exception {
@@ -88,17 +90,33 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
 
     @Override
     public void onRequestFailure(SpiceException spiceException) {
-
+        loadingView.hideProgessBar();
+        if (loadingView.isShown()) {
+            loadingView.setMessageError(getString(R.string.error_JSON_PARSING));
+        }
     }
 
     @Override
     public void onRequestSuccess(Object o) {
-        List<String> headers = new ArrayList<>();
-
         if (o instanceof MoodleAssignmentCourses) {
+            List<String> headers = new ArrayList<>();
+            HashMap<String, List<MoodleAssignment>> childs = new HashMap<>();
+
             for (MoodleAssignmentCourse course : ((MoodleAssignmentCourses) o).getCourses()) {
                 headers.add(course.getFullName());
+                List<MoodleAssignment> assignments = new ArrayList<>();
+                for (MoodleAssignment assignment : course.getAssignments())
+                    assignments.add(assignment);
+
+                childs.put(course.getFullName(), assignments);
             }
+
+            ExpandableListMoodleAssignmentsAdapter adapter = new ExpandableListMoodleAssignmentsAdapter(this);
+            adapter.setData(headers, childs);
+            assignmentsElv.setAdapter(adapter);
+
+            adapter.setData(headers, childs);
+            LoadingView.hideLoadingView(loadingView);
         }
     }
 }
