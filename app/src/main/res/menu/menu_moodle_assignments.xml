@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_item_moodle_assignments_submitted"
+        android:checkable="true"
+        android:title="@string/moodle_assignments_submitted"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_item_moodle_assignments_graded"
+        android:checkable="true"
+        android:title="@string/moodle_assignments_graded"
+        app:showAsAction="never" />
+</menu>

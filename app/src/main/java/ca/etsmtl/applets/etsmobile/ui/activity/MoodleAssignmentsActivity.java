@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
@@ -38,6 +41,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
     private ExpandableListView assignmentsElv;
     private LoadingView loadingView;
     private int[] coursesIds;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +58,41 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
         quueryAssignments();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_moodle_assignments, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_moodle_assignments_submitted:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                } else {
+                    item.setChecked(true);
+                }
+                break;
+            case R.id.menu_item_moodle_assignments_graded:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                } else {
+                    item.setChecked(true);
+                }
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
+
     private void setUpTitleBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        this.toolbar = toolbar;
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.moodle_assignments_title));
