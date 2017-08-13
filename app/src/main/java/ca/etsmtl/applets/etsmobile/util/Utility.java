@@ -36,9 +36,6 @@ import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
 import ca.etsmtl.applets.etsmobile.model.MonETSNotificationList;
 import ca.etsmtl.applets.etsmobile2.R;
 
-import static ca.etsmtl.applets.etsmobile.util.Constants.EXTRA_CUSTOM_TABS_SESSION;
-import static ca.etsmtl.applets.etsmobile.util.Constants.EXTRA_CUSTOM_TABS_TOOLBAR_COLOR;
-
 public class Utility {
 
     public static boolean isTabletDevice(Context context) {
@@ -74,6 +71,12 @@ public class Utility {
     public static String getStringForApplETSApiFromDate(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyy");
         return simpleDateFormat.format(date);
+    }
+
+    public static Date getDateTimeFromUnixTime(long unixDate) {
+        Date date = new Date(unixDate * 1000);
+
+        return date;
     }
 
     public static Map<String, String> parseCookies(String cookieHeader) {

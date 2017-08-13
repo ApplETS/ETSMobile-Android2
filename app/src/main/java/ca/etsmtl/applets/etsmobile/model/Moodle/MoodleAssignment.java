@@ -22,7 +22,7 @@ public class MoodleAssignment {
     @JsonProperty("submissiondrafts")
     private int submissionDrafts;
     @JsonProperty("duedate")
-    private int dueDate;
+    private long dueDate;
     @JsonProperty("allowsubmissionsfromdate")
     private int allowSubmissionsFromDate;
     @JsonProperty("grade")
@@ -44,5 +44,9 @@ public class MoodleAssignment {
 
     public String getName() {
         return name;
+    }
+
+    public long getDueDate() {
+        return dueDate;
     }
 }

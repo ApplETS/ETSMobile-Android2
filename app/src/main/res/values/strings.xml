@@ -70,8 +70,7 @@
     <string name="etsmobile_android_commentaire">ETSMobile-Android : Commentaire</string>
     <string name="default_comment"></string>
     <string name="moodle_assignments_title">Devoirs</string>
-    <string name="moodle_assignments_submitted">Remis</string>
-    <string name="moodle_assignments_graded">Évalués</string>
+    <string name="moodle_past_assignments">Devoirs passés</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, la radio étudiante de l\'ÉTS.</string>

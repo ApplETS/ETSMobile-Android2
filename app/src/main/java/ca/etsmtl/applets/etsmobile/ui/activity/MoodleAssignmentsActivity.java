@@ -15,6 +15,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourses;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAssignmentsAdapter;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -41,6 +43,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
     private LoadingView loadingView;
     private int[] coursesIds;
     private Toolbar toolbar;
+    private List<MoodleAssignmentCourse> courses;
+    private boolean displayPastAssignments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,19 +72,10 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_moodle_assignments_submitted:
-                if (item.isChecked()) {
-                    item.setChecked(false);
-                } else {
-                    item.setChecked(true);
-                }
-                break;
-            case R.id.menu_item_moodle_assignments_graded:
-                if (item.isChecked()) {
-                    item.setChecked(false);
-                } else {
-                    item.setChecked(true);
-                }
+            case R.id.menu_item_moodle_past_assignments:
+                displayPastAssignments = !item.isChecked();
+                item.setChecked(displayPastAssignments);
+                refreshUI();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -135,24 +130,36 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
     @Override
     public void onRequestSuccess(Object o) {
         if (o instanceof MoodleAssignmentCourses) {
-            List<String> headers = new ArrayList<>();
-            HashMap<String, List<MoodleAssignment>> childs = new HashMap<>();
+            courses = ((MoodleAssignmentCourses) o).getCourses();
+            refreshUI();
+        }
+    }
 
-            for (MoodleAssignmentCourse course : ((MoodleAssignmentCourses) o).getCourses()) {
-                headers.add(course.getFullName());
-                List<MoodleAssignment> assignments = new ArrayList<>();
-                for (MoodleAssignment assignment : course.getAssignments())
+    private void refreshUI() {
+        List<String> headers = new ArrayList<>();
+        HashMap<String, List<MoodleAssignment>> childs = new HashMap<>();
+
+        for (MoodleAssignmentCourse course : courses) {
+            headers.add(course.getFullName());
+            List<MoodleAssignment> assignments = new ArrayList<>();
+            for (MoodleAssignment assignment : course.getAssignments()) {
+                if (!displayPastAssignments) {
+                    Date dueDate = Utility.getDateTimeFromUnixTime(assignment.getDueDate());
+                    Date currentDate = new Date();
+                    if (dueDate.after(currentDate))
+                        assignments.add(assignment);
+                } else
                     assignments.add(assignment);
-
-                childs.put(course.getFullName(), assignments);
             }
 
-            ExpandableListMoodleAssignmentsAdapter adapter = new ExpandableListMoodleAssignmentsAdapter(this);
-            adapter.setData(headers, childs);
-            assignmentsElv.setAdapter(adapter);
-
-            adapter.setData(headers, childs);
-            LoadingView.hideLoadingView(loadingView);
+            childs.put(course.getFullName(), assignments);
         }
+
+        ExpandableListMoodleAssignmentsAdapter adapter = new ExpandableListMoodleAssignmentsAdapter(this);
+        adapter.setData(headers, childs);
+        assignmentsElv.setAdapter(adapter);
+
+        adapter.setData(headers, childs);
+        LoadingView.hideLoadingView(loadingView);
     }
 }
