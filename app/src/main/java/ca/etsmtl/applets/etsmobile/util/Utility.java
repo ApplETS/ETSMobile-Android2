@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
@@ -74,9 +75,7 @@ public class Utility {
     }
 
     public static Date getDateTimeFromUnixTime(long unixDate) {
-        Date date = new Date(unixDate * 1000);
-
-        return date;
+        return new Date(TimeUnit.SECONDS.toMillis(unixDate));
     }
 
     public static Map<String, String> parseCookies(String cookieHeader) {

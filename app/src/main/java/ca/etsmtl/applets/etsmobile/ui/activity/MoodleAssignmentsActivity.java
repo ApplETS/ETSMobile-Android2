@@ -15,6 +15,8 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +27,6 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourses;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAssignmentsAdapter;
-import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -45,6 +46,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
     private Toolbar toolbar;
     private List<MoodleAssignmentCourse> courses;
     private boolean displayPastAssignments;
+    private boolean requestInProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
             case R.id.menu_item_moodle_past_assignments:
                 displayPastAssignments = !item.isChecked();
                 item.setChecked(displayPastAssignments);
-                refreshUI();
+                if (!requestInProgress)
+                    refreshUI();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -100,6 +103,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
     }
 
     private void quueryAssignments() {
+        requestInProgress = true;
         loadingView.showLoadingView();
         SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
             @Override
@@ -121,6 +125,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
 
     @Override
     public void onRequestFailure(SpiceException spiceException) {
+        requestInProgress = false;
         loadingView.hideProgessBar();
         if (loadingView.isShown()) {
             loadingView.setMessageError(getString(R.string.error_JSON_PARSING));
@@ -129,6 +134,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
 
     @Override
     public void onRequestSuccess(Object o) {
+        requestInProgress = false;
         if (o instanceof MoodleAssignmentCourses) {
             courses = ((MoodleAssignmentCourses) o).getCourses();
             refreshUI();
@@ -144,13 +150,20 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
             List<MoodleAssignment> assignments = new ArrayList<>();
             for (MoodleAssignment assignment : course.getAssignments()) {
                 if (!displayPastAssignments) {
-                    Date dueDate = Utility.getDateTimeFromUnixTime(assignment.getDueDate());
+                    Date dueDate = assignment.getDueDateObj();
                     Date currentDate = new Date();
                     if (dueDate.after(currentDate))
                         assignments.add(assignment);
                 } else
                     assignments.add(assignment);
             }
+
+            Collections.sort(assignments, new Comparator<MoodleAssignment>() {
+                @Override
+                public int compare(MoodleAssignment a1, MoodleAssignment a2) {
+                    return a1.getDueDateObj().compareTo(a2.getDueDateObj());
+                }
+            });
 
             childs.put(course.getFullName(), assignments);
         }

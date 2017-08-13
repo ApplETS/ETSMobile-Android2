@@ -3,6 +3,10 @@ package ca.etsmtl.applets.etsmobile.model.Moodle;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Date;
+
+import ca.etsmtl.applets.etsmobile.util.Utility;
+
 /**
  * Created by Sonphil on 12-08-17.
  */
@@ -23,6 +27,7 @@ public class MoodleAssignment {
     private int submissionDrafts;
     @JsonProperty("duedate")
     private long dueDate;
+    private Date dueDateObj;
     @JsonProperty("allowsubmissionsfromdate")
     private int allowSubmissionsFromDate;
     @JsonProperty("grade")
@@ -46,7 +51,7 @@ public class MoodleAssignment {
         return name;
     }
 
-    public long getDueDate() {
-        return dueDate;
+    public Date getDueDateObj() {
+        return Utility.getDateTimeFromUnixTime(dueDate);
     }
 }
