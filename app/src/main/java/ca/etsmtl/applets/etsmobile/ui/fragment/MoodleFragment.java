@@ -43,12 +43,14 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class MoodleFragment extends HttpFragment {
 
+    private static final int ASSIGNMENTS_ITEM_INDEX = 0;
 
     ListView moodleCoursesListView;
     private MoodleCoursesAdapter moodleCoursesAdapter;
     private String firstSemesterInserted;
     private String lastSemesterInserted;
     private List<MoodleCourse> firstSemesterInsertedCourses;
+    private Menu menu;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,6 @@ public class MoodleFragment extends HttpFragment {
         moodleCoursesListView = (ListView) v.findViewById(R.id.listView_moodle_courses);
         Log.d("MoodleFragment", "Moodle course list fragment is instantiated");
 
-
         queryMoodleToken();
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
@@ -78,6 +79,8 @@ public class MoodleFragment extends HttpFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_moodle, menu);
+        this.menu = menu;
+        menu.getItem(ASSIGNMENTS_ITEM_INDEX).setVisible(false);
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -87,7 +90,6 @@ public class MoodleFragment extends HttpFragment {
         switch (item.getItemId()) {
             case R.id.menu_item_moodle_assignments:
                 Intent intent = new Intent(getActivity(), MoodleAssignmentsActivity.class);
-                intent.putExtra(MoodleAssignmentsActivity.SEMESTER_KEY, firstSemesterInserted);
                 int size = firstSemesterInsertedCourses.size();
                 int[] coursesIds = new int[size];
                 for (int i = 0; i < size; i++)
@@ -194,6 +196,8 @@ public class MoodleFragment extends HttpFragment {
 
                     }
                 });
+
+                menu.getItem(ASSIGNMENTS_ITEM_INDEX).setVisible(true);
 
                 super.onRequestSuccess(null);
             }

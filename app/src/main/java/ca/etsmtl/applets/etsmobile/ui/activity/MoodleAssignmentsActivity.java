@@ -33,7 +33,6 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 public class MoodleAssignmentsActivity extends AppCompatActivity implements RequestListener<Object> {
 
-    public static final String SEMESTER_KEY = "CurrentSemester";
     public static final String COURSES_KEY = "CurrentSemesterCourses";
     private static final String TAG = "MoodleAssignments";
 
