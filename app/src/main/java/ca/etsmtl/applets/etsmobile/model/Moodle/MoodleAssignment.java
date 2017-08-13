@@ -46,12 +46,16 @@ public class MoodleAssignment {
     private int teamSubmissionGroupingId;
     @JsonProperty("maxattempts")
     private int maxAttempts;
+    @JsonProperty("intro")
+    private String intro;
 
     public String getName() {
         return name;
     }
 
     public Date getDueDateObj() {
-        return Utility.getDateTimeFromUnixTime(dueDate);
+        Date date = Utility.getDateTimeFromUnixTime(dueDate);
+
+        return date;
     }
 }
