@@ -70,7 +70,10 @@
     <string name="etsmobile_android_commentaire">ETSMobile-Android : Comments</string>
     <string name="default_comment"></string>
     <string name="moodle_assignments_title">Assignments</string>
-    <string name="moodle_past_assignments">Past assignments</string>
+    <string name="moodle_past_assignments">Previous assignments</string>
+    <string name="moodle_past_assignments_sort">Sort</string>
+    <string name="moodle_past_assignments_sort_date">Sort by date</string>
+    <string name="moodle_past_assignments_sort_alpha">Sort alphabetically</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, ÉTS student radio</string>
