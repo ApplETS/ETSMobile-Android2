@@ -21,6 +21,7 @@ import org.joda.time.DateTime;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
@@ -32,6 +33,7 @@ import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
+import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
@@ -133,20 +135,34 @@ public class TodayFragment extends HttpFragment implements Observer {
             Date currentDate = new Date();
             Date dateStart;
             Date dateEnd;
-            for (int i = listeDeSessions.liste.size() - 1; i > 0; i-- ) {
-                dateStart = Utility.getDateFromString(listeDeSessions.liste.get(i).dateDebut);
-                dateEnd = Utility.getDateFromString(listeDeSessions.liste.get(i).dateFin);
-                if (isAdded()) {
-                    saveSemesterProgressBarDatesToPrefs(listeDeSessions.liste.get(i).dateDebut, listeDeSessions.liste.get(i).dateFin);
-                    setSemesterProgressBarText(dateStart, dateEnd);
-                }
-                if (currentDate.getTime() >= dateStart.getTime() && currentDate.getTime() <= dateEnd.getTime()) {
-                    String dateStartString = Utility.getStringForApplETSApiFromDate(dateStart);
-                    String dateEndString = Utility.getStringForApplETSApiFromDate(dateEnd);
 
-                    //todo dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateStartString, dateEndString), TodayFragment.this);
-                    break;
+            Collections.sort(listeDeSessions.liste, new Comparator<Trimestre>() {
+                @Override
+                public int compare(Trimestre t1, Trimestre t2) {
+                    Date dateT1 = Utility.getDateFromString(t1.dateDebut);
+                    Date dateT2 = Utility.getDateFromString(t2.dateDebut);
+
+                    return dateT2.compareTo(dateT1);
                 }
+            });
+
+            // Obtention de la session précédente
+            Trimestre trimestre = listeDeSessions.liste.get(1);
+            dateStart = Utility.getDateFromString(trimestre.dateDebut);
+            dateEnd = Utility.getDateFromString(trimestre.dateFin);
+
+            // Si la session précédente est cours...
+            if (isAdded() && currentDate.after(dateStart) && currentDate.before(dateEnd)) {
+                saveSemesterProgressBarDatesToPrefs(trimestre.dateDebut, trimestre.dateFin);
+                setSemesterProgressBarText(dateStart, dateEnd);
+            } else {
+                trimestre = listeDeSessions.liste.get(0);
+
+                dateStart = Utility.getDateFromString(trimestre.dateDebut);
+                dateEnd = Utility.getDateFromString(trimestre.dateFin);
+
+                saveSemesterProgressBarDatesToPrefs(trimestre.dateDebut, trimestre.dateFin);
+                setSemesterProgressBarText(dateStart, dateEnd);
             }
         } else {
             horaireManager.onRequestSuccess(o);
@@ -184,7 +200,7 @@ public class TodayFragment extends HttpFragment implements Observer {
         long progressionJour;
 
         if (dateActuelle.after(dateDebut) && dateActuelle.before(dateFin)) {
-            dureeTotaleMs = dateFin.getTime() - dateDebut.getTime() + TimeUnit.DAYS.toMillis(1);
+            dureeTotaleMs = dateFin.getTime() - dateDebut.getTime();
             nbJoursTotal = TimeUnit.MILLISECONDS.toDays(dureeTotaleMs);
             progressionMs = dateActuelle.getTime() - dateDebut.getTime();
             progressionJour = TimeUnit.MILLISECONDS.toDays(progressionMs);
@@ -199,6 +215,7 @@ public class TodayFragment extends HttpFragment implements Observer {
             progressionMs = dateDebut.getTime() - dateActuelle.getTime() + TimeUnit.DAYS.toMillis(1);
             progressionJour = TimeUnit.MILLISECONDS.toDays(progressionMs);
 
+            semesterProgressBar.setProgress(0);
             semesterProgressBarText.setText(String.format(getString(R.string.days_before_session_start), String.valueOf(progressionJour)));
             semesterProgressBarText.setVisibility(View.VISIBLE);
         }
