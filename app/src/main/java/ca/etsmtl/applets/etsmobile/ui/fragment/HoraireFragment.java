@@ -58,7 +58,6 @@ import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.TrimestreComparator;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
-import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class HoraireFragment extends HttpFragment implements Observer, OnDateSelectedListener {
@@ -196,6 +195,8 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
     @Override
     public void onRequestSuccess(final Object o) {
+        super.onRequestSuccess(o);
+
         if (o instanceof ListeDeSessions && !((ListeDeSessions) o).liste.isEmpty()) {
 
             ListeDeSessions listeDeSessions = (ListeDeSessions) o;
@@ -236,7 +237,6 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
         if (isAdded()) {
             fillSeancesList(dateTime.toDate());
-            LoadingView.hideLoadingView(loadingView);
         }
     }
 
