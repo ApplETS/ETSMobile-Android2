@@ -7,24 +7,17 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
-import ca.etsmtl.applets.etsmobile.model.Cours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
-import ca.etsmtl.applets.etsmobile.model.Trimestre;
-import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotesSessionItem;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteAdapter;
@@ -76,7 +69,8 @@ public class NotesFragment extends HttpFragment implements Observer {
         mapNoteACeJour = new HashMap<>();
         loadingView.showLoadingView();
 
-        refreshList();
+        if (isAdded())
+            refreshList();
 
         dataManager.getDataFromSignet(SignetMethods.LIST_COURS, ApplicationManager.userCredentials, this, "");
         dataManager.getDataFromSignet(SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this, "");
@@ -139,15 +133,17 @@ public class NotesFragment extends HttpFragment implements Observer {
             notesSession = new NotesSessionItem[listeDeSessions.liste.size()];
             genererSessionCote(mapSession);
 
-            getActivity().runOnUiThread(new Runnable() {
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
 
-                @Override
-                public void run() {
-                    adapter = new NoteAdapter(getActivity(), R.layout.row_note_menu, notesSession);
-                    mListView.setAdapter(adapter);
-                }
+                    @Override
+                    public void run() {
+                        adapter = new NoteAdapter(getActivity(), R.layout.row_note_menu, notesSession);
+                        mListView.setAdapter(adapter);
+                    }
 
-            });
+                });
+            }
         }
 
     }

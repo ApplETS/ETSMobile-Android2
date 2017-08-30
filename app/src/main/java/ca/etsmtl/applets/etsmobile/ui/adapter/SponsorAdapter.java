@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -62,7 +63,11 @@ public class SponsorAdapter extends ArrayAdapter<Sponsor> {
                 imageSize = 300;
                 break;
         }
-        Picasso.with(context).load(item.getImageUrl()).resize(imageSize, imageSize).into(holder.imageSource);
+        Picasso.with(context)
+                .load(item.getImageUrl())
+                .resize(imageSize, imageSize)
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .into(holder.imageSource);
         holder.tvName.setText(item.getName());
 
         return view;

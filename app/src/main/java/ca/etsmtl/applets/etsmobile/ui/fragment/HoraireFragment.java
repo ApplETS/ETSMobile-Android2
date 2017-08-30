@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.CalendarContract;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -44,12 +44,10 @@ import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
-import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseTodayDecorator;
@@ -60,6 +58,7 @@ import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.TrimestreComparator;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
+import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class HoraireFragment extends HttpFragment implements Observer, OnDateSelectedListener {
@@ -72,7 +71,6 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     private SeanceAdapter allseanceAdapter;//Seances du semestre
     private SeanceAdapter upcomingseanceAdapter;//Seances du semestre
     private DatabaseHelper databaseHelper;
-    private ProgressBar progressBarSyncHoraire;
     @Bind(R.id.calendarView)
     MaterialCalendarView mCalendarView;
     @Bind(R.id.horraireViewSwitcher)
@@ -82,7 +80,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     private ArrayList<CalendarDay> courseDays;
     private ArrayList<CalendarDay> eventDays;
     private ArrayList<CalendarDay> finalExamDays;
-    private  boolean listDisplay = true;
+    private boolean listDisplay = true;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -100,12 +98,12 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
                 showCalendarPickerDialog();
                 return true;
             case R.id.calendar_display_toggle:
-                if(listDisplay){
+                if (listDisplay) {
 
                     item.setIcon(R.drawable.list_icon);
                     item.setTitle(R.string.list);
                     listDisplay = false;
-                }else{
+                } else {
                     item.setIcon(R.drawable.icon_calendar);
                     item.setTitle(R.string.calendar);
                     listDisplay = true;
@@ -126,50 +124,55 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.calendar_horaire_layout, container, false);
+        ViewGroup v = (ViewGroup) inflater.inflate(R.layout.calendar_horaire_layout, container, false);
+        super.onCreateView(inflater, v, savedInstanceState);
+        loadingView.showLoadingView();
         ButterKnife.bind(this, v);
 
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                databaseHelper = new DatabaseHelper(getActivity());
 
-        databaseHelper = new DatabaseHelper(getActivity());
+                seanceAdapter = new SeanceAdapter(getActivity());
+                allseanceAdapter = new SeanceAdapter(getActivity());
+                upcomingseanceAdapter = new SeanceAdapter(getActivity());
 
-        seanceAdapter = new SeanceAdapter(getActivity());
-        allseanceAdapter = new SeanceAdapter(getActivity());
-        upcomingseanceAdapter = new SeanceAdapter(getActivity());
+                fillSeancesList(dateTime.toDate());
+                fillListView();
+                setDaysList();
 
-        fillSeancesList(dateTime.toDate());
-        fillListView();
-        setDaysList();
+                calendar_listview.setAdapter(upcomingseanceAdapter);
 
-        calendar_listview.setAdapter(upcomingseanceAdapter);
-
-        mCalendarView.setCurrentDate(new Date());
-        mCalendarView.setSelectedDate(new Date());
-        mCalendarView.setOnDateChangedListener(this);
-        mCalendarView.addDecorators(
-                new CourseDecorator(getActivity(),courseDays),
-                new FinalExamDecorator(getActivity(),finalExamDays),
-                new EventDecorator(eventDays,  ContextCompat.getColor(getActivity(),R.color.black)),
-                new TodayDecorator(getActivity()),
-                new CourseTodayDecorator(getActivity(),courseDays)
+                mCalendarView.setCurrentDate(new Date());
+                mCalendarView.setSelectedDate(new Date());
+                mCalendarView.setOnDateChangedListener(HoraireFragment.this);
+                mCalendarView.addDecorators(
+                        new CourseDecorator(getActivity(), courseDays),
+                        new FinalExamDecorator(getActivity(), finalExamDays),
+                        new EventDecorator(eventDays, ContextCompat.getColor(getActivity(), R.color.black)),
+                        new TodayDecorator(getActivity()),
+                        new CourseTodayDecorator(getActivity(), courseDays)
                 );
 
 
-        horaireManager = new HoraireManager(this, getActivity());
-        horaireManager.addObserver(this);
-
-        progressBarSyncHoraire = (ProgressBar) v.findViewById(R.id.progressBar_sync_horaire);
-        progressBarSyncHoraire.setVisibility(ProgressBar.VISIBLE);
+                horaireManager = new HoraireManager(HoraireFragment.this, getActivity());
+                horaireManager.addObserver(HoraireFragment.this);
 
 //        customProgressDialog = new CustomProgressDialog(getActivity(), R.drawable.loading_spinner, "Synchronisation en cours");
 //        customProgressDialog.show();
 
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-        // @TODO Eventually, we might want to make the call for ETS Events here instead of in the onRequestSuccess.
-        // The problem right now is getting the endDate without using the ListeDeSessions
+                dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, HoraireFragment.this);
+                dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, HoraireFragment.this);
+                dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, HoraireFragment.this);
+                // @TODO Eventually, we might want to make the call for ETS Events here instead of in the onRequestSuccess.
+                // The problem right now is getting the endDate without using the ListeDeSessions
         /*String dateStart = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateStart, "2016-04-30"), this);*/
+
+                horraireViewSwitcher.setVisibility(View.VISIBLE);
+            }
+        });
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
@@ -184,7 +187,8 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
     @Override
     public void onRequestFailure(SpiceException arg0) {
-        progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
+        super.onRequestFailure(arg0);
+
 //        customProgressDialog.dismiss();
         if (getActivity() != null)
             Toast.makeText(getActivity(), getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT).show();
@@ -192,7 +196,6 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
     @Override
     public void onRequestSuccess(final Object o) {
-
         if (o instanceof ListeDeSessions && !((ListeDeSessions) o).liste.isEmpty()) {
 
             ListeDeSessions listeDeSessions = (ListeDeSessions) o;
@@ -201,7 +204,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
             DateTime dateDebut = new DateTime(derniereSession.dateDebut);
 
-            if(DateTime.now().isBefore(dateDebut)) {
+            if (DateTime.now().isBefore(dateDebut)) {
                 dateDebut = DateTime.now();
             }
 
@@ -230,12 +233,14 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     public void update(Observable observable, Object data) {
 
 //        customProgressDialog.dismiss();
-        progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 
-        fillSeancesList(dateTime.toDate());
+        if (isAdded()) {
+            fillSeancesList(dateTime.toDate());
+            LoadingView.hideLoadingView(loadingView);
+        }
     }
 
-    public void fillListView(){
+    public void fillListView() {
 
         try {
             List<Seances> seances = databaseHelper.getDao(Seances.class).queryForAll();
@@ -247,20 +252,20 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
             List<Event> upcomingEvents = new ArrayList<>();
 
             DateTime now = new DateTime();
-            for(Seances sc : seances){
+            for (Seances sc : seances) {
                 DateTime scDate = DateTime.parse(sc.getDateDebut());
-                if( DateTimeComparator.getDateOnlyInstance().compare(now, scDate) <= 0 ){
+                if (DateTimeComparator.getDateOnlyInstance().compare(now, scDate) <= 0) {
                     upcomingSeances.add(sc);
                 }
             }
-            for(Event ev : events){
+            for (Event ev : events) {
                 DateTime evDate = DateTime.parse(ev.getDateDebut());
-                if( DateTimeComparator.getDateOnlyInstance().compare(now, evDate) <= 0 ){
+                if (DateTimeComparator.getDateOnlyInstance().compare(now, evDate) <= 0) {
                     upcomingEvents.add(ev);
                 }
             }
 
-            upcomingseanceAdapter.setItemList(upcomingSeances,upcomingEvents);
+            upcomingseanceAdapter.setItemList(upcomingSeances, upcomingEvents);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -269,6 +274,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         allseanceAdapter.notifyDataSetChanged();
         upcomingseanceAdapter.notifyDataSetChanged();
     }
+
     public void fillSeancesList(Date date) {
         SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
         String today = seancesFormatter.format(date).toString();
@@ -330,7 +336,6 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
             }
 
 
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -349,7 +354,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     /**
      * Shows a dialog to the user inviting him/her to select a type of calendar. It is based between
      * three choices:
-     *
+     * <p>
      * Replaced days (Jours remplacés)
      * Courses (Séances)
      * ETS public calendar (Calendrier public ÉTS)
@@ -394,8 +399,8 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     private class AsyncUpdateCalendar extends AsyncTask<Object, Void, Object> {
 
         /**
-         *  Async class responsible for synchronizing the calendar in the background so the user
-         *  experience isn't affected.
+         * Async class responsible for synchronizing the calendar in the background so the user
+         * experience isn't affected.
          */
 
         private boolean isJoursRemplacesSelected;
@@ -445,5 +450,5 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
             }
         }
     }
-    
+
 }

@@ -129,43 +129,45 @@ public class TodayFragment extends HttpFragment implements Observer {
     @Override
     public void onRequestSuccess(Object o) {
 
-        if (o instanceof ListeDeSessions) {
+        if (isAdded()) {
+            if (o instanceof ListeDeSessions) {
 
-            ListeDeSessions listeDeSessions = (ListeDeSessions) o;
-            Date currentDate = new Date();
-            Date dateStart;
-            Date dateEnd;
+                ListeDeSessions listeDeSessions = (ListeDeSessions) o;
+                Date currentDate = new Date();
+                Date dateStart;
+                Date dateEnd;
 
-            Collections.sort(listeDeSessions.liste, new Comparator<Trimestre>() {
-                @Override
-                public int compare(Trimestre t1, Trimestre t2) {
-                    Date dateT1 = Utility.getDateFromString(t1.dateDebut);
-                    Date dateT2 = Utility.getDateFromString(t2.dateDebut);
+                Collections.sort(listeDeSessions.liste, new Comparator<Trimestre>() {
+                    @Override
+                    public int compare(Trimestre t1, Trimestre t2) {
+                        Date dateT1 = Utility.getDateFromString(t1.dateDebut);
+                        Date dateT2 = Utility.getDateFromString(t2.dateDebut);
 
-                    return dateT2.compareTo(dateT1);
-                }
-            });
+                        return dateT2.compareTo(dateT1);
+                    }
+                });
 
-            // Obtention de la session précédente
-            Trimestre trimestre = listeDeSessions.liste.get(1);
-            dateStart = Utility.getDateFromString(trimestre.dateDebut);
-            dateEnd = Utility.getDateFromString(trimestre.dateFin);
-
-            // Si la session précédente est cours...
-            if (isAdded() && currentDate.after(dateStart) && currentDate.before(dateEnd)) {
-                saveSemesterProgressBarDatesToPrefs(trimestre.dateDebut, trimestre.dateFin);
-                setSemesterProgressBarText(dateStart, dateEnd);
-            } else {
-                trimestre = listeDeSessions.liste.get(0);
-
+                // Obtention de la session précédente
+                Trimestre trimestre = listeDeSessions.liste.get(1);
                 dateStart = Utility.getDateFromString(trimestre.dateDebut);
                 dateEnd = Utility.getDateFromString(trimestre.dateFin);
 
-                saveSemesterProgressBarDatesToPrefs(trimestre.dateDebut, trimestre.dateFin);
-                setSemesterProgressBarText(dateStart, dateEnd);
+                // Si la session précédente est cours...
+                if (isAdded() && currentDate.after(dateStart) && currentDate.before(dateEnd)) {
+                    saveSemesterProgressBarDatesToPrefs(trimestre.dateDebut, trimestre.dateFin);
+                    setSemesterProgressBarText(dateStart, dateEnd);
+                } else {
+                    trimestre = listeDeSessions.liste.get(0);
+
+                    dateStart = Utility.getDateFromString(trimestre.dateDebut);
+                    dateEnd = Utility.getDateFromString(trimestre.dateFin);
+
+                    saveSemesterProgressBarDatesToPrefs(trimestre.dateDebut, trimestre.dateFin);
+                    setSemesterProgressBarText(dateStart, dateEnd);
+                }
+            } else {
+                horaireManager.onRequestSuccess(o);
             }
-        } else {
-            horaireManager.onRequestSuccess(o);
         }
     }
 

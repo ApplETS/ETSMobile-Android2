@@ -1,6 +1,8 @@
 package ca.etsmtl.applets.etsmobile.views;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +42,7 @@ public class LoadingView extends RelativeLayout {
     public void init(Context context){
         LayoutInflater.from(context).inflate(R.layout.base_layout, this, true);
         progressBar = (ProgressBar) findViewById(R.id.base_layout_loading_pb);
+        progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(context, R.color.ets_red), PorterDuff.Mode.SRC_IN);
         textView = (TextView) findViewById(R.id.base_layout_error_tv);
         textView.setVisibility(View.GONE);
     }

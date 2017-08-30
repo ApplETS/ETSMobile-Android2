@@ -19,6 +19,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -528,13 +529,44 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    public void goToFragment(Fragment fragment, String tag) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .addToBackStack(tag)
-                .commit();
+    public void goToFragment(final Fragment fragment, final String tag) {
+        if (activityDrawer != null && activityDrawer.isDrawerOpen()) {
+            final DrawerLayout drawerLayout = activityDrawer.getDrawerLayout();
+
+            drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+                @Override
+                public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                }
+
+                @Override
+                public void onDrawerOpened(View drawerView) {
+
+                }
+
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    replaceWithFragment(fragment, tag);
+
+                    drawerLayout.removeDrawerListener(this);
+                }
+
+                @Override
+                public void onDrawerStateChanged(int newState) {
+
+                }
+            });
+        } else {
+            replaceWithFragment(fragment, tag);
+        }
 
         this.invalidateOptionsMenu();
+    }
+
+    private void replaceWithFragment(Fragment fragment, String tag) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment, tag)
+                .commit();
     }
 
     public void setTitle(String title) {
