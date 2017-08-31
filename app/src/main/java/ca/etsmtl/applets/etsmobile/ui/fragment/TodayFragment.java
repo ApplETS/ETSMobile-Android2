@@ -129,12 +129,12 @@ public class TodayFragment extends HttpFragment implements Observer {
     @Override
     public void onRequestSuccess(Object o) {
 
-        if (o instanceof ListeDeSessions) {
+        if (o instanceof ListeDeSessions && ((ListeDeSessions) o).liste.size() > 0) {
 
             ListeDeSessions listeDeSessions = (ListeDeSessions) o;
             Date currentDate = new Date();
-            Date dateStart;
-            Date dateEnd;
+            Date dateStart = new Date();
+            Date dateEnd = new Date();
 
             Collections.sort(listeDeSessions.liste, new Comparator<Trimestre>() {
                 @Override
@@ -146,13 +146,17 @@ public class TodayFragment extends HttpFragment implements Observer {
                 }
             });
 
+            Trimestre trimestre = null;
+
             // Obtention de la session précédente
-            Trimestre trimestre = listeDeSessions.liste.get(1);
-            dateStart = Utility.getDateFromString(trimestre.dateDebut);
-            dateEnd = Utility.getDateFromString(trimestre.dateFin);
+            if (listeDeSessions.liste.size() > 1) {
+                trimestre = listeDeSessions.liste.get(1);
+                dateStart = Utility.getDateFromString(trimestre.dateDebut);
+                dateEnd = Utility.getDateFromString(trimestre.dateFin);
+            }
 
             // Si la session précédente est cours...
-            if (isAdded() && currentDate.after(dateStart) && currentDate.before(dateEnd)) {
+            if (isAdded() && trimestre != null && currentDate.after(dateStart) && currentDate.before(dateEnd)) {
                 saveSemesterProgressBarDatesToPrefs(trimestre.dateDebut, trimestre.dateFin);
                 setSemesterProgressBarText(dateStart, dateEnd);
             } else {
