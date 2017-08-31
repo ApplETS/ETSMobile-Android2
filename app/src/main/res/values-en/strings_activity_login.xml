@@ -14,6 +14,7 @@
     <string name="error_invalid_email">Invalid universal code</string>
     <string name="error_invalid_pwd">Invalid password</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_unable_connect_server">Unable to connect to server</string>
 
     <string name="touch_login">Please touch to login</string>
 </resources>
