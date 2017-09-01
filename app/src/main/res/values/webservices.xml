@@ -17,7 +17,7 @@
         <item>ca.applets.etsmap;ic_etsmap;etsmap_title</item>
     </string-array>
 
-    <string name="moodle_url">https://ena.etsmlt.ca</string>
+    <string name="moodle_url">https://ena.etsmtl.ca</string>
     <string name="portail_api_authentification_url">https://portail.etsmtl.ca/api/authentification</string>
     <string name="portail_api_base_url">https://portail.etsmtl.ca</string>
     <string name="applets_api_calendar">https://api3.clubapplets.ca/calendar/%1$s/%2$s/%3$s</string>
