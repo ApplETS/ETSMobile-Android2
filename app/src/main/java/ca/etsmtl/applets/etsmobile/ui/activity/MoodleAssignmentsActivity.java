@@ -93,6 +93,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                         if (loadingView.isShown()) {
                             loadingView.setMessageError(getString(R.string.error_JSON_PARSING));
                         }
+                    } else if (listRemoteResource.status == RemoteResource.LOADING) {
+                        requestInProgress = true;
                     }
                 }
             }
