@@ -63,6 +63,7 @@ android {
 }
 
 def SUPPORT_LIBRARY_VERSION = '26.0.1'
+def PLAY_SERVICES_LIBRARY_VERSION = '11.2.0'
 
 dependencies {
     wearApp project(':wear')
@@ -83,11 +84,11 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
         transitive = true;
     }
-    compile 'com.google.android.gms:play-services-gcm:11.0.4'
-    compile 'com.google.android.gms:play-services-wearable:11.0.4'
-    compile 'com.google.android.gms:play-services-analytics:11.0.4'
-
-    compile 'com.google.android.gms:play-services-base:11.0.4'
+    compile "com.google.android.gms:play-services-gcm:${PLAY_SERVICES_LIBRARY_VERSION}"
+    compile "com.google.android.gms:play-services-wearable:${PLAY_SERVICES_LIBRARY_VERSION}"
+    compile "com.google.android.gms:play-services-analytics:${PLAY_SERVICES_LIBRARY_VERSION}"
+    compile "com.google.android.gms:play-services-base:${PLAY_SERVICES_LIBRARY_VERSION}"
+    compile "com.google.android.gms:play-services-location:${PLAY_SERVICES_LIBRARY_VERSION}"
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'io.smooch:core:latest.release'
