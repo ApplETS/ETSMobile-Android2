@@ -13,12 +13,12 @@ apply plugin: 'com.android.application'
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     maven { url 'https://github.com/leonardocardoso/mvn-repo/raw/master/maven-deploy' }
+    maven { url 'https://maven.google.com' }
 }
 
-
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.1'
     useLibrary 'org.apache.http.legacy'
 
     lintOptions {
@@ -62,6 +62,8 @@ android {
     }
 }
 
+def SUPPORT_LIBRARY_VERSION = '26.0.1'
+
 dependencies {
     wearApp project(':wear')
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -74,18 +76,19 @@ dependencies {
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.11'
     compile 'joda-time:joda-time:2.3'
     compile 'org.joda:joda-convert:1.7'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-
-    compile 'com.android.support:support-v4:25.3.1'
+    compile "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
+    compile "com.android.support:support-v4:${SUPPORT_LIBRARY_VERSION}"
+    compile "com.android.support:recyclerview-v7:${SUPPORT_LIBRARY_VERSION}"
+    compile "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
     compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
         transitive = true;
     }
-    compile 'com.google.android.gms:play-services-gcm:10.0.1'
-    compile 'com.google.android.gms:play-services-wearable:10.0.1'
-    compile 'com.google.android.gms:play-services-analytics:10.0.1'
+    compile 'com.google.android.gms:play-services-gcm:11.0.4'
+    compile 'com.google.android.gms:play-services-wearable:11.0.4'
+    compile 'com.google.android.gms:play-services-analytics:11.0.4'
 
-    compile 'com.google.android.gms:play-services-base:10.0.1'
-    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.google.android.gms:play-services-base:11.0.4'
+    compile 'com.google.code.gson:gson:2.7'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'io.smooch:core:latest.release'
     compile 'io.smooch:ui:latest.release'
@@ -93,7 +96,7 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-sns:2.2.5'
     compile 'com.amazonaws:aws-android-sdk-core:2.2.5'
     compile 'net.sf.opencsv:opencsv:2.3'
-    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.1'
     compile 'me.grantland:autofittextview:0.2.+'
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
     compile 'com.jakewharton:butterknife:7.0.1'
@@ -109,4 +112,9 @@ dependencies {
     compile 'com.github.markushi:circlebutton:1.1'
     compile 'com.flaviofaria:kenburnsview:1.0.7'
     compile 'com.evernote:android-job:1.1.11'
+
+    // Lifecycles, LiveData, and ViewModel
+    compile "android.arch.lifecycle:runtime:1.0.0-alpha9"
+    compile "android.arch.lifecycle:extensions:1.0.0-alpha9"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha9"
 }
