@@ -1,6 +1,10 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
+import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.LifecycleRegistryOwner;
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,10 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
-import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,12 +21,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourses;
+import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAssignmentsAdapter;
+import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -34,12 +33,11 @@ import ca.etsmtl.applets.etsmobile2.R;
  * Created by Sonphil on 2017-08-12.
  */
 
-public class MoodleAssignmentsActivity extends AppCompatActivity implements RequestListener<Object> {
+public class MoodleAssignmentsActivity extends AppCompatActivity implements LifecycleRegistryOwner {
 
     public static final String COURSES_KEY = "CurrentSemesterCourses";
     private static final String TAG = "MoodleAssignments";
 
-    private DataManager dataManager;
     private ExpandableListView assignmentsElv;
     private LoadingView loadingView;
     private int[] coursesIds;
@@ -50,6 +48,9 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
     private Comparator<MoodleAssignment> dateComparator;
     private Comparator<MoodleAssignment> alphaComparator;
     private Comparator<MoodleAssignment> currentComparator;
+    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
+    private Observer<RemoteResource<List<MoodleAssignmentCourse>>> assignmentsCoursesObserver;
+    private MoodleViewModel moodleViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +58,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
         setContentView(R.layout.activity_moodle_assignments);
         setUpTitleBar();
 
-        assignmentsElv = (ExpandableListView) findViewById(R.id.assignments_elv);
-        loadingView = (LoadingView) findViewById(R.id.loading_view);
+        assignmentsElv = findViewById(R.id.assignments_elv);
+        loadingView = findViewById(R.id.loading_view);
 
         coursesIds = getIntent().getIntArrayExtra(COURSES_KEY);
 
@@ -76,8 +77,36 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
         };
         currentComparator = dateComparator;
 
-        dataManager = DataManager.getInstance(this);
-        quueryAssignments();
+        assignmentsCoursesObserver = new Observer<RemoteResource<List<MoodleAssignmentCourse>>>() {
+
+            @Override
+            public void onChanged(@Nullable RemoteResource<List<MoodleAssignmentCourse>> listRemoteResource) {
+                if (listRemoteResource != null) {
+                    if (listRemoteResource.status == RemoteResource.SUCCESS) {
+                        requestInProgress = false;
+                        courses = listRemoteResource.data;
+                        refreshUI();
+                    } else if (listRemoteResource.status == RemoteResource.ERROR) {
+                        requestInProgress = false;
+                        loadingView.hideProgessBar();
+                        if (loadingView.isShown()) {
+                            loadingView.setMessageError(getString(R.string.error_JSON_PARSING));
+                        }
+                    }
+                }
+            }
+        };
+
+        moodleViewModel = new MoodleViewModel(getApplication());
+        moodleViewModel.getAssignmentCourses(coursesIds).observe(this, assignmentsCoursesObserver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        moodleViewModel.getAssignmentCourses(coursesIds).removeObserver(assignmentsCoursesObserver);
+        assignmentsCoursesObserver = null;
     }
 
     @Override
@@ -117,7 +146,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
     }
 
     private void setUpTitleBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.moodle_assignments_title));
@@ -128,45 +157,6 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
                 onBackPressed();
             }
         });
-    }
-
-    private void quueryAssignments() {
-        requestInProgress = true;
-        loadingView.showLoadingView();
-        SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
-            @Override
-            public MoodleAssignmentCourses loadDataFromNetwork() throws Exception {
-                String coursesIdsStr = "";
-
-                for (int id : coursesIds) {
-                    coursesIdsStr += "&courseids[]=" + id;
-                }
-                String url = getString(R.string.moodle_api_assignments,
-                        ApplicationManager.userCredentials.getMoodleToken(), coursesIdsStr);
-
-                return getRestTemplate().getForObject(url, MoodleAssignmentCourses.class);
-            }
-        };
-
-        dataManager.sendRequest(request, MoodleAssignmentsActivity.this);
-    }
-
-    @Override
-    public void onRequestFailure(SpiceException spiceException) {
-        requestInProgress = false;
-        loadingView.hideProgessBar();
-        if (loadingView.isShown()) {
-            loadingView.setMessageError(getString(R.string.error_JSON_PARSING));
-        }
-    }
-
-    @Override
-    public void onRequestSuccess(Object o) {
-        requestInProgress = false;
-        if (o instanceof MoodleAssignmentCourses) {
-            courses = ((MoodleAssignmentCourses) o).getCourses();
-            refreshUI();
-        }
     }
 
     private void refreshUI() {
@@ -195,10 +185,16 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Requ
             ExpandableListMoodleAssignmentsAdapter adapter = new ExpandableListMoodleAssignmentsAdapter(this);
             adapter.setData(headers, childs);
             assignmentsElv.setAdapter(adapter);
+            // TODO: Set empty view
             for (int i = 0; i < headers.size(); i++)
                 assignmentsElv.expandGroup(0);
 
             LoadingView.hideLoadingView(loadingView);
         }
+    }
+
+    @Override
+    public LifecycleRegistry getLifecycle() {
+        return lifecycleRegistry;
     }
 }

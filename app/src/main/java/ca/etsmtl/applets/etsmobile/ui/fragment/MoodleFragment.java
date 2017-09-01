@@ -220,7 +220,7 @@ public class MoodleFragment extends HttpFragment {
 
             @Override
             public MoodleCourses loadDataFromNetwork() throws Exception {
-                String url = getActivity().getString(R.string.moodle_api_enrol_get_users_courses, ApplicationManager.userCredentials.getMoodleToken(),moodleProfile.getUserId());
+                String url = getActivity().getString(R.string.moodle_api_core_enrol_get_users_courses, ApplicationManager.userCredentials.getMoodleToken(),moodleProfile.getUserId());
                 Log.d("loadDataFromNetwork", "getting url for moodle server class list");
                 return getRestTemplate().getForObject(url, MoodleCourses.class);
             }
@@ -240,7 +240,7 @@ public class MoodleFragment extends HttpFragment {
 
             @Override
             public MoodleProfile loadDataFromNetwork() throws Exception {
-                String url = getActivity().getString(R.string.moodle_api_get_siteinfo, moodleToken.getToken());
+                String url = getActivity().getString(R.string.moodle_api_core_get_siteinfo, moodleToken.getToken());
 
                 return getRestTemplate().getForObject(url, MoodleProfile.class);
             }
