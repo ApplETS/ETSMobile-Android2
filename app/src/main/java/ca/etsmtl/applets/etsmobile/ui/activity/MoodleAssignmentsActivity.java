@@ -3,6 +3,7 @@ package ca.etsmtl.applets.etsmobile.ui.activity;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -97,7 +98,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
             }
         };
 
-        moodleViewModel = new MoodleViewModel(getApplication());
+        moodleViewModel = ViewModelProviders.of(this).get(MoodleViewModel.class);
         moodleViewModel.getAssignmentCourses(coursesIds).observe(this, assignmentsCoursesObserver);
     }
 

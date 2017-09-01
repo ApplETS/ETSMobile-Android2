@@ -17,6 +17,7 @@ import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 public class MoodleViewModel extends AndroidViewModel {
 
     private MoodleRepository repository;
+    private LiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses;
 
     public MoodleViewModel(Application application) {
         super(application);
@@ -25,6 +26,10 @@ public class MoodleViewModel extends AndroidViewModel {
     }
 
     public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses(int[] coursesIds) {
-        return repository.getAssignmentCourses(coursesIds);
+        if (assignmentCourses == null) {
+            this.assignmentCourses = repository.getAssignmentCourses(coursesIds);
+        }
+
+        return assignmentCourses;
     }
 }
