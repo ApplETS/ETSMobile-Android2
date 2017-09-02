@@ -111,6 +111,6 @@ public class ExpandableListMoodleAssignmentsAdapter extends BaseExpandableListAd
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
     }
 }

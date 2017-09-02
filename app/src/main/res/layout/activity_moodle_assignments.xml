@@ -1,28 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity">
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+<layout>
 
-    <ExpandableListView
-        android:id="@+id/assignments_elv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:groupIndicator="@null"
-        tools:listheader="@layout/list_separator_moodle"
-        tools:listitem="@layout/row_moodle_assignment">
+    <data>
 
-    </ExpandableListView>
+        <import type="android.view.View" />
 
-    <ca.etsmtl.applets.etsmobile.views.LoadingView
-        android:id="@+id/loading_view"
+        <variable
+            name="selectedAssignment"
+            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment" />
+
+        <variable
+            name="loading"
+            type="java.lang.Boolean" />
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</RelativeLayout>
+        android:layout_height="match_parent"
+        tools:context="ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ExpandableListView
+            android:id="@+id/assignments_elv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar"
+            android:groupIndicator="@null"
+            tools:listheader="@layout/list_separator_moodle"
+            tools:listitem="@layout/row_moodle_assignment">
+
+        </ExpandableListView>
+
+        <ca.etsmtl.applets.etsmobile.views.LoadingView
+            android:id="@+id/loading_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{loading ? View.VISIBLE : View.GONE}" />
+
+        <View
+            android:id="@+id/shadow"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:background="@drawable/shape_gradient_top_shadow"
+            app:layout_anchor="@+id/bottom_sheet" />
+
+        <LinearLayout
+            android:id="@+id/bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            app:behavior_hideable="true"
+            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@{selectedAssignment.name}"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@{String.format(@string/moodle_assignment_due_date, selectedAssignment.dueDateObj.toLocaleString())}"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text='@{String.format(@string/moodle_assignment_grade, "100 / " + selectedAssignment.grade)}'
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

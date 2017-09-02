@@ -4,8 +4,10 @@ import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,26 +26,26 @@ import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAssignmentsAdapter;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile2.databinding.ActivityMoodleAssignmentsBinding;
 
 /**
  * Created by Sonphil on 2017-08-12.
  */
 
-public class MoodleAssignmentsActivity extends AppCompatActivity implements LifecycleRegistryOwner {
+public class MoodleAssignmentsActivity extends AppCompatActivity implements LifecycleRegistryOwner, ExpandableListView.OnChildClickListener {
 
     private static final String TAG = "MoodleAssignments";
 
     private ExpandableListView assignmentsElv;
     private LoadingView loadingView;
+    private View bottomSheet;
     private Menu menu;
     private List<MoodleAssignmentCourse> assignmentsCourses;
-    private MoodleCourses courses;
     private boolean displayPastAssignments;
     private boolean requestInProgress;
     private Comparator<MoodleAssignment> dateComparator;
@@ -52,11 +54,15 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     private Observer<RemoteResource<List<MoodleAssignmentCourse>>> assignmentsCoursesObserver;
     private MoodleViewModel moodleViewModel;
+    private BottomSheetBehavior bottomSheetBehavior;
+    private ActivityMoodleAssignmentsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_moodle_assignments);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_moodle_assignments);
+        binding.setLoading(true);
+
         setUpTitleBar();
 
         assignmentsElv = findViewById(R.id.assignments_elv);
@@ -87,7 +93,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                         refreshUI();
                     } else if (listRemoteResource.status == RemoteResource.ERROR) {
                         requestInProgress = false;
-                        loadingView.hideProgessBar();
+                        binding.setLoading(false);
                         if (loadingView.isShown()) {
                             loadingView.setMessageError(getString(R.string.error_JSON_PARSING));
                         }
@@ -100,6 +106,10 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
         moodleViewModel = ViewModelProviders.of(this).get(MoodleViewModel.class);
         moodleViewModel.getAssignmentCourses().observe(this, assignmentsCoursesObserver);
+
+        bottomSheet = findViewById(R.id.bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
     @Override
@@ -167,6 +177,9 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
             for (MoodleAssignmentCourse course : assignmentsCourses) {
                 headers.add(course.getFullName());
+
+                Collections.sort(course.getAssignments(), currentComparator);
+
                 List<MoodleAssignment> assignments = new ArrayList<>();
                 for (MoodleAssignment assignment : course.getAssignments()) {
                     if (!displayPastAssignments) {
@@ -178,24 +191,34 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                         assignments.add(assignment);
                 }
 
-                Collections.sort(assignments, currentComparator);
-
                 childs.put(course.getFullName(), assignments);
             }
 
             ExpandableListMoodleAssignmentsAdapter adapter = new ExpandableListMoodleAssignmentsAdapter(this);
             adapter.setData(headers, childs);
             assignmentsElv.setAdapter(adapter);
+            assignmentsElv.setOnChildClickListener(this);
             // TODO: Set empty view
             for (int i = 0; i < headers.size(); i++)
                 assignmentsElv.expandGroup(i);
 
-            LoadingView.hideLoadingView(loadingView);
+            binding.setLoading(false);
         }
     }
 
     @Override
     public LifecycleRegistry getLifecycle() {
         return lifecycleRegistry;
+    }
+
+    @Override
+    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+        binding.setSelectedAssignment(assignmentsCourses.get(groupPosition).getAssignments().get(childPosition));
+
+        bottomSheet.requestLayout();
+
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+        return true;
     }
 }

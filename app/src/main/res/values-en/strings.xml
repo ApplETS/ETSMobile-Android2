@@ -74,6 +74,8 @@
     <string name="moodle_past_assignments_sort">Sort</string>
     <string name="moodle_past_assignments_sort_date">Sort by date</string>
     <string name="moodle_past_assignments_sort_alpha">Sort alphabetically</string>
+    <string name="moodle_assignment_due_date">Due date: %s</string>
+    <string name="moodle_assignment_grade">Grade: %s</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, ÉTS student radio</string>

@@ -74,6 +74,8 @@
     <string name="moodle_past_assignments_sort">Trier</string>
     <string name="moodle_past_assignments_sort_date">Trier par date</string>
     <string name="moodle_past_assignments_sort_alpha">Trier par ordre alphabétique</string>
+    <string name="moodle_assignment_due_date">Date de remise : %s</string>
+    <string name="moodle_assignment_grade">Note : %s</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, la radio étudiante de l\'ÉTS.</string>

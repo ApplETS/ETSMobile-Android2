@@ -53,9 +53,17 @@ public class MoodleAssignment {
         return name;
     }
 
+    public int getGrade() {
+        return grade;
+    }
+
     public Date getDueDateObj() {
         Date date = Utility.getDateTimeFromUnixTime(dueDate);
 
         return date;
+    }
+
+    public String getIntro() {
+        return intro;
     }
 }
