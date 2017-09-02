@@ -49,6 +49,10 @@ public class MoodleAssignment {
     @JsonProperty("intro")
     private String intro;
 
+    public int getCmid() {
+        return cmid;
+    }
+
     public String getName() {
         return name;
     }

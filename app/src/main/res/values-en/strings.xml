@@ -12,6 +12,7 @@
     <string name="contact_creation_failed">Contact creation failed</string>
     <string name="cannot_open_file">No application can open that file</string>
     <string name="logout_confirmation">You are about to logout. Do you wish to proceed?</string>
+    <string name="open_in_browser">Open in browser</string>
 
     <!--MENU DE LANGAGE-->
     <string name="lang_title">Language change</string>
@@ -76,6 +77,12 @@
     <string name="moodle_past_assignments_sort_alpha">Sort alphabetically</string>
     <string name="moodle_assignment_due_date">Due date: %s</string>
     <string name="moodle_assignment_grade">Grade: %s</string>
+    <string name="moodle_assignment_status_submitted">Statut: Submitted</string>
+    <string name="moodle_assignment_status_not_submitted">Statut: Not Submitted</string>
+    <string name="moodle_assignment_grading_status_graded">Grading status: Graded</string>
+    <string name="moodle_assignment_grading_status_not_graded">SGrading status: Not Graded</string>
+    <string name="moodle_assignment_grader">Grader : %s</string>
+    <string name="moodle_assignment_comments">Comments : %s</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, ÉTS student radio</string>

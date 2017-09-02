@@ -12,6 +12,7 @@
     <string name="contact_creation_failed">Echec de la création du contact</string>
     <string name="cannot_open_file">Aucune application ne peut ouvrir ce fichier</string>
     <string name="logout_confirmation">Êtes-vous sûr de vouloir vous déconnecter?</string>
+    <string name="open_in_browser">Ouvrir dans le navigateur</string>
 
     <!--MENU DE LANGAGE-->
     <string name="lang_title">Changement de langue</string>
@@ -76,7 +77,12 @@
     <string name="moodle_past_assignments_sort_alpha">Trier par ordre alphabétique</string>
     <string name="moodle_assignment_due_date">Date de remise : %s</string>
     <string name="moodle_assignment_grade">Note : %s</string>
-
+    <string name="moodle_assignment_status_submitted">Statut : Remis</string>
+    <string name="moodle_assignment_status_not_submitted">Statut : Non remis</string>
+    <string name="moodle_assignment_grading_status_graded">Statut de l\'évaluation : Évalué</string>
+    <string name="moodle_assignment_grading_status_not_graded">Statut de l\'évaluation : Non évalué</string>
+    <string name="moodle_assignment_grader">Évaluateur : %s</string>
+    <string name="moodle_assignment_comments">Commentaires : %s</string>
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, la radio étudiante de l\'ÉTS.</string>
     <string name="listing">Écouter</string>

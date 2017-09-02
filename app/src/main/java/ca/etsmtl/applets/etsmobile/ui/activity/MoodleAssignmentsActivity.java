@@ -1,13 +1,16 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +31,7 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAssignmentsAdapter;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -56,6 +60,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     private MoodleViewModel moodleViewModel;
     private BottomSheetBehavior bottomSheetBehavior;
     private ActivityMoodleAssignmentsBinding binding;
+    private MoodleAssignment selectedAssignment;
+    private FloatingActionButton openAssignmentFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +73,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
         assignmentsElv = findViewById(R.id.assignments_elv);
         loadingView = findViewById(R.id.loading_view);
+        openAssignmentFab = findViewById(R.id.open_assignment_fab);
 
         dateComparator = new Comparator<MoodleAssignment>() {
             @Override
@@ -109,6 +116,20 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
         bottomSheet = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_EXPANDED)
+                    openAssignmentFab.setVisibility(View.VISIBLE);
+                else
+                    openAssignmentFab.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                openAssignmentFab.setVisibility(View.VISIBLE);
+            }
+        });
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
@@ -213,12 +234,27 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        binding.setSelectedAssignment(assignmentsCourses.get(groupPosition).getAssignments().get(childPosition));
+        selectedAssignment = assignmentsCourses.get(groupPosition).getAssignments().get(childPosition);
+
+        binding.setSelectedAssignment(selectedAssignment);
 
         bottomSheet.requestLayout();
 
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         return true;
+    }
+
+    @SuppressLint("StringFormatMatches")
+    public void openInBrowser(View v) {
+        Utility.openChromeCustomTabs(this, String.format(getString(R.string.moodle_view_assignment), selectedAssignment.getCmid()));
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        else
+            super.onBackPressed();
     }
 }
