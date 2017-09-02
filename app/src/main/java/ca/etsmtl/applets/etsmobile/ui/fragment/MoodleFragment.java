@@ -169,10 +169,11 @@ public class MoodleFragment extends HttpFragment {
                         courseSemesterSeparator.setCourseSemester(semesterString);
                         moodleCoursesAdapter.addSectionHeader(courseSemesterSeparator);
                         moodleCoursesAdapter.addCourse(moodleCourse);
-                        if (semesterString.equals(firstSemesterInserted))
+                        /*if (semesterString.equals(firstSemesterInserted))
                             firstSemesterInsertedCourses.add(moodleCourse);
                         else
-                            insertingFirstSemester = false;
+                            insertingFirstSemester = false;*/
+                        firstSemesterInsertedCourses.add(moodleCourse);
                     } else {
                         moodleCoursesAdapter.addCourse(moodleCourse);
                         if (insertingFirstSemester)
