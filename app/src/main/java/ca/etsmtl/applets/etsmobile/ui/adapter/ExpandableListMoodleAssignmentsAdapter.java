@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -87,10 +86,8 @@ public class ExpandableListMoodleAssignmentsAdapter extends BaseExpandableListAd
             convertView = inflater.inflate(R.layout.list_separator_moodle, null);
         }
 
-        TextView tv = (TextView) convertView.findViewById(R.id.textViewSeparator);
+        TextView tv = convertView.findViewById(R.id.textViewSeparator);
         tv.setText(header);
-
-        ((ExpandableListView) parent).expandGroup(groupPosition);
 
         return convertView;
     }

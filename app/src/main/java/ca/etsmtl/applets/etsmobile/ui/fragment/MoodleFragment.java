@@ -42,8 +42,6 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwner {
 
-    private static final int ASSIGNMENTS_ITEM_INDEX = 0;
-
     ListView moodleCoursesListView;
     private MoodleCoursesAdapter moodleCoursesAdapter;
     private String firstSemesterInserted;
@@ -111,7 +109,6 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_moodle, menu);
         this.menu = menu;
-        menu.getItem(ASSIGNMENTS_ITEM_INDEX).setVisible(false);
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -121,11 +118,6 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
         switch (item.getItemId()) {
             case R.id.menu_item_moodle_assignments:
                 Intent intent = new Intent(getActivity(), MoodleAssignmentsActivity.class);
-                int size = firstSemesterInsertedCourses.size();
-                int[] coursesIds = new int[size];
-                for (int i = 0; i < size; i++)
-                    coursesIds[i] = firstSemesterInsertedCourses.get(i).getId();
-                intent.putExtra(MoodleAssignmentsActivity.COURSES_KEY, coursesIds);
                 getActivity().startActivity(intent);
 
                 return true;
@@ -186,8 +178,6 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
 
             }
         });
-
-        menu.getItem(ASSIGNMENTS_ITEM_INDEX).setVisible(true);
     }
 
     /**
@@ -231,8 +221,6 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
                     return lastSemesterInserted;
 
             }
-
-
     }
 
     @Override

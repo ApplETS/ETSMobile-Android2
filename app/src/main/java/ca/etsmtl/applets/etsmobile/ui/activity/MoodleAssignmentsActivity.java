@@ -24,6 +24,7 @@ import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAssignmentsAdapter;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel;
@@ -36,14 +37,13 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 public class MoodleAssignmentsActivity extends AppCompatActivity implements LifecycleRegistryOwner {
 
-    public static final String COURSES_KEY = "CurrentSemesterCourses";
     private static final String TAG = "MoodleAssignments";
 
     private ExpandableListView assignmentsElv;
     private LoadingView loadingView;
-    private int[] coursesIds;
     private Menu menu;
-    private List<MoodleAssignmentCourse> courses;
+    private List<MoodleAssignmentCourse> assignmentsCourses;
+    private MoodleCourses courses;
     private boolean displayPastAssignments;
     private boolean requestInProgress;
     private Comparator<MoodleAssignment> dateComparator;
@@ -61,8 +61,6 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
         assignmentsElv = findViewById(R.id.assignments_elv);
         loadingView = findViewById(R.id.loading_view);
-
-        coursesIds = getIntent().getIntArrayExtra(COURSES_KEY);
 
         dateComparator = new Comparator<MoodleAssignment>() {
             @Override
@@ -85,7 +83,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                 if (listRemoteResource != null) {
                     if (listRemoteResource.status == RemoteResource.SUCCESS) {
                         requestInProgress = false;
-                        courses = listRemoteResource.data;
+                        assignmentsCourses = listRemoteResource.data;
                         refreshUI();
                     } else if (listRemoteResource.status == RemoteResource.ERROR) {
                         requestInProgress = false;
@@ -101,14 +99,14 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
         };
 
         moodleViewModel = ViewModelProviders.of(this).get(MoodleViewModel.class);
-        moodleViewModel.getAssignmentCourses(coursesIds).observe(this, assignmentsCoursesObserver);
+        moodleViewModel.getAssignmentCourses().observe(this, assignmentsCoursesObserver);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        moodleViewModel.getAssignmentCourses(coursesIds).removeObserver(assignmentsCoursesObserver);
+        moodleViewModel.getAssignmentCourses().removeObserver(assignmentsCoursesObserver);
         assignmentsCoursesObserver = null;
     }
 
@@ -167,7 +165,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
             List<String> headers = new ArrayList<>();
             HashMap<String, List<MoodleAssignment>> childs = new HashMap<>();
 
-            for (MoodleAssignmentCourse course : courses) {
+            for (MoodleAssignmentCourse course : assignmentsCourses) {
                 headers.add(course.getFullName());
                 List<MoodleAssignment> assignments = new ArrayList<>();
                 for (MoodleAssignment assignment : course.getAssignments()) {
@@ -190,7 +188,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
             assignmentsElv.setAdapter(adapter);
             // TODO: Set empty view
             for (int i = 0; i < headers.size(); i++)
-                assignmentsElv.expandGroup(0);
+                assignmentsElv.expandGroup(i);
 
             LoadingView.hideLoadingView(loadingView);
         }

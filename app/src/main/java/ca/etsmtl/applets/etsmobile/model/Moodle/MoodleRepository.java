@@ -84,14 +84,18 @@ public class MoodleRepository {
         return token;
     }
 
-    public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses(final int[] coursesIds) {
+    public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses() {
 
         if (assignmentCourses.getValue() == null|| assignmentCourses.getValue().status != RemoteResource.SUCCESS) {
             assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>loading(null));
 
-            RemoteResource<MoodleToken> remoteToken = token.getValue();
+            RemoteResource<MoodleCourses> moodleCourses = courses.getValue();
 
-            if (remoteToken != null && remoteToken.data != null && remoteToken.status != RemoteResource.LOADING) {
+            if (moodleCourses != null && moodleCourses.data != null && moodleCourses.status != RemoteResource.LOADING) {
+                int[] coursesIds = new int[moodleCourses.data.size()];
+                for (int i = 0; i < moodleCourses.data.size(); i++){
+                    coursesIds[i] = moodleCourses.data.get(i).getId();
+                }
                 dataManager.sendRequest(new MoodleAssignmentCoursesRequest(context, coursesIds, ApplicationManager.userCredentials.getMoodleToken()), new RequestListener<Object>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
@@ -105,15 +109,15 @@ public class MoodleRepository {
                     }
                 });
             } else {
-                token.observeForever(new Observer<RemoteResource<MoodleToken>>() {
+                getCourses().observeForever(new Observer<RemoteResource<MoodleCourses>>() {
                     @Override
-                    public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
-                        if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
-                            assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error("Impossible d'obtenir le jeton", null));
-                            token.removeObserver(this);
-                        } else if (moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
-                            getAssignmentCourses(coursesIds);
-                            token.removeObserver(this);
+                    public void onChanged(@Nullable RemoteResource<MoodleCourses> moodleCoursesRemoteResource) {
+                        if (moodleCoursesRemoteResource == null || moodleCoursesRemoteResource.status == RemoteResource.ERROR) {
+                            assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error("Impossible d'obtenir les cours", null));
+                            courses.removeObserver(this);
+                        } else if (moodleCoursesRemoteResource.status == RemoteResource.SUCCESS) {
+                            getAssignmentCourses();
+                            courses.removeObserver(this);
                         }
                     }
                 });

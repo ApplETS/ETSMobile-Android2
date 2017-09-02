@@ -37,9 +37,9 @@ public class MoodleViewModel extends AndroidViewModel {
         return profile;
     }
 
-    public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses(int[] coursesIds) {
+    public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses() {
         if (assignmentCourses == null) {
-            this.assignmentCourses = repository.getAssignmentCourses(coursesIds);
+            this.assignmentCourses = repository.getAssignmentCourses();
         }
 
         return assignmentCourses;
