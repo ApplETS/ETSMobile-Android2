@@ -27,6 +27,8 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 public class MoodleRepository {
 
+    private static String TAG = "MoodleRepository";
+
     private Context context;
     private DataManager dataManager;
     private MutableLiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses = new MutableLiveData<>();
@@ -40,9 +42,9 @@ public class MoodleRepository {
         getToken();
     }
 
-    public LiveData<RemoteResource<MoodleToken>> getToken() {
+    private LiveData<RemoteResource<MoodleToken>> getToken() {
 
-        if(context != null) {
+        if (context != null && token.getValue() == null) {
             token.setValue(RemoteResource.<MoodleToken>loading(null));
 
             SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
@@ -84,126 +86,136 @@ public class MoodleRepository {
 
     public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses(final int[] coursesIds) {
 
-        assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>loading(null));
+        if (assignmentCourses.getValue() == null|| assignmentCourses.getValue().status != RemoteResource.SUCCESS) {
+            assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>loading(null));
 
-        RemoteResource<MoodleToken> remoteToken = token.getValue();
+            RemoteResource<MoodleToken> remoteToken = token.getValue();
 
-        if (remoteToken != null && remoteToken.data != null && remoteToken.status != RemoteResource.LOADING) {
-            dataManager.sendRequest(new MoodleAssignmentCoursesRequest(context, coursesIds, ApplicationManager.userCredentials.getMoodleToken()), new RequestListener<Object>() {
-                @Override
-                public void onRequestFailure(SpiceException spiceException) {
-                    assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(spiceException.getLocalizedMessage(), null));
-                }
-
-                @Override
-                public void onRequestSuccess(Object o) {
-                    List<MoodleAssignmentCourse> courses = ((MoodleAssignmentCourses) o).getCourses();
-                    assignmentCourses.setValue(RemoteResource.success(courses));
-                }
-            });
-        } else {
-            token.observeForever(new Observer<RemoteResource<MoodleToken>>() {
-                @Override
-                public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
-                    if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
-                        assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error("Impossible d'obtenir le jeton", null));
-                        token.removeObserver(this);
-                    } else if (moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
-                        getAssignmentCourses(coursesIds);
-                        token.removeObserver(this);
+            if (remoteToken != null && remoteToken.data != null && remoteToken.status != RemoteResource.LOADING) {
+                dataManager.sendRequest(new MoodleAssignmentCoursesRequest(context, coursesIds, ApplicationManager.userCredentials.getMoodleToken()), new RequestListener<Object>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(spiceException.getLocalizedMessage(), null));
                     }
-                }
-            });
+
+                    @Override
+                    public void onRequestSuccess(Object o) {
+                        List<MoodleAssignmentCourse> courses = ((MoodleAssignmentCourses) o).getCourses();
+                        assignmentCourses.setValue(RemoteResource.success(courses));
+                    }
+                });
+            } else {
+                token.observeForever(new Observer<RemoteResource<MoodleToken>>() {
+                    @Override
+                    public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
+                        if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
+                            assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error("Impossible d'obtenir le jeton", null));
+                            token.removeObserver(this);
+                        } else if (moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
+                            getAssignmentCourses(coursesIds);
+                            token.removeObserver(this);
+                        }
+                    }
+                });
+            }
         }
 
         return assignmentCourses;
     }
 
     public LiveData<RemoteResource<MoodleProfile>> getProfile() {
+        if (profile.getValue() == null || profile.getValue().status != RemoteResource.SUCCESS) {
+            profile.setValue(RemoteResource.<MoodleProfile>loading(null));
 
-        profile.setValue(RemoteResource.<MoodleProfile>loading(null));
+            RemoteResource<MoodleToken> remoteToken = token.getValue();
 
-        RemoteResource<MoodleToken> remoteToken = token.getValue();
+            if (remoteToken != null && remoteToken.data != null && remoteToken.status != RemoteResource.LOADING) {
+                SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
 
-        if (remoteToken != null && remoteToken.data != null && remoteToken.status != RemoteResource.LOADING) {
-            SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
+                    @Override
+                    public MoodleProfile loadDataFromNetwork() throws Exception {
+                        String url = context.getString(R.string.moodle_api_get_siteinfo, token.getValue().data.getToken());
 
-                @Override
-                public MoodleProfile loadDataFromNetwork() throws Exception {
-                    String url = context.getString(R.string.moodle_api_core_get_siteinfo, token.getValue().data);
-
-                    return getRestTemplate().getForObject(url, MoodleProfile.class);
-                }
-            };
-
-            dataManager.sendRequest(request, new RequestListener<Object>() {
-                @Override
-                public void onRequestFailure(SpiceException spiceException) {
-                    profile.setValue(RemoteResource.<MoodleProfile>error(spiceException.getLocalizedMessage(), null));
-                }
-
-                @Override
-                public void onRequestSuccess(Object o) {
-                    profile.setValue(RemoteResource.success((MoodleProfile) o));
-                }
-            });
-        } else {
-            token.observeForever(new Observer<RemoteResource<MoodleToken>>() {
-                @Override
-                public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
-                    if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
-                        assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error("Impossible d'obtenir le jeton", null));
-                        token.removeObserver(this);
-                    } else if (moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
-                        getProfile();
-                        token.removeObserver(this);
+                        return getRestTemplate().getForObject(url, MoodleProfile.class);
                     }
-                }
-            });
+                };
+
+                dataManager.sendRequest(request, new RequestListener<Object>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        profile.setValue(RemoteResource.<MoodleProfile>error(spiceException.getLocalizedMessage(), null));
+                    }
+
+                    @Override
+                    public void onRequestSuccess(Object o) {
+                        MoodleProfile moodleProfile = (MoodleProfile) o;
+                        if (moodleProfile.getErrorcode() != null)
+                            onRequestFailure(new SpiceException(moodleProfile.getException()));
+                        else
+                            profile.setValue(RemoteResource.success(moodleProfile));
+                    }
+                });
+            } else {
+                token.observeForever(new Observer<RemoteResource<MoodleToken>>() {
+                    @Override
+                    public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
+                        if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
+                            profile.setValue(RemoteResource.<MoodleProfile>error("Impossible d'obtenir le jeton", null));
+                            token.removeObserver(this);
+                        } else if (moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
+                            getProfile();
+                            token.removeObserver(this);
+                        }
+                    }
+                });
+            }
         }
 
         return profile;
     }
 
     public LiveData<RemoteResource<MoodleCourses>> getCourses() {
-        courses.setValue(RemoteResource.<MoodleCourses>loading(null));
+        if (courses.getValue() == null || courses.getValue().status != RemoteResource.SUCCESS) {
+            courses.setValue(RemoteResource.<MoodleCourses>loading(null));
 
-        final RemoteResource<MoodleProfile> remoteProfile = getProfile().getValue();
+            final RemoteResource<MoodleProfile> remoteProfile = profile.getValue();
 
-        if (remoteProfile != null && remoteProfile.data != null && remoteProfile.status != RemoteResource.LOADING) {
-            SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
+            if (remoteProfile != null && remoteProfile.data != null && remoteProfile.status != RemoteResource.LOADING) {
+                SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
 
-                @Override
-                public MoodleCourses loadDataFromNetwork() throws Exception {
-                    @SuppressLint("StringFormatMatches") String url = context.getString(R.string.moodle_api_core_enrol_get_users_courses, ApplicationManager.userCredentials.getMoodleToken(), remoteProfile.data.getUserId());
-                    return getRestTemplate().getForObject(url, MoodleCourses.class);
-                }
-            };
-
-            dataManager.sendRequest(request, new RequestListener<Object>() {
-                @Override
-                public void onRequestFailure(SpiceException spiceException) {
-                    courses.setValue(RemoteResource.<MoodleCourses>error(spiceException.getLocalizedMessage(), null));
-                }
-
-                @Override
-                public void onRequestSuccess(Object o) {
-                    courses.setValue(RemoteResource.success((MoodleCourses) o));
-                }
-            });
-        } else {
-            profile.observeForever(new Observer<RemoteResource<MoodleProfile>>() {
-                @Override
-                public void onChanged(@Nullable RemoteResource<MoodleProfile> moodleProfileRemoteResource) {
-                    if (moodleProfileRemoteResource == null || moodleProfileRemoteResource.status == RemoteResource.ERROR) {
-                        courses.setValue(RemoteResource.<MoodleCourses>error("Impossible d'obtenir le profile", null));
-                        profile.removeObserver(this);
-                    } else if (moodleProfileRemoteResource.status == RemoteResource.SUCCESS) {
-                        getCourses();
-                        profile.removeObserver(this);
+                    @Override
+                    public MoodleCourses loadDataFromNetwork() throws Exception {
+                        @SuppressLint("StringFormatMatches") String url = context.getString(R.string.moodle_api_enrol_get_users_courses, ApplicationManager.userCredentials.getMoodleToken(), remoteProfile.data.getUserId());
+                        return getRestTemplate().getForObject(url, MoodleCourses.class);
                     }
-                }
-            });
+                };
+
+                dataManager.sendRequest(request, new RequestListener<Object>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        courses.setValue(RemoteResource.<MoodleCourses>error(spiceException.getLocalizedMessage(), null));
+                    }
+
+                    @Override
+                    public void onRequestSuccess(Object o) {
+                        courses.setValue(RemoteResource.success((MoodleCourses) o));
+                    }
+                });
+            } else {
+                profile.observeForever(new Observer<RemoteResource<MoodleProfile>>() {
+                    @Override
+                    public void onChanged(@Nullable RemoteResource<MoodleProfile> moodleProfileRemoteResource) {
+                        if (moodleProfileRemoteResource == null || moodleProfileRemoteResource.status == RemoteResource.ERROR) {
+                            courses.setValue(RemoteResource.<MoodleCourses>error("Impossible d'obtenir le profil", null));
+                            profile.removeObserver(this);
+                        } else if (moodleProfileRemoteResource.status == RemoteResource.SUCCESS) {
+                            getCourses();
+                            profile.removeObserver(this);
+                        }
+                    }
+                });
+                getProfile();
+            }
         }
 
         return courses;

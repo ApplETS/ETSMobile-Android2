@@ -7,6 +7,8 @@ import android.arch.lifecycle.LiveData;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleRepository;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 
@@ -17,12 +19,22 @@ import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 public class MoodleViewModel extends AndroidViewModel {
 
     private MoodleRepository repository;
+    private LiveData<RemoteResource<MoodleProfile>> profile;
     private LiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses;
+    private LiveData<RemoteResource<MoodleCourses>> courses;
 
     public MoodleViewModel(Application application) {
         super(application);
 
         repository = new MoodleRepository(getApplication());
+    }
+
+    public LiveData<RemoteResource<MoodleProfile>> getProfile() {
+        if (profile == null) {
+            this.profile = repository.getProfile();
+        }
+
+        return profile;
     }
 
     public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses(int[] coursesIds) {
@@ -31,5 +43,12 @@ public class MoodleViewModel extends AndroidViewModel {
         }
 
         return assignmentCourses;
+    }
+
+    public LiveData<RemoteResource<MoodleCourses>> getCourses() {
+        if (courses == null)
+            this.courses = repository.getCourses();
+
+        return courses;
     }
 }
