@@ -246,12 +246,17 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
         bottomSheet.requestLayout();
 
+
         final LiveData<RemoteResource<MoodleAssignmentSubmission>> submissionLiveData = moodleViewModel.getAssignmentSubmission(selectedAssignment.getId());
         submissionLiveData.observe(MoodleAssignmentsActivity.this, new Observer<RemoteResource<MoodleAssignmentSubmission>>() {
             @Override
             public void onChanged(@Nullable RemoteResource<MoodleAssignmentSubmission> moodleAssignmentFeedbackRemoteResource) {
+                boolean notLongerNeedtoObserve = true;
+
                 if (moodleAssignmentFeedbackRemoteResource == null || moodleAssignmentFeedbackRemoteResource.status == RemoteResource.ERROR) {
-                    submissionLiveData.removeObserver(this);
+                    binding.setSelectedAssignmentFeedback(null);
+                    binding.setSelectedAssignmentLastAttempt(null);
+                    binding.setLoadingSelectedAssignmentSubmission(false);
                 } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.SUCCESS) {
                     MoodleAssignmentSubmission submission = moodleAssignmentFeedbackRemoteResource.data;
 
@@ -259,15 +264,27 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                         MoodleAssignmentSubmission.MoodleAssignmentFeedback feedback = submission.getFeedback();
 
                         if (feedback != null) {
-                            if (submission.getFeedback().getGrade().getAssignment() == selectedAssignment.getId())
-                                binding.setSelectedAssignmentFeedback(moodleAssignmentFeedbackRemoteResource.data.getFeedback());
-                            submissionLiveData.removeObserver(this);
-                            return;
-                        }
-                    }
-                } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.LOADING) {
+                            if (submission.getFeedback().getGrade().getAssignment() == selectedAssignment.getId()) {
 
+                                binding.setSelectedAssignmentFeedback(moodleAssignmentFeedbackRemoteResource.data.getFeedback());
+                                binding.setSelectedAssignmentLastAttempt(moodleAssignmentFeedbackRemoteResource.data.getLastAttempt());
+                            }
+                        } else {
+                            binding.setSelectedAssignmentLastAttempt(null);
+                        }
+                    } else {
+                        binding.setSelectedAssignmentFeedback(null);
+                        binding.setSelectedAssignmentLastAttempt(null);
+                    }
+
+                    binding.setLoadingSelectedAssignmentSubmission(false);
+                } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.LOADING) {
+                    binding.setLoadingSelectedAssignmentSubmission(true);
+                    notLongerNeedtoObserve = false;
                 }
+
+                if (notLongerNeedtoObserve)
+                    submissionLiveData.removeObserver(this);
             }
         });
 

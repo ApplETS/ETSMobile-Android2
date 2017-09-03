@@ -19,10 +19,6 @@ public class MoodleAssignmentSubmission {
         return feedback;
     }
 
-    public class MoodleAssignmentLastAttempt {
-
-    }
-
     public class MoodleAssignmentFeedback {
         @SerializedName("grade")
         private MoodleAssignmentGrade grade;

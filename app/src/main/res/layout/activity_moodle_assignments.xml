@@ -14,6 +14,14 @@
             type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission.MoodleAssignmentFeedback" />
 
         <variable
+            name="selectedAssignmentLastAttempt"
+            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentLastAttempt" />
+
+        <variable
+            name="loadingSelectedAssignmentSubmission"
+            type="java.lang.Boolean" />
+
+        <variable
             name="loading"
             type="java.lang.Boolean" />
     </data>
@@ -76,8 +84,13 @@
             android:orientation="vertical"
             android:paddingTop="@dimen/fab_margin"
             app:behavior_hideable="true"
-            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+            app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+            android:gravity="center_horizontal">
 
+            <ca.etsmtl.applets.etsmobile.views.LoadingView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:visibility="@{loadingSelectedAssignmentSubmission ? View.VISIBLE : View.GONE}" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,86 +103,94 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/single_line_list_item_with_avatar_height"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_assignment_turned_in_black_24dp"
-                    android:tint="@color/black" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/single_line_list_item_with_avatar_height"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                    android:text="@string/moodle_assignment_status_submitted"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/single_line_list_item_font_size" />
-            </LinearLayout>
+                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/single_line_list_item_with_avatar_height"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_assignment_turned_in_black_24dp"
+                        android:tint="@color/black" />
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_ico_schedule" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                    android:text="@{String.format(@string/moodle_assignment_due_date, selectedAssignment.dueDateObj.toLocaleString())}"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/single_line_list_item_font_size" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/single_line_list_item_with_avatar_height"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_ico_notes"
-                    android:tint="@color/black" />
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
+                        android:text="@string/moodle_assignment_status_submitted"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/single_line_list_item_font_size"
+                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}"/>
+                </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/single_line_list_item_with_avatar_height"
                     android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
+                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ico_schedule" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/two_line_list_item_with_icon_icon_left_padding"
-                        android:text="@string/moodle_assignment_grading_status_graded"
+                        android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
+                        android:text="@{String.format(@string/moodle_assignment_due_date, selectedAssignment.dueDateObj.toLocaleString())}"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/two_line_list_item_with_icon_font_size" />
+                        android:textSize="@dimen/single_line_list_item_font_size" />
+                </LinearLayout>
 
-                    <TextView
-                        android:layout_width="fill_parent"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/single_line_list_item_with_avatar_height"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
+                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
+
+                    <ImageView
+                        android:layout_width="40dp"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/two_line_list_item_with_icon_icon_left_padding"
-                        android:text='@{String.format(@string/moodle_assignment_grade, String.format("%.1f", selectedAssignmentFeedback.grade.grade) + " / " + selectedAssignment.grade)}'
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/two_line_list_item_with_icon_font_size" />
+                        android:src="@drawable/ic_ico_notes"
+                        android:tint="@color/black" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/two_line_list_item_with_icon_icon_left_padding"
+                            android:text='@{selectedAssignmentLastAttempt.graded ? @string/moodle_assignment_grading_status_graded : @string/moodle_assignment_grading_status_not_graded}'
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/two_line_list_item_with_icon_font_size" />
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/two_line_list_item_with_icon_icon_left_padding"
+                            android:text='@{String.format(@string/moodle_assignment_grade, String.format("%.1f", selectedAssignmentFeedback.grade.grade) + " / " + selectedAssignment.grade)}'
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/two_line_list_item_with_icon_font_size"
+                            android:visibility='@{selectedAssignmentLastAttempt.graded ? View.VISIBLE : View.GONE}'/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
