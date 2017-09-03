@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -103,8 +104,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                         refreshUI();
                     } else if (listRemoteResource.status == RemoteResource.ERROR) {
                         requestInProgress = false;
-                        binding.setLoading(false);
                         if (loadingView.isShown()) {
+                            loadingView.hideProgessBar();
                             loadingView.setMessageError(getString(R.string.error_JSON_PARSING));
                         }
                     } else if (listRemoteResource.status == RemoteResource.LOADING) {
@@ -198,7 +199,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     }
 
     private void refreshUI() {
-        if (!requestInProgress) {
+        if (!requestInProgress && assignmentsCourses != null) {
             List<String> headers = new ArrayList<>();
             HashMap<String, List<MoodleAssignment>> childs = new HashMap<>();
 
@@ -254,6 +255,11 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                     binding.setSelectedAssignmentFeedback(null);
                     binding.setSelectedAssignmentLastAttempt(null);
                     binding.setLoadingSelectedAssignmentSubmission(false);
+
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+                    Toast toast = Toast.makeText(MoodleAssignmentsActivity.this, getString(R.string.error_JSON_PARSING), Toast.LENGTH_SHORT);
+                    toast.show();
                 } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.SUCCESS) {
                     MoodleAssignmentSubmission submission = moodleAssignmentFeedbackRemoteResource.data;
 
