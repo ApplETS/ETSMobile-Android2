@@ -244,9 +244,6 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
         binding.setSelectedAssignment(selectedAssignment);
 
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        bottomSheet.requestLayout();
-
         final LiveData<RemoteResource<MoodleAssignmentSubmission>> submissionLiveData = moodleViewModel.getAssignmentSubmission(selectedAssignment.getId());
         submissionLiveData.observe(MoodleAssignmentsActivity.this, new Observer<RemoteResource<MoodleAssignmentSubmission>>() {
             @Override
@@ -288,7 +285,9 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
             }
         });
 
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
 
         return true;
     }
