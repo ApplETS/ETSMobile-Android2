@@ -80,7 +80,7 @@
     <string name="moodle_assignment_status_submitted">Statut: Submitted</string>
     <string name="moodle_assignment_status_not_submitted">Statut: Not Submitted</string>
     <string name="moodle_assignment_grading_status_graded">Grading status: Graded</string>
-    <string name="moodle_assignment_grading_status_not_graded">SGrading status: Not Graded</string>
+    <string name="moodle_assignment_grading_status_not_graded">Grading status: Not Graded</string>
     <string name="moodle_assignment_grader">Grader : %s</string>
     <string name="moodle_assignment_comments">Comments : %s</string>
 
