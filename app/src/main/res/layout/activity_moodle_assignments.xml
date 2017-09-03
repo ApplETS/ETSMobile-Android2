@@ -117,15 +117,16 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_assignment_turned_in_black_24dp"
-                        android:tint="@color/black" />
+                        android:src="@{selectedAssignmentLastAttempt.submitted ? @drawable/ic_assignment_turned_in_black_24dp : @drawable/ic_assignment_black_24dp}"
+                        android:tint="@{selectedAssignmentLastAttempt.submitted ? @color/success_color : @color/failure_color}"
+                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}"/>
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                        android:text="@string/moodle_assignment_status_submitted"
-                        android:textColor="@color/black"
+                        android:text='@{selectedAssignmentLastAttempt.submitted ? @string/moodle_assignment_status_submitted : @string/moodle_assignment_status_not_submitted}'
+                        android:textColor="@{selectedAssignmentLastAttempt.submitted ? @color/success_color : @color/failure_color}"
                         android:textSize="@dimen/single_line_list_item_font_size"
                         android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}"/>
                 </LinearLayout>

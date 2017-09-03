@@ -8,6 +8,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class MoodleAssignmentLastAttempt {
 
+    private static final String STATUS_SUBMITTED = "submitted";
+
     @SerializedName("submission")
     private Submission submission;
     @SerializedName("teamsubmission")
@@ -41,6 +43,21 @@ public class MoodleAssignmentLastAttempt {
         return graded;
     }
 
+    public boolean isSubmitted() {
+        boolean teamSubmitted = false;
+        boolean individualSubmitted = false;
+
+        if (teamSubmission != null) {
+            teamSubmitted = teamSubmission.status.equals(STATUS_SUBMITTED);
+        }
+
+        if (submission != null) {
+            individualSubmitted = submission.status.equals(STATUS_SUBMITTED);
+        }
+
+        return teamSubmitted || individualSubmitted;
+    }
+
     public String getGradingStatus() {
         return gradingStatus;
     }
@@ -71,7 +88,6 @@ public class MoodleAssignmentLastAttempt {
         private int attemptNumber;
         @SerializedName("timecreated")
         private int timeCreated;
-        @SerializedName("timmodified")
         private String status;
         private int groupid;
         private int assignment;

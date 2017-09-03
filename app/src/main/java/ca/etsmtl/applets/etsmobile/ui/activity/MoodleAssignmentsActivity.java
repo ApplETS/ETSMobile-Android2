@@ -244,14 +244,14 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
         binding.setSelectedAssignment(selectedAssignment);
 
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         bottomSheet.requestLayout();
-
 
         final LiveData<RemoteResource<MoodleAssignmentSubmission>> submissionLiveData = moodleViewModel.getAssignmentSubmission(selectedAssignment.getId());
         submissionLiveData.observe(MoodleAssignmentsActivity.this, new Observer<RemoteResource<MoodleAssignmentSubmission>>() {
             @Override
             public void onChanged(@Nullable RemoteResource<MoodleAssignmentSubmission> moodleAssignmentFeedbackRemoteResource) {
-                boolean notLongerNeedtoObserve = true;
+                boolean noLongerNeedtoObserve = true;
 
                 if (moodleAssignmentFeedbackRemoteResource == null || moodleAssignmentFeedbackRemoteResource.status == RemoteResource.ERROR) {
                     binding.setSelectedAssignmentFeedback(null);
@@ -280,10 +280,10 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                     binding.setLoadingSelectedAssignmentSubmission(false);
                 } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.LOADING) {
                     binding.setLoadingSelectedAssignmentSubmission(true);
-                    notLongerNeedtoObserve = false;
+                    noLongerNeedtoObserve = false;
                 }
 
-                if (notLongerNeedtoObserve)
+                if (noLongerNeedtoObserve)
                     submissionLiveData.removeObserver(this);
             }
         });

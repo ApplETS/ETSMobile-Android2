@@ -22,6 +22,8 @@
     <color name="grey_bandwith">#9E9E9E</color>
     <color name="noir_pale">#4D000000</color>
     <color name="blanc_pale">#A6ffffff</color>
+    <color name="success_color">#009688</color>
+    <color name="failure_color">#F4511E</color>
 
 
     <color name="bright_pink">#FF007F</color>
