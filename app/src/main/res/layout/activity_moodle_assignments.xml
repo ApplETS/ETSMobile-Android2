@@ -55,14 +55,14 @@
             android:id="@+id/open_assignment_fab"
             android:layout_width="@dimen/fab_default_size"
             android:layout_height="@dimen/fab_default_size"
-            android:src="@drawable/ic_link_white_24dp"
-            app:backgroundTint="@color/ets_red"
-            app:layout_anchor="@id/bottom_sheet"
             android:layout_margin="@dimen/fab_margin"
             android:onClick="openInBrowser"
-            app:layout_anchorGravity="end"
+            android:src="@drawable/ic_link_white_24dp"
             android:visibility="gone"
-            tools:visibility="visible"/>
+            app:backgroundTint="@color/ets_red"
+            app:layout_anchor="@id/bottom_sheet"
+            app:layout_anchorGravity="end"
+            tools:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/bottom_sheet"
@@ -79,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/single_line_list_item_left_right_item_padding"
                 android:paddingRight="@dimen/single_line_list_item_left_right_item_padding"
+                android:paddingTop="@dimen/single_line_list_item_padding_top"
                 android:text="@{selectedAssignment.name}"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -86,16 +87,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/single_line_list_item_with_avatar_height"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding"
-                android:gravity="center_vertical"
-                android:background="?android:attr/selectableItemBackground">
+                android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
+
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_assignment_turned_in_black_24dp"
-                    android:tint="@color/black"/>
+                    android:tint="@color/black" />
 
                 <TextView
                     android:layout_width="fill_parent"
@@ -109,10 +111,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/single_line_list_item_with_avatar_height"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding"
-                android:gravity="center_vertical">
+                android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
+
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
@@ -130,22 +133,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/single_line_list_item_with_avatar_height"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding"
-                android:gravity="center_vertical"
-                android:background="?android:attr/selectableItemBackground">
+                android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
+
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_ico_notes"
-                    android:tint="@color/black"/>
+                    android:tint="@color/black" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"

@@ -44,6 +44,7 @@ import ca.etsmtl.applets.etsmobile2.databinding.ActivityMoodleAssignmentsBinding
 public class MoodleAssignmentsActivity extends AppCompatActivity implements LifecycleRegistryOwner, ExpandableListView.OnChildClickListener {
 
     private static final String TAG = "MoodleAssignments";
+    private static final float BS_MIN_OFFSET_HIDE_FAB = -0.8f;
 
     private ExpandableListView assignmentsElv;
     private LoadingView loadingView;
@@ -59,6 +60,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     private Observer<RemoteResource<List<MoodleAssignmentCourse>>> assignmentsCoursesObserver;
     private MoodleViewModel moodleViewModel;
     private BottomSheetBehavior bottomSheetBehavior;
+    private float bottomSheetOffset;
     private ActivityMoodleAssignmentsBinding binding;
     private MoodleAssignment selectedAssignment;
     private FloatingActionButton openAssignmentFab;
@@ -119,15 +121,18 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_EXPANDED)
-                    openAssignmentFab.setVisibility(View.VISIBLE);
-                else
-                    openAssignmentFab.setVisibility(View.GONE);
+
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                openAssignmentFab.setVisibility(View.VISIBLE);
+                if (slideOffset > bottomSheetOffset)
+                    openAssignmentFab.show();
+                else if (slideOffset <= BS_MIN_OFFSET_HIDE_FAB)
+                    //openAssignmentFab.hide();
+                    openAssignmentFab.setVisibility(View.GONE);
+
+                bottomSheetOffset = slideOffset;
             }
         });
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
