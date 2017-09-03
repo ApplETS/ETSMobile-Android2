@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.model.Moodle;
 
-import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
@@ -16,6 +15,7 @@ import java.util.List;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.MoodleAssignmentCoursesRequest;
+import ca.etsmtl.applets.etsmobile.http.MoodleAssignmentSubmissionRequest;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
@@ -189,7 +189,7 @@ public class MoodleRepository {
 
                     @Override
                     public MoodleCourses loadDataFromNetwork() throws Exception {
-                        @SuppressLint("StringFormatMatches") String url = context.getString(R.string.moodle_api_enrol_get_users_courses, ApplicationManager.userCredentials.getMoodleToken(), remoteProfile.data.getUserId());
+                        String url = context.getString(R.string.moodle_api_enrol_get_users_courses, ApplicationManager.userCredentials.getMoodleToken(), String.valueOf(remoteProfile.data.getUserId()));
                         return getRestTemplate().getForObject(url, MoodleCourses.class);
                     }
                 };
@@ -223,5 +223,41 @@ public class MoodleRepository {
         }
 
         return courses;
+    }
+
+    public LiveData<RemoteResource<MoodleAssignmentSubmission>> getAssignmentSubmission(final int assignId) {
+        final MutableLiveData<RemoteResource<MoodleAssignmentSubmission>> submission = new MutableLiveData<>();
+        submission.setValue(RemoteResource.<MoodleAssignmentSubmission>loading(null));
+
+        RemoteResource<MoodleToken> remoteToken = token.getValue();
+
+        if (remoteToken != null && remoteToken.data != null && remoteToken.status != RemoteResource.LOADING) {
+            dataManager.sendRequest(new MoodleAssignmentSubmissionRequest(context, ApplicationManager.userCredentials.getMoodleToken(), assignId), new RequestListener<Object>() {
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    submission.setValue(RemoteResource.<MoodleAssignmentSubmission>error(spiceException.getLocalizedMessage(), null));
+                }
+
+                @Override
+                public void onRequestSuccess(Object o) {
+                    submission.setValue(RemoteResource.success((MoodleAssignmentSubmission) o));
+                }
+            });
+        } else {
+            token.observeForever(new Observer<RemoteResource<MoodleToken>>() {
+                @Override
+                public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
+                    if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
+                        submission.setValue(RemoteResource.<MoodleAssignmentSubmission>error("Impossible d'obtenir le jeton", null));
+                        token.removeObserver(this);
+                    } else if (moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
+                        getProfile();
+                        token.removeObserver(this);
+                    }
+                }
+            });
+        }
+
+        return submission;
     }
 }

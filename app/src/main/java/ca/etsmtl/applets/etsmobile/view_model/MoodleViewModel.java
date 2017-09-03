@@ -7,6 +7,7 @@ import android.arch.lifecycle.LiveData;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleRepository;
@@ -22,6 +23,7 @@ public class MoodleViewModel extends AndroidViewModel {
     private LiveData<RemoteResource<MoodleProfile>> profile;
     private LiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses;
     private LiveData<RemoteResource<MoodleCourses>> courses;
+    private LiveData<RemoteResource<MoodleAssignmentSubmission>> assignmentSubmission;
 
     public MoodleViewModel(Application application) {
         super(application);
@@ -50,5 +52,17 @@ public class MoodleViewModel extends AndroidViewModel {
             this.courses = repository.getCourses();
 
         return courses;
+    }
+
+    public LiveData<RemoteResource<MoodleAssignmentSubmission>> getAssignmentSubmission(int assignId) {
+        if (assignmentSubmission == null ||assignmentSubmission.getValue() == null
+                || assignmentSubmission.getValue().data == null
+                || assignmentSubmission.getValue().data.getFeedback() == null
+                || assignmentSubmission.getValue().data.getFeedback().getGrade() == null
+                || assignmentSubmission.getValue().data.getFeedback().getGrade().getAssignment() != assignId) {
+            this.assignmentSubmission = repository.getAssignmentSubmission(assignId);
+        }
+
+        return assignmentSubmission;
     }
 }

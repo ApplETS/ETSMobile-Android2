@@ -10,6 +10,10 @@
             type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment" />
 
         <variable
+            name="selectedAssignmentFeedback"
+            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission.MoodleAssignmentFeedback" />
+
+        <variable
             name="loading"
             type="java.lang.Boolean" />
     </data>
@@ -163,7 +167,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/two_line_list_item_with_icon_icon_left_padding"
-                        android:text='@{String.format(@string/moodle_assignment_grade, "100 / " + selectedAssignment.grade)}'
+                        android:text='@{String.format(@string/moodle_assignment_grade, String.format("%.1f", selectedAssignmentFeedback.grade.grade) + " / " + selectedAssignment.grade)}'
                         android:textColor="@color/black"
                         android:textSize="@dimen/two_line_list_item_with_icon_font_size" />
                 </LinearLayout>

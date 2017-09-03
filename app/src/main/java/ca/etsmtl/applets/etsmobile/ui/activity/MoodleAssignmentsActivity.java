@@ -1,8 +1,8 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
@@ -29,6 +29,7 @@ import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAssignmentsAdapter;
 import ca.etsmtl.applets.etsmobile.util.Utility;
@@ -66,7 +67,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     private FloatingActionButton openAssignmentFab;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_moodle_assignments);
         binding.setLoading(true);
@@ -245,14 +246,38 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
         bottomSheet.requestLayout();
 
+        final LiveData<RemoteResource<MoodleAssignmentSubmission>> submissionLiveData = moodleViewModel.getAssignmentSubmission(selectedAssignment.getId());
+        submissionLiveData.observe(MoodleAssignmentsActivity.this, new Observer<RemoteResource<MoodleAssignmentSubmission>>() {
+            @Override
+            public void onChanged(@Nullable RemoteResource<MoodleAssignmentSubmission> moodleAssignmentFeedbackRemoteResource) {
+                if (moodleAssignmentFeedbackRemoteResource == null || moodleAssignmentFeedbackRemoteResource.status == RemoteResource.ERROR) {
+                    submissionLiveData.removeObserver(this);
+                } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.SUCCESS) {
+                    MoodleAssignmentSubmission submission = moodleAssignmentFeedbackRemoteResource.data;
+
+                    if (submission != null) {
+                        MoodleAssignmentSubmission.MoodleAssignmentFeedback feedback = submission.getFeedback();
+
+                        if (feedback != null) {
+                            if (submission.getFeedback().getGrade().getAssignment() == selectedAssignment.getId())
+                                binding.setSelectedAssignmentFeedback(moodleAssignmentFeedbackRemoteResource.data.getFeedback());
+                            submissionLiveData.removeObserver(this);
+                            return;
+                        }
+                    }
+                } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.LOADING) {
+
+                }
+            }
+        });
+
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         return true;
     }
 
-    @SuppressLint("StringFormatMatches")
     public void openInBrowser(View v) {
-        Utility.openChromeCustomTabs(this, String.format(getString(R.string.moodle_view_assignment), selectedAssignment.getCmid()));
+        Utility.openChromeCustomTabs(this, String.format(getString(R.string.moodle_view_assignment), String.valueOf(selectedAssignment.getCmid())));
     }
 
     @Override

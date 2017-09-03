@@ -26,6 +26,7 @@
     <string name="moodle_api_enrol_get_users_courses">https://ena.etsmtl.ca/webservice/rest/server.php?moodlewsrestformat=json&amp;wsfunction=core_enrol_get_users_courses&amp;wstoken=%1$s&amp;userid=%2$s</string>
     <string name="moodle_api_core_course_get_contents">https://ena.etsmtl.ca/webservice/rest/server.php?moodlewsrestformat=json&amp;wsfunction=core_course_get_contents&amp;wstoken=%1$s&amp;courseid=%2$s</string>
     <string name="moodle_api_assignments">https://ena.etsmtl.ca/webservice/rest/server.php?moodlewsrestformat=json&amp;wstoken=%1$s&amp;wsfunction=mod_assign_get_assignments%2$s</string>
+    <string name="moodle_api_assign_submission">https://ena.etsmtl.ca/webservice/rest/server.php?moodlewsrestformat=json&amp;wsfunction=mod_assign_get_submission_status&amp;wstoken=%1$s&amp;assignid=%2$s</string>
     <string name="moodle_view_assignment">https://ena.etsmtl.ca/mod/assign/view.php?id=%1$s</string>
     <string name="applets_api_news">https://api.clubapplets.ca/news/%1$s?post_date_min=%2$s&amp;post_date_max=%3$s</string>
     <string name="applets_api_news_all">https://api.clubapplets.ca/news/all</string>
