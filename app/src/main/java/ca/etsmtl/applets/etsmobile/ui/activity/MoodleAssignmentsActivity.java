@@ -53,6 +53,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     private View bottomSheet;
     private Menu menu;
     private List<MoodleAssignmentCourse> assignmentsCourses;
+    private List<MoodleAssignmentCourse> filteredAssignmentsCourses;
     private boolean displayPastAssignments;
     private boolean requestInProgress;
     private Comparator<MoodleAssignment> dateComparator;
@@ -66,6 +67,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     private ActivityMoodleAssignmentsBinding binding;
     private MoodleAssignment selectedAssignment;
     private FloatingActionButton openAssignmentFab;
+    private View emptyView;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -78,7 +80,24 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
         assignmentsElv = findViewById(R.id.assignments_elv);
         loadingView = findViewById(R.id.loading_view);
         openAssignmentFab = findViewById(R.id.open_assignment_fab);
+        emptyView = findViewById(R.id.empty_view);
 
+        setUpSortComparators();
+
+        subscribeUIList();
+
+        setUpBottomSheet();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        moodleViewModel.getAssignmentCourses().removeObservers(this);
+        assignmentsCoursesObserver = null;
+    }
+
+    private void setUpSortComparators() {
         dateComparator = new Comparator<MoodleAssignment>() {
             @Override
             public int compare(MoodleAssignment a1, MoodleAssignment a2) {
@@ -92,7 +111,9 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
             }
         };
         currentComparator = dateComparator;
+    }
 
+    public void subscribeUIList() {
         assignmentsCoursesObserver = new Observer<RemoteResource<List<MoodleAssignmentCourse>>>() {
 
             @Override
@@ -114,10 +135,11 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                 }
             }
         };
-
         moodleViewModel = ViewModelProviders.of(this).get(MoodleViewModel.class);
         moodleViewModel.getAssignmentCourses().observe(this, assignmentsCoursesObserver);
+    }
 
+    private void setUpBottomSheet() {
         bottomSheet = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -138,14 +160,6 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
             }
         });
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        moodleViewModel.getAssignmentCourses().removeObserver(assignmentsCoursesObserver);
-        assignmentsCoursesObserver = null;
     }
 
     @Override
@@ -203,7 +217,9 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
             List<String> headers = new ArrayList<>();
             HashMap<String, List<MoodleAssignment>> childs = new HashMap<>();
 
-            for (MoodleAssignmentCourse course : assignmentsCourses) {
+            filteredAssignmentsCourses = filterCourses(assignmentsCourses);
+
+            for (MoodleAssignmentCourse course : filteredAssignmentsCourses) {
                 headers.add(course.getFullName());
 
                 Collections.sort(course.getAssignments(), currentComparator);
@@ -224,14 +240,50 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
             ExpandableListMoodleAssignmentsAdapter adapter = new ExpandableListMoodleAssignmentsAdapter(this);
             adapter.setData(headers, childs);
+            assignmentsElv.setEmptyView(emptyView);
             assignmentsElv.setAdapter(adapter);
             assignmentsElv.setOnChildClickListener(this);
-            // TODO: Set empty view
             for (int i = 0; i < headers.size(); i++)
                 assignmentsElv.expandGroup(i);
 
             binding.setLoading(false);
         }
+    }
+
+    /**
+     * Filtrage des cours en retirant les cours n'ayant aucun devoir
+     *
+     * @param assignmentsCourses liste des cours à filtrer
+     * @return liste de cours filtrés
+     */
+    private List<MoodleAssignmentCourse> filterCourses(List<MoodleAssignmentCourse> assignmentsCourses) {
+        List<MoodleAssignmentCourse> filteredCourses = new ArrayList<>();
+
+        for (MoodleAssignmentCourse course : assignmentsCourses) {
+
+            int nbAssignments = course.getAssignments().size();
+
+            if (nbAssignments != 0) {
+                /*
+                 Si les devoirs antérieurs ne doivent pas être affichés, ceux-ci ne doivent pas être
+                 pris en compte.
+                 */
+                if (!displayPastAssignments) {
+                    for (MoodleAssignment assignment : course.getAssignments()) {
+                        Date dueDate = assignment.getDueDateObj();
+                        Date currentDate = new Date();
+                        if (dueDate.before(currentDate))
+                            nbAssignments--;
+                    }
+                }
+
+                // Ajout du cours si celui-ci contient des devoirs
+                if (nbAssignments != 0)
+                    filteredCourses.add(course);
+            }
+        }
+
+        return filteredCourses;
     }
 
     @Override
@@ -241,7 +293,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        selectedAssignment = assignmentsCourses.get(groupPosition).getAssignments().get(childPosition);
+        selectedAssignment = getSelectedAssignment(groupPosition, childPosition);
 
         binding.setSelectedAssignment(selectedAssignment);
 
@@ -296,6 +348,30 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
         }
 
         return true;
+    }
+
+    private MoodleAssignment getSelectedAssignment(int courseIndex, int assignmentIndex) {
+        MoodleAssignment selectedAssignment = null;
+
+        if (displayPastAssignments) {
+            selectedAssignment = filteredAssignmentsCourses.get(courseIndex).getAssignments().get(assignmentIndex);
+        } else {
+            int index = 0;
+            for (MoodleAssignment assignment : filteredAssignmentsCourses.get(courseIndex).getAssignments()) {
+                Date dueDate = assignment.getDueDateObj();
+                Date currentDate = new Date();
+                if (dueDate.before(currentDate))
+                    continue;
+                else if (index == assignmentIndex) {
+                    selectedAssignment = assignment;
+                    break;
+                } else {
+                    index++;
+                }
+            }
+        }
+
+        return selectedAssignment;
     }
 
     public void openInBrowser(View v) {

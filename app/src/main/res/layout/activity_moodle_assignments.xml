@@ -51,6 +51,15 @@
 
         </ExpandableListView>
 
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/moodle_assignment_none"
+            android:textSize="@dimen/title_text_size"
+            android:visibility="gone" />
+
         <ca.etsmtl.applets.etsmobile.views.LoadingView
             android:id="@+id/loading_view"
             android:layout_width="match_parent"
@@ -101,7 +110,7 @@
                 android:paddingTop="@dimen/single_line_list_item_padding_top"
                 android:text="@{selectedAssignment.name}"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="@dimen/title_text_size" />
 
             <LinearLayout
                 android:layout_width="match_parent"

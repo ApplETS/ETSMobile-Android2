@@ -31,6 +31,19 @@
     <dimen name="fab_min_size">40dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
+    <!-- Text sizes -->
+    <dimen name="display_4_text_size">112sp</dimen>
+    <dimen name="display_3_text_size">56sp</dimen>
+    <dimen name="display_2_text_size">45sp</dimen>
+    <dimen name="display_1_text_size">34sp</dimen>
+    <dimen name="headline_text_size">24sp</dimen>
+    <dimen name="title_text_size">20sp</dimen>
+    <dimen name="subheading_text_size">16sp</dimen>
+    <dimen name="body_2_text_size">14sp</dimen>
+    <dimen name="body_1_text_size">14sp</dimen>
+    <dimen name="caption_text_size">12sp</dimen>
+    <dimen name="button_text_size">14sp</dimen>
+
     <!--Widget-->
     <dimen name="widget_margin">0dp</dimen>
     <dimen name="widget_border">1dp</dimen>
