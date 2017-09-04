@@ -47,14 +47,13 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
     private static final String TAG = "MoodleAssignments";
     private static final float BS_MIN_OFFSET_HIDE_FAB = -0.8f;
+    private static final String SHOW_BS_KEY = "ShowBS";
 
     private ExpandableListView assignmentsElv;
     private LoadingView loadingView;
     private View bottomSheet;
     private Menu menu;
-    private List<MoodleAssignmentCourse> assignmentsCourses;
     private List<MoodleAssignmentCourse> filteredAssignmentsCourses;
-    private boolean displayPastAssignments;
     private boolean requestInProgress;
     private Comparator<MoodleAssignment> dateComparator;
     private Comparator<MoodleAssignment> alphaComparator;
@@ -65,7 +64,6 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     private BottomSheetBehavior bottomSheetBehavior;
     private float bottomSheetOffset;
     private ActivityMoodleAssignmentsBinding binding;
-    private MoodleAssignment selectedAssignment;
     private FloatingActionButton openAssignmentFab;
     private View emptyView;
 
@@ -87,6 +85,22 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
         subscribeUIList();
 
         setUpBottomSheet();
+
+        if (savedInstanceState != null && savedInstanceState.getBoolean(SHOW_BS_KEY)) {
+            MoodleAssignment selectedAssignment = moodleViewModel.getSelectedAssignment();
+            if (selectedAssignment != null) {
+                displaySelectedAssignment(selectedAssignment);
+                openAssignmentFab.show();
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        boolean bSShown = bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED;
+        outState.putBoolean(SHOW_BS_KEY, bSShown);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -121,7 +135,6 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                 if (listRemoteResource != null) {
                     if (listRemoteResource.status == RemoteResource.SUCCESS) {
                         requestInProgress = false;
-                        assignmentsCourses = listRemoteResource.data;
                         refreshUI();
                     } else if (listRemoteResource.status == RemoteResource.ERROR) {
                         requestInProgress = false;
@@ -169,6 +182,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
         this.menu = menu;
 
+        menu.findItem(R.id.menu_item_moodle_previous_assignments).setChecked(moodleViewModel.isDisplayPastAssingments());
+
         return true;
     }
 
@@ -176,7 +191,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_moodle_previous_assignments:
-                displayPastAssignments = !item.isChecked();
+                moodleViewModel.setDisplayPastAssignments(!item.isChecked());
                 break;
             case R.id.menu_item_moodle_sort_assignments_date:
                 menu.getItem(1).setChecked(false);
@@ -213,11 +228,11 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     }
 
     private void refreshUI() {
-        if (!requestInProgress && assignmentsCourses != null) {
+        if (!requestInProgress) {
             List<String> headers = new ArrayList<>();
             HashMap<String, List<MoodleAssignment>> childs = new HashMap<>();
 
-            filteredAssignmentsCourses = filterCourses(assignmentsCourses);
+            filteredAssignmentsCourses = moodleViewModel.filterCourses().getValue();
 
             for (MoodleAssignmentCourse course : filteredAssignmentsCourses) {
                 headers.add(course.getFullName());
@@ -226,7 +241,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
                 List<MoodleAssignment> assignments = new ArrayList<>();
                 for (MoodleAssignment assignment : course.getAssignments()) {
-                    if (!displayPastAssignments) {
+                    if (!moodleViewModel.isDisplayPastAssingments()) {
                         Date dueDate = assignment.getDueDateObj();
                         Date currentDate = new Date();
                         if (dueDate.after(currentDate))
@@ -250,42 +265,6 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
         }
     }
 
-    /**
-     * Filtrage des cours en retirant les cours n'ayant aucun devoir
-     *
-     * @param assignmentsCourses liste des cours à filtrer
-     * @return liste de cours filtrés
-     */
-    private List<MoodleAssignmentCourse> filterCourses(List<MoodleAssignmentCourse> assignmentsCourses) {
-        List<MoodleAssignmentCourse> filteredCourses = new ArrayList<>();
-
-        for (MoodleAssignmentCourse course : assignmentsCourses) {
-
-            int nbAssignments = course.getAssignments().size();
-
-            if (nbAssignments != 0) {
-                /*
-                 Si les devoirs antérieurs ne doivent pas être affichés, ceux-ci ne doivent pas être
-                 pris en compte.
-                 */
-                if (!displayPastAssignments) {
-                    for (MoodleAssignment assignment : course.getAssignments()) {
-                        Date dueDate = assignment.getDueDateObj();
-                        Date currentDate = new Date();
-                        if (dueDate.before(currentDate))
-                            nbAssignments--;
-                    }
-                }
-
-                // Ajout du cours si celui-ci contient des devoirs
-                if (nbAssignments != 0)
-                    filteredCourses.add(course);
-            }
-        }
-
-        return filteredCourses;
-    }
-
     @Override
     public LifecycleRegistry getLifecycle() {
         return lifecycleRegistry;
@@ -293,8 +272,12 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        selectedAssignment = getSelectedAssignment(groupPosition, childPosition);
+        displaySelectedAssignment(moodleViewModel.selectAssignment(groupPosition, childPosition));
 
+        return true;
+    }
+
+    private void displaySelectedAssignment(final MoodleAssignment selectedAssignment) {
         binding.setSelectedAssignment(selectedAssignment);
 
         final LiveData<RemoteResource<MoodleAssignmentSubmission>> submissionLiveData = moodleViewModel.getAssignmentSubmission(selectedAssignment.getId());
@@ -346,36 +329,10 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
         if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
-
-        return true;
-    }
-
-    private MoodleAssignment getSelectedAssignment(int courseIndex, int assignmentIndex) {
-        MoodleAssignment selectedAssignment = null;
-
-        if (displayPastAssignments) {
-            selectedAssignment = filteredAssignmentsCourses.get(courseIndex).getAssignments().get(assignmentIndex);
-        } else {
-            int index = 0;
-            for (MoodleAssignment assignment : filteredAssignmentsCourses.get(courseIndex).getAssignments()) {
-                Date dueDate = assignment.getDueDateObj();
-                Date currentDate = new Date();
-                if (dueDate.before(currentDate))
-                    continue;
-                else if (index == assignmentIndex) {
-                    selectedAssignment = assignment;
-                    break;
-                } else {
-                    index++;
-                }
-            }
-        }
-
-        return selectedAssignment;
     }
 
     public void openInBrowser(View v) {
-        Utility.openChromeCustomTabs(this, String.format(getString(R.string.moodle_view_assignment), String.valueOf(selectedAssignment.getCmid())));
+        Utility.openChromeCustomTabs(this, String.format(getString(R.string.moodle_view_assignment), String.valueOf(moodleViewModel.getSelectedAssignment().getCmid())));
     }
 
     @Override
