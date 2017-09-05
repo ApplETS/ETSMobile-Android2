@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
@@ -55,9 +56,6 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     private Menu menu;
     private List<MoodleAssignmentCourse> filteredAssignmentsCourses;
     private boolean requestInProgress;
-    private Comparator<MoodleAssignment> dateComparator;
-    private Comparator<MoodleAssignment> alphaComparator;
-    private Comparator<MoodleAssignment> currentComparator;
     private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     private Observer<RemoteResource<List<MoodleAssignmentCourse>>> assignmentsCoursesObserver;
     private MoodleViewModel moodleViewModel;
@@ -79,8 +77,6 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
         loadingView = findViewById(R.id.loading_view);
         openAssignmentFab = findViewById(R.id.open_assignment_fab);
         emptyView = findViewById(R.id.empty_view);
-
-        setUpSortComparators();
 
         subscribeUIList();
 
@@ -109,22 +105,6 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
         moodleViewModel.getAssignmentCourses().removeObservers(this);
         assignmentsCoursesObserver = null;
-    }
-
-    private void setUpSortComparators() {
-        dateComparator = new Comparator<MoodleAssignment>() {
-            @Override
-            public int compare(MoodleAssignment a1, MoodleAssignment a2) {
-                return a1.getDueDateObj().compareTo(a2.getDueDateObj());
-            }
-        };
-        alphaComparator = new Comparator<MoodleAssignment>() {
-            @Override
-            public int compare(MoodleAssignment a1, MoodleAssignment a2) {
-                return a1.getName().compareTo(a2.getName());
-            }
-        };
-        currentComparator = dateComparator;
     }
 
     public void subscribeUIList() {
@@ -180,28 +160,35 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_moodle_assignments, menu);
 
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
         this.menu = menu;
 
-        menu.findItem(R.id.menu_item_moodle_previous_assignments).setChecked(moodleViewModel.isDisplayPastAssingments());
+        menu.findItem(R.id.menu_item_moodle_previous_assignments).setChecked(moodleViewModel.isDisplayPastAssignments());
+
+        SubMenu sortSubMenu = menu.getItem(0).getSubMenu();
+        sortSubMenu.getItem(moodleViewModel.getAssignmentsSortIndex()).setChecked(true);
 
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
         switch (item.getItemId()) {
             case R.id.menu_item_moodle_previous_assignments:
                 moodleViewModel.setDisplayPastAssignments(!item.isChecked());
                 break;
             case R.id.menu_item_moodle_sort_assignments_date:
-                menu.getItem(1).setChecked(false);
-                if (currentComparator != dateComparator)
-                    currentComparator = dateComparator;
+                moodleViewModel.setAssignmentsSort(MoodleViewModel.SORT_BY_DATE);
                 break;
             case R.id.menu_item_moodle_sort_assignments_alpha:
-                menu.getItem(0).setChecked(false);
-                if (currentComparator != alphaComparator)
-                    currentComparator = alphaComparator;
+                moodleViewModel.setAssignmentsSort(MoodleViewModel.SORT_ALPHA);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -234,6 +221,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
             filteredAssignmentsCourses = moodleViewModel.filterCourses().getValue();
 
+            Comparator<MoodleAssignment> currentComparator = moodleViewModel.getAssignmentsSortComparator();
+
             for (MoodleAssignmentCourse course : filteredAssignmentsCourses) {
                 headers.add(course.getFullName());
 
@@ -241,7 +230,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
                 List<MoodleAssignment> assignments = new ArrayList<>();
                 for (MoodleAssignment assignment : course.getAssignments()) {
-                    if (!moodleViewModel.isDisplayPastAssingments()) {
+                    if (!moodleViewModel.isDisplayPastAssignments()) {
                         Date dueDate = assignment.getDueDateObj();
                         Date currentDate = new Date();
                         if (dueDate.after(currentDate))
