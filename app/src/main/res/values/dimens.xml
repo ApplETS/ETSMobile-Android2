@@ -27,8 +27,8 @@
     <dimen name="two_line_list_item_with_icon_text_right_padding">16dp</dimen>
 
     <!-- Floating action button -->
-    <dimen name="fab_default_size">56dp</dimen>
-    <dimen name="fab_min_size">40dp</dimen>
+    <dimen name="fab_pressed_elevation">12dp</dimen>
+    <dimen name="fab_resting_elevation">6dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
     <!-- Text sizes -->

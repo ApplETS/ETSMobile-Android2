@@ -75,15 +75,18 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/open_assignment_fab"
-            android:layout_width="@dimen/fab_default_size"
-            android:layout_height="@dimen/fab_default_size"
-            android:layout_margin="@dimen/fab_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:onClick="openInBrowser"
             android:src="@drawable/ic_link_white_24dp"
             android:visibility="gone"
             app:backgroundTint="@color/ets_red"
+            app:elevation="@dimen/fab_resting_elevation"
+            app:fabSize="normal"
             app:layout_anchor="@id/bottom_sheet"
             app:layout_anchorGravity="end"
+            app:rippleColor="@color/white"
+            app:useCompatPadding="true"
             tools:visibility="visible" />
 
         <LinearLayout
