@@ -221,7 +221,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
     @Override
     public void onRequestFailure(SpiceException e) {
         showProgress(false);
-        mPasswordView.setError(getString(R.string.error_invalid_email));
+        mPasswordView.setError(getString(R.string.error_unable_connect_server));
         mPasswordView.requestFocus();
     }
 
