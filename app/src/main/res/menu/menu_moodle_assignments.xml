@@ -22,9 +22,17 @@
             </group>
         </menu>
     </item>
-    <item
-        android:id="@+id/menu_item_moodle_previous_assignments"
-        android:checkable="true"
-        android:title="@string/moodle_past_assignments"
-        app:showAsAction="never" />
+    <item android:id="@+id/menu_item_moodle_filter"
+        android:title="@string/moodle_past_assignments_filter"
+        android:icon="@drawable/ic_filter_list_white_24dp"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/menu_item_moodle_previous_assignments"
+                android:checkable="true"
+                android:icon="@null"
+                android:title="@string/moodle_past_assignments"
+                app:showAsAction="never" />
+        </menu>
+    </item>
 </menu>
