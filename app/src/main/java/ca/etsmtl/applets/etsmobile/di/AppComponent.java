@@ -4,7 +4,6 @@ import javax.inject.Singleton;
 
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
-import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModelFactory;
 import dagger.Component;
 
 /**
@@ -17,6 +16,4 @@ public interface AppComponent {
     void inject(MoodleFragment moodleFragment);
 
     void inject(MoodleAssignmentsActivity moodleAssignmentsActivity);
-
-    void inject(MoodleViewModelFactory moodleViewModelFactory);
 }

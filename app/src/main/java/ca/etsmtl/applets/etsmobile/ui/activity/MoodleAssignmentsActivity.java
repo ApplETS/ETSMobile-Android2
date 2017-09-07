@@ -140,9 +140,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
             }
         };
 
-        // Get the factory
-        ApplicationManager application = (ApplicationManager) getApplication();
-        application.getAppComponent().inject(this);
+        // Get the view model factory
+        ApplicationManager.getAppComponent().inject(this);
 
         moodleViewModel = ViewModelProviders.of(this, moodleViewModelFactory).get(MoodleViewModel.class);
         moodleViewModel.getAssignmentCourses().observe(this, assignmentsCoursesObserver);

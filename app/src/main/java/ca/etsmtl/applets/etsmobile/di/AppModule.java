@@ -16,7 +16,7 @@ import dagger.Provides;
  */
 @Module
 public class AppModule {
-    Application app;
+    private Application app;
 
     public AppModule(Application application) {
         app = application;
@@ -33,7 +33,6 @@ public class AppModule {
     public MoodleRepository provideMoodleRepository() {
         return new MoodleRepository(app);
     }
-
 
     @Provides
     @Singleton

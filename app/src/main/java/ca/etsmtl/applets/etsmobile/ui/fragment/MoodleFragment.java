@@ -87,8 +87,8 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ApplicationManager application = (ApplicationManager) getActivity().getApplication();
-        application.getAppComponent().inject(this);
+        // Get the view model factory
+        ApplicationManager.getAppComponent().inject(this);
 
         moodleViewModel = ViewModelProviders.of(this, moodleViewModelFactory).get(MoodleViewModel.class);
 
