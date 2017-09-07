@@ -42,10 +42,10 @@ public class MoodleViewModel extends AndroidViewModel {
     private MutableLiveData<List<MoodleAssignmentCourse>> filteredCourses = new MutableLiveData<>();
     private MutableLiveData<MoodleAssignment> selectedAssignment = new MutableLiveData<>();
 
-    public MoodleViewModel(Application application) {
+    public MoodleViewModel(Application application, MoodleRepository moodleRepository) {
         super(application);
 
-        repository = new MoodleRepository(getApplication());
+        this.repository = moodleRepository;
     }
 
     public LiveData<RemoteResource<MoodleProfile>> getProfile() {

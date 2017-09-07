@@ -31,6 +31,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
@@ -38,6 +41,7 @@ import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAssignmentsAdapter;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel;
+import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModelFactory;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 import ca.etsmtl.applets.etsmobile2.databinding.ActivityMoodleAssignmentsBinding;
@@ -66,6 +70,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     private ActivityMoodleAssignmentsBinding binding;
     private FloatingActionButton openAssignmentFab;
     private View emptyView;
+    @Inject
+    MoodleViewModelFactory moodleViewModelFactory;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -133,7 +139,12 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                 }
             }
         };
-        moodleViewModel = ViewModelProviders.of(this).get(MoodleViewModel.class);
+
+        // Get the factory
+        ApplicationManager application = (ApplicationManager) getApplication();
+        application.getAppComponent().inject(this);
+
+        moodleViewModel = ViewModelProviders.of(this, moodleViewModelFactory).get(MoodleViewModel.class);
         moodleViewModel.getAssignmentCourses().observe(this, assignmentsCoursesObserver);
     }
 

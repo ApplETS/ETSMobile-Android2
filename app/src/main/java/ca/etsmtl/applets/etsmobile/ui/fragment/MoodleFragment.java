@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
@@ -31,6 +34,7 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.MoodleCoursesAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.CourseComparator;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel;
+import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModelFactory;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -52,6 +56,8 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
     private Observer<RemoteResource<MoodleCourses>> coursesObserver;
     private MoodleViewModel moodleViewModel;
     private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
+    @Inject
+    MoodleViewModelFactory moodleViewModelFactory;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,7 +78,20 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
 
         loadingView = v.findViewById(R.id.loading_view);
 
-        moodleViewModel = ViewModelProviders.of(this).get(MoodleViewModel.class);
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
+
+		return v;
+	}
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        ApplicationManager application = (ApplicationManager) getActivity().getApplication();
+        application.getAppComponent().inject(this);
+
+        moodleViewModel = ViewModelProviders.of(this, moodleViewModelFactory).get(MoodleViewModel.class);
+
         coursesObserver = new Observer<RemoteResource<MoodleCourses>>() {
             @Override
             public void onChanged(@Nullable RemoteResource<MoodleCourses> moodleCoursesRemoteResource) {
@@ -95,11 +114,7 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
             }
         };
         moodleViewModel.getCourses().observe(this, coursesObserver);
-
-        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
-
-		return v;
-	}
+    }
 
     @Override
     public String getFragmentTitle() {

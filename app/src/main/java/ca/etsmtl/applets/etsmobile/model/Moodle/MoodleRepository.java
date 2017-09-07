@@ -1,5 +1,6 @@
 package ca.etsmtl.applets.etsmobile.model.Moodle;
 
+import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
@@ -11,6 +12,8 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import java.util.List;
+
+import javax.inject.Singleton;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
@@ -24,7 +27,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 /**
  * Created by Sonphil on 31-08-17.
  */
-
+@Singleton
 public class MoodleRepository {
 
     private static String TAG = "MoodleRepository";
@@ -36,8 +39,8 @@ public class MoodleRepository {
     private MutableLiveData<RemoteResource<MoodleProfile>> profile = new MutableLiveData<>();
     private MutableLiveData<RemoteResource<MoodleCourses>> courses = new MutableLiveData<>();
 
-    public MoodleRepository(Context context) {
-        this.context = context.getApplicationContext();
+    public MoodleRepository(Application application) {
+        this.context = application;
         dataManager = DataManager.getInstance(context);
 
         // The token is obtained at the beginning because every request needs it.
