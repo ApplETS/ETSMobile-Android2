@@ -39,6 +39,8 @@ public class MoodleRepository {
     public MoodleRepository(Context context) {
         this.context = context.getApplicationContext();
         dataManager = DataManager.getInstance(context);
+
+        // The token is obtained at the beginning because every request needs it.
         getToken();
     }
 
@@ -86,32 +88,55 @@ public class MoodleRepository {
         return token;
     }
 
+    public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses(final int[] coursesIds) {
+        RemoteResource<MoodleToken> remoteToken = token.getValue();
+
+        if (remoteToken != null && remoteToken.data != null && remoteToken.status != RemoteResource.LOADING) {
+            dataManager.sendRequest(new MoodleAssignmentCoursesRequest(context, coursesIds, ApplicationManager.userCredentials.getMoodleToken()), new RequestListener<Object>() {
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(spiceException.getLocalizedMessage(), null));
+                }
+
+                @Override
+                public void onRequestSuccess(Object o) {
+                    List<MoodleAssignmentCourse> courses = ((MoodleAssignmentCourses) o).getCourses();
+                    assignmentCourses.setValue(RemoteResource.success(courses));
+                }
+            });
+        } else {
+            token.observeForever(new Observer<RemoteResource<MoodleToken>>() {
+                @Override
+                public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
+                    if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
+                        String errorMessage = moodleTokenRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_token) : moodleTokenRemoteResource.message;
+                        assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(errorMessage, null));
+                        token.removeObserver(this);
+                    } else if (moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
+                        getAssignmentCourses(coursesIds);
+                        token.removeObserver(this);
+                    }
+                }
+            });
+        }
+
+        return assignmentCourses;
+    }
+
     public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses() {
 
-        if (assignmentCourses.getValue() == null|| assignmentCourses.getValue().status != RemoteResource.SUCCESS) {
+        if (assignmentCourses.getValue() == null || assignmentCourses.getValue().status != RemoteResource.SUCCESS) {
             assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>loading(null));
 
             RemoteResource<MoodleCourses> moodleCourses = courses.getValue();
 
             if (moodleCourses != null && moodleCourses.data != null && moodleCourses.status != RemoteResource.LOADING) {
                 int[] coursesIds = new int[moodleCourses.data.size()];
-                for (int i = 0; i < moodleCourses.data.size(); i++){
+                for (int i = 0; i < moodleCourses.data.size(); i++) {
                     coursesIds[i] = moodleCourses.data.get(i).getId();
                 }
-                dataManager.sendRequest(new MoodleAssignmentCoursesRequest(context, coursesIds,
-                        ApplicationManager.userCredentials.getMoodleToken()),
-                        new RequestListener<Object>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(spiceException.getLocalizedMessage(), null));
-                    }
 
-                    @Override
-                    public void onRequestSuccess(Object o) {
-                        List<MoodleAssignmentCourse> courses = ((MoodleAssignmentCourses) o).getCourses();
-                        assignmentCourses.setValue(RemoteResource.success(courses));
-                    }
-                });
+                return getAssignmentCourses(coursesIds);
             } else {
                 getCourses().observeForever(new Observer<RemoteResource<MoodleCourses>>() {
                     @Override
