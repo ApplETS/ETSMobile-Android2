@@ -84,6 +84,10 @@
     <string name="moodle_assignment_grader">Grader : %s</string>
     <string name="moodle_assignment_comments">Comments : %s</string>
     <string name="moodle_assignment_none">No assignment</string>
+    <string name="moddle_error_connection_failure">Connection failed</string>
+    <string name="moodle_error_cant_get_token">Failed to get the token</string>
+    <string name="moodle_error_cant_get_profil">Failed to get profile</string>
+    <string name="moodle_error_cant_get_courses">Failed to get courses</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, ÉTS student radio</string>

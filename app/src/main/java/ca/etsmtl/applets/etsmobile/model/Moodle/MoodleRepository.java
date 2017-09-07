@@ -37,7 +37,7 @@ public class MoodleRepository {
     private MutableLiveData<RemoteResource<MoodleCourses>> courses = new MutableLiveData<>();
 
     public MoodleRepository(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
         dataManager = DataManager.getInstance(context);
         getToken();
     }
@@ -51,7 +51,9 @@ public class MoodleRepository {
 
                 @Override
                 public MoodleToken loadDataFromNetwork() throws Exception {
-                    String url = context.getString(R.string.moodle_api_get_token, ApplicationManager.userCredentials.getUsername(), ApplicationManager.userCredentials.getPassword());
+                    String url = context.getString(R.string.moodle_api_get_token,
+                            ApplicationManager.userCredentials.getUsername(),
+                            ApplicationManager.userCredentials.getPassword());
 
                     return getRestTemplate().getForObject(url, MoodleToken.class);
                 }
@@ -73,7 +75,7 @@ public class MoodleRepository {
                     ApplicationManager.userCredentials.setMoodleToken(moodleToken.getToken());
 
                     if (moodleToken.getToken().equals("")) {
-                        onRequestFailure(new SpiceException("Impossible de se connecter"));
+                        onRequestFailure(new SpiceException(context.getString(R.string.moodle_error_connection_failure)));
                     }
 
                     token.setValue(RemoteResource.success((MoodleToken) o));
@@ -96,7 +98,9 @@ public class MoodleRepository {
                 for (int i = 0; i < moodleCourses.data.size(); i++){
                     coursesIds[i] = moodleCourses.data.get(i).getId();
                 }
-                dataManager.sendRequest(new MoodleAssignmentCoursesRequest(context, coursesIds, ApplicationManager.userCredentials.getMoodleToken()), new RequestListener<Object>() {
+                dataManager.sendRequest(new MoodleAssignmentCoursesRequest(context, coursesIds,
+                        ApplicationManager.userCredentials.getMoodleToken()),
+                        new RequestListener<Object>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
                         assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(spiceException.getLocalizedMessage(), null));
@@ -113,7 +117,8 @@ public class MoodleRepository {
                     @Override
                     public void onChanged(@Nullable RemoteResource<MoodleCourses> moodleCoursesRemoteResource) {
                         if (moodleCoursesRemoteResource == null || moodleCoursesRemoteResource.status == RemoteResource.ERROR) {
-                            assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error("Impossible d'obtenir les cours", null));
+                            String errorMessage = moodleCoursesRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_courses) : moodleCoursesRemoteResource.message;
+                            assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(errorMessage, null));
                             courses.removeObserver(this);
                         } else if (moodleCoursesRemoteResource.status == RemoteResource.SUCCESS) {
                             getAssignmentCourses();
@@ -138,7 +143,7 @@ public class MoodleRepository {
 
                     @Override
                     public MoodleProfile loadDataFromNetwork() throws Exception {
-                        String url = context.getString(R.string.moodle_api_get_siteinfo, token.getValue().data.getToken());
+                        String url = context.getString(R.string.moodle_api_get_siteinfo, ApplicationManager.userCredentials.getMoodleToken());
 
                         return getRestTemplate().getForObject(url, MoodleProfile.class);
                     }
@@ -147,7 +152,7 @@ public class MoodleRepository {
                 dataManager.sendRequest(request, new RequestListener<Object>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
-                        profile.setValue(RemoteResource.<MoodleProfile>error(spiceException.getLocalizedMessage(), null));
+                        profile.setValue(RemoteResource.<MoodleProfile>error(context.getString(R.string.moodle_error_cant_get_profil), null));
                     }
 
                     @Override
@@ -164,7 +169,8 @@ public class MoodleRepository {
                     @Override
                     public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
                         if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
-                            profile.setValue(RemoteResource.<MoodleProfile>error("Impossible d'obtenir le jeton", null));
+                            String errorMessage = moodleTokenRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_token) : moodleTokenRemoteResource.message;
+                            profile.setValue(RemoteResource.<MoodleProfile>error(errorMessage, null));
                             token.removeObserver(this);
                         } else if (moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
                             getProfile();
@@ -189,7 +195,9 @@ public class MoodleRepository {
 
                     @Override
                     public MoodleCourses loadDataFromNetwork() throws Exception {
-                        String url = context.getString(R.string.moodle_api_enrol_get_users_courses, ApplicationManager.userCredentials.getMoodleToken(), String.valueOf(remoteProfile.data.getUserId()));
+                        String url = context.getString(R.string.moodle_api_enrol_get_users_courses,
+                                ApplicationManager.userCredentials.getMoodleToken(),
+                                String.valueOf(remoteProfile.data.getUserId()));
                         return getRestTemplate().getForObject(url, MoodleCourses.class);
                     }
                 };
@@ -210,7 +218,8 @@ public class MoodleRepository {
                     @Override
                     public void onChanged(@Nullable RemoteResource<MoodleProfile> moodleProfileRemoteResource) {
                         if (moodleProfileRemoteResource == null || moodleProfileRemoteResource.status == RemoteResource.ERROR) {
-                            courses.setValue(RemoteResource.<MoodleCourses>error("Impossible d'obtenir le profil", null));
+                            String errorMessage = moodleProfileRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_profil) : moodleProfileRemoteResource.message;
+                            courses.setValue(RemoteResource.<MoodleCourses>error(errorMessage, null));
                             profile.removeObserver(this);
                         } else if (moodleProfileRemoteResource.status == RemoteResource.SUCCESS) {
                             getCourses();
@@ -248,7 +257,8 @@ public class MoodleRepository {
                 @Override
                 public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
                     if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
-                        submission.setValue(RemoteResource.<MoodleAssignmentSubmission>error("Impossible d'obtenir le jeton", null));
+                        String errorMessage = moodleTokenRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_token) : moodleTokenRemoteResource.message;
+                        submission.setValue(RemoteResource.<MoodleAssignmentSubmission>error(errorMessage, null));
                         token.removeObserver(this);
                     } else if (moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
                         getProfile();

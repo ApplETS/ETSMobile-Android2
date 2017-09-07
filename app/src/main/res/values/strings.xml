@@ -84,6 +84,10 @@
     <string name="moodle_assignment_grader">Évaluateur : %s</string>
     <string name="moodle_assignment_comments">Commentaires : %s</string>
     <string name="moodle_assignment_none">Aucun devoir</string>
+    <string name="moodle_error_connection_failure">Échec de la connexion</string>
+    <string name="moodle_error_cant_get_token">Échec de l\'obtention du jeton</string>
+    <string name="moodle_error_cant_get_profil">Échec de l\'obtention du profil</string>
+    <string name="moodle_error_cant_get_courses">Échec de l\'obtention des cours</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, la radio étudiante de l\'ÉTS.</string>

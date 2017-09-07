@@ -124,7 +124,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                         requestInProgress = false;
                         if (loadingView.isShown()) {
                             loadingView.hideProgessBar();
-                            loadingView.setMessageError(getString(R.string.error_JSON_PARSING));
+                            loadingView.setMessageError(getString(R.string.error_JSON_PARSING)
+                                    + "\n" + listRemoteResource.message);
                         }
                     } else if (listRemoteResource.status == RemoteResource.LOADING) {
                         requestInProgress = true;
@@ -286,7 +287,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
-                    Toast toast = Toast.makeText(MoodleAssignmentsActivity.this, getString(R.string.error_JSON_PARSING), Toast.LENGTH_SHORT);
+                    String errorMsg = moodleAssignmentFeedbackRemoteResource == null ? getString(R.string.error_JSON_PARSING) : moodleAssignmentFeedbackRemoteResource.message;
+                    Toast toast = Toast.makeText(MoodleAssignmentsActivity.this, errorMsg, Toast.LENGTH_SHORT);
                     toast.show();
                 } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.SUCCESS) {
                     MoodleAssignmentSubmission submission = moodleAssignmentFeedbackRemoteResource.data;

@@ -85,7 +85,8 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
                     } else if (moodleCoursesRemoteResource.status == RemoteResource.ERROR) {
                         loadingView.hideProgessBar();
                         if (loadingView.isShown()) {
-                            loadingView.setMessageError(getString(R.string.error_JSON_PARSING));
+                            loadingView.setMessageError(getString(R.string.error_JSON_PARSING)
+                                    + "\n" + moodleCoursesRemoteResource.message);
                         }
                     } else if (moodleCoursesRemoteResource.status == RemoteResource.LOADING) {
                         loadingView.showLoadingView();
