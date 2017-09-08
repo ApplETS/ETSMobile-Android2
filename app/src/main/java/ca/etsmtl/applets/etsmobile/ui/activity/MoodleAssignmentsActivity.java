@@ -128,15 +128,14 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                         refreshUI();
                     } else if (listRemoteResource.status == RemoteResource.ERROR) {
                         requestInProgress = false;
-                        if (loadingView.isShown()) {
-                            loadingView.hideProgessBar();
-                            loadingView.setMessageError(getString(R.string.error_JSON_PARSING)
-                                    + "\n" + listRemoteResource.message);
-                        }
+                        loadingView.hideProgessBar();
+                        loadingView.setMessageError(getString(R.string.error_JSON_PARSING)
+                                + "\n" + listRemoteResource.message);
                     } else if (listRemoteResource.status == RemoteResource.LOADING) {
                         requestInProgress = true;
                     }
                 }
+
             }
         };
 

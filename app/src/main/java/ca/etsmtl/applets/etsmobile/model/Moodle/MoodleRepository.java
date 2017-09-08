@@ -42,14 +42,13 @@ public class MoodleRepository {
     public MoodleRepository(Application application) {
         this.context = application;
         dataManager = DataManager.getInstance(context);
-
-        // The token is obtained at the beginning because every request needs it.
-        getToken();
     }
 
     private LiveData<RemoteResource<MoodleToken>> getToken() {
 
-        if (context != null && token.getValue() == null) {
+        boolean tokenReady = token.getValue() != null && token.getValue().status != RemoteResource.ERROR;
+
+        if (context != null && !tokenReady) {
             token.setValue(RemoteResource.<MoodleToken>loading(null));
 
             SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
@@ -108,7 +107,7 @@ public class MoodleRepository {
                 }
             });
         } else {
-            token.observeForever(new Observer<RemoteResource<MoodleToken>>() {
+            getToken().observeForever(new Observer<RemoteResource<MoodleToken>>() {
                 @Override
                 public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
                     if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
@@ -193,7 +192,7 @@ public class MoodleRepository {
                     }
                 });
             } else {
-                token.observeForever(new Observer<RemoteResource<MoodleToken>>() {
+                getToken().observeForever(new Observer<RemoteResource<MoodleToken>>() {
                     @Override
                     public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
                         if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
@@ -242,7 +241,7 @@ public class MoodleRepository {
                     }
                 });
             } else {
-                profile.observeForever(new Observer<RemoteResource<MoodleProfile>>() {
+                getProfile().observeForever(new Observer<RemoteResource<MoodleProfile>>() {
                     @Override
                     public void onChanged(@Nullable RemoteResource<MoodleProfile> moodleProfileRemoteResource) {
                         if (moodleProfileRemoteResource == null || moodleProfileRemoteResource.status == RemoteResource.ERROR) {
@@ -255,7 +254,6 @@ public class MoodleRepository {
                         }
                     }
                 });
-                getProfile();
             }
         }
 
@@ -281,7 +279,7 @@ public class MoodleRepository {
                 }
             });
         } else {
-            token.observeForever(new Observer<RemoteResource<MoodleToken>>() {
+            getToken().observeForever(new Observer<RemoteResource<MoodleToken>>() {
                 @Override
                 public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
                     if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {

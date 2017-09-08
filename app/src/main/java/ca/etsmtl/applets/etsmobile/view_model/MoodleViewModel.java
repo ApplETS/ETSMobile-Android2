@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,6 +27,7 @@ import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 
 public class MoodleViewModel extends AndroidViewModel {
 
+    private static final String TAG = "MoodleViewModel";
     private static final String MOODLE_PREFS = "MoodlePrefs";
     private static final String DISPLAY_PAST_ASSIGNMENTS_PREF = "DisplayPastAssignmentPref";
     public static final int SORT_BY_DATE = 0;
@@ -45,11 +47,13 @@ public class MoodleViewModel extends AndroidViewModel {
     public MoodleViewModel(Application application, MoodleRepository moodleRepository) {
         super(application);
 
+        Log.d(TAG, "New instance of MoodleViewModel");
+
         this.repository = moodleRepository;
     }
 
     public LiveData<RemoteResource<MoodleProfile>> getProfile() {
-        if (profile == null) {
+        if (profile == null || profile.getValue() == null || profile.getValue().data == null) {
             this.profile = repository.getProfile();
         }
 
@@ -57,7 +61,8 @@ public class MoodleViewModel extends AndroidViewModel {
     }
 
     public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses() {
-        if (assignmentCourses == null) {
+        if (assignmentCourses == null || assignmentCourses.getValue() == null
+                || assignmentCourses.getValue().data == null) {
             this.assignmentCourses = repository.getAssignmentCourses();
         }
 
@@ -65,7 +70,7 @@ public class MoodleViewModel extends AndroidViewModel {
     }
 
     public LiveData<RemoteResource<MoodleCourses>> getCourses() {
-        if (courses == null)
+        if (courses == null || courses.getValue() == null || courses.getValue().data == null)
             this.courses = repository.getCourses();
 
         return courses;
