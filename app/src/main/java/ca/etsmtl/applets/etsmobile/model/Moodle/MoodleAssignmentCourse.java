@@ -18,8 +18,16 @@ public class MoodleAssignmentCourse {
     @SerializedName("assignments")
     private List<MoodleAssignment> assignments;
 
+    public int getId() {
+        return id;
+    }
+
     public String getFullName() {
         return fullName;
+    }
+
+    public String getShortName() {
+        return shortName;
     }
 
     public List<MoodleAssignment> getAssignments() {

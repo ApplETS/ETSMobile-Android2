@@ -1,6 +1,8 @@
 package ca.etsmtl.applets.etsmobile.model.Moodle;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by gnut3ll4 on 10/13/14.
@@ -14,7 +16,11 @@ public class MoodleCourse {
     private int id;
     private String shortname;
     private String fullname;
+    @JsonProperty("enrolledusercount")
+    @SerializedName("enrolledusercount")
     private int enrolledUserCount;
+    @JsonProperty("idnumber")
+    @SerializedName("idnumber")
     private String idNumber;
     private int visible;
 
