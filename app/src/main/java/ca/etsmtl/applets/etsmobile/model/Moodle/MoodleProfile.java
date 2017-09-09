@@ -1,15 +1,11 @@
 package ca.etsmtl.applets.etsmobile.model.Moodle;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by gnut3ll4 on 10/13/14.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class MoodleProfile {
-
-
 
     private String sitename;
     private String username;
@@ -18,23 +14,18 @@ public class MoodleProfile {
     private String fullname;
     private String lang;
 
-    @JsonProperty("userid")
+    @SerializedName("userid")
     private int userId;
 
-    @JsonProperty("siteurl")
+    @SerializedName("siteurl")
     private String siteUrl;
 
-    @JsonProperty("userpictureurl")
+    @SerializedName("userpictureurl")
     private String userPictureUrl;
 
     private String exception;
     private String errorcode;
     private String message;
-
-    public MoodleProfile() {
-
-    }
-
 
     public String getSitename() {
         return sitename;

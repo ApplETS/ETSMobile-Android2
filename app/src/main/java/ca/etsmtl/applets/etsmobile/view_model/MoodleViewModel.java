@@ -153,7 +153,7 @@ public class MoodleViewModel extends AndroidViewModel {
      *
      * @return liste de cours filtrés
      */
-    public LiveData<List<MoodleAssignmentCourse>> filterCourses() {
+    public LiveData<List<MoodleAssignmentCourse>> filterAssignmentCourses() {
         List<MoodleAssignmentCourse> filteredCourses = new ArrayList<>();
 
         if (assignmentCourses.getValue() != null && this.assignmentCourses.getValue().data != null) {

@@ -233,7 +233,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
             List<String> headers = new ArrayList<>();
             HashMap<String, List<MoodleAssignment>> childs = new HashMap<>();
 
-            filteredAssignmentsCourses = moodleViewModel.filterCourses().getValue();
+            filteredAssignmentsCourses = moodleViewModel.filterAssignmentCourses().getValue();
 
             Comparator<MoodleAssignment> currentComparator = moodleViewModel.getAssignmentsSortComparator();
 

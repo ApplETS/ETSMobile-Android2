@@ -154,14 +154,19 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding"
-                    android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}">
+                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
+
+                    <ca.etsmtl.applets.etsmobile.views.LoadingView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.VISIBLE : View.GONE}" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:src="@{selectedAssignmentLastAttempt.submitted ? @drawable/ic_assignment_turned_in_black_24dp : @drawable/ic_assignment_black_24dp}"
-                        android:tint="@{selectedAssignmentLastAttempt.submitted ? @color/success_color : @color/failure_color}" />
+                        android:tint="@{selectedAssignmentLastAttempt.submitted ? @color/success_color : @color/failure_color}"
+                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}" />
 
                     <TextView
                         android:layout_width="fill_parent"
@@ -169,7 +174,8 @@
                         android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
                         android:text='@{selectedAssignmentLastAttempt.submitted ? @string/moodle_assignment_status_submitted : @string/moodle_assignment_status_not_submitted}'
                         android:textColor="@{selectedAssignmentLastAttempt.submitted ? @color/success_color : @color/failure_color}"
-                        android:textSize="@dimen/single_line_list_item_font_size" />
+                        android:textSize="@dimen/single_line_list_item_font_size"
+                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -179,20 +185,26 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding"
-                    android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}">
+                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
+
+                    <ca.etsmtl.applets.etsmobile.views.LoadingView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.VISIBLE : View.GONE}" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_ico_notes"
-                        android:tint="@color/black" />
+                        android:tint="@color/black"
+                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}">
 
                         <TextView
                             android:layout_width="fill_parent"

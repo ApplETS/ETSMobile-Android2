@@ -5,24 +5,22 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
-import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import java.util.List;
 
 import javax.inject.Singleton;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.http.MoodleAssignmentCoursesRequest;
-import ca.etsmtl.applets.etsmobile.http.MoodleAssignmentSubmissionRequest;
+import ca.etsmtl.applets.etsmobile.http.MoodleWebService;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Sonphil on 31-08-17.
@@ -33,15 +31,15 @@ public class MoodleRepository {
     private static String TAG = "MoodleRepository";
 
     private Context context;
-    private DataManager dataManager;
+    private MoodleWebService moodleWebService;
     private MutableLiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses = new MutableLiveData<>();
     private MutableLiveData<RemoteResource<MoodleToken>> token = new MutableLiveData<>();
     private MutableLiveData<RemoteResource<MoodleProfile>> profile = new MutableLiveData<>();
     private MutableLiveData<RemoteResource<MoodleCourses>> courses = new MutableLiveData<>();
 
-    public MoodleRepository(Application application) {
+    public MoodleRepository(Application application, MoodleWebService moodleWebService) {
         this.context = application;
-        dataManager = DataManager.getInstance(context);
+        this.moodleWebService = moodleWebService;
     }
 
     private LiveData<RemoteResource<MoodleToken>> getToken() {
@@ -51,38 +49,30 @@ public class MoodleRepository {
         if (context != null && !tokenReady) {
             token.setValue(RemoteResource.<MoodleToken>loading(null));
 
-            SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
-
+            moodleWebService.getToken(ApplicationManager.userCredentials.getUsername(), ApplicationManager.userCredentials.getPassword()).enqueue(new Callback<MoodleToken>() {
                 @Override
-                public MoodleToken loadDataFromNetwork() throws Exception {
-                    String url = context.getString(R.string.moodle_api_get_token,
-                            ApplicationManager.userCredentials.getUsername(),
-                            ApplicationManager.userCredentials.getPassword());
+                public void onResponse(@NonNull Call<MoodleToken> call, @NonNull Response<MoodleToken> response) {
+                    if (response.isSuccessful()) {
+                        MoodleToken moodleToken = response.body();
 
-                    return getRestTemplate().getForObject(url, MoodleToken.class);
-                }
-            };
+                        SecurePreferences securePreferences = new SecurePreferences(context);
+                        securePreferences.edit().putString(UserCredentials.MOODLE_TOKEN, moodleToken.getToken()).apply();
 
-            dataManager.sendRequest(request, new RequestListener<Object>() {
-                @Override
-                public void onRequestFailure(SpiceException spiceException) {
-                    token.setValue(RemoteResource.<MoodleToken>error(spiceException.getLocalizedMessage(), null));
-                }
+                        ApplicationManager.userCredentials.setMoodleToken(moodleToken.getToken());
 
-                @Override
-                public void onRequestSuccess(Object o) {
-                    MoodleToken moodleToken = (MoodleToken) o;
+                        if (moodleToken.getToken().equals("")) {
+                            token.setValue(RemoteResource.<MoodleToken>error(context.getString(R.string.moodle_error_cant_get_token) + "\n" + response.message(), null));
+                        }
 
-                    SecurePreferences securePreferences = new SecurePreferences(context);
-                    securePreferences.edit().putString(UserCredentials.MOODLE_TOKEN, moodleToken.getToken()).apply();
-
-                    ApplicationManager.userCredentials.setMoodleToken(moodleToken.getToken());
-
-                    if (moodleToken.getToken().equals("")) {
-                        onRequestFailure(new SpiceException(context.getString(R.string.moodle_error_connection_failure)));
+                        token.setValue(RemoteResource.success(moodleToken));
+                    } else {
+                        token.setValue(RemoteResource.<MoodleToken>error(context.getString(R.string.moodle_error_cant_get_token) + "\n" + response.message(), null));
                     }
+                }
 
-                    token.setValue(RemoteResource.success((MoodleToken) o));
+                @Override
+                public void onFailure(Call<MoodleToken> call, Throwable t) {
+                    token.setValue(RemoteResource.<MoodleToken>error(context.getString(R.string.moodle_error_connection_failure), null));
                 }
             });
         }
@@ -94,16 +84,24 @@ public class MoodleRepository {
         RemoteResource<MoodleToken> remoteToken = token.getValue();
 
         if (remoteToken != null && remoteToken.data != null && remoteToken.status != RemoteResource.LOADING) {
-            dataManager.sendRequest(new MoodleAssignmentCoursesRequest(context, coursesIds, ApplicationManager.userCredentials.getMoodleToken()), new RequestListener<Object>() {
+            assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>loading(null));
+
+            moodleWebService.getAssignmentCourses(ApplicationManager.userCredentials.getMoodleToken(), coursesIds).enqueue(new Callback<MoodleAssignmentCourses>() {
                 @Override
-                public void onRequestFailure(SpiceException spiceException) {
-                    assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(spiceException.getLocalizedMessage(), null));
+                public void onResponse(@NonNull Call<MoodleAssignmentCourses> call, @NonNull Response<MoodleAssignmentCourses> response) {
+                    MoodleAssignmentCourses moodleAssignmentCourses = response.body();
+
+                    if (response.isSuccessful() && moodleAssignmentCourses != null) {
+                        List<MoodleAssignmentCourse> courses = moodleAssignmentCourses.getCourses();
+                        assignmentCourses.setValue(RemoteResource.success(courses));
+                    } else {
+                        assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(response.message(), null));
+                    }
                 }
 
                 @Override
-                public void onRequestSuccess(Object o) {
-                    List<MoodleAssignmentCourse> courses = ((MoodleAssignmentCourses) o).getCourses();
-                    assignmentCourses.setValue(RemoteResource.success(courses));
+                public void onFailure(Call<MoodleAssignmentCourses> call, Throwable t) {
+                    assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(context.getString(R.string.moodle_error_connection_failure), null));
                 }
             });
         } else {
@@ -163,32 +161,23 @@ public class MoodleRepository {
         if (profile.getValue() == null || profile.getValue().status != RemoteResource.SUCCESS) {
             profile.setValue(RemoteResource.<MoodleProfile>loading(null));
 
-            RemoteResource<MoodleToken> remoteToken = token.getValue();
+            final RemoteResource<MoodleToken> remoteToken = token.getValue();
 
             if (remoteToken != null && remoteToken.data != null && remoteToken.status != RemoteResource.LOADING) {
-                SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
-
+                moodleWebService.getProfile(ApplicationManager.userCredentials.getMoodleToken()).enqueue(new Callback<MoodleProfile>() {
                     @Override
-                    public MoodleProfile loadDataFromNetwork() throws Exception {
-                        String url = context.getString(R.string.moodle_api_get_siteinfo, ApplicationManager.userCredentials.getMoodleToken());
+                    public void onResponse(@NonNull Call<MoodleProfile> call, @NonNull Response<MoodleProfile> response) {
+                        MoodleProfile moodleProfile = response.body();
 
-                        return getRestTemplate().getForObject(url, MoodleProfile.class);
-                    }
-                };
-
-                dataManager.sendRequest(request, new RequestListener<Object>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        profile.setValue(RemoteResource.<MoodleProfile>error(context.getString(R.string.moodle_error_cant_get_profil), null));
-                    }
-
-                    @Override
-                    public void onRequestSuccess(Object o) {
-                        MoodleProfile moodleProfile = (MoodleProfile) o;
-                        if (moodleProfile.getErrorcode() != null)
-                            onRequestFailure(new SpiceException(moodleProfile.getException()));
-                        else
+                        if (response.isSuccessful() && moodleProfile != null)
                             profile.setValue(RemoteResource.success(moodleProfile));
+                        else
+                            profile.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_profile) + "\n" + response.message(), moodleProfile));
+                    }
+
+                    @Override
+                    public void onFailure(Call<MoodleProfile> call, Throwable t) {
+                        profile.setValue(RemoteResource.<MoodleProfile>error(context.getString(R.string.moodle_error_connection_failure), null));
                     }
                 });
             } else {
@@ -218,26 +207,20 @@ public class MoodleRepository {
             final RemoteResource<MoodleProfile> remoteProfile = profile.getValue();
 
             if (remoteProfile != null && remoteProfile.data != null && remoteProfile.status != RemoteResource.LOADING) {
-                SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
-
+                moodleWebService.getCourses(ApplicationManager.userCredentials.getMoodleToken(), remoteProfile.data.getUserId()).enqueue(new Callback<MoodleCourses>() {
                     @Override
-                    public MoodleCourses loadDataFromNetwork() throws Exception {
-                        String url = context.getString(R.string.moodle_api_enrol_get_users_courses,
-                                ApplicationManager.userCredentials.getMoodleToken(),
-                                String.valueOf(remoteProfile.data.getUserId()));
-                        return getRestTemplate().getForObject(url, MoodleCourses.class);
-                    }
-                };
+                    public void onResponse(@NonNull Call<MoodleCourses> call, @NonNull Response<MoodleCourses> response) {
+                        MoodleCourses moodleCourses = response.body();
 
-                dataManager.sendRequest(request, new RequestListener<Object>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        courses.setValue(RemoteResource.<MoodleCourses>error(spiceException.getLocalizedMessage(), null));
+                        if (response.isSuccessful() && moodleCourses != null)
+                            courses.setValue(RemoteResource.success(moodleCourses));
+                        else
+                            courses.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_courses) + "\n" + response.message(), moodleCourses));
                     }
 
                     @Override
-                    public void onRequestSuccess(Object o) {
-                        courses.setValue(RemoteResource.success((MoodleCourses) o));
+                    public void onFailure(Call<MoodleCourses> call, Throwable t) {
+                        courses.setValue(RemoteResource.<MoodleCourses>error(context.getString(R.string.moodle_error_connection_failure), null));
                     }
                 });
             } else {
@@ -245,7 +228,7 @@ public class MoodleRepository {
                     @Override
                     public void onChanged(@Nullable RemoteResource<MoodleProfile> moodleProfileRemoteResource) {
                         if (moodleProfileRemoteResource == null || moodleProfileRemoteResource.status == RemoteResource.ERROR) {
-                            String errorMessage = moodleProfileRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_profil) : moodleProfileRemoteResource.message;
+                            String errorMessage = moodleProfileRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_profile) : moodleProfileRemoteResource.message;
                             courses.setValue(RemoteResource.<MoodleCourses>error(errorMessage, null));
                             profile.removeObserver(this);
                         } else if (moodleProfileRemoteResource.status == RemoteResource.SUCCESS) {
@@ -267,15 +250,21 @@ public class MoodleRepository {
         RemoteResource<MoodleToken> remoteToken = token.getValue();
 
         if (remoteToken != null && remoteToken.data != null && remoteToken.status != RemoteResource.LOADING) {
-            dataManager.sendRequest(new MoodleAssignmentSubmissionRequest(context, ApplicationManager.userCredentials.getMoodleToken(), assignId), new RequestListener<Object>() {
+            moodleWebService.getAssignmentSubmission(ApplicationManager.userCredentials.getMoodleToken(), assignId).enqueue(new Callback<MoodleAssignmentSubmission>() {
                 @Override
-                public void onRequestFailure(SpiceException spiceException) {
-                    submission.setValue(RemoteResource.<MoodleAssignmentSubmission>error(spiceException.getLocalizedMessage(), null));
+                public void onResponse(@NonNull Call<MoodleAssignmentSubmission> call, @NonNull Response<MoodleAssignmentSubmission> response) {
+                    MoodleAssignmentSubmission assignmentSubmission = response.body();
+
+                    if (response.isSuccessful() && assignmentSubmission != null) {
+                        submission.setValue(RemoteResource.success(assignmentSubmission));
+                    } else {
+                        submission.setValue(RemoteResource.error(response.message(), assignmentSubmission));
+                    }
                 }
 
                 @Override
-                public void onRequestSuccess(Object o) {
-                    submission.setValue(RemoteResource.success((MoodleAssignmentSubmission) o));
+                public void onFailure(Call<MoodleAssignmentSubmission> call, Throwable t) {
+                    submission.setValue(RemoteResource.<MoodleAssignmentSubmission>error(context.getString(R.string.moddle_error_connection_failure), null));
                 }
             });
         } else {

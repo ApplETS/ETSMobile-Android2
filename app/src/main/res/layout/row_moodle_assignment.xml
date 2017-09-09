@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
-        <variable name="assignment" type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment"/>
+
+        <variable
+            name="assignment"
+            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment" />
     </data>
 
     <LinearLayout
-        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="10dp">
+
         <TextView
             android:id="@+id/assignment_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
+            android:layout_weight="1"
             android:text="@{assignment.name}"
-            tools:text="Nom du cours"
-            android:layout_weight="1"/>
+            android:textStyle="bold"
+            tools:text="Nom du cours" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{assignment.dueDateObj.toLocaleString()}" />
+            android:text="@{assignment.dueDateObj.toLocaleString()}"
+            tools:text="Date" />
     </LinearLayout>
 </layout>

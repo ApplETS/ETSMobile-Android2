@@ -1,7 +1,6 @@
 package ca.etsmtl.applets.etsmobile.model.Moodle;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
@@ -11,42 +10,35 @@ import ca.etsmtl.applets.etsmobile.util.Utility;
  * Created by Sonphil on 12-08-17.
  */
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class MoodleAssignment {
-    @JsonProperty("id")
     private int id;
-    @JsonProperty("cmid")
     private int cmid;
-    @JsonProperty("course")
     private int course;
-    @JsonProperty("name")
     private String name;
-    @JsonProperty("nosubmissions")
+    @SerializedName("nosubmissions")
     private int noSubmissions;
-    @JsonProperty("submissiondrafts")
+    @SerializedName("submissiondrafts")
     private int submissionDrafts;
-    @JsonProperty("duedate")
+    @SerializedName("duedate")
     private long dueDate;
     private Date dueDateObj;
-    @JsonProperty("allowsubmissionsfromdate")
+    @SerializedName("allowsubmissionsfromdate")
     private int allowSubmissionsFromDate;
-    @JsonProperty("grade")
     private int grade;
-    @JsonProperty("timemodified")
+    @SerializedName("timemodified")
     private int timeModified;
-    @JsonProperty("completionsubmit")
+    @SerializedName("completionsubmit")
     private int completionSubmit;
-    @JsonProperty("cutofdate")
-    private int cutOffDate;
-    @JsonProperty("teamsubmission")
+    @SerializedName("cutofdate")
+    private int cutOfDate;
+    @SerializedName("teamsubmission")
     private int teamSubmission;
-    @JsonProperty("requireallteammemberssubmit")
+    @SerializedName("requireallteammemberssubmit")
     private int requireAllTeamMembersSubmit;
-    @JsonProperty("teamsubmissiongroupingid")
+    @SerializedName("teamsubmissiongroupingid")
     private int teamSubmissionGroupingId;
-    @JsonProperty("maxattempts")
+    @SerializedName("maxattempts")
     private int maxAttempts;
-    @JsonProperty("intro")
     private String intro;
 
     public int getId() {
