@@ -6,7 +6,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -46,8 +45,6 @@ public class MoodleViewModel extends AndroidViewModel {
 
     public MoodleViewModel(Application application, MoodleRepository moodleRepository) {
         super(application);
-
-        Log.d(TAG, "New instance of MoodleViewModel");
 
         this.repository = moodleRepository;
     }

@@ -43,6 +43,8 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 
 /**
  * Created by Sonphil on 09-09-17.
@@ -112,7 +114,7 @@ public class MoodleWebServiceTest {
     @Test
     public void getMoodleProfile() throws IOException, InterruptedException {
         enqueueResponse("profile.json");
-        MoodleProfile profile = (MoodleProfile) getValue(service.getProfile("1234"));
+        MoodleProfile profile = (MoodleProfile) getValue(service.getProfile(anyString()));
         assertThat(profile, notNullValue());
         assertEquals(profile.getUsername(), "am12345");
         assertEquals(profile.getFirstname(), "Bruce");
@@ -126,7 +128,7 @@ public class MoodleWebServiceTest {
     @Test
     public void getMoodleCourses() throws IOException, InterruptedException {
         enqueueResponse("courses.json");
-        MoodleCourses courses = (MoodleCourses) getValue(service.getCourses("1234", 1234));
+        MoodleCourses courses = (MoodleCourses) getValue(service.getCourses(anyString(), anyInt()));
         assertThat(courses, notNullValue());
         assertEquals(courses.size(), 20);
         MoodleCourse course = courses.get(0);
@@ -139,7 +141,7 @@ public class MoodleWebServiceTest {
     @Test
     public void getMoodleAssignmentsCourses() throws IOException, InterruptedException {
         enqueueResponse("assignments.json");
-        MoodleAssignmentCourses courses = (MoodleAssignmentCourses) getValue(service.getAssignmentCourses("1234", new int[1]));
+        MoodleAssignmentCourses courses = (MoodleAssignmentCourses) getValue(service.getAssignmentCourses(anyString(), new int[1]));
         assertThat(courses, notNullValue());
         assertEquals(courses.getCourses().size(), 3);
         MoodleAssignmentCourse course = courses.getCourses().get(2);
@@ -164,7 +166,7 @@ public class MoodleWebServiceTest {
     @Test
     public void getMoodleAssignmentSubmission() throws IOException, InterruptedException {
         enqueueResponse("assignment_submission.json");
-        MoodleAssignmentSubmission moodleSubmission = (MoodleAssignmentSubmission) getValue(service.getAssignmentSubmission("1234", 0));
+        MoodleAssignmentSubmission moodleSubmission = (MoodleAssignmentSubmission) getValue(service.getAssignmentSubmission(anyString(), anyInt()));
         assertThat(moodleSubmission, notNullValue());
 
         MoodleAssignmentLastAttempt lastAttempt = moodleSubmission.getLastAttempt();
