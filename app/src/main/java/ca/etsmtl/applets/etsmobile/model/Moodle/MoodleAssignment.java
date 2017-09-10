@@ -63,6 +63,10 @@ public class MoodleAssignment {
         return date;
     }
 
+    public void setDueDate(long dueDate) {
+        this.dueDate = dueDate;
+    }
+
     public String getIntro() {
         return intro;
     }

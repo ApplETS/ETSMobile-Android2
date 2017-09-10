@@ -74,6 +74,13 @@ public class Utility {
         return simpleDateFormat.format(date);
     }
 
+    /**
+     * Conversion d'une heure Unix en objet {@link Date}
+     *
+     * @param unixDate heure Unix (nombre de secondes écoulées depuis le 1er janvier 1970 00:00:00
+     *                 UTC)
+     * @return objet {@link Date} représentant l'heure unix
+     */
     public static Date getDateTimeFromUnixTime(long unixDate) {
         return new Date(TimeUnit.SECONDS.toMillis(unixDate));
     }

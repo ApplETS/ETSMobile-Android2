@@ -18,6 +18,14 @@ public class MoodleAssignmentCourse {
     @SerializedName("assignments")
     private List<MoodleAssignment> assignments;
 
+    public MoodleAssignmentCourse(int id, String fullName, String shortName, int timeModified, List<MoodleAssignment> assignments) {
+        this.id = id;
+        this.fullName = fullName;
+        this.shortName = shortName;
+        this.timeModified = timeModified;
+        this.assignments = assignments;
+    }
+
     public int getId() {
         return id;
     }

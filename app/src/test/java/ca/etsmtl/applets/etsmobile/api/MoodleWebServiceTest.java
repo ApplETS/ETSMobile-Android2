@@ -43,8 +43,6 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 
 /**
  * Created by Sonphil on 09-09-17.
@@ -114,47 +112,47 @@ public class MoodleWebServiceTest {
     @Test
     public void getMoodleProfile() throws IOException, InterruptedException {
         enqueueResponse("profile.json");
-        MoodleProfile profile = (MoodleProfile) getValue(service.getProfile(anyString()));
+        MoodleProfile profile = (MoodleProfile) getValue(service.getProfile("12345"));
         assertThat(profile, notNullValue());
-        assertEquals(profile.getUsername(), "am12345");
-        assertEquals(profile.getFirstname(), "Bruce");
-        assertEquals(profile.getLastname(), "Wayne");
-        assertEquals(profile.getFullname(), "Bruce Wayne");
-        assertEquals(profile.getLang(), "fr_ca");
-        assertEquals(profile.getUserId(), 12345);
-        assertEquals(profile.getUserPictureUrl(), "https://ena.etsmtl.ca/theme/image.php/boost_ets/core/1234/u/f1");
+        assertEquals("am12345", profile.getUsername());
+        assertEquals("Bruce", profile.getFirstname());
+        assertEquals("Wayne", profile.getLastname());
+        assertEquals("Bruce Wayne", profile.getFullname());
+        assertEquals("fr_ca", profile.getLang());
+        assertEquals(12345, profile.getUserId());
+        assertEquals("https://ena.etsmtl.ca/theme/image.php/boost_ets/core/1234/u/f1", profile.getUserPictureUrl());
     }
 
     @Test
     public void getMoodleCourses() throws IOException, InterruptedException {
         enqueueResponse("courses.json");
-        MoodleCourses courses = (MoodleCourses) getValue(service.getCourses(anyString(), anyInt()));
+        MoodleCourses courses = (MoodleCourses) getValue(service.getCourses("1234", 1234));
         assertThat(courses, notNullValue());
-        assertEquals(courses.size(), 20);
+        assertEquals(20, courses.size());
         MoodleCourse course = courses.get(0);
-        assertEquals(course.getId(), 1705);
-        assertEquals(course.getShortname(), "PRE010-Références");
-        assertEquals(course.getFullname(), "PRE010 - volet développement professionnel - RÉFÉRENCES");
-        assertEquals(course.getIdNumber(), "PRE010-References");
+        assertEquals(1705, course.getId());
+        assertEquals("PRE010-Références", course.getShortname());
+        assertEquals("PRE010 - volet développement professionnel - RÉFÉRENCES", course.getFullname());
+        assertEquals("PRE010-References", course.getIdNumber());
     }
 
     @Test
     public void getMoodleAssignmentsCourses() throws IOException, InterruptedException {
         enqueueResponse("assignments.json");
-        MoodleAssignmentCourses courses = (MoodleAssignmentCourses) getValue(service.getAssignmentCourses(anyString(), new int[1]));
+        MoodleAssignmentCourses courses = (MoodleAssignmentCourses) getValue(service.getAssignmentCourses("1234", new int[1]));
         assertThat(courses, notNullValue());
-        assertEquals(courses.getCourses().size(), 3);
+        assertEquals(3, courses.getCourses().size());
         MoodleAssignmentCourse course = courses.getCourses().get(2);
-        assertEquals(course.getId(), 5599);
+        assertEquals(5599, course.getId());
         assertThat(course.getFullName(), is("GTI350-01-02 Conception et évaluation des interfaces utilisateurs (H2017)"));
         assertThat(course.getShortName(), is("S20171-GTI350-01-02"));
         List<MoodleAssignment> assignments = course.getAssignments();
         assertThat(assignments, notNullValue());
-        assertEquals(assignments.size(), 6);
+        assertEquals(6, assignments.size());
         MoodleAssignment assignment = assignments.get(0);
         assertThat(assignment, notNullValue());
-        assertEquals(assignment.getId(), 11356);
-        assertEquals(assignment.getCmid(), 262197);
+        assertEquals(11356, assignment.getId());
+        assertEquals(262197, assignment.getCmid());
         assertThat(assignment.getName(), is("Remise Laboratoire 1 (scoreboard snowboard)"));
         assertThat(assignment.getGrade(), is(100));
         Date dueDate = assignment.getDueDateObj();
@@ -166,7 +164,7 @@ public class MoodleWebServiceTest {
     @Test
     public void getMoodleAssignmentSubmission() throws IOException, InterruptedException {
         enqueueResponse("assignment_submission.json");
-        MoodleAssignmentSubmission moodleSubmission = (MoodleAssignmentSubmission) getValue(service.getAssignmentSubmission(anyString(), anyInt()));
+        MoodleAssignmentSubmission moodleSubmission = (MoodleAssignmentSubmission) getValue(service.getAssignmentSubmission("1234", 1234));
         assertThat(moodleSubmission, notNullValue());
 
         MoodleAssignmentLastAttempt lastAttempt = moodleSubmission.getLastAttempt();
