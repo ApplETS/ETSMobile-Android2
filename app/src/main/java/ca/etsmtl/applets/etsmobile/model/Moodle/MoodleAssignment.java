@@ -57,6 +57,11 @@ public class MoodleAssignment {
         return grade;
     }
 
+    /**
+     * Returns a {@link Date} instance representing the due date of the assignment
+     *
+     * @return A {@link Date} instance representing the due date of the assignment
+     */
     public Date getDueDateObj() {
         Date date = Utility.getDateTimeFromUnixTime(dueDate);
 

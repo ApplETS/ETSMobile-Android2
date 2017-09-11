@@ -198,20 +198,27 @@ public class MoodleViewModel extends AndroidViewModel {
         MoodleAssignment selectedAssignment = null;
 
         if (filteredCourses.getValue() != null) {
+            MoodleAssignmentCourse course = filteredCourses.getValue().get(courseIndex);
+
             if (isDisplayPastAssignments()) {
-                selectedAssignment = this.filteredCourses.getValue().get(courseIndex).getAssignments().get(assignmentIndex);
-            } else {
-                int index = 0;
-                for (MoodleAssignment assignment : this.filteredCourses.getValue().get(courseIndex).getAssignments()) {
+                selectedAssignment = course.getAssignments().get(assignmentIndex);
+            } else { // The past assignments are not displayed.
+                int assignmentsListIndex = 0; // Pointer used on the assignments list
+                for (MoodleAssignment assignment : course.getAssignments()) {
                     Date dueDate = assignment.getDueDateObj();
                     Date currentDate = new Date();
                     if (dueDate.before(currentDate))
-                        continue;
-                    else if (index == assignmentIndex) {
+                        continue;  // Skip the assignment because it's not displayed.
+                    else if (assignmentsListIndex == assignmentIndex) {
+                        // The selected assignment has been found.
                         selectedAssignment = assignment;
                         break;
                     } else {
-                        index++;
+                        /*
+                         The current assignment is displayed, but it's not the one the user
+                         selected.
+                          */
+                        assignmentsListIndex++;
                     }
                 }
             }
