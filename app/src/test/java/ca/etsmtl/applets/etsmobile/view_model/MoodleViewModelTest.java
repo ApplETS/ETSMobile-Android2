@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -64,15 +65,23 @@ public class MoodleViewModelTest {
 
     @Test
     public void getProfile() {
+        // Prepare LiveData
         MutableLiveData<RemoteResource<MoodleProfile>> liveData = new MutableLiveData<>();
         when(repository.getProfile()).thenReturn(liveData);
+
+        // Prepare Observer
         Observer<RemoteResource<MoodleProfile>> observer = mock(Observer.class);
         viewModel.getProfile().observeForever(observer);
         verify(observer, never()).onChanged(any(RemoteResource.class));
+
+        // Set a value and check if onChanged was called
         RemoteResource<MoodleProfile> remoteRes = RemoteResource.loading(null);
         liveData.setValue(remoteRes);
         verify(observer).onChanged(remoteRes);
+
         reset(observer);
+
+        // Set another value and check if onChanged was called
         remoteRes = RemoteResource.success(new MoodleProfile());
         liveData.setValue(remoteRes);
         verify(observer).onChanged(remoteRes);
@@ -80,15 +89,23 @@ public class MoodleViewModelTest {
 
     @Test
     public void getAssignmentCourses() {
+        // Prepare LiveData
         MutableLiveData<RemoteResource<List<MoodleAssignmentCourse>>> liveData = new MutableLiveData<>();
         when(repository.getAssignmentCourses()).thenReturn(liveData);
+
+        // Prepare Observer
         Observer<RemoteResource<List<MoodleAssignmentCourse>>> observer = mock(Observer.class);
         viewModel.getAssignmentCourses().observeForever(observer);
         verify(observer, never()).onChanged(any(RemoteResource.class));
+
+        // Set a value and check if onChanged was called
         RemoteResource<List<MoodleAssignmentCourse>> remoteRes = RemoteResource.loading(null);
         liveData.setValue(remoteRes);
         verify(observer).onChanged(remoteRes);
+
         reset(observer);
+
+        // Set another value and check if onChanged was called
         List<MoodleAssignmentCourse> list = new ArrayList<>();
         remoteRes = RemoteResource.success(list);
         liveData.setValue(remoteRes);
@@ -99,21 +116,33 @@ public class MoodleViewModelTest {
     public void filterAssignmentCoursesNoAssignments() {
         createMockSharedPreferences();
 
-        List<MoodleAssignmentCourse> courses = new ArrayList<>();
+        // Prepare LiveData which will contain the courses
         MutableLiveData<RemoteResource<List<MoodleAssignmentCourse>>> liveData = new MutableLiveData<>();
         when(repository.getAssignmentCourses()).thenReturn(liveData);
+
+        // The view model gets the the live data.
         viewModel.getAssignmentCourses();
+
+        // Set an empty courses list
+        List<MoodleAssignmentCourse> courses = new ArrayList<>();
         liveData.setValue(RemoteResource.success(courses));
         assertEquals(0, viewModel.getAssignmentCourses().getValue().data.size());
         assertEquals(0, viewModel.filterAssignmentCourses().getValue().size());
 
+        // Set up assignments list and an assignment without adding it to the list
         List<MoodleAssignment> assignments = new ArrayList<>();
         MoodleAssignment assignment = new MoodleAssignment();
+        // Set a future date because past assignments are not displayed
         long unixTimeFuture = (TimeUnit.MILLISECONDS.toSeconds(new Date().getTime()) + TimeUnit.DAYS.toSeconds(1));
         assignment.setDueDate(unixTimeFuture);
-        assignments.add(assignment);
+
+        // Add course to courses list
         courses.add(new MoodleAssignmentCourse(0, "", "", 1510358400, assignments));
         assertEquals(1, viewModel.getAssignmentCourses().getValue().data.size());
+        assertEquals(0, viewModel.filterAssignmentCourses().getValue().size());
+
+        // Add assignment to assignments list
+        assignments.add(assignment);
         assertEquals(1, viewModel.filterAssignmentCourses().getValue().size());
     }
 
@@ -164,15 +193,23 @@ public class MoodleViewModelTest {
 
     @Test
     public void getCourses() {
+        // Prepare LiveData containing the courses
         MutableLiveData<RemoteResource<MoodleCourses>> liveData = new MutableLiveData<>();
         when(repository.getCourses()).thenReturn(liveData);
+
+        // Prepare observer
         Observer<RemoteResource<MoodleCourses>> observer = mock(Observer.class);
         viewModel.getCourses().observeForever(observer);
         verify(observer, never()).onChanged(any(RemoteResource.class));
+
+        // Set a value and check if onChanged has been called
         RemoteResource<MoodleCourses> remoteRes = RemoteResource.loading(null);
         liveData.setValue(remoteRes);
         verify(observer).onChanged(remoteRes);
+
         reset(observer);
+
+        // Aet another value and check if onChanged has been called again
         remoteRes = RemoteResource.success(new MoodleCourses());
         liveData.setValue(remoteRes);
         verify(observer).onChanged(remoteRes);
@@ -180,15 +217,23 @@ public class MoodleViewModelTest {
 
     @Test
     public void getAssignmentSubmission() {
+        // Prepare LiveData
         MutableLiveData<RemoteResource<MoodleAssignmentSubmission>> liveData = new MutableLiveData<>();
         when(repository.getAssignmentSubmission(anyInt())).thenReturn(liveData);
+
+        // Prepare Observer
         Observer<RemoteResource<MoodleAssignmentSubmission>> observer = mock(Observer.class);
         viewModel.getAssignmentSubmission(anyInt()).observeForever(observer);
         verify(observer, never()).onChanged(any(RemoteResource.class));
+
+        // Set a value and check if onChanged has been called
         RemoteResource<MoodleAssignmentSubmission> remoteRes = RemoteResource.loading(null);
         liveData.setValue(remoteRes);
         verify(observer).onChanged(remoteRes);
+
         reset(observer);
+
+        // Aet another value and check if onChanged has been called again
         remoteRes = RemoteResource.success(new MoodleAssignmentSubmission());
         liveData.setValue(remoteRes);
         verify(observer).onChanged(remoteRes);
@@ -216,8 +261,11 @@ public class MoodleViewModelTest {
 
     @Test
     public void getDisplayPastAssignments() {
+        // The display past assignments pref is set to false
         createMockSharedPreferences();
+
         assertFalse(viewModel.isDisplayPastAssignments());
+
         when(prefs.getBoolean(eq(DISPLAY_PAST_ASSIGNMENTS_PREF), anyBoolean()))
                 .thenReturn(true);
         assertTrue(viewModel.isDisplayPastAssignments());
@@ -227,37 +275,56 @@ public class MoodleViewModelTest {
     public void setDisplayPastAssignments() {
         createMockSharedPreferences();
 
+        // Test set true
         viewModel.setDisplayPastAssignments(true);
-
-        when(prefs.getBoolean(eq(DISPLAY_PAST_ASSIGNMENTS_PREF), anyBoolean()))
-                .thenReturn(true);
-
+        verify(editor).putBoolean(DISPLAY_PAST_ASSIGNMENTS_PREF, true);
+        when(prefs.getBoolean(eq(DISPLAY_PAST_ASSIGNMENTS_PREF), anyBoolean())).thenReturn(true);
         assertTrue(viewModel.isDisplayPastAssignments());
 
+        // Test set false
+        reset(editor);
         viewModel.setDisplayPastAssignments(false);
-
-        when(prefs.getBoolean(eq(DISPLAY_PAST_ASSIGNMENTS_PREF), anyBoolean()))
-                .thenReturn(false);
-
+        verify(editor).putBoolean(DISPLAY_PAST_ASSIGNMENTS_PREF, false);
+        when(prefs.getBoolean(eq(DISPLAY_PAST_ASSIGNMENTS_PREF), anyBoolean())).thenReturn(false);
         assertFalse(viewModel.isDisplayPastAssignments());
 
     }
 
     @Test
-    public void getSortIndex() {
+    public void getAssignmentsSortIndex() {
         createMockSharedPreferences();
         assertEquals(viewModel.getAssignmentsSortIndex(), MoodleViewModel.SORT_ALPHA);
     }
 
     @Test
-    public void setSortIndex() {
+    public void setAssignmentsSortIndex() {
         createMockSharedPreferences();
 
-        viewModel.setAssignmentsSort(MoodleViewModel.SORT_BY_DATE);
+        // Prepare assignments
+        MoodleAssignment assign1 = new MoodleAssignment();
+        assign1.setName("cca");
+        assign1.setDueDate(TimeUnit.SECONDS.toMillis(1505079000));
 
+        MoodleAssignment assign2 = new MoodleAssignment();
+        assign2.setName("aab");
+        assign2.setDueDate(TimeUnit.SECONDS.toMillis(1507593600));
+
+        // Verify that editor putInt method has been called correctly
+        viewModel.setAssignmentsSort(MoodleViewModel.SORT_BY_DATE);
+        verify(editor).putInt(SORT_ASSIGNMENTS_PREF, MoodleViewModel.SORT_BY_DATE);
+
+        // Test comparator returned to sort by date
         when(prefs.getInt(eq(SORT_ASSIGNMENTS_PREF), anyInt()))
                 .thenReturn(MoodleViewModel.SORT_BY_DATE);
-
         assertEquals(viewModel.getAssignmentsSortIndex(), MoodleViewModel.SORT_BY_DATE);
+        Comparator<MoodleAssignment> comparator = viewModel.getAssignmentsSortComparator();
+        assertTrue(comparator.compare(assign1, assign2) < 0);
+
+        // Test comparator returned to sort alphabetically
+        when(prefs.getInt(eq(SORT_ASSIGNMENTS_PREF), anyInt()))
+                .thenReturn(MoodleViewModel.SORT_ALPHA);
+        assertEquals(viewModel.getAssignmentsSortIndex(), MoodleViewModel.SORT_ALPHA);
+        comparator = viewModel.getAssignmentsSortComparator();
+        assertTrue(comparator.compare(assign2, assign1) < 0);
     }
 }

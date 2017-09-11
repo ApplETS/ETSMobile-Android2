@@ -63,6 +63,15 @@ public class MoodleAssignment {
         return date;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Set the assignment's due date
+     *
+     * @param dueDate Unix time in seconds
+     */
     public void setDueDate(long dueDate) {
         this.dueDate = dueDate;
     }

@@ -187,6 +187,13 @@ public class MoodleViewModel extends AndroidViewModel {
         return this.filteredCourses;
     }
 
+    /**
+     * Select an assignment
+     *
+     * @param courseIndex     index of the assignment's course among the filtered courses
+     * @param assignmentIndex index of the assignment among the displayed assignment
+     * @return selected {@link MoodleAssignment}
+     */
     public MoodleAssignment selectAssignment(int courseIndex, int assignmentIndex) {
         MoodleAssignment selectedAssignment = null;
 
