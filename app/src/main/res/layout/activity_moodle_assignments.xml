@@ -107,6 +107,7 @@
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingTop="@dimen/fab_margin"
+            android:clickable="true"
             app:behavior_hideable="true"
             app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
@@ -150,7 +151,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/single_line_list_item_with_avatar_height"
-                    android:background="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
@@ -181,7 +181,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/single_line_list_item_with_avatar_height"
-                    android:background="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
