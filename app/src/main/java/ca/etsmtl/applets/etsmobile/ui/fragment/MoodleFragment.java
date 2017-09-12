@@ -7,7 +7,9 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +33,7 @@ import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
+import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MoodleCoursesAdapter;
@@ -96,8 +102,6 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
             @Override
             public void onChanged(@Nullable RemoteResource<MoodleCourses> moodleCoursesRemoteResource) {
                 if (moodleCoursesRemoteResource != null) {
-                    Log.d("phil", String.valueOf(moodleCoursesRemoteResource.status));
-
                     if (moodleCoursesRemoteResource.status == RemoteResource.SUCCESS) {
                         loadingView.hideProgessBar();
                         updateUI(moodleCoursesRemoteResource.data);
@@ -123,10 +127,28 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_moodle, menu);
-        this.menu = menu;
+        final Toolbar toolbar = ((MainActivity) getActivity()).getToolbar();
+        toolbar.inflateMenu(R.menu.menu_moodle);
+        this.menu = toolbar.getMenu();
 
-        super.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(this.menu, inflater);
+
+        if (menu.findItem(R.id.menu_item_moodle_assignments) != null || !moodleViewModel.isShowCaseHasBeenDisplayed()) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        TapTargetView.showFor(getActivity(), TapTarget.forToolbarMenuItem(toolbar,
+                                R.id.menu_item_moodle_assignments,
+                                getString(R.string.moodle_assignments_title),
+                                getString(R.string.moodle_assignments_description)));
+                        moodleViewModel.setShowCaseHasBeenDisplayed(false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 
     @Override

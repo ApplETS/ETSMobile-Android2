@@ -70,6 +70,7 @@
     <string name="etsmobile_android_commentaire">ETSMobile-Android : Commentaire</string>
     <string name="default_comment"></string>
     <string name="moodle_assignments_title">Devoirs</string>
+    <string name="moodle_assignments_description">Accédez à vos devoirs à l\'aide de ce bouton</string>
     <string name="moodle_past_assignments_filter">Filtrer</string>
     <string name="moodle_past_assignments">Devoirs antérieurs</string>
     <string name="moodle_past_assignments_sort">Trier</string>

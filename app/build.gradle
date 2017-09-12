@@ -120,6 +120,7 @@ dependencies {
     compile 'com.github.markushi:circlebutton:1.1'
     compile 'com.flaviofaria:kenburnsview:1.0.7'
     compile 'com.evernote:android-job:1.1.11'
+    compile 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
     compile "android.arch.lifecycle:runtime:${ARCH_VERSION}"
     compile "android.arch.lifecycle:extensions:${ARCH_VERSION}"
     compile 'com.android.support:support-v4:26.+'

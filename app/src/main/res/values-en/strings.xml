@@ -58,6 +58,7 @@
 
     <!-- Moodle Page -->
     <string name="activity_moodle_titre">Moodle instructions</string>
+    <string name="moodle_assignments_description">Access your assignments using this button</string>
     <string name="activity_moodle_url_text">Website url to use:</string>
     <string name="activity_moodle_nom">Username:</string>
     <string name="activity_moodle_code_universelle">Your universal code</string>

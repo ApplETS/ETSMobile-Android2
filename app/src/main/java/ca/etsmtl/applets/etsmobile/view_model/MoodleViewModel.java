@@ -29,6 +29,7 @@ public class MoodleViewModel extends AndroidViewModel {
     private static final String TAG = "MoodleViewModel";
     private static final String MOODLE_PREFS = "MoodlePrefs";
     private static final String DISPLAY_PAST_ASSIGNMENTS_PREF = "DisplayPastAssignmentPref";
+    private static final String DISPLAY_SHOW_CASE_PREF = "DisplayShowCase";
     public static final int SORT_BY_DATE = 0;
     public static final int SORT_ALPHA = 1;
     private static final String SORT_ASSIGNMENTS_PREF = "SortAssignmentsPref";
@@ -47,6 +48,20 @@ public class MoodleViewModel extends AndroidViewModel {
         super(application);
 
         this.repository = moodleRepository;
+    }
+
+    public boolean isShowCaseHasBeenDisplayed() {
+        SharedPreferences settings = getApplication().getSharedPreferences(MOODLE_PREFS,
+                Context.MODE_PRIVATE);
+        return settings.getBoolean(DISPLAY_SHOW_CASE_PREF, false);
+    }
+
+    public void setShowCaseHasBeenDisplayed(boolean display) {
+        SharedPreferences settings = getApplication().getSharedPreferences(MOODLE_PREFS,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(DISPLAY_SHOW_CASE_PREF, display);
+        editor.apply();
     }
 
     public LiveData<RemoteResource<MoodleProfile>> getProfile() {

@@ -358,9 +358,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+    public Toolbar getToolbar() {
+        return toolbar;
     }
 
     @Override
@@ -531,7 +530,6 @@ public class MainActivity extends AppCompatActivity {
     public void goToFragment(Fragment fragment, String tag) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
-                .addToBackStack(tag)
                 .commit();
 
         this.invalidateOptionsMenu();

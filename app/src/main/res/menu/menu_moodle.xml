@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/menu_item_moodle_assignments"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_assignment_white_24dp"
+        app:showAsAction="always"
+        android:icon="@drawable/moodle_assignments_white_icon"
         android:title="@string/moodle_assignments_title">
     </item>
 
