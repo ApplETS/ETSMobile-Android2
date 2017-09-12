@@ -314,5 +314,5 @@
     <!-- Showcase -->
     <string name="new_future_message">Appuyer sur l\'image de proile pour acceder à votre profile (lorsque vous êtes connecté)</string>
     <string name="coachmark_hint_profile">Utilisez l\'icône au dessus pour accéder au Profil</string>
-    <string name="coachmark_hint_login">Utilisez l\'icône au dessous pour la connexion</string>
+    <string name="coachmark_hint_login">Utilisez ce bouton pour la connexion</string>
 </resources>
