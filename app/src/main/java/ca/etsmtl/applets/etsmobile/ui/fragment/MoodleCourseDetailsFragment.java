@@ -186,6 +186,9 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                     }
                 }
 
+                if (listMoodleLinkModules == null || listMoodleResourceContents == null)
+                    return;
+
                 Object[] finalArray = ArrayUtils.addAll(listMoodleLinkModules.toArray(), listMoodleResourceContents.toArray());
                 if(finalArray.length != 0)
                     listDataSectionName.put(new HeaderText(coreCourse.getName(), positionSection), finalArray);
