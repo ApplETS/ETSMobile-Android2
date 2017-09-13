@@ -393,6 +393,13 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         builder.show();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        horaireManager.deleteObserver(this);
+    }
+
     private class AsyncUpdateCalendar extends AsyncTask<Object, Void, Object> {
 
         /**

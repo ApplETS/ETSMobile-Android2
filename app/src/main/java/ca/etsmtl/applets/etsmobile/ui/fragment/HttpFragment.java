@@ -68,4 +68,11 @@ public abstract class HttpFragment extends BaseFragment implements RequestListen
             });
 		}
 	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+
+		dataManager.stop();
+	}
 }
