@@ -209,6 +209,9 @@ public class TodayFragment extends HttpFragment implements Observer {
             progressionMs = dateActuelle.getTime() - dateDebut.getTime();
             progressionJour = TimeUnit.MILLISECONDS.toDays(progressionMs);
 
+            if (getActivity() == null || !isAdded())
+                return;
+
             semesterProgressBar.setMax((int) nbJoursTotal);
             semesterProgressBar.setProgress((int) progressionJour);
             semesterProgressBarText.setText(getString(R.string.semester_progression)
