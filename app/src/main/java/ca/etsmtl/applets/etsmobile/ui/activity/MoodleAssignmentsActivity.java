@@ -110,6 +110,21 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN)
+            openAssignmentFab.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        openAssignmentFab.setVisibility(View.GONE);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
