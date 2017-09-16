@@ -29,9 +29,6 @@ import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -328,73 +325,5 @@ public class MoodleViewModelTest {
         assertEquals(viewModel.getAssignmentsSortIndex(), MoodleViewModel.SORT_ALPHA);
         comparator = viewModel.getAssignmentsSortComparator();
         assertTrue(comparator.compare(assign2, assign1) < 0);
-    }
-
-    @Test
-    public void selectAssignment() {
-        createMockSharedPreferences();
-
-        // Prepare LiveData which will contain the courses
-        MutableLiveData<RemoteResource<List<MoodleAssignmentCourse>>> liveData = new MutableLiveData<>();
-        when(repository.getAssignmentCourses()).thenReturn(liveData);
-
-        // Tell the view model to get the live data instance
-        viewModel.getAssignmentCourses();
-
-        assertThat(viewModel.selectAssignment(0, 0), nullValue());
-
-        // Prepare assignments lists four course 1 and course 2
-        List<MoodleAssignment> assignments1 = new ArrayList<>();
-        List<MoodleAssignment> assignments2 = new ArrayList<>();
-
-        // Prepare unix times
-        long unixTimeNowMs = (TimeUnit.MILLISECONDS.toSeconds(new Date().getTime()));
-        long unixTimePastMs = unixTimeNowMs - TimeUnit.DAYS.toSeconds(1);
-        long unixTimeFutureMs = unixTimeNowMs + TimeUnit.DAYS.toSeconds(1);
-
-        // Prepare assignments
-        MoodleAssignment pastAssign1 = new MoodleAssignment();
-        pastAssign1.setName("pastAssign1");
-        pastAssign1.setDueDate(unixTimePastMs);
-        assignments1.add(pastAssign1);
-
-        MoodleAssignment pastAssign2 = new MoodleAssignment();
-        pastAssign2.setName("pastAssign2");
-        pastAssign2.setDueDate(unixTimePastMs);
-        assignments2.add(pastAssign2);
-
-        MoodleAssignment futureAssign1 = new MoodleAssignment();
-        futureAssign1.setName("futureAssign1");
-        futureAssign1.setDueDate(unixTimeFutureMs);
-        assignments1.add(futureAssign1);
-
-        MoodleAssignment futureAssign2 = new MoodleAssignment();
-        futureAssign2.setName("futureAssign2");
-        futureAssign2.setDueDate(unixTimeFutureMs);
-        assignments2.add(futureAssign2);
-
-        // Prepare courses
-        List<MoodleAssignmentCourse> courses = new ArrayList<>();
-        MoodleAssignmentCourse emptyCourse = new MoodleAssignmentCourse(0, "", "", 1505079000, new ArrayList<MoodleAssignment>());
-        MoodleAssignmentCourse course1 = new MoodleAssignmentCourse(0, "course1", "course1", 1505079000, assignments1);
-        MoodleAssignmentCourse course2 = new MoodleAssignmentCourse(0, "course2", "course2", 1505079000, assignments2);
-        courses.add(emptyCourse);
-        courses.add(course1);
-        courses.add(course2);
-        liveData.setValue(RemoteResource.success(courses));
-        viewModel.filterAssignmentCourses();
-
-        // Test with past assignments not displayed
-        MoodleAssignment selectedAssignment = viewModel.selectAssignment(0, 0);
-        assertThat(selectedAssignment.getName(), is("futureAssign1"));
-        selectedAssignment = viewModel.selectAssignment(1, 0);
-        assertThat(selectedAssignment.getName(), is("futureAssign2"));
-
-        // Test with past assignments displayed
-        when(prefs.getBoolean(eq(DISPLAY_PAST_ASSIGNMENTS_PREF), anyBoolean())).thenReturn(true);
-        selectedAssignment = viewModel.selectAssignment(0, 0);
-        assertThat(selectedAssignment.getName(), is("pastAssign1"));
-        selectedAssignment = viewModel.selectAssignment(1, 1);
-        assertThat(selectedAssignment.getName(), is("futureAssign2"));
     }
 }

@@ -1,7 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
-import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -50,7 +48,7 @@ import ca.etsmtl.applets.etsmobile2.databinding.ActivityMoodleAssignmentsBinding
  * Created by Sonphil on 2017-08-12.
  */
 
-public class MoodleAssignmentsActivity extends AppCompatActivity implements LifecycleRegistryOwner, ExpandableListView.OnChildClickListener {
+public class MoodleAssignmentsActivity extends AppCompatActivity {
 
     private static final String TAG = "MoodleAssignments";
     private static final float BS_MIN_OFFSET_HIDE_FAB = -0.8f;
@@ -62,8 +60,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     private Menu menu;
     private List<MoodleAssignmentCourse> filteredAssignmentsCourses;
     private boolean requestInProgress;
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     private Observer<RemoteResource<List<MoodleAssignmentCourse>>> assignmentsCoursesObserver;
+    private Observer<MoodleAssignment> selectedAssignmentObserver;
     private MoodleViewModel moodleViewModel;
     private BottomSheetBehavior bottomSheetBehavior;
     private float bottomSheetOffset;
@@ -89,11 +87,13 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
         progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.ets_red), android.graphics.PorterDuff.Mode.SRC_IN);
 
         subscribeUIList();
+        subscribeUISelectedAssignment();
 
         setUpBottomSheet();
 
         if (savedInstanceState != null && savedInstanceState.getBoolean(SHOW_BS_KEY)) {
-            MoodleAssignment selectedAssignment = moodleViewModel.getSelectedAssignment();
+            MoodleAssignment selectedAssignment = moodleViewModel.getSelectedAssignment().getValue();
+
             if (selectedAssignment != null) {
                 displaySelectedAssignment(selectedAssignment);
                 openAssignmentFab.show();
@@ -159,6 +159,19 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
 
         moodleViewModel = ViewModelProviders.of(this, moodleViewModelFactory).get(MoodleViewModel.class);
         moodleViewModel.getAssignmentCourses().observe(this, assignmentsCoursesObserver);
+    }
+
+    private void subscribeUISelectedAssignment() {
+        selectedAssignmentObserver = new Observer<MoodleAssignment>() {
+            @Override
+            public void onChanged(@Nullable MoodleAssignment moodleAssignment) {
+                if (moodleAssignment != null) {
+                    displaySelectedAssignment(moodleAssignment);
+                }
+            }
+        };
+
+        moodleViewModel.getSelectedAssignment().observe(this, selectedAssignmentObserver);
     }
 
     private void setUpBottomSheet() {
@@ -271,28 +284,15 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
                 childs.put(course.getFullName(), assignments);
             }
 
-            ExpandableListMoodleAssignmentsAdapter adapter = new ExpandableListMoodleAssignmentsAdapter(this);
+            ExpandableListMoodleAssignmentsAdapter adapter = new ExpandableListMoodleAssignmentsAdapter(this, moodleViewModel);
             adapter.setData(headers, childs);
             assignmentsElv.setEmptyView(emptyView);
             assignmentsElv.setAdapter(adapter);
-            assignmentsElv.setOnChildClickListener(this);
             for (int i = 0; i < headers.size(); i++)
                 assignmentsElv.expandGroup(i);
 
             binding.setLoading(false);
         }
-    }
-
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return lifecycleRegistry;
-    }
-
-    @Override
-    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        displaySelectedAssignment(moodleViewModel.selectAssignment(groupPosition, childPosition));
-
-        return true;
     }
 
     private void displaySelectedAssignment(final MoodleAssignment selectedAssignment) {
@@ -352,7 +352,13 @@ public class MoodleAssignmentsActivity extends AppCompatActivity implements Life
     }
 
     public void openInBrowser(View v) {
-        Utility.openChromeCustomTabs(this, String.format(getString(R.string.moodle_view_assignment), String.valueOf(moodleViewModel.getSelectedAssignment().getCmid())));
+        MoodleAssignment selectedAssignment = moodleViewModel.getSelectedAssignment().getValue();
+
+        if (selectedAssignment != null) {
+            Utility.openChromeCustomTabs(this,
+                    String.format(getString(R.string.moodle_view_assignment),
+                            String.valueOf(selectedAssignment.getCmid())));
+        }
     }
 
     @Override

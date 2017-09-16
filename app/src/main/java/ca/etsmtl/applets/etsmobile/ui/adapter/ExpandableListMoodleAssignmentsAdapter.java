@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
+import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel;
 import ca.etsmtl.applets.etsmobile2.R;
 import ca.etsmtl.applets.etsmobile2.databinding.RowMoodleAssignmentBinding;
 
@@ -23,11 +24,13 @@ import ca.etsmtl.applets.etsmobile2.databinding.RowMoodleAssignmentBinding;
 public class ExpandableListMoodleAssignmentsAdapter extends BaseExpandableListAdapter {
 
     private Context context;
+    private MoodleViewModel moodleViewModel;
     private List<String> headers;
     private HashMap<String, List<MoodleAssignment>> childs;
 
-    public ExpandableListMoodleAssignmentsAdapter(Context context) {
+    public ExpandableListMoodleAssignmentsAdapter(Context context, MoodleViewModel viewModel) {
         this.context = context;
+        this.moodleViewModel = viewModel;
         headers = new ArrayList<>();
         childs = new HashMap<>();
     }
@@ -100,6 +103,7 @@ public class ExpandableListMoodleAssignmentsAdapter extends BaseExpandableListAd
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             RowMoodleAssignmentBinding binding = RowMoodleAssignmentBinding.inflate(inflater, parent, false);
+            binding.setViewModel(moodleViewModel);
             convertView = binding.getRoot();
         }
 

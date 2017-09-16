@@ -7,12 +7,17 @@
         <variable
             name="assignment"
             type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment" />
+
+        <variable
+            name="viewModel"
+            type="ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:onClick="@{() -> viewModel.selectAssignment(assignment)}"
         android:orientation="vertical"
         android:padding="10dp">
 

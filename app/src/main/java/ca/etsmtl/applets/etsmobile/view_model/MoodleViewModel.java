@@ -202,49 +202,11 @@ public class MoodleViewModel extends AndroidViewModel {
         return this.filteredCourses;
     }
 
-    /**
-     * Select an assignment
-     *
-     * @param courseIndex     index of the assignment's course among the filtered courses
-     * @param assignmentIndex index of the assignment among the displayed assignment
-     * @return selected {@link MoodleAssignment}
-     */
-    public MoodleAssignment selectAssignment(int courseIndex, int assignmentIndex) {
-        MoodleAssignment selectedAssignment = null;
-
-        if (filteredCourses.getValue() != null) {
-            MoodleAssignmentCourse course = filteredCourses.getValue().get(courseIndex);
-
-            if (isDisplayPastAssignments()) {
-                selectedAssignment = course.getAssignments().get(assignmentIndex);
-            } else { // The past assignments are not displayed.
-                int assignmentsListIndex = 0; // Pointer used on the assignments list
-                for (MoodleAssignment assignment : course.getAssignments()) {
-                    Date dueDate = assignment.getDueDateObj();
-                    Date currentDate = new Date();
-                    if (dueDate.before(currentDate))
-                        continue;  // Skip the assignment because it's not displayed.
-                    else if (assignmentsListIndex == assignmentIndex) {
-                        // The selected assignment has been found.
-                        selectedAssignment = assignment;
-                        break;
-                    } else {
-                        /*
-                         The current assignment is displayed, but it's not the one the user
-                         selected.
-                          */
-                        assignmentsListIndex++;
-                    }
-                }
-            }
-        }
-
+    public void selectAssignment(MoodleAssignment selectedAssignment) {
         this.selectedAssignment.setValue(selectedAssignment);
-
-        return selectedAssignment;
     }
 
-    public MoodleAssignment getSelectedAssignment() {
-        return selectedAssignment.getValue();
+    public LiveData<MoodleAssignment> getSelectedAssignment() {
+        return selectedAssignment;
     }
 }
