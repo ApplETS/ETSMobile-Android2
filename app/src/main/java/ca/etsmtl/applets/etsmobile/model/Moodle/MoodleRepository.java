@@ -264,7 +264,7 @@ public class MoodleRepository {
 
                 @Override
                 public void onFailure(Call<MoodleAssignmentSubmission> call, Throwable t) {
-                    submission.setValue(RemoteResource.<MoodleAssignmentSubmission>error(context.getString(R.string.moddle_error_connection_failure), null));
+                    submission.setValue(RemoteResource.<MoodleAssignmentSubmission>error(context.getString(R.string.moodle_error_connection_failure), null));
                 }
             });
         } else {
