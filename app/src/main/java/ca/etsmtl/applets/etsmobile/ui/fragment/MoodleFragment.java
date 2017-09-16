@@ -1,7 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -50,7 +48,7 @@ import ca.etsmtl.applets.etsmobile2.R;
  * @author Thibaut
  * 
  */
-public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwner {
+public class MoodleFragment extends BaseFragment {
 
     ListView moodleCoursesListView;
     private MoodleCoursesAdapter moodleCoursesAdapter;
@@ -61,7 +59,6 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
     private LoadingView loadingView;
     private Observer<RemoteResource<MoodleCourses>> coursesObserver;
     private MoodleViewModel moodleViewModel;
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     @Inject
     MoodleViewModelFactory moodleViewModelFactory;
 
@@ -259,10 +256,5 @@ public class MoodleFragment extends BaseFragment implements LifecycleRegistryOwn
                     return lastSemesterInserted;
 
             }
-    }
-
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return lifecycleRegistry;
     }
 }
