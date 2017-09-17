@@ -318,17 +318,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                     MoodleAssignmentSubmission submission = moodleAssignmentFeedbackRemoteResource.data;
 
                     if (submission != null) {
-                        MoodleAssignmentSubmission.MoodleAssignmentFeedback feedback = submission.getFeedback();
-
-                        if (feedback != null) {
-                            if (submission.getFeedback().getGrade().getAssignment() == selectedAssignment.getId()) {
-
-                                binding.setSelectedAssignmentFeedback(moodleAssignmentFeedbackRemoteResource.data.getFeedback());
-                                binding.setSelectedAssignmentLastAttempt(moodleAssignmentFeedbackRemoteResource.data.getLastAttempt());
-                            }
-                        } else {
-                            binding.setSelectedAssignmentLastAttempt(null);
-                        }
+                        binding.setSelectedAssignmentFeedback(submission.getFeedback());
+                        binding.setSelectedAssignmentLastAttempt(submission.getLastAttempt());
                     } else {
                         binding.setSelectedAssignmentFeedback(null);
                         binding.setSelectedAssignmentLastAttempt(null);
