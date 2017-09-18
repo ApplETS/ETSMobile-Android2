@@ -12,6 +12,8 @@
     <string name="contact_creation_failed">Echec de la création du contact</string>
     <string name="cannot_open_file">Aucune application ne peut ouvrir ce fichier</string>
     <string name="logout_confirmation">Êtes-vous sûr de vouloir vous déconnecter?</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
 
     <!--MENU DE LANGAGE-->
     <string name="lang_title">Changement de langue</string>
@@ -77,6 +79,9 @@
     <string name="moodle_past_assignments_sort_date">Trier par date</string>
     <string name="moodle_past_assignments_sort_alpha">Trier par ordre alphabétique</string>
     <string name="moodle_assignment_due_date">Date d\'échéance : %s</string>
+    <string name="moodle_assignment_team_submission">Remise en équipe activé : %s</string>
+    <string name="moodle_prevent_submission_not_in_group">Remise en équipe : %s</string>
+    <string name="moodle_assignment_team_require_all_team_member_submit">Remise requise pour tous les membres : %s</string>
     <string name="moodle_assignment_grade">Note : %s</string>
     <string name="moodle_assignment_status_submitted">Statut : Remis</string>
     <string name="moodle_assignment_status_not_submitted">Statut : Non remis</string>

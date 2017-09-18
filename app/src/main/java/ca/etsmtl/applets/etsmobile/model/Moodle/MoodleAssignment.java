@@ -37,6 +37,8 @@ public class MoodleAssignment {
     private int requireAllTeamMembersSubmit;
     @SerializedName("teamsubmissiongroupingid")
     private int teamSubmissionGroupingId;
+    @SerializedName("preventsubmissionnotingroup")
+    private int preventSubmissionNotIngroup;
     @SerializedName("maxattempts")
     private int maxAttempts;
     private String intro;
@@ -79,6 +81,22 @@ public class MoodleAssignment {
      */
     public void setDueDate(long dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public boolean isTeamSubmission() {
+        return teamSubmission == 1;
+    }
+
+    public boolean isRequireAllTeamMembersSubmit() {
+        return requireAllTeamMembersSubmit == 1;
+    }
+
+    public boolean isPreventSubmissionNotIngroup() {
+        return preventSubmissionNotIngroup == 1;
+    }
+
+    public int getMaxAttempts() {
+        return maxAttempts;
     }
 
     public String getIntro() {

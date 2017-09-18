@@ -39,6 +39,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -175,7 +176,8 @@ public class MoodleWebServiceTest {
         assertThat(teamSubmission, notNullValue());
         assertThat(lastAttempt.getGradingStatus(), is("graded"));
         assertTrue(lastAttempt.isGraded());
-        assertTrue(lastAttempt.isSubmitted());
+        assertFalse(lastAttempt.isSubmitted());
+        assertTrue(lastAttempt.isTeamSubmitted());
 
         MoodleAssignmentSubmission.MoodleAssignmentFeedback feedback = moodleSubmission.getFeedback();
         assertThat(feedback, notNullValue());

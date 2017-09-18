@@ -44,18 +44,17 @@ public class MoodleAssignmentLastAttempt {
     }
 
     public boolean isSubmitted() {
-        boolean teamSubmitted = false;
-        boolean individualSubmitted = false;
+        if (submission != null && submission.status != null)
+            return submission.status.equals(STATUS_SUBMITTED);
 
-        if (teamSubmission != null) {
-            teamSubmitted = teamSubmission.status.equals(STATUS_SUBMITTED);
-        }
+        return false;
+    }
 
-        if (submission != null) {
-            individualSubmitted = submission.status.equals(STATUS_SUBMITTED);
-        }
+    public boolean isTeamSubmitted() {
+        if (teamSubmission != null && teamSubmission.status != null)
+            return teamSubmission.status.equals(STATUS_SUBMITTED);
 
-        return teamSubmitted || individualSubmitted;
+        return false;
     }
 
     public String getGradingStatus() {
@@ -88,6 +87,8 @@ public class MoodleAssignmentLastAttempt {
         private int attemptNumber;
         @SerializedName("timecreated")
         private int timeCreated;
+        @SerializedName("timmodified")
+        private int timeModified;
         private String status;
         private int groupid;
         private int assignment;
