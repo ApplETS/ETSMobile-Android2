@@ -153,8 +153,7 @@
                 <!-- Équipe -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="@dimen/single_line_list_item_with_avatar_height"
+                    android:layout_height="@dimen/two_line_list_item_with_avatar_height"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
@@ -182,7 +181,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                            android:text='@{String.format(@string/moodle_assignment_team_submission, selectedAssignment.preventSubmissionNotIngroup ? @string/yes : @string/no)}'
+                            android:text='@{String.format(@string/moodle_assignment_team_submission, (selectedAssignment.teamSubmission ? @string/yes : @string/no))}'
                             android:textColor="@color/black"
                             android:textSize="@dimen/two_line_list_item_with_icon_font_size" />
 
@@ -192,7 +191,8 @@
                             android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
                             android:text='@{String.format(@string/moodle_assignment_team_require_all_team_member_submit, selectedAssignment.requireAllTeamMembersSubmit ? @string/yes : @string/no)}'
                             android:textColor="@color/black"
-                            android:textSize="@dimen/two_line_list_item_with_icon_font_size" />
+                            android:textSize="@dimen/two_line_list_item_with_icon_font_size"
+                            android:visibility='@{selectedAssignment.teamSubmission ? View.VISIBLE : View.GONE}' />
                     </LinearLayout>
                 </LinearLayout>
 

@@ -18,6 +18,14 @@
     <dimen name="single_line_list_item_with_avatar_left_text_padding">72dp</dimen>
     <dimen name="single_line_list_item_with_avatar_top_padding">8dp</dimen>
 
+    <!-- Two-line list item with avatar and icon specs -->
+    <dimen name="two_line_list_item_with_avatar_and_icon_font_size">16sp</dimen>
+    <dimen name="two_line_list_item_with_avatar_height">72dp</dimen>
+    <dimen name="two_line_list_item_with_avatar_left_avatar_padding">16dp</dimen>
+    <dimen name="two_line_list_item_with_avatar_right_icon_padding">16dp</dimen>
+    <dimen name="two_line_list_item_with_avatar_left_text_padding">72dp</dimen>
+    <dimen name="two_line_list_item_with_avatar_top_padding">8dp</dimen>
+
     <!-- Two-line list with icon specs -->
     <dimen name="two_line_list_item_with_icon_font_size">16sp</dimen>
     <dimen name="two_line_list_item_with_icon_height">72dp</dimen>
