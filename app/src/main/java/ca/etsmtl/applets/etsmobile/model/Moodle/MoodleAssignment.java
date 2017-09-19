@@ -11,9 +11,21 @@ import ca.etsmtl.applets.etsmobile.util.Utility;
  */
 
 public class MoodleAssignment {
+    /**
+     * Assignment id
+     **/
     private int id;
+    /**
+     * Course module id
+     **/
     private int cmid;
+    /**
+     * Course id
+     **/
     private int course;
+    /**
+     * Assignment name
+     **/
     private String name;
     @SerializedName("nosubmissions")
     private int noSubmissions;
@@ -25,32 +37,100 @@ public class MoodleAssignment {
     @SerializedName("allowsubmissionsfromdate")
     private int allowSubmissionsFromDate;
     private int grade;
+    /**
+     * Last time assignment was modified
+     **/
     @SerializedName("timemodified")
     private int timeModified;
+    /**
+     * If enabled, set activity as complete following submission
+     **/
     @SerializedName("completionsubmit")
     private int completionSubmit;
+    /**
+     * Date after which submission is not accepted without an extension
+     **/
     @SerializedName("cutofdate")
     private int cutOfDate;
+    /**
+     * If enabled, students submit as a team
+     **/
     @SerializedName("teamsubmission")
     private int teamSubmission;
+    /**
+     * If enabled, all team members must submit
+     **/
     @SerializedName("requireallteammemberssubmit")
     private int requireAllTeamMembersSubmit;
+    /**
+     * The grouping id for the team submission groups
+     **/
     @SerializedName("teamsubmissiongroupingid")
     private int teamSubmissionGroupingId;
+    /**
+     * If enabled, hide identities until reveal identities actioned
+     * True if student identities is hidden from graders
+     **/
+    @SerializedName("blindmarking")
+    private int blindMarking;
+    /**
+     * Show identities for a blind marking assignment
+     **/
+    @SerializedName("revealidentities")
+    private int revealIdentities;
+    /**
+     * Method used to control opening new attempts
+     **/
+    @SerializedName("attemptreopenmethod")
+    private String attemptReopenMethod;
+    /**
+     * Prevent submission if user is not in a group
+     **/
     @SerializedName("preventsubmissionnotingroup")
     private int preventSubmissionNotIngroup;
+    /**
+     * Maximum number of attempts allowed
+     **/
     @SerializedName("maxattempts")
     private int maxAttempts;
+    /**
+     * Enable marking workflow
+     **/
+    @SerializedName("markingworkflow")
+    private int markingWorkflow;
+    /**
+     * Student must accept submission statement
+     **/
+    @SerializedName("requiresubmissionstatement")
+    private int requireSubmissionStatement;
+    /**
+     * Assignment intro, not always returned because it deppends on the activity configuration
+     **/
     private String intro;
 
+    /**
+     * Return the assignment id
+     *
+     * @return assignment id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Return the course module id
+     *
+     * @return course module id
+     */
     public int getCmid() {
         return cmid;
     }
 
+    /**
+     * Return the assignment name
+     *
+     * @return assignment name
+     */
     public String getName() {
         return name;
     }
@@ -70,6 +150,11 @@ public class MoodleAssignment {
         return date;
     }
 
+    /**
+     * Set the assignment name
+     *
+     * @param name the assignment name
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -83,10 +168,20 @@ public class MoodleAssignment {
         this.dueDate = dueDate;
     }
 
+    /**
+     * Return true if students submit as a team
+     *
+     * @return true if students submit as a team
+     */
     public boolean isTeamSubmission() {
         return teamSubmission == 1;
     }
 
+    /**
+     * Return true if student must accept submission statement
+     *
+     * @return true if student must accept submission statement
+     */
     public boolean isRequireAllTeamMembersSubmit() {
         return requireAllTeamMembersSubmit == 1;
     }
@@ -95,6 +190,11 @@ public class MoodleAssignment {
         return preventSubmissionNotIngroup == 1;
     }
 
+    /**
+     * Return the maximum number of attempts allowed
+     *
+     * @return maximum number of attempts allowed
+     */
     public int getMaxAttempts() {
         return maxAttempts;
     }

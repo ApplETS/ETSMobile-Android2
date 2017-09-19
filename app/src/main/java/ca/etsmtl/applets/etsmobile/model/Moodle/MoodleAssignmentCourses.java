@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
+ * Array of courses where each courses contains all of the assignments that the user can
+ * view within that course.
+ * <p>
  * Created by Sonphil on 12-08-17.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
