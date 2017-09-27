@@ -30,7 +30,13 @@ public class MoodleViewModel extends AndroidViewModel {
     private static final String MOODLE_PREFS = "MoodlePrefs";
     private static final String DISPLAY_PAST_ASSIGNMENTS_PREF = "DisplayPastAssignmentPref";
     private static final String DISPLAY_SHOW_CASE_PREF = "DisplayShowCase";
+    /**
+     * Index of the sort by date option
+     **/
     public static final int SORT_BY_DATE = 0;
+    /**
+     * Index of the sort alphabetically option
+     **/
     public static final int SORT_ALPHA = 1;
     private static final String SORT_ASSIGNMENTS_PREF = "SortAssignmentsPref";
 
@@ -50,12 +56,26 @@ public class MoodleViewModel extends AndroidViewModel {
         this.repository = moodleRepository;
     }
 
+    /**
+     * Returns true if the Moodle Assignment screen's showcase has been displayed
+     * <p>
+     * The boolean value is obtained from the preferences.
+     *
+     * @return true if the Moodle Assignment screen's showcase has been displayed
+     */
     public boolean isShowCaseHasBeenDisplayed() {
         SharedPreferences settings = getApplication().getSharedPreferences(MOODLE_PREFS,
                 Context.MODE_PRIVATE);
         return settings.getBoolean(DISPLAY_SHOW_CASE_PREF, false);
     }
 
+    /**
+     * Set a value indicating whether Moodle Assignment screen's showcase has been displayed or not
+     * <p>
+     * The boolean value is set in the preferences.
+     *
+     * @param display true if the Moodle Assignment screen's showcase has been displayed
+     */
     public void setShowCaseHasBeenDisplayed(boolean display) {
         SharedPreferences settings = getApplication().getSharedPreferences(MOODLE_PREFS,
                 Context.MODE_PRIVATE);
@@ -64,6 +84,11 @@ public class MoodleViewModel extends AndroidViewModel {
         editor.apply();
     }
 
+    /**
+     * Get the user profile which contains information about the user
+     *
+     * @return profile
+     */
     public LiveData<RemoteResource<MoodleProfile>> getProfile() {
         if (profile == null || profile.getValue() == null || profile.getValue().data == null) {
             this.profile = repository.getProfile();
@@ -72,6 +97,13 @@ public class MoodleViewModel extends AndroidViewModel {
         return profile;
     }
 
+    /**
+     * Returns the assignments courses
+     * <p>
+     * Each course contains a list of Moodle assignments that the user can view for that course
+     *
+     * @return {@link LiveData} instance which contains the assignments courses
+     */
     public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses() {
         if (assignmentCourses == null || assignmentCourses.getValue() == null
                 || assignmentCourses.getValue().data == null) {
@@ -81,6 +113,11 @@ public class MoodleViewModel extends AndroidViewModel {
         return assignmentCourses;
     }
 
+    /**
+     * Returns the courses
+     *
+     * @return {@link LiveData} instance which contains the courses
+     */
     public LiveData<RemoteResource<MoodleCourses>> getCourses() {
         if (courses == null || courses.getValue() == null || courses.getValue().data == null)
             this.courses = repository.getCourses();
@@ -88,6 +125,12 @@ public class MoodleViewModel extends AndroidViewModel {
         return courses;
     }
 
+    /**
+     * Returns an assignment submission
+     *
+     * @param assignId the assignment id
+     * @return {@link LiveData} instance which contains the assignment submission
+     */
     public LiveData<RemoteResource<MoodleAssignmentSubmission>> getAssignmentSubmission(int assignId) {
         if (assignmentSubmission == null || assignmentSubmission.getValue() == null
                 || assignmentSubmission.getValue().data == null
@@ -100,6 +143,13 @@ public class MoodleViewModel extends AndroidViewModel {
         return assignmentSubmission;
     }
 
+    /**
+     * Set a boolean indicating whether past assignments should be displayed
+     * <p>
+     * The boolean value is set in the preferences
+     *
+     * @param display true if past assignments should be displayed
+     */
     public void setDisplayPastAssignments(boolean display) {
         SharedPreferences settings = getApplication().getSharedPreferences(MOODLE_PREFS,
                 Context.MODE_PRIVATE);
@@ -108,20 +158,37 @@ public class MoodleViewModel extends AndroidViewModel {
         editor.apply();
     }
 
+    /**
+     * Returns true if the past assignments needs to be displayed
+     * <p>
+     * The boolean value is obtained from the preferences.
+     *
+     * @return true if the past assignments needs to be displayed
+     */
     public boolean isDisplayPastAssignments() {
         SharedPreferences settings = getApplication().getSharedPreferences(MOODLE_PREFS,
                 Context.MODE_PRIVATE);
         return settings.getBoolean(DISPLAY_PAST_ASSIGNMENTS_PREF, false);
     }
 
-    public void setAssignmentsSort(int sort) {
+    /**
+     * Save index of the type of sort selected by the user in the preferences
+     *
+     * @param index index of the type of sort selected by the user
+     */
+    public void setAssignmentsSortIndex(int index) {
         SharedPreferences settings = getApplication().getSharedPreferences(MOODLE_PREFS,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putInt(SORT_ASSIGNMENTS_PREF, sort);
+        editor.putInt(SORT_ASSIGNMENTS_PREF, index);
         editor.apply();
     }
 
+    /**
+     * Returns the index of the type of sort selected by the user
+     *
+     * @return index of the type of sort selected by the user
+     */
     public int getAssignmentsSortIndex() {
         SharedPreferences settings = getApplication().getSharedPreferences(MOODLE_PREFS,
                 Context.MODE_PRIVATE);
@@ -129,6 +196,11 @@ public class MoodleViewModel extends AndroidViewModel {
         return settings.getInt(SORT_ASSIGNMENTS_PREF, SORT_BY_DATE);
     }
 
+    /**
+     * Returns the {@link Comparator} instance that can be used to sort the assignments
+     *
+     * @return {@link Comparator} instance that can be used to sort the assignments
+     */
     public Comparator<MoodleAssignment> getAssignmentsSortComparator() {
         int sort = getAssignmentsSortIndex();
         Comparator<MoodleAssignment> currentComparator = null;
@@ -161,9 +233,9 @@ public class MoodleViewModel extends AndroidViewModel {
     }
 
     /**
-     * Filtrage des cours en retirant les cours n'ayant aucun devoir
+     * Filter courses by removing the courses with no assignment
      *
-     * @return liste de cours filtrés
+     * @return {@link LiveData} instance which contains the filtered courses
      */
     public LiveData<List<MoodleAssignmentCourse>> filterAssignmentCourses() {
         List<MoodleAssignmentCourse> filteredCourses = new ArrayList<>();
@@ -194,7 +266,6 @@ public class MoodleViewModel extends AndroidViewModel {
                         filteredCourses.add(course);
                 }
             }
-
         }
 
         this.filteredCourses.setValue(filteredCourses);
@@ -202,10 +273,21 @@ public class MoodleViewModel extends AndroidViewModel {
         return this.filteredCourses;
     }
 
+    /**
+     * Select an assignment
+     * <p>
+     * The selected assignment is stored in a {@link LiveData} instance which will trigger the
+     * observers of that {@link LiveData} instance.
+     *
+     * @param selectedAssignment the selected an assignment
+     */
     public void selectAssignment(MoodleAssignment selectedAssignment) {
         this.selectedAssignment.setValue(selectedAssignment);
     }
 
+    /**
+     * @return {@link LiveData} instance which contains the selected assignment
+     */
     public LiveData<MoodleAssignment> getSelectedAssignment() {
         return selectedAssignment;
     }

@@ -233,7 +233,7 @@ public class MoodleViewModelTest {
 
         reset(observer);
 
-        // Aet another value and check if onChanged has been called again
+        // Set another value and check if onChanged has been called again
         remoteRes = RemoteResource.success(new MoodleAssignmentSubmission());
         liveData.setValue(remoteRes);
         verify(observer).onChanged(remoteRes);
@@ -309,7 +309,7 @@ public class MoodleViewModelTest {
         assign2.setDueDate(TimeUnit.SECONDS.toMillis(1507593600));
 
         // Verify that editor putInt method has been called correctly by the view model
-        viewModel.setAssignmentsSort(MoodleViewModel.SORT_BY_DATE);
+        viewModel.setAssignmentsSortIndex(MoodleViewModel.SORT_BY_DATE);
         verify(editor).putInt(SORT_ASSIGNMENTS_PREF, MoodleViewModel.SORT_BY_DATE);
 
         // Test the comparator for sorting by date

@@ -3,6 +3,8 @@ package ca.etsmtl.applets.etsmobile.model.Moodle;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
+ * Grade of an assignment
+ * <p>
  * Created by Sonphil on 02-09-17.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)

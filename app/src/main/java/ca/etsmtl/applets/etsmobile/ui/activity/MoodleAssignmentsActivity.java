@@ -227,10 +227,10 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                 moodleViewModel.setDisplayPastAssignments(!item.isChecked());
                 break;
             case R.id.menu_item_moodle_sort_assignments_date:
-                moodleViewModel.setAssignmentsSort(MoodleViewModel.SORT_BY_DATE);
+                moodleViewModel.setAssignmentsSortIndex(MoodleViewModel.SORT_BY_DATE);
                 break;
             case R.id.menu_item_moodle_sort_assignments_alpha:
-                moodleViewModel.setAssignmentsSort(MoodleViewModel.SORT_ALPHA);
+                moodleViewModel.setAssignmentsSortIndex(MoodleViewModel.SORT_ALPHA);
                 break;
             default:
                 return super.onOptionsItemSelected(item);

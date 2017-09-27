@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
+ * Course that contains a list of Moodle assignments that the user can view
+ * <p>
  * Created by Sonphil on 12-08-17.
  */
 public class MoodleAssignmentCourse {
