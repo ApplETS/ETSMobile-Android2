@@ -49,7 +49,6 @@ import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.model.Trimestre;
-import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseTodayDecorator;
@@ -270,6 +269,9 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         upcomingseanceAdapter.notifyDataSetChanged();
     }
     public void fillSeancesList(Date date) {
+        if (getActivity() == null || !isAdded())
+            return;
+
         SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
         String today = seancesFormatter.format(date).toString();
 
@@ -389,6 +391,13 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         });
 
         builder.show();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        horaireManager.deleteObserver(this);
     }
 
     private class AsyncUpdateCalendar extends AsyncTask<Object, Void, Object> {

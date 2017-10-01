@@ -11,9 +11,9 @@ import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceReques
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.soap.SignetsMobileSoap;
@@ -38,6 +38,7 @@ public class DataManager {
 	private SpiceManager spiceManager;
 	private DatabaseHelper dbHelper;
 	private static Context c;
+	private List<AsyncTask<Object, Void, Object>> tasks = new ArrayList<>();
 
 	private DataManager() {
 		spiceManager = new SpiceManager(MyJackSpringAndroidSpiceService.class);
@@ -85,7 +86,7 @@ public class DataManager {
 			String... params) {
 
 		// inline asynctask
-		new AsyncTask<Object, Void, Object>() {
+		final AsyncTask<Object, Void, Object> task = new AsyncTask<Object, Void, Object>() {
 			
 			private Exception exception = null;
 			private Object result;
@@ -332,9 +333,15 @@ public class DataManager {
 				} else {
 					listener.onRequestSuccess(result);
 				}
+
+				tasks.remove(this);
 			}
 			
-		}.execute(method, params);
+		};
+
+		tasks.add(task);
+
+		task.execute(method, params);
 	}
 
 	/**
@@ -386,6 +393,10 @@ public class DataManager {
 	public void stop() {
 		if (!spiceManager.isStarted())
 			spiceManager.shouldStop();
+
+		for (AsyncTask<Object, Void, Object> task : tasks) {
+			task.cancel(true);
+		}
 	}
 
 	/**

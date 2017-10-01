@@ -256,7 +256,7 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
                 afficherRafraichissementEtRechargerBottin();
             }
         } catch (Exception e) {
-            Log.e("BD FicheEmploye", e.getMessage());
+            Log.e("BD FicheEmploye", "" + e.getMessage());
         }
     }
 
