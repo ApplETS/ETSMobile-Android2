@@ -208,4 +208,11 @@ public class NotesFragment extends HttpFragment implements Observer {
                 refreshList();
             }
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        mNoteManager.deleteObserver(this);
+    }
 }

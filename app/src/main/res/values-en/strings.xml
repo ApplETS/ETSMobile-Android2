@@ -232,5 +232,5 @@
     <!-- Showcase -->
     <string name="new_future_message">Tap the profile image in the menu to access the Profile(when logged in)</string>
     <string name="coachmark_hint_profile">Use the icon above to access your Profile</string>
-    <string name="coachmark_hint_login">Use the button below to Login/Logout</string>
+    <string name="coachmark_hint_login">Use this button to Login/Logout</string>
 </resources>

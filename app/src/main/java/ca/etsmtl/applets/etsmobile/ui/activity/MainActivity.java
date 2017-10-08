@@ -27,10 +27,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
 import com.evernote.android.job.JobManager;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -94,10 +98,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int SPONSOR_ITEM = 14;
     public static final int TODAY_ITEM = 15;
     public static final int EVENTS_ITEM = 16;
-
     public static final int LOGIN = 17;
     public static final int LOGOUT = 18;
-
+    public static final int PROFILE_ITEM = 19;
 
     private String TAG = "MainActivity";
     private AccountManager accountManager;
@@ -146,12 +149,18 @@ public class MainActivity extends AppCompatActivity {
 
         boolean firstLogin = prefs.getBoolean(Constants.FIRST_LOGIN, true);
         if (firstLogin) {
-            prefs.edit().putBoolean(Constants.FIRST_LOGIN, false).commit();
-            onCoachMark();
+            showShowCase();
         }
 
         initJobManager();
         BottinSyncJob.scheduleJob();
+    }
+
+    private void showShowCase() {
+        activityDrawer.openDrawer();
+        TextView textView = (TextView) activityDrawer.getStickyFooter().findViewById(R.id.material_drawer_name);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        TapTargetView.showFor(this, TapTarget.forView(textView, getString(R.string.welcome), getString(R.string.coachmark_hint_login)));
     }
 
     private void initJobManager() {
@@ -225,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
                 .withShowDrawerOnFirstLaunch(true)
                 .addDrawerItems(
                         new ExpandableDrawerItem().withName(R.string.menu_section_1_moi).withSelectable(false).withSubItems(
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_profil).withIdentifier(PROFILE_ITEM).withIcon(R.drawable.ic_ico_profil).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_ajd).withIdentifier(TODAY_ITEM).withIcon(R.drawable.ic_ico_aujourdhui).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_horaire).withIdentifier(SCHEDULE_ITEM).withIcon(R.drawable.ic_ico_schedule).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_notes).withIdentifier(COURSE_ITEM).withIcon(R.drawable.ic_ico_notes).withEnabled(isUserLoggedIn),
@@ -439,6 +449,9 @@ public class MainActivity extends AppCompatActivity {
             if (drawerItem != null) {
 
                 switch ((int) drawerItem.getIdentifier()) {
+                    case PROFILE_ITEM:
+                        goToFragment(new ProfilFragment(), ProfilFragment.class.getName());
+                        break;
                     case SCHEDULE_ITEM:
                         goToFragment(new HoraireFragment(), HoraireFragment.class.getName());
                         break;
@@ -488,6 +501,7 @@ public class MainActivity extends AppCompatActivity {
                         selectAccount();
                         break;
                     case LOGIN:
+                        prefs.edit().putBoolean(Constants.FIRST_LOGIN, false).apply();
                         final AccountManagerFuture<Bundle> future =
                                 accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
                                     @Override
@@ -539,5 +553,4 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) // Small fix : null when changing language
             getSupportActionBar().setTitle(title);
     }
-
 }
