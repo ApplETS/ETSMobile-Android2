@@ -9,17 +9,38 @@
         android:id="@+id/widget_title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/widget_prev_day_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_keyboard_arrow_left_white_24dp" />
+
         <TextView
             android:id="@+id/widget_todays_name"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            tools:text="@string/lundi_le_26_avril"
-            android:gravity="left"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/widget_prev_day_btn"
+            android:gravity="center"
+            android:includeFontPadding="false"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white"
-            android:padding="5dp"
-            android:layout_toLeftOf="@+id/widget_sync"/>
+            android:textStyle="bold"
+            tools:text="@string/lundi_le_26_avril" />
+
+        <ImageButton
+            android:id="@+id/widget_next_day_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/widget_todays_name"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_keyboard_arrow_right_white_24dp" />
 
         <FrameLayout
             android:id="@+id/widget_sync"
@@ -29,21 +50,22 @@
 
             <ImageButton
                 android:id="@+id/widget_sync_btn"
-                android:contentDescription="Sync"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:minWidth="0dp"
+                android:contentDescription="Sync"
                 android:minHeight="0dp"
-                android:visibility="gone"/>
+                android:minWidth="0dp"
+                android:src="@drawable/ic_sync"
+                android:visibility="gone" />
 
             <ProgressBar
                 android:id="@+id/widget_progress_bar"
-                android:indeterminateDrawable="@drawable/widget_today_progress_bar_style"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:visibility="invisible"/>
+                android:indeterminateDrawable="@drawable/widget_today_progress_bar_style"
+                android:visibility="invisible" />
         </FrameLayout>
 
     </RelativeLayout>
@@ -53,33 +75,33 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
-        android:layoutAnimation="@anim/fade_in"
-        tools:listitem="@layout/widget_today_row_courses"
         android:layout_below="@id/widget_title_bar"
-        android:listSelector="@android:color/transparent"
         android:divider="@color/transparent"
-        android:dividerHeight="5dp" />
+        android:dividerHeight="5dp"
+        android:layoutAnimation="@anim/fade_in"
+        android:listSelector="@android:color/transparent"
+        tools:listitem="@layout/widget_today_row_courses" />
 
     <TextView
         android:id="@+id/widget_empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/today_no_classes"
-        android:textColor="@color/white"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:visibility="gone"
+        android:layout_below="@+id/widget_todays_list"
         android:layout_centerInParent="true"
-        android:layout_below="@+id/widget_todays_list" />
+        android:text="@string/today_no_classes"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/widget_login_btn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:text="@string/touch_login"
         android:background="@drawable/widget_today_layer_list_logged_out"
         android:gravity="bottom|center"
         android:paddingBottom="4dp"
+        android:text="@string/touch_login"
         android:visibility="gone" />
 
 </RelativeLayout>

@@ -7,14 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.net.Uri;
 import android.support.v4.graphics.ColorUtils;
 import android.util.DisplayMetrics;
@@ -56,7 +49,9 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     private static int progressBarId = R.id.widget_progress_bar;
     private static int todayListId = R.id.widget_todays_list;
     private static int emptyViewId = R.id.widget_empty_view;
+    private static int prevDayBtnId = R.id.widget_prev_day_btn;
     private static int todayNameTvId = R.id.widget_todays_name;
+    private static int nextDayBtnId = R.id.widget_next_day_btn;
     private static DataManager dataManager;
 
     private HoraireManager horaireManager;
@@ -99,6 +94,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, todayListId);
             views.setViewVisibility(emptyViewId, View.VISIBLE);
             setUpSyncBtn(context, views, textColor);
+            setUpPrevAndNextBtns(views, textColor);
         } else {
             views.setViewVisibility(syncBtnId, View.GONE);
             views.setViewVisibility(progressBarId, View.GONE);
@@ -219,19 +215,15 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         PendingIntent pendingIntentRefresh = PendingIntent.getBroadcast(context, 0, intentRefresh,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_sync);
-
-        // Copie mutable de l'icône
-        icon = icon.copy(Bitmap.Config.ARGB_8888, true);
-        Paint paint = new Paint();
-        ColorFilter filter = new PorterDuffColorFilter(textColor, PorterDuff.Mode.SRC_IN);
-        paint.setColorFilter(filter);
-        Canvas canvas = new Canvas(icon);
-        canvas.drawBitmap(icon, 0, 0, paint);
-
-        views.setImageViewBitmap(syncBtnId, icon);
+        views.setInt(syncBtnId, "setColorFilter", textColor);
         views.setInt(syncBtnId, "setBackgroundColor", Color.TRANSPARENT);
         views.setOnClickPendingIntent(syncBtnId, pendingIntentRefresh);
+    }
+
+    private void setUpPrevAndNextBtns(RemoteViews views, int textColor) {
+
+        views.setInt(prevDayBtnId, "setColorFilter", textColor);
+        views.setInt(nextDayBtnId, "setColorFilter", textColor);
     }
 
     private void setAllWidgetsLocale(Context context, String language) {
