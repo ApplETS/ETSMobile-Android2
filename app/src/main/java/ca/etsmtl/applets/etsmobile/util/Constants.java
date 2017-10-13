@@ -25,6 +25,7 @@ public class Constants {
     public static final String ALL_NOTIFS_LOADED = "ALL_NOTIFS_LOADED";
     public static final String RECEIVED_NOTIF = "RECEIVED_NOTIF";
 	public static final String TEXT_COLOR = "TEXT_COLOR";
+    public static final String DATE = "DATE";
 	public static final long GOOGLE_API_CLIENT_TIMEOUT_S = 10;
     public static final String FIRST_LOGIN = "FIRST_LOGIN";
     public static final String EXTRA_CUSTOM_TABS_SESSION = "android.support.customtabs.extra.SESSION";
