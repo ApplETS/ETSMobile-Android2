@@ -57,6 +57,8 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
     private RelativeLayout mWidgetPreviewLayout;
     private TextView mWidgetTodaysNameTv;
     private ImageButton syncBtn;
+    private ImageButton prevBtn;
+    private ImageButton nextBtn;
 
     //******************************
     //ÉCOUTEURS
@@ -135,6 +137,9 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
 
             mWidgetTodaysNameTv.setText(dateActuelleStr);
             mWidgetTodaysNameTv.setTextColor(textColor);
+
+            prevBtn.setColorFilter(textColor);
+            nextBtn.setColorFilter(textColor);
 
             syncBtn.setColorFilter(textColor);
             syncBtn.setBackgroundColor(Color.TRANSPARENT);
@@ -245,7 +250,9 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
         setUpActionBar();
 
         mWidgetPreviewLayout = (RelativeLayout) findViewById(R.id.today_widget);
+        prevBtn = findViewById(R.id.widget_prev_day_btn);
         mWidgetTodaysNameTv = (TextView) findViewById(R.id.widget_todays_name);
+        nextBtn = findViewById(R.id.widget_next_day_btn);
         syncBtn = (ImageButton) findViewById(R.id.widget_sync_btn);
 
         mBgColorSpinner = (Spinner) findViewById(R.id.bg_color_spinner);
