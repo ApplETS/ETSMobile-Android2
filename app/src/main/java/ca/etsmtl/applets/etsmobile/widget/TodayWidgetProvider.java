@@ -104,6 +104,8 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             views.setRemoteAdapter(appWidgetId, todayListId, intent);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, todayListId);
             views.setViewVisibility(emptyViewId, View.VISIBLE);
+            views.setViewVisibility(prevDayBtnId, View.VISIBLE);
+            views.setViewVisibility(nextDayBtnId, View.VISIBLE);
             setUpSyncBtn(context, views, textColor);
             setUpPrevBtn(views, textColor);
             setUpNextBtn(views, textColor);
@@ -112,6 +114,8 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             views.setViewVisibility(progressBarId, View.GONE);
             views.setViewVisibility(todayListId, View.GONE);
             views.setViewVisibility(emptyViewId, View.GONE);
+            views.setViewVisibility(prevDayBtnId, View.GONE);
+            views.setViewVisibility(nextDayBtnId, View.GONE);
         }
 
         setUpTodayDateTv(context, views);
