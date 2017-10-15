@@ -108,9 +108,9 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             views.setViewVisibility(emptyViewId, View.VISIBLE);
             views.setViewVisibility(prevDayBtnId, View.VISIBLE);
             views.setViewVisibility(nextDayBtnId, View.VISIBLE);
-            setUpSyncBtn(context, views, textColor, appWidgetId);
-            setUpPrevBtn(views, textColor, appWidgetId);
-            setUpNextBtn(views, textColor, appWidgetId);
+            setUpSyncBtn(context, views, textColor);
+            setUpPrevBtn(views, textColor);
+            setUpNextBtn(views, textColor);
         } else {
             views.setViewVisibility(syncBtnId, View.GONE);
             views.setViewVisibility(progressBarId, View.GONE);
@@ -121,7 +121,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
 
         setUpTodayDateTv(context, views);
-        setUpLoginBtn(context, views, textColor, appWidgetId);
+        setUpLoginBtn(context, views, textColor);
 
         bgColor = ColorUtils.setAlphaComponent(bgColor, bgOpacity);
         views.setInt(widgetLayoutId, "setBackgroundColor", bgColor);
@@ -201,7 +201,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
     }
 
-    private void setUpLoginBtn(Context context, RemoteViews views, int textColor, int widgetId) {
+    private void setUpLoginBtn(Context context, RemoteViews views, int textColor) {
         int loginBtnId = R.id.widget_login_btn;
 
         if (mUserLoggedIn) {
@@ -209,8 +209,8 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         } else {
             Intent intentLogin = new Intent(context, LoginActivity.class);
             intentLogin.putExtra(Constants.KEY_IS_ADDING_NEW_ACCOUNT, true);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, widgetId, intentLogin,
-                    FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, LOGIN_REQUEST_CODE,
+                    intentLogin, FLAG_UPDATE_CURRENT);
             views.setOnClickPendingIntent(loginBtnId, pendingIntent);
             views.setTextViewText(loginBtnId, context.getString(R.string.touch_login));
             views.setTextColor(loginBtnId, textColor);
@@ -235,11 +235,9 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
     }
 
-    private void setUpSyncBtn(Context context, RemoteViews views, int textColor, int widgetId) {
-        Intent intentRefresh = new Intent(context, TodayWidgetProvider.class);
-        intentRefresh.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        intentRefresh.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[]{widgetId});
-        PendingIntent pendingIntentRefresh = PendingIntent.getBroadcast(context, widgetId,
+    private void setUpSyncBtn(Context context, RemoteViews views, int textColor) {
+        Intent intentRefresh = getUpdateIntent();
+        PendingIntent pendingIntentRefresh = PendingIntent.getBroadcast(context, SYNC_REQUEST_CODE,
                 intentRefresh, PendingIntent.FLAG_CANCEL_CURRENT);
 
         views.setInt(syncBtnId, "setColorFilter", textColor);
@@ -247,30 +245,34 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         views.setOnClickPendingIntent(syncBtnId, pendingIntentRefresh);
     }
 
-    private void setUpPrevBtn(RemoteViews views, int textColor, int widgetId) {
+    private void setUpPrevBtn(RemoteViews views, int textColor) {
         views.setInt(prevDayBtnId, "setColorFilter", textColor);
 
-        Intent prevIntent = new Intent(context, TodayWidgetProvider.class);
-        prevIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        prevIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[]{widgetId});
+        Intent prevIntent = getUpdateIntent();
         prevIntent.putExtra(Constants.DATE, dateTime.minusDays(1));
 
-        PendingIntent pendingIntentPrev = PendingIntent.getBroadcast(context, widgetId,
+        PendingIntent pendingIntentPrev = PendingIntent.getBroadcast(context, PREV_DAY_REQUEST_CODE,
                 prevIntent, FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(prevDayBtnId, pendingIntentPrev);
     }
 
-    private void setUpNextBtn(RemoteViews views, int textColor, int widgetId) {
+    private void setUpNextBtn(RemoteViews views, int textColor) {
         views.setInt(nextDayBtnId, "setColorFilter", textColor);
 
-        Intent nextIntent = new Intent(context, TodayWidgetProvider.class);
-        nextIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        nextIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[]{widgetId});
+        Intent nextIntent = getUpdateIntent();
         nextIntent.putExtra(Constants.DATE, dateTime.plusDays(1));
 
-        PendingIntent pendingIntentNext = PendingIntent.getBroadcast(context, widgetId,
+        PendingIntent pendingIntentNext = PendingIntent.getBroadcast(context, NEXT_DAY_REQUEST_CODE,
                 nextIntent, FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(nextDayBtnId, pendingIntentNext);
+    }
+
+    private Intent getUpdateIntent() {
+        Intent intent = new Intent(context, TodayWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetsIds(context));
+
+        return intent;
     }
 
     private void setAllWidgetsLocale(Context context, String language) {
