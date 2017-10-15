@@ -98,8 +98,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:background="@drawable/ets_background_grayscale"
-        android:gravity="center"
+        android:background="@drawable/widget_today_layer_list_logged_out"
+        android:gravity="bottom|center"
         android:paddingBottom="4dp"
         android:text="@string/touch_login"
         android:visibility="gone" />
