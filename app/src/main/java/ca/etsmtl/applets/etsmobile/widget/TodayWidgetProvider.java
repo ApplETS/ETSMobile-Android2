@@ -108,7 +108,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             views.setViewVisibility(emptyViewId, View.VISIBLE);
             views.setViewVisibility(prevDayBtnId, View.VISIBLE);
             views.setViewVisibility(nextDayBtnId, View.VISIBLE);
-            setUpSyncBtn(context, views, textColor);
+            setUpSyncBtn(views, textColor);
             setUpPrevBtn(views, textColor);
             setUpNextBtn(views, textColor);
         } else {
@@ -235,10 +235,10 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
     }
 
-    private void setUpSyncBtn(Context context, RemoteViews views, int textColor) {
+    private void setUpSyncBtn(RemoteViews views, int textColor) {
         Intent intentRefresh = getUpdateIntent();
         PendingIntent pendingIntentRefresh = PendingIntent.getBroadcast(context, SYNC_REQUEST_CODE,
-                intentRefresh, PendingIntent.FLAG_CANCEL_CURRENT);
+                intentRefresh, PendingIntent.FLAG_UPDATE_CURRENT);
 
         views.setInt(syncBtnId, "setColorFilter", textColor);
         views.setInt(syncBtnId, "setBackgroundColor", Color.TRANSPARENT);
