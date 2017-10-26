@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
@@ -72,11 +72,11 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
     private SeanceAdapter upcomingseanceAdapter;//Seances du semestre
     private DatabaseHelper databaseHelper;
     private ProgressBar progressBarSyncHoraire;
-    @Bind(R.id.calendarView)
+    @BindView(R.id.calendarView)
     MaterialCalendarView mCalendarView;
-    @Bind(R.id.horraireViewSwitcher)
+    @BindView(R.id.horraireViewSwitcher)
     ViewSwitcher horraireViewSwitcher;
-    @Bind(R.id.calendar_listview)
+    @BindView(R.id.calendar_listview)
     ListView calendar_listview;
     private ArrayList<CalendarDay> courseDays;
     private ArrayList<CalendarDay> eventDays;

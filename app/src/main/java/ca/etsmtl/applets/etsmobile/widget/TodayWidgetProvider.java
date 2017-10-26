@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.graphics.ColorUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -73,11 +72,8 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
     private void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                  int appWidgetId) {
-        Log.d(TAG, "Mise à jour du widget " + appWidgetId);
-
         RemoteViews views = new RemoteViews(context.getPackageName(), widgetInitialLayoutId);
 
-        Log.d(TAG, "Vérification si la synchronisation en cours : " + syncEnCours);
         if (!syncEnCours && mUserLoggedIn) {
             views.setViewVisibility(syncBtnId, View.VISIBLE);
             views.setViewVisibility(progressBarId, View.GONE);
@@ -142,7 +138,6 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             this.appWidgetManager = appWidgetManager;
 
             if (mUserLoggedIn && !syncEnCours) {
-                Log.d(TAG, "Démarrage de synchronisation");
                 syncEnCours = true;
                 dataManager = DataManager.getInstance(context);
                 sync();
@@ -194,8 +189,6 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             dateTime = (DateTime) intent.getSerializableExtra(Constants.DATE);
             if (dateTime == null)
                 dateTime = new DateTime();
-
-            Log.d(TAG, "Date : " + dateTime.toString());
 
             onUpdate(context, appWidgetManager, widgetsIds);
         }
@@ -313,7 +306,6 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     @Override
     public void onRequestFailure(SpiceException spiceException) {
         syncEnCours = false;
-        Log.d(TAG, "Fin de la synchronisation (échec)");
 
         Toast toast = Toast.makeText(context, "ÉTSMobile" + context.getString(R.string.deux_points)
                 + spiceException.getLocalizedMessage(), Toast.LENGTH_SHORT);
@@ -383,7 +375,6 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     @Override
     public void update(Observable observable, Object data) {
         syncEnCours = false;
-        Log.d(TAG, "Fin de la synchronisation (maj UI)");
 
         for (int appWidgetId : appWidgetsToBeUpdatedIds) {
 
