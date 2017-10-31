@@ -98,7 +98,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             intent.putExtra(Constants.TEXT_COLOR, textColor);
             intent.putExtra(Constants.DATE, dateTime.getMillis());
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-            views.setTextViewText(emptyViewId, context.getString(R.string.today_no_classes));
+            views.setTextViewText(emptyViewId, context.getString(R.string.no_classes_widget));
             views.setRemoteAdapter(appWidgetId, todayListId, intent);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, todayListId);
             views.setViewVisibility(emptyViewId, View.VISIBLE);
