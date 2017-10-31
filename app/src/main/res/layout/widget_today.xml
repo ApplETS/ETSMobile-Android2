@@ -5,24 +5,27 @@
     android:layout_height="match_parent"
     android:padding="@dimen/widget_margin">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/widget_title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="true"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/widget_sync"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            tools:background="@color/green">
+            tools:background="@color/blue">
 
             <ImageButton
                 android:id="@+id/widget_prev_day_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:background="@null"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_keyboard_arrow_left_white_24dp" />
@@ -41,22 +44,19 @@
 
             <ImageButton
                 android:id="@+id/widget_next_day_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:background="@null"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_keyboard_arrow_right_white_24dp" />
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
         <LinearLayout
             android:id="@+id/widget_sync"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:orientation="horizontal">
 
             <ImageButton
@@ -74,8 +74,7 @@
                 android:indeterminateDrawable="@drawable/widget_today_progress_bar_style"
                 android:visibility="invisible" />
         </LinearLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/widget_todays_list"
@@ -90,11 +89,12 @@
 
     <TextView
         android:id="@+id/widget_empty_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/widget_todays_list"
         android:layout_centerInParent="true"
-        android:text="@string/today_no_classes"
+        android:gravity="center"
+        android:text="@string/no_classes_widget"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white"
         android:visibility="gone" />

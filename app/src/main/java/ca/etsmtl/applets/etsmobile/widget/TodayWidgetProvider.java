@@ -98,7 +98,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             intent.putExtra(Constants.TEXT_COLOR, textColor);
             intent.putExtra(Constants.DATE, dateTime.getMillis());
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-            views.setTextViewText(emptyViewId, context.getString(R.string.today_no_classes));
+            views.setTextViewText(emptyViewId, context.getString(R.string.no_classes_widget));
             views.setRemoteAdapter(appWidgetId, todayListId, intent);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, todayListId);
             views.setViewVisibility(emptyViewId, View.VISIBLE);
@@ -221,6 +221,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             Locale locale = context.getResources().getConfiguration().locale;
             String dateActuelleStr = context.getString(R.string.horaire, pDoW.getAsText(locale),
                     pDoM.getAsText(locale), pMoY.getAsText(locale));
+            views.setViewVisibility(todayNameTvId, View.GONE);
             views.setTextViewText(todayNameTvId, dateActuelleStr);
             views.setViewVisibility(todayNameTvId, View.VISIBLE);
         } else {
