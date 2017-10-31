@@ -221,6 +221,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             Locale locale = context.getResources().getConfiguration().locale;
             String dateActuelleStr = context.getString(R.string.horaire, pDoW.getAsText(locale),
                     pDoM.getAsText(locale), pMoY.getAsText(locale));
+            views.setViewVisibility(todayNameTvId, View.GONE);
             views.setTextViewText(todayNameTvId, dateActuelleStr);
             views.setViewVisibility(todayNameTvId, View.VISIBLE);
         } else {
