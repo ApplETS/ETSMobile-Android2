@@ -4,22 +4,14 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -65,6 +57,8 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
     private RelativeLayout mWidgetPreviewLayout;
     private TextView mWidgetTodaysNameTv;
     private ImageButton syncBtn;
+    private ImageButton prevBtn;
+    private ImageButton nextBtn;
 
     //******************************
     //ÉCOUTEURS
@@ -144,19 +138,10 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
             mWidgetTodaysNameTv.setText(dateActuelleStr);
             mWidgetTodaysNameTv.setTextColor(textColor);
 
-            Bitmap icon = BitmapFactory
-                    .decodeResource(TodayWidgetConfigureActivity.this.getResources(),
-                            R.drawable.ic_sync);
+            prevBtn.setColorFilter(textColor);
+            nextBtn.setColorFilter(textColor);
 
-            // Copie mutable de l'icône
-            icon = icon.copy(Bitmap.Config.ARGB_8888, true);
-            Paint paint = new Paint();
-            ColorFilter filter = new PorterDuffColorFilter(textColor, PorterDuff.Mode.SRC_IN);
-            paint.setColorFilter(filter);
-            Canvas canvas = new Canvas(icon);
-            canvas.drawBitmap(icon, 0, 0, paint);
-
-            syncBtn.setImageBitmap(icon);
+            syncBtn.setColorFilter(textColor);
             syncBtn.setBackgroundColor(Color.TRANSPARENT);
             syncBtn.setVisibility(View.VISIBLE);
         }
@@ -265,7 +250,9 @@ public class TodayWidgetConfigureActivity extends AppCompatActivity {
         setUpActionBar();
 
         mWidgetPreviewLayout = (RelativeLayout) findViewById(R.id.today_widget);
+        prevBtn = findViewById(R.id.widget_prev_day_btn);
         mWidgetTodaysNameTv = (TextView) findViewById(R.id.widget_todays_name);
+        nextBtn = findViewById(R.id.widget_next_day_btn);
         syncBtn = (ImageButton) findViewById(R.id.widget_sync_btn);
 
         mBgColorSpinner = (Spinner) findViewById(R.id.bg_color_spinner);

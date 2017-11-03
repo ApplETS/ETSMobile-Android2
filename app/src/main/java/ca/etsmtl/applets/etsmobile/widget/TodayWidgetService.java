@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
@@ -51,12 +52,15 @@ public class TodayWidgetService extends RemoteViewsService {
         private int appWidgetId;
         private DatabaseHelper databaseHelper;
         private int textColor;
+        private Date date;
 
         public ListRemoteViewFactory(Context context, Intent intent) {
             this.context = context;
             this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             this.textColor = intent.getIntExtra(Constants.TEXT_COLOR, Color.WHITE);
+            long dateMs = intent.getLongExtra(Constants.DATE, new Date().getTime());
+            date = new Date(dateMs);
             listeDataRowItems = new ArrayList<TodayDataRowItem>();
 
         }
@@ -81,12 +85,10 @@ public class TodayWidgetService extends RemoteViewsService {
             listeDataRowItems = new ArrayList<TodayDataRowItem>();
 
             try {
-                DateTime dateTime = new DateTime();
-
                 SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd",
                         context.getResources().getConfiguration().locale);
 
-                String dateStrFormatted = seancesFormatter.format(dateTime.toDate()).toString();
+                String dateStrFormatted = seancesFormatter.format(date);
 
                 listeSeances = databaseHelper.getDao(Seances.class).queryBuilder().where().
                         like("dateDebut", dateStrFormatted + "%").query();

@@ -18,7 +18,7 @@ repositories {
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    buildToolsVersion '26.0.2'
     useLibrary 'org.apache.http.legacy'
 
     lintOptions {
@@ -111,7 +111,8 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'me.grantland:autofittextview:0.2.+'
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.prolificinteractive:material-calendarview:1.4.0'
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.5.0'
     compile 'com.j256.ormlite:ormlite-core:4.43'

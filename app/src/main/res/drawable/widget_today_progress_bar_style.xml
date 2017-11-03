@@ -3,8 +3,10 @@
     android:pivotX="50%"
     android:pivotY="50%"
     android:fromDegrees="0"
-    android:toDegrees="-1080">
+    android:toDegrees="-1080"
+    android:drawable="@drawable/ic_sync_white_24dp">
 
+    <!--
     <shape android:shape="ring" android:innerRadiusRatio="3"
         android:thicknessRatio="8" android:useLevel="false">
 
@@ -15,4 +17,5 @@
             android:angle="0"
             />
     </shape>
+    -->
 </rotate>

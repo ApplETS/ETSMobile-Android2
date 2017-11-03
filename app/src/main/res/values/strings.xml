@@ -335,6 +335,7 @@
     <string name="config_text_color">Couleur de police</string>
     <string name="config_bg_opacity">Opacité du fond</string>
     <string name="config_widget_preview">Aperçu du widget</string>
+    <string name="no_classes_widget">Pas de cours</string>
 
     <!-- Showcase -->
     <string name="new_future_message">Appuyer sur l\'image de proile pour acceder à votre profile (lorsque vous êtes connecté)</string>
