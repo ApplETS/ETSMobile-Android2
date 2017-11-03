@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         boolean firstLogin = prefs.getBoolean(Constants.FIRST_LOGIN, true);
         if (firstLogin) {
             showShowCase();
+            prefs.edit().putBoolean(Constants.FIRST_LOGIN, false).apply();
         }
 
         initJobManager();

@@ -7,14 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.net.Uri;
 import android.support.v4.graphics.ColorUtils;
 import android.util.DisplayMetrics;
@@ -45,10 +38,18 @@ import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.TrimestreComparator;
 import ca.etsmtl.applets.etsmobile2.R;
 
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+
 /**
  * Implémentation du widget Today.
  */
 public class TodayWidgetProvider extends AppWidgetProvider implements RequestListener<Object>, Observer {
+
+    private static final String TAG = "TodayWidget";
+    private static final int LOGIN_REQUEST_CODE = 0;
+    private static final int SYNC_REQUEST_CODE = 1;
+    private static final int PREV_DAY_REQUEST_CODE = 2;
+    private static final int NEXT_DAY_REQUEST_CODE = 3;
 
     private static int widgetInitialLayoutId = R.layout.widget_today;
     private static int widgetLayoutId = R.id.today_widget;
@@ -56,19 +57,21 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     private static int progressBarId = R.id.widget_progress_bar;
     private static int todayListId = R.id.widget_todays_list;
     private static int emptyViewId = R.id.widget_empty_view;
+    private static int prevDayBtnId = R.id.widget_prev_day_btn;
     private static int todayNameTvId = R.id.widget_todays_name;
+    private static int nextDayBtnId = R.id.widget_next_day_btn;
     private static DataManager dataManager;
+    private static DateTime dateTime = new DateTime();
+    private boolean syncEnCours;
 
     private HoraireManager horaireManager;
     private Context context;
     private boolean mUserLoggedIn;
-    private boolean syncEnCours;
     private int[] appWidgetsToBeUpdatedIds;
     private AppWidgetManager appWidgetManager;
 
     private void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                  int appWidgetId) {
-
         RemoteViews views = new RemoteViews(context.getPackageName(), widgetInitialLayoutId);
 
         if (!syncEnCours && mUserLoggedIn) {
@@ -93,17 +96,24 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             Intent intent = new Intent(context, TodayWidgetService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             intent.putExtra(Constants.TEXT_COLOR, textColor);
+            intent.putExtra(Constants.DATE, dateTime.getMillis());
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-            views.setTextViewText(emptyViewId, context.getString(R.string.today_no_classes));
+            views.setTextViewText(emptyViewId, context.getString(R.string.no_classes_widget));
             views.setRemoteAdapter(appWidgetId, todayListId, intent);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, todayListId);
             views.setViewVisibility(emptyViewId, View.VISIBLE);
-            setUpSyncBtn(context, views, textColor);
+            views.setViewVisibility(prevDayBtnId, View.VISIBLE);
+            views.setViewVisibility(nextDayBtnId, View.VISIBLE);
+            setUpSyncBtn(views, textColor);
+            setUpPrevBtn(views, textColor);
+            setUpNextBtn(views, textColor);
         } else {
             views.setViewVisibility(syncBtnId, View.GONE);
             views.setViewVisibility(progressBarId, View.GONE);
             views.setViewVisibility(todayListId, View.GONE);
             views.setViewVisibility(emptyViewId, View.GONE);
+            views.setViewVisibility(prevDayBtnId, View.GONE);
+            views.setViewVisibility(nextDayBtnId, View.GONE);
         }
 
         setUpTodayDateTv(context, views);
@@ -128,9 +138,9 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
             this.appWidgetManager = appWidgetManager;
 
             if (mUserLoggedIn && !syncEnCours) {
+                syncEnCours = true;
                 dataManager = DataManager.getInstance(context);
                 sync();
-                syncEnCours = true;
                 // Sauvegarde des ids pour une mise à jour ultérieure à la suite de la synchronisation
                 appWidgetsToBeUpdatedIds = appWidgetIds.clone();
             }
@@ -166,6 +176,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+
         String actionStr = intent.getAction();
 
         if (actionStr != null && actionStr.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
@@ -174,6 +185,10 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
             if (widgetsIds == null || widgetsIds.length == 0)
                 widgetsIds = allWidgetsIds(context);
+
+            dateTime = (DateTime) intent.getSerializableExtra(Constants.DATE);
+            if (dateTime == null)
+                dateTime = new DateTime();
 
             onUpdate(context, appWidgetManager, widgetsIds);
         }
@@ -187,7 +202,8 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         } else {
             Intent intentLogin = new Intent(context, LoginActivity.class);
             intentLogin.putExtra(Constants.KEY_IS_ADDING_NEW_ACCOUNT, true);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intentLogin, 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, LOGIN_REQUEST_CODE,
+                    intentLogin, FLAG_UPDATE_CURRENT);
             views.setOnClickPendingIntent(loginBtnId, pendingIntent);
             views.setTextViewText(loginBtnId, context.getString(R.string.touch_login));
             views.setTextColor(loginBtnId, textColor);
@@ -198,13 +214,14 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     private void setUpTodayDateTv(Context context, RemoteViews views) {
 
         if (mUserLoggedIn) {
-            DateTime dateActuelle = new DateTime();
+            DateTime dateActuelle = dateTime;
             DateTime.Property pDoW = dateActuelle.dayOfWeek();
             DateTime.Property pDoM = dateActuelle.dayOfMonth();
             DateTime.Property pMoY = dateActuelle.monthOfYear();
             Locale locale = context.getResources().getConfiguration().locale;
             String dateActuelleStr = context.getString(R.string.horaire, pDoW.getAsText(locale),
                     pDoM.getAsText(locale), pMoY.getAsText(locale));
+            views.setViewVisibility(todayNameTvId, View.GONE);
             views.setTextViewText(todayNameTvId, dateActuelleStr);
             views.setViewVisibility(todayNameTvId, View.VISIBLE);
         } else {
@@ -212,26 +229,44 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
         }
     }
 
-    private void setUpSyncBtn(Context context, RemoteViews views, int textColor) {
-        Intent intentRefresh = new Intent(context, TodayWidgetProvider.class);
-        intentRefresh.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        intentRefresh.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetsIds(context));
-        PendingIntent pendingIntentRefresh = PendingIntent.getBroadcast(context, 0, intentRefresh,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+    private void setUpSyncBtn(RemoteViews views, int textColor) {
+        Intent intentRefresh = getUpdateIntent();
+        PendingIntent pendingIntentRefresh = PendingIntent.getBroadcast(context, SYNC_REQUEST_CODE,
+                intentRefresh, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_sync);
-
-        // Copie mutable de l'icône
-        icon = icon.copy(Bitmap.Config.ARGB_8888, true);
-        Paint paint = new Paint();
-        ColorFilter filter = new PorterDuffColorFilter(textColor, PorterDuff.Mode.SRC_IN);
-        paint.setColorFilter(filter);
-        Canvas canvas = new Canvas(icon);
-        canvas.drawBitmap(icon, 0, 0, paint);
-
-        views.setImageViewBitmap(syncBtnId, icon);
+        views.setInt(syncBtnId, "setColorFilter", textColor);
         views.setInt(syncBtnId, "setBackgroundColor", Color.TRANSPARENT);
         views.setOnClickPendingIntent(syncBtnId, pendingIntentRefresh);
+    }
+
+    private void setUpPrevBtn(RemoteViews views, int textColor) {
+        views.setInt(prevDayBtnId, "setColorFilter", textColor);
+
+        Intent prevIntent = getUpdateIntent();
+        prevIntent.putExtra(Constants.DATE, dateTime.minusDays(1));
+
+        PendingIntent pendingIntentPrev = PendingIntent.getBroadcast(context, PREV_DAY_REQUEST_CODE,
+                prevIntent, FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(prevDayBtnId, pendingIntentPrev);
+    }
+
+    private void setUpNextBtn(RemoteViews views, int textColor) {
+        views.setInt(nextDayBtnId, "setColorFilter", textColor);
+
+        Intent nextIntent = getUpdateIntent();
+        nextIntent.putExtra(Constants.DATE, dateTime.plusDays(1));
+
+        PendingIntent pendingIntentNext = PendingIntent.getBroadcast(context, NEXT_DAY_REQUEST_CODE,
+                nextIntent, FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(nextDayBtnId, pendingIntentNext);
+    }
+
+    private Intent getUpdateIntent() {
+        Intent intent = new Intent(context, TodayWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetsIds(context));
+
+        return intent;
     }
 
     private void setAllWidgetsLocale(Context context, String language) {

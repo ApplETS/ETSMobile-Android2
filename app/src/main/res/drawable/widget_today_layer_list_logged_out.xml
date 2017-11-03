@@ -4,8 +4,8 @@
     <item >
         <bitmap
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:src="@drawable/ic_ets"
-            android:gravity="center"
+            android:src="@drawable/ets_blanc_ecran_fond_transparent"
+            android:gravity="center|clip_vertical"
             />
     </item>
 </layer-list>

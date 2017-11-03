@@ -13,12 +13,12 @@ apply plugin: 'com.android.application'
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     maven { url 'https://github.com/leonardocardoso/mvn-repo/raw/master/maven-deploy' }
+    maven { url 'https://maven.google.com' }
 }
 
-
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
     useLibrary 'org.apache.http.legacy'
 
     lintOptions {
@@ -56,7 +56,18 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
+
+def SUPPORT_LIBRARY_VERSION = '26.1.0'
+def PLAY_SERVICES_LIBRARY_VERSION = '11.0.4'
+def ARCH_VERSION = '1.0.0-alpha9-1'
+def DAGGER_VERSION = '2.11'
+def RETROFIT_VERSION = '2.3.0'
+def OK_HTTP_3_VERSION = '3.9.0'
 
 dependencies {
     wearApp project(':wear')
@@ -64,46 +75,88 @@ dependencies {
     compile('com.octo.android.robospice:robospice-spring-android:1.4.12') {
         exclude group: 'org.apache.commons', module: 'commons-io'
     }
+    compile "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
+    compile "com.android.support:support-v4:${SUPPORT_LIBRARY_VERSION}"
+    compile "com.android.support:recyclerview-v7:${SUPPORT_LIBRARY_VERSION}"
+    compile "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
+    compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
+        transitive = true;
+    }
+    compile "com.google.android.gms:play-services-gcm:${PLAY_SERVICES_LIBRARY_VERSION}"
+    compile "com.google.android.gms:play-services-wearable:${PLAY_SERVICES_LIBRARY_VERSION}"
+    compile "com.google.android.gms:play-services-analytics:${PLAY_SERVICES_LIBRARY_VERSION}"
+    compile "com.google.android.gms:play-services-base:${PLAY_SERVICES_LIBRARY_VERSION}"
+    compile "com.google.android.gms:play-services-location:${PLAY_SERVICES_LIBRARY_VERSION}"
+
+    compile('com.mikepenz:materialdrawer:5.8.0@aar') {
+        transitive = true
+    }
+
+    // Lifecycles, LiveData, and ViewModel
     compile 'commons-io:commons-io:1.3.2'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.3'
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.11'
     compile 'joda-time:joda-time:2.3'
     compile 'org.joda:joda-convert:1.7'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-
-    compile 'com.android.support:support-v4:25.3.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
-        transitive = true;
-    }
-    compile 'com.google.android.gms:play-services-gcm:10.0.1'
-    compile 'com.google.android.gms:play-services-wearable:10.0.1'
-    compile 'com.google.android.gms:play-services-analytics:10.0.1'
-
-    compile 'com.google.android.gms:play-services-base:10.0.1'
-    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.google.code.gson:gson:2.7'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile "com.squareup.okhttp3:okhttp:${OK_HTTP_3_VERSION}"
     compile 'io.smooch:core:latest.release'
     compile 'io.smooch:ui:latest.release'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.amazonaws:aws-android-sdk-sns:2.2.5'
     compile 'com.amazonaws:aws-android-sdk-core:2.2.5'
     compile 'net.sf.opencsv:opencsv:2.3'
-    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.1'
     compile 'me.grantland:autofittextview:0.2.+'
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.prolificinteractive:material-calendarview:1.4.0'
-
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.5.0'
     compile 'com.j256.ormlite:ormlite-core:4.43'
     compile 'com.j256.ormlite:ormlite-android:4.43'
-
-    compile('com.mikepenz:materialdrawer:5.8.0@aar') {
-        transitive = true
-    }
     compile 'com.github.markushi:circlebutton:1.1'
     compile 'com.flaviofaria:kenburnsview:1.0.7'
     compile 'com.evernote:android-job:1.1.11'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
+    compile "android.arch.lifecycle:runtime:${ARCH_VERSION}"
+    compile "android.arch.lifecycle:extensions:${ARCH_VERSION}"
+    compile 'com.android.support:support-v4:26.+'
+    annotationProcessor "android.arch.lifecycle:compiler:${ARCH_VERSION}"
+
+    // Local Unit Tests
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile ("android.arch.core:core-testing:${ARCH_VERSION}", {
+        exclude group: 'com.android.support', module: 'support-compat'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-core-utils'
+    })
+    testCompile "com.squareup.okhttp3:mockwebserver:${OK_HTTP_3_VERSION}"
+
+    // Instrumented Unit Tests
+    androidTestCompile "com.android.support:support-annotations:${SUPPORT_LIBRARY_VERSION}"
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.google.code.findbugs:jsr305:3.0.1'
+
+    // Dagger
+    compile "com.google.dagger:dagger:${DAGGER_VERSION}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
+    compile "com.google.dagger:dagger-android:${DAGGER_VERSION}"
+    compile "com.google.dagger:dagger-android-support:${DAGGER_VERSION}"
+    annotationProcessor "com.google.dagger:dagger-android-processor:${DAGGER_VERSION}"
+
+    // Retrofit
+    compile "com.squareup.retrofit2:retrofit:${RETROFIT_VERSION}"
+    compile "com.squareup.retrofit2:converter-gson:${RETROFIT_VERSION}"
+}
+
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xmaxerrs" << "500" // Number of errors that javac will print
+    }
 }
