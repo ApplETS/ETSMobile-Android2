@@ -30,7 +30,7 @@
     <string name="menu_section_1_stages">Stages</string>
     <string name="menu_section_1_profil">Profil</string>
     <string name="menu_section_1_monETS">MonETS</string>
-    <string name="menu_section_1_bandwith">Bande Passante</string>
+    <string name="menu_section_1_bandwith">Bande passante</string>
 
     <!--Section 2 ÉTS-->
     <string name="menu_section_2_ets">ÉTS</string>
@@ -43,9 +43,9 @@
     <string name="menu_section_2_securite">Sécurité</string>
     <!-- Section 3 ApplETS-->
     <string name="menu_section_3_applets">ApplETS</string>
-    <string name="menu_section_3_comms">Problème ou Commentaire ?</string>
-    <string name="menu_section_3_about">À Propos d\'ÉTSMobile</string>
-    <string name="menu_section_3_sponsors">Nos Partenaires</string>
+    <string name="menu_section_3_comms">Problème ou commentaire?</string>
+    <string name="menu_section_3_about">À propos d\'ÉTSMobile</string>
+    <string name="menu_section_3_sponsors">Nos partenaires</string>
     <string name="menu_section_3_apps">Nos réalisations</string>
     <string name="menu_section_3_faq">FAQ</string>
 
@@ -106,11 +106,19 @@
     <!-- wifi bandwith -->
     <string name="bandwith_phase">Phase</string>
     <string name="bandwith_app">App</string>
+    <string name="bandwith_chambre">Chambre</string>
     <string name="_0">0</string>
-    <string name="utilise">Restant:</string>
+    <string name="utilise">Restant :</string>
     <string name="gigaoctetx">Go</string>
     <string name="error_invalid_app">Erreur appartement invalide</string>
     <string name="error_invalid_phase">Erreur phase invalide</string>
+    <string name="bandwith_used">Bande passante consommée</string>
+    <string-array name="phases_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 
     <!-- Securite -->
     <string name="secu_title1">Joindre la sécurité</string>

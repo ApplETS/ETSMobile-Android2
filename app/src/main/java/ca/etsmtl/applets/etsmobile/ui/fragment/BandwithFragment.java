@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +19,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -35,7 +35,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ca.etsmtl.applets.etsmobile.model.ConsommationBandePassante;
-import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
@@ -51,14 +50,19 @@ import lecho.lib.hellocharts.view.PieChartView;
  */
 public class BandwithFragment extends BaseFragment {
 
+    private static final String PHASE_PREF_KEY = "Phase";
+    private static final String APP_PREF_KEY = "App";
+    private static final String CHAMBRE_PREF_KEY = "Chambre";
+
     private PieChartView chart;
     private PieChartData data;
     static double limit;
-    static String phase, app;
+    static String phase, app, chambre;
     ArrayList<Double> upDownList = new ArrayList<>();
     private double[] values;
     private String[] rooms;
     private MultiColorProgressBar progressBar;
+    private TextView progressBarTv;
     private ProgressBar loadProgressBar;
     private EditText editTextApp;
     public OnFocusChangeListener onFocusChangeColorEditText = new OnFocusChangeListener() {
@@ -71,6 +75,7 @@ public class BandwithFragment extends BaseFragment {
         }
     };
     private EditText editTextPhase;
+    private EditText editTextChambre;
     private GridView grid;
 
     @Override
@@ -80,24 +85,28 @@ public class BandwithFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_bandwith, container, false);
+        final View v = inflater.inflate(R.layout.fragment_bandwith, container, false);
 
-        progressBar = (MultiColorProgressBar) v.findViewById(R.id.bandwith_progress);
-        editTextApp = (EditText) v.findViewById(R.id.bandwith_editText_app);
-        editTextPhase = (EditText) v.findViewById(R.id.bandwith_editText_phase);
-        grid = (GridView) v.findViewById(R.id.bandwith_grid);
-        loadProgressBar = (ProgressBar)v.findViewById(R.id.progressBarLoad);
+        editTextApp = v.findViewById(R.id.bandwith_editText_app);
+        editTextPhase = v.findViewById(R.id.bandwith_editText_phase);
+        editTextChambre = v.findViewById(R.id.bandwith_editText_chambre);
+        grid = v.findViewById(R.id.bandwith_grid);
+        progressBar = v.findViewById(R.id.bandwith_progress);
+        progressBarTv = v.findViewById(R.id.bandwith_progress_tv);
+        loadProgressBar = v.findViewById(R.id.progressBarLoad);
 
-        chart = (PieChartView) v.findViewById(R.id.chart);
+        chart = v.findViewById(R.id.chart);
         chart.setVisibility(View.INVISIBLE);
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        phase = defaultSharedPreferences.getString("Phase", "");
-        app = defaultSharedPreferences.getString("App", "");
+        phase = defaultSharedPreferences.getString(PHASE_PREF_KEY, "");
+        app = defaultSharedPreferences.getString(APP_PREF_KEY, "");
+        chambre = defaultSharedPreferences.getString(CHAMBRE_PREF_KEY, "");
 
         if (phase.length() > 0 && app.length() > 0) {
             editTextApp.setText(app);
             editTextPhase.setText(phase);
-            getBandwith(phase, app);
+            editTextChambre.setText(chambre);
+            getBandwith(phase, app, chambre);
         }
         editTextPhase.addTextChangedListener(new TextWatcher() {
 
@@ -108,7 +117,7 @@ public class BandwithFragment extends BaseFragment {
                     Pattern p = Pattern.compile("[1,2,3,4]");
                     Matcher m = p.matcher(s);
                     if (m.find()) {
-                        editTextApp.requestFocus();
+                        verifyInputsAndGetBandwidth();
                     } else {
                         setError(editTextPhase, getString(R.string.error_invalid_phase));
                     }
@@ -123,44 +132,65 @@ public class BandwithFragment extends BaseFragment {
             public void afterTextChanged(Editable s) {
             }
         });
-        editTextApp.addTextChangedListener(new TextWatcher() {
 
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() >= 1) {
-                    if (editTextPhase.length() > 0) {
-                        String phase = editTextPhase.getText().toString();
-                        if (phase.equals("1") || phase.equals("2") || phase.equals("4")) {
-                            if (editTextApp.getText().length() > 2) {
-                                if (editTextPhase.length() > 0) {
-                                    String app = editTextApp.getText().toString();
-                                    getBandwith(phase, app);
-                                }
-                            }
-                        } else if (phase.equals("3")) {
-                            if (editTextApp.getText().length() > 3) {
-                                if (editTextPhase.length() > 0) {
-                                    String app = editTextApp.getText().toString();
-                                    getBandwith(phase, app);
-                                }
-                            }
-                        }
-                    }
-                }
+            public void beforeTextChanged(CharSequence cS, int start, int before, int count) {
+
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void onTextChanged(CharSequence cS, int start, int before, int count) {
+                verifyInputsAndGetBandwidth();
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void afterTextChanged(Editable editable) {
+
             }
-        });
+        };
+
+        editTextApp.addTextChangedListener(textWatcher);
+        editTextChambre.addTextChangedListener(textWatcher);
+
+        OnFocusChangeListener editTextFocusChangeListener = new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                EditText editText = (EditText) view;
+
+                if (!hasFocus && editText.length() == 0)
+                    editText.setError(getString(R.string.error_field_required));
+            }
+        };
+        editTextPhase.setOnFocusChangeListener(editTextFocusChangeListener);
+        editTextApp.setOnFocusChangeListener(editTextFocusChangeListener);
+        editTextChambre.setOnFocusChangeListener(editTextFocusChangeListener);
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
+    }
+
+    private void verifyInputsAndGetBandwidth() {
+        String phase = editTextPhase.getText().toString();
+        String app = editTextApp.getText().toString();
+        String chambre = editTextChambre.getText().toString();
+
+        if (phase.length() > 0) {
+            if (app.length() > 0) {
+                if (chambre.length() > 0) {
+                    if (phase.equals("1") || phase.equals("2") || phase.equals("4")) {
+                        if (editTextApp.getText().length() > 2) {
+                            getBandwith(phase, app, chambre);
+                        }
+                    } else if (phase.equals("3")) {
+                        if (editTextApp.getText().length() > 3) {
+                            getBandwith(phase, app, chambre);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -187,23 +217,24 @@ public class BandwithFragment extends BaseFragment {
         }
     }
 
-    private void getBandwith(String phase, String app) {
+    private void getBandwith(String phase, String app, String chambre) {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-        savePhaseAppPreferences(phase, app);
+        savePhaseAppPreferences(phase, app, chambre);
         reset();
-        String url = "https://api3.clubapplets.ca/cooptel?phase="+phase+"&appt="+app;
+        String url = String.format(getString(R.string.bandwith), phase, app ,chambre);
         if(Utility.isNetworkAvailable(getActivity())){
             loadProgressBar.setVisibility(View.VISIBLE);
             new BandwithAsyncTask().execute(url);
         }
     }
 
-    private void savePhaseAppPreferences(String phase, String app) {
+    private void savePhaseAppPreferences(String phase, String app, String chambre) {
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         Editor editor = defaultSharedPreferences.edit();
-        editor.putString("Phase", phase);
-        editor.putString("App", app);
+        editor.putString(PHASE_PREF_KEY, phase);
+        editor.putString(APP_PREF_KEY, app);
+        editor.putString(CHAMBRE_PREF_KEY, chambre);
         editor.commit();
 
     }
@@ -256,12 +287,12 @@ public class BandwithFragment extends BaseFragment {
                 public void run() {
                     progressBar.setMax((int) quota);
                     progressBar.setProgress((int) total);
-                    View v = getView();
                     String gb = getString(R.string.gigaoctetx);
                     double reste = Math.round((quota - total) * 100) / 100.0;
-                    ((TextView) v.findViewById(R.id.bandwith_used_lbl)).setText(getString(R.string.utilise) + " "
-                            + reste + gb);
-                    ((TextView) v.findViewById(R.id.bandwith_max)).setText(quota + gb);
+                    String text = getString(R.string.bandwith_used)
+                            + getString(R.string.deux_points) + String.format("%.2f", total) + "/"
+                            + String.format("%.2f", quota) + " " + gb;
+                    progressBarTv.setText(text);
                 }
             });
         }
@@ -272,9 +303,7 @@ public class BandwithFragment extends BaseFragment {
         if (v != null) {
             progressBar.setProgress(0);
             chart.setVisibility(View.INVISIBLE);
-            String gb = getString(R.string.gigaoctetx);
-            ((TextView) v.findViewById(R.id.bandwith_used_lbl)).setText("");
-            ((TextView) v.findViewById(R.id.bandwith_max)).setText(gb);
+            progressBarTv.setText("");
         }
     }
 
@@ -382,12 +411,15 @@ public class BandwithFragment extends BaseFragment {
 
         @Override
         protected void onPostExecute(HashMap<String, Double> map) {
+            loadProgressBar.setVisibility(View.GONE);
+
             if(map !=null) {
-                loadProgressBar.setVisibility(View.GONE);
                 updatePieChart(map);
                 setProgressBar(map.get("total"), map.get("limit"));
             }else{
-                setError(editTextApp, getString(R.string.error_invalid_phase));
+                Toast t = Toast.makeText(getContext(), getString(R.string.error_JSON_PARSING),
+                        Toast.LENGTH_SHORT);
+                t.show();
             }
             super.onPostExecute(map);
         }
