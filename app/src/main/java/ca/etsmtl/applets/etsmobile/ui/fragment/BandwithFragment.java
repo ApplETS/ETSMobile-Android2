@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -64,19 +65,14 @@ public class BandwithFragment extends BaseFragment {
     private MultiColorProgressBar progressBar;
     private TextView progressBarTv;
     private ProgressBar loadProgressBar;
+    private TextInputLayout textInputLayoutApp;
     private EditText editTextApp;
-    public OnFocusChangeListener onFocusChangeColorEditText = new OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            if (v == editTextApp) {
-                editTextApp.setTextColor(Color.RED);
-            }
-
-        }
-    };
+    private TextInputLayout textInputLayoutPhase;
     private EditText editTextPhase;
+    private TextInputLayout textInputLayoutChambre;
     private EditText editTextChambre;
     private GridView grid;
+    private ViewGroup progressLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,16 +83,21 @@ public class BandwithFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_bandwith, container, false);
 
+        textInputLayoutApp = v.findViewById(R.id.text_input_layout_app);
         editTextApp = v.findViewById(R.id.bandwith_editText_app);
+        textInputLayoutPhase = v.findViewById(R.id.text_input_layout_phase);
         editTextPhase = v.findViewById(R.id.bandwith_editText_phase);
+        textInputLayoutChambre = v.findViewById(R.id.text_input_layout_chambre);
         editTextChambre = v.findViewById(R.id.bandwith_editText_chambre);
         grid = v.findViewById(R.id.bandwith_grid);
         progressBar = v.findViewById(R.id.bandwith_progress);
         progressBarTv = v.findViewById(R.id.bandwith_progress_tv);
         loadProgressBar = v.findViewById(R.id.progressBarLoad);
-
+        progressLayout = v.findViewById(R.id.bandwith_progress_layout);
         chart = v.findViewById(R.id.chart);
         chart.setVisibility(View.INVISIBLE);
+        progressLayout.setVisibility(View.GONE);
+
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         phase = defaultSharedPreferences.getString(PHASE_PREF_KEY, "");
         app = defaultSharedPreferences.getString(APP_PREF_KEY, "");
@@ -117,10 +118,14 @@ public class BandwithFragment extends BaseFragment {
                     Pattern p = Pattern.compile("[1,2,3,4]");
                     Matcher m = p.matcher(s);
                     if (m.find()) {
+                        textInputLayoutPhase.setError(null);
                         verifyInputsAndGetBandwidth();
                     } else {
-                        setError(editTextPhase, getString(R.string.error_invalid_phase));
+                        String errorStr = getString(R.string.error_invalid_phase);
+                        textInputLayoutPhase.setError(errorStr);
                     }
+                } else {
+                    textInputLayoutPhase.setError(getString(R.string.error_field_required));
                 }
             }
 
@@ -157,12 +162,25 @@ public class BandwithFragment extends BaseFragment {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 EditText editText = (EditText) view;
+                TextInputLayout textInputLayout = null;
 
-                if (!hasFocus && editText.length() == 0)
-                    editText.setError(getString(R.string.error_field_required));
+                switch (view.getId()) {
+                    case R.id.bandwith_editText_app:
+                        textInputLayout = textInputLayoutApp;
+                        break;
+                    case R.id.bandwith_editText_chambre:
+                        textInputLayout = textInputLayoutChambre;
+                        break;
+                }
+
+                if (textInputLayout != null) {
+                    if (!hasFocus && editText.getText().toString().length() == 0)
+                        textInputLayout.setError(getString(R.string.error_field_required));
+                    else
+                        textInputLayout.setError(null);
+                }
             }
         };
-        editTextPhase.setOnFocusChangeListener(editTextFocusChangeListener);
         editTextApp.setOnFocusChangeListener(editTextFocusChangeListener);
         editTextChambre.setOnFocusChangeListener(editTextFocusChangeListener);
 
@@ -174,7 +192,7 @@ public class BandwithFragment extends BaseFragment {
     private void verifyInputsAndGetBandwidth() {
         String phase = editTextPhase.getText().toString();
         String app = editTextApp.getText().toString();
-        String chambre = editTextChambre.getText().toString();
+        String chambre = editTextChambre.getText().toString().toLowerCase();
 
         if (phase.length() > 0) {
             if (app.length() > 0) {
@@ -198,32 +216,13 @@ public class BandwithFragment extends BaseFragment {
         return getString(R.string.menu_section_1_bandwith);
     }
 
-    private void setError(final EditText edit, final String messageError) {
-
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        if (activity != null) {
-            activity.runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    reset();
-                    loadProgressBar.setVisibility(View.GONE);
-                    edit.setError(messageError);
-                    edit.requestFocus();
-                    //edit.setHint(edit.getText());
-                    edit.setText("");
-                }
-            });
-        }
-    }
-
     private void getBandwith(String phase, String app, String chambre) {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         savePhaseAppPreferences(phase, app, chambre);
         reset();
-        String url = String.format(getString(R.string.bandwith), phase, app ,chambre);
-        if(Utility.isNetworkAvailable(getActivity())){
+        String url = String.format(getString(R.string.bandwith), phase, app, chambre);
+        if (Utility.isNetworkAvailable(getActivity())) {
             loadProgressBar.setVisibility(View.VISIBLE);
             new BandwithAsyncTask().execute(url);
         }
@@ -242,11 +241,11 @@ public class BandwithFragment extends BaseFragment {
     private void updateProgressBarColorItems(double bandwidthQuota) {
         final int[] colorChoice = new int[]{R.color.red_bandwith, R.color.blue_bandwith, R.color.green_bandwith, R.color.purple_bandwith};
         int[] legendColors = new int[values.length];
-        final AppCompatActivity activity = (AppCompatActivity)getActivity();
+        final AppCompatActivity activity = (AppCompatActivity) getActivity();
 
         progressBar.clearProgressItems();
         bandwidthQuota = bandwidthQuota / 1024;
-        for (int i = 0, color = 0; i < values.length-1; ++i) {
+        for (int i = 0, color = 0; i < values.length - 1; ++i) {
             ProgressItem progressItem = new ProgressItem(colorChoice[color], (values[i] / bandwidthQuota) * 100);
 
             progressBar.addProgressItem(progressItem);
@@ -279,7 +278,7 @@ public class BandwithFragment extends BaseFragment {
     }
 
     private void setProgressBar(final double total, final double quota) {
-        AppCompatActivity activity =(AppCompatActivity) getActivity();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null) {
             activity.runOnUiThread(new Runnable() {
 
@@ -291,7 +290,7 @@ public class BandwithFragment extends BaseFragment {
                     double reste = Math.round((quota - total) * 100) / 100.0;
                     String text = getString(R.string.bandwith_used)
                             + getString(R.string.deux_points) + String.format("%.2f", total) + "/"
-                            + String.format("%.2f", quota) + " " + gb;
+                            + String.format("%.0f", quota) + " " + gb;
                     progressBarTv.setText(text);
                 }
             });
@@ -304,43 +303,44 @@ public class BandwithFragment extends BaseFragment {
             progressBar.setProgress(0);
             chart.setVisibility(View.INVISIBLE);
             progressBarTv.setText("");
+            progressLayout.setVisibility(View.GONE);
         }
     }
 
-    private void bandePassanteParChambre(ArrayList<ConsommationBandePassante> list){
+    private void bandePassanteParChambre(ArrayList<ConsommationBandePassante> list) {
         ArrayList<ConsommationBandePassante> autreChambre = new ArrayList<ConsommationBandePassante>();
-        double chambreUpTot=0, chambreDownTot=0, chambreTot;
-        for(int i=0;i<list.size(); i++){
+        double chambreUpTot = 0, chambreDownTot = 0, chambreTot;
+        for (int i = 0; i < list.size(); i++) {
             ConsommationBandePassante item = list.get(i);
             int id = list.get(0).getIdChambre();
-            if(id == item.getIdChambre()){
+            if (id == item.getIdChambre()) {
                 chambreUpTot = chambreUpTot + item.getUpload();
                 chambreDownTot = chambreDownTot + item.getDownload();
-            }else{
+            } else {
                 //on met tous les chambres différent dans une liste
                 autreChambre.add(item);
             }
         }
-        if(autreChambre.size()>0){
+        if (autreChambre.size() > 0) {
             // S'il y a plusieur chambres, on enregistre le total de cette chambre ci et on refait
             // une itération de la méthode pour les autres chambres
-            chambreTot = chambreUpTot/1024 + chambreDownTot/1024;
+            chambreTot = chambreUpTot / 1024 + chambreDownTot / 1024;
             upDownList.add(chambreTot);
             bandePassanteParChambre(autreChambre);
-        }else{
+        } else {
             //updownlist contient une liste de tous les totaux upload/download de tous les chambres
-            chambreTot = chambreUpTot/1024 + chambreDownTot/1024;
+            chambreTot = chambreUpTot / 1024 + chambreDownTot / 1024;
             upDownList.add(chambreTot);
             rooms = new String[upDownList.size()];
-            values = new double[upDownList.size()+1];
-            double tot=0;
-            for(int i=0; i<upDownList.size(); i++){
+            values = new double[upDownList.size() + 1];
+            double tot = 0;
+            for (int i = 0; i < upDownList.size(); i++) {
                 values[i] = upDownList.get(i);
                 tot = tot + values[i];
-                int j =i+1;
-                rooms[i] = "■ Chambre" + j + " " + String.format("%.2f",values[i]) + " Go";
-                if(i == upDownList.size()-1){
-                    values[i+1] = limit - tot;
+                int j = i + 1;
+                rooms[i] = "■ Chambre" + j + " " + String.format("%.2f", values[i]) + " Go";
+                if (i == upDownList.size() - 1) {
+                    values[i + 1] = limit - tot;
                 }
             }
             upDownList.clear();
@@ -351,10 +351,10 @@ public class BandwithFragment extends BaseFragment {
     private class BandwithAsyncTask extends AsyncTask<String, Void, HashMap<String, Double>> {
 
         @Override
-        protected HashMap<String,Double> doInBackground(String... param) {
+        protected HashMap<String, Double> doInBackground(String... param) {
             double total[] = new double[2];
             ArrayList<ConsommationBandePassante> consommationList;
-            HashMap<String,Double> map = new HashMap<>();
+            HashMap<String, Double> map = new HashMap<>();
             try {
                 double uploadTot, downloadTot;
                 OkHttpClient client = new OkHttpClient();
@@ -364,12 +364,12 @@ public class BandwithFragment extends BaseFragment {
                         .addHeader("cache-control", "no-cache")
                         .build();
                 Response response = client.newCall(request).execute();
-                if(response.code() == 200) {
+                if (response.code() == 200) {
                     String jsonData = response.body().string();
                     JSONObject Jobject = new JSONObject(jsonData);
                     limit = Jobject.getDouble("restant");
                     Object consommations = Jobject.get("consommations");
-                    if(consommations instanceof JSONArray){
+                    if (consommations instanceof JSONArray) {
                         JSONArray consommationsArray = (JSONArray) consommations;
                         consommationList = new ArrayList<>();
                         for (int i = 0; i < consommationsArray.length(); i++) {
@@ -384,7 +384,7 @@ public class BandwithFragment extends BaseFragment {
                             downloadTot = downloadTot + consommationList.get(i).getDownload();
                         }
                         bandePassanteParChambre(consommationList);
-                    }else{
+                    } else {
                         JSONObject consommationsObject = (JSONObject) consommations;
                         ConsommationBandePassante consommationBandePassante = new ConsommationBandePassante(consommationsObject);
                         uploadTot = consommationBandePassante.getUpload();
@@ -399,7 +399,7 @@ public class BandwithFragment extends BaseFragment {
                     map.put("limit", limit);
                     total[0] = uploadTot + downloadTot;
                     total[1] = limit;
-                }else{
+                } else {
                     return null;
                 }
             } catch (Exception e) {
@@ -413,10 +413,10 @@ public class BandwithFragment extends BaseFragment {
         protected void onPostExecute(HashMap<String, Double> map) {
             loadProgressBar.setVisibility(View.GONE);
 
-            if(map !=null) {
+            if (map != null) {
                 updatePieChart(map);
                 setProgressBar(map.get("total"), map.get("limit"));
-            }else{
+            } else {
                 Toast t = Toast.makeText(getContext(), getString(R.string.error_JSON_PARSING),
                         Toast.LENGTH_SHORT);
                 t.show();
@@ -425,22 +425,23 @@ public class BandwithFragment extends BaseFragment {
         }
     }
 
-    public void updatePieChart(HashMap<String, Double> map){
+    public void updatePieChart(HashMap<String, Double> map) {
         List<SliceValue> values = new ArrayList<SliceValue>();
         double rest;
-        rest = map.get("limit")-map.get("total");
+        rest = map.get("limit") - map.get("total");
         double upload, download;
         upload = map.get("uploadTot");
         download = map.get("downloadTot");
         //TODO put labels
-        values.add(new SliceValue((float) upload).setLabel("Upload : " + String.format("%.2f",upload) + " Go").setColor(Color.rgb(217,119,37)));
-        values.add(new SliceValue((float) download).setLabel("Download : " + String.format("%.2f",download) + " Go").setColor(Color.rgb(217,52,37)));
-        values.add(new SliceValue((float) rest).setLabel("Restant : " + String.format("%.2f",rest) + " Go").setColor(Color.rgb(105,184,57)));
+        values.add(new SliceValue((float) upload).setLabel("Upload : " + String.format("%.2f", upload) + " Go").setColor(Color.rgb(217, 119, 37)));
+        values.add(new SliceValue((float) download).setLabel("Download : " + String.format("%.2f", download) + " Go").setColor(Color.rgb(217, 52, 37)));
+        values.add(new SliceValue((float) rest).setLabel("Restant : " + String.format("%.2f", rest) + " Go").setColor(Color.rgb(105, 184, 57)));
 
         data = new PieChartData(values);
 
         chart.setVisibility(View.VISIBLE);
         data.setHasLabels(true);
         chart.setPieChartData(data);
+        progressLayout.setVisibility(View.VISIBLE);
     }
 }
