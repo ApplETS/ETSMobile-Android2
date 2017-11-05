@@ -109,7 +109,7 @@ public class MoodleAssignment {
     private String intro;
 
     /**
-     * Return the assignment id
+     * Returns the assignment id
      *
      * @return assignment id
      */
@@ -118,7 +118,7 @@ public class MoodleAssignment {
     }
 
     /**
-     * Return the course module id
+     * Returns the course module id
      *
      * @return course module id
      */
@@ -127,7 +127,7 @@ public class MoodleAssignment {
     }
 
     /**
-     * Return the assignment name
+     * Returns the assignment name
      *
      * @return assignment name
      */
@@ -140,7 +140,19 @@ public class MoodleAssignment {
     }
 
     /**
+     * Returns true if a due date has been set for the assignment
+     *
+     * @return true if a due date has been set for the assignment
+     */
+    public boolean isDueDateSet() {
+        return dueDate > 0;
+    }
+
+    /**
      * Returns a {@link Date} instance representing the due date of the assignment
+     * <p>
+     * If the due date hasn't been set, an {@link Date} instance set to December 31th 1969 19:00:00
+     * will be returned.
      *
      * @return A {@link Date} instance representing the due date of the assignment
      */

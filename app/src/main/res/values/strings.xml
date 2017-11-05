@@ -81,7 +81,7 @@
     <string name="moodle_assignment_due_date">Date d\'échéance : %s</string>
     <string name="moodle_assignment_team_submission">Remise en équipe : %s</string>
     <string name="moodle_prevent_submission_not_in_group">Remise en équipe : %s</string>
-    <string name="moodle_assignment_team_require_all_team_member_submit">Remise requise pour tous les membres : %s</string>
+    <string name="moodle_assignment_team_require_all_team_member_submit">Remise requise pour chaque membre : %s</string>
     <string name="moodle_assignment_grade">Note : %s</string>
     <string name="moodle_assignment_status_submitted">Statut : Remis</string>
     <string name="moodle_assignment_status_not_submitted">Statut : Non remis</string>

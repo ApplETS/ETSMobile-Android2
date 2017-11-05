@@ -122,19 +122,20 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/title_text_size" />
 
-            <!-- Date d'échéance -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <!-- Date d'échéance -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/single_line_list_item_with_avatar_height"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
+                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding"
+                    android:visibility="@{selectedAssignment.dueDateSet ? View.VISIBLE : View.GONE}">
 
                     <ImageView
                         android:layout_width="40dp"
