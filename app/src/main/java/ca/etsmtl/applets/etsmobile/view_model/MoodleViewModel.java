@@ -137,6 +137,7 @@ public class MoodleViewModel extends AndroidViewModel {
                 || assignmentSubmission.getValue().data.getFeedback() == null
                 || assignmentSubmission.getValue().data.getFeedback().getGrade() == null
                 || assignmentSubmission.getValue().data.getFeedback().getGrade().getAssignment() != assignId) {
+            // Get an instance from the repository
             this.assignmentSubmission = repository.getAssignmentSubmission(assignId);
         }
 
