@@ -158,7 +158,8 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
+                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding"
+                    android:visibility="@{selectedAssignment.teamSubmission ? View.VISIBLE : View.GONE}">
 
                     <ca.etsmtl.applets.etsmobile.views.LoadingView
                         android:layout_width="match_parent"
@@ -168,7 +169,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
-                        android:src="@{selectedAssignment.teamSubmission ? @drawable/ic_group_black_24dp : @drawable/ic_person_black_24dp}"
+                        android:src="@drawable/ic_group_black_24dp"
                         android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}" />
 
                     <LinearLayout
@@ -182,7 +183,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
-                            android:text='@{String.format(@string/moodle_assignment_team_submission, (selectedAssignment.teamSubmission ? @string/yes : @string/no))}'
+                            android:text='@string/moodle_assignment_team_submission'
                             android:textColor="@color/black"
                             android:textSize="@dimen/two_line_list_item_with_icon_font_size" />
 
@@ -192,8 +193,7 @@
                             android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
                             android:text='@{String.format(@string/moodle_assignment_team_require_all_team_member_submit, selectedAssignment.requireAllTeamMembersSubmit ? @string/yes : @string/no)}'
                             android:textColor="@color/black"
-                            android:textSize="@dimen/two_line_list_item_with_icon_font_size"
-                            android:visibility='@{selectedAssignment.teamSubmission ? View.VISIBLE : View.GONE}' />
+                            android:textSize="@dimen/two_line_list_item_with_icon_font_size" />
                     </LinearLayout>
                 </LinearLayout>
 

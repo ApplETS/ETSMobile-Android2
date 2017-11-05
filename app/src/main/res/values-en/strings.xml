@@ -79,7 +79,7 @@
     <string name="moodle_past_assignments_sort_date">Sort by date</string>
     <string name="moodle_past_assignments_sort_alpha">Sort alphabetically</string>
     <string name="moodle_assignment_due_date">Due date: %s</string>
-    <string name="moodle_assignment_team_submission">Team submission: %s</string>
+    <string name="moodle_assignment_team_submission">Team submission</string>
     <string name="moodle_prevent_submission_not_in_group">Need to be in a team: %s</string>
     <string name="moodle_assignment_team_require_all_team_member_submit">All team members must submit: %s</string>
     <string name="moodle_assignment_grade">Grade: %s</string>
