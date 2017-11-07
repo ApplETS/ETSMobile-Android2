@@ -17,7 +17,6 @@ import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +35,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ca.etsmtl.applets.etsmobile.model.ConsommationBandePassante;
-import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar;
@@ -71,7 +69,7 @@ public class BandwithFragment extends BaseFragment {
     private EditText editTextPhase;
     private TextInputLayout textInputLayoutChambre;
     private EditText editTextChambre;
-    private GridView grid;
+    //private GridView grid;
     private ViewGroup progressLayout;
 
     @Override
@@ -89,7 +87,7 @@ public class BandwithFragment extends BaseFragment {
         editTextPhase = v.findViewById(R.id.bandwith_editText_phase);
         textInputLayoutChambre = v.findViewById(R.id.text_input_layout_chambre);
         editTextChambre = v.findViewById(R.id.bandwith_editText_chambre);
-        grid = v.findViewById(R.id.bandwith_grid);
+        //grid = v.findViewById(R.id.bandwith_grid);
         progressBar = v.findViewById(R.id.bandwith_progress);
         progressBarTv = v.findViewById(R.id.bandwith_progress_tv);
         loadProgressBar = v.findViewById(R.id.progressBarLoad);
@@ -165,11 +163,11 @@ public class BandwithFragment extends BaseFragment {
                 TextInputLayout textInputLayout = null;
 
                 switch (view.getId()) {
+                    case R.id.bandwith_editText_phase:
+                        textInputLayout = textInputLayoutPhase;
+                        break;
                     case R.id.bandwith_editText_app:
                         textInputLayout = textInputLayoutApp;
-                        break;
-                    case R.id.bandwith_editText_chambre:
-                        textInputLayout = textInputLayoutChambre;
                         break;
                 }
 
@@ -181,8 +179,8 @@ public class BandwithFragment extends BaseFragment {
                 }
             }
         };
+        editTextPhase.setOnFocusChangeListener(editTextFocusChangeListener);
         editTextApp.setOnFocusChangeListener(editTextFocusChangeListener);
-        editTextChambre.setOnFocusChangeListener(editTextFocusChangeListener);
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
@@ -196,15 +194,13 @@ public class BandwithFragment extends BaseFragment {
 
         if (phase.length() > 0) {
             if (app.length() > 0) {
-                if (chambre.length() > 0) {
-                    if (phase.equals("1") || phase.equals("2") || phase.equals("4")) {
-                        if (editTextApp.getText().length() > 2) {
-                            getBandwith(phase, app, chambre);
-                        }
-                    } else if (phase.equals("3")) {
-                        if (editTextApp.getText().length() > 3) {
-                            getBandwith(phase, app, chambre);
-                        }
+                if (phase.equals("1") || phase.equals("2") || phase.equals("4")) {
+                    if (editTextApp.getText().length() > 2) {
+                        getBandwith(phase, app, chambre);
+                    }
+                } else if (phase.equals("3")) {
+                    if (editTextApp.getText().length() > 3) {
+                        getBandwith(phase, app, chambre);
                     }
                 }
             }
@@ -221,6 +217,11 @@ public class BandwithFragment extends BaseFragment {
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         savePhaseAppPreferences(phase, app, chambre);
         reset();
+        /*
+        Si l'appartement n'a qu'une seule chambre, la lettre correspondant à la chambre est « a ».
+         */
+        if (chambre.isEmpty())
+            chambre = "a";
         String url = String.format(getString(R.string.bandwith), phase, app, chambre);
         if (Utility.isNetworkAvailable(getActivity())) {
             loadProgressBar.setVisibility(View.VISIBLE);
@@ -263,8 +264,7 @@ public class BandwithFragment extends BaseFragment {
             progressBar.addProgressItem(progressItem);
         }
 
-
-        if (activity != null) {
+        /*if (activity != null) {
             final int[] colors = legendColors;
 
             activity.runOnUiThread(new Runnable() {
@@ -273,7 +273,7 @@ public class BandwithFragment extends BaseFragment {
                     grid.setAdapter(new LegendAdapter(activity, rooms, colors));
                 }
             });
-        }
+        }*/
 
     }
 
