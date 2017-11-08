@@ -52,6 +52,8 @@ public class BandwithFragment extends BaseFragment {
     private static final String PHASE_PREF_KEY = "Phase";
     private static final String APP_PREF_KEY = "App";
     private static final String CHAMBRE_PREF_KEY = "Chambre";
+    /** Lettre assignée au champ « chambre » pour les appartements ayant qu'une seule chambre **/
+    private static final String UNE_SEULE_CHAMBRE = "a";
 
     private PieChartView chart;
     private PieChartData data;
@@ -101,12 +103,17 @@ public class BandwithFragment extends BaseFragment {
         app = defaultSharedPreferences.getString(APP_PREF_KEY, "");
         chambre = defaultSharedPreferences.getString(CHAMBRE_PREF_KEY, "");
 
+        if (chambre.length() > 0)
+            editTextChambre.setText(chambre);
+        else
+            editTextChambre.setText(UNE_SEULE_CHAMBRE);
+
         if (phase.length() > 0 && app.length() > 0) {
             editTextApp.setText(app);
             editTextPhase.setText(phase);
-            editTextChambre.setText(chambre);
             getBandwith(phase, app, chambre);
         }
+
         editTextPhase.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -221,7 +228,7 @@ public class BandwithFragment extends BaseFragment {
         Si l'appartement n'a qu'une seule chambre, la lettre correspondant à la chambre est « a ».
          */
         if (chambre.isEmpty())
-            chambre = "a";
+            chambre = UNE_SEULE_CHAMBRE;
         String url = String.format(getString(R.string.bandwith), phase, app, chambre);
         if (Utility.isNetworkAvailable(getActivity())) {
             loadProgressBar.setVisibility(View.VISIBLE);
