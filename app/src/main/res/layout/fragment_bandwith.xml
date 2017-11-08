@@ -17,7 +17,7 @@
         android:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/bandwith_info"
+        android:id="@+id/bandwidth_info"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -33,11 +33,11 @@
             app:errorEnabled="true">
 
             <EditText
-                android:id="@+id/bandwith_editText_phase"
+                android:id="@+id/bandwidth_editText_phase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/bandwith_phase"
+                android:hint="@string/bandwidth_phase"
                 android:inputType="number"
                 android:singleLine="true">
 
@@ -54,11 +54,11 @@
             app:errorEnabled="true">
 
             <EditText
-                android:id="@+id/bandwith_editText_app"
+                android:id="@+id/bandwidth_editText_app"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/bandwith_app"
+                android:hint="@string/bandwidth_app"
                 android:inputType="number"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
@@ -71,24 +71,24 @@
             app:errorEnabled="true">
 
             <EditText
-                android:id="@+id/bandwith_editText_chambre"
+                android:id="@+id/bandwidth_editText_chambre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:digits="abcdABCD"
                 android:ems="10"
-                android:hint="@string/bandwith_chambre"
+                android:hint="@string/bandwidth_chambre"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/bandwith_progress_layout"
+        android:id="@+id/bandwidth_progress_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/bandwith_info"
+        android:layout_below="@+id/bandwidth_info"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="vertical"
@@ -100,32 +100,32 @@
             android:layout_weight="1">
 
             <ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar
-                android:id="@+id/bandwith_progress"
+                android:id="@+id/bandwidth_progress"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:progress="0" />
 
             <TextView
-                android:id="@+id/bandwith_progress_tv"
+                android:id="@+id/bandwidth_progress_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:textColor="@color/white"
-                tools:text="@string/bandwith_used" />
+                tools:text="@string/bandwidth_used" />
         </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/bandwith_grid_layout"
+        android:id="@+id/bandwidth_grid_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/bandwith_progress_layout"
+        android:layout_below="@id/bandwidth_progress_layout"
         android:orientation="vertical">
 
         <!--
         <GridView
-            android:id="@+id/bandwith_grid"
+            android:id="@+id/bandwidth_grid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"

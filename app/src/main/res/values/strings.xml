@@ -19,7 +19,7 @@
         Les langues disponibles sont l\'anglais et le français</string>
     <string name="lang_choix_positif">Français</string>
     <string name="lang_choix_negatif">Anglais</string>
-  
+
 
     <!-- MENU -->
     <!-- Section 1 Moi-->
@@ -54,7 +54,7 @@
     <string name="dialog_Loading_Directory">Chargement du bottin en cours</string>
     <string name="menu_bottin_refresh">Recharger le bottin</string>
     <string name="bottin_refresh_text">Le bottin va être supprimé puis téléchargé à nouveau.\nÊtes-vous sûr de votre choix ?</string>
-   <string name="bottin_search_hint">Recherche...</string>
+    <string name="bottin_search_hint">Recherche...</string>
 
     <!-- Moodle Page -->
     <string name="activity_moodle_titre">Instructions Moodle</string>
@@ -104,21 +104,29 @@
     <string name="profil_cours_equivalent">Cours équivalents</string>
 
     <!-- wifi bandwith -->
-    <string name="bandwith_phase">Phase</string>
-    <string name="bandwith_app">App</string>
-    <string name="bandwith_chambre">Chambre</string>
+    <string name="bandwidth_phase">Phase</string>
+    <string name="bandwidth_app">App</string>
+    <string name="bandwidth_chambre">Chambre</string>
     <string name="_0">0</string>
     <string name="utilise">Restant :</string>
     <string name="gigaoctetx">Go</string>
     <string name="error_invalid_app">Erreur appartement invalide</string>
     <string name="error_invalid_phase">Erreur phase invalide</string>
-    <string name="bandwith_used">Bande passante consommée</string>
-    <string-array name="phases_array">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </string-array>
+    <string name="bandwidth_used">Bande passante consommée</string>
+    <string name="bandwidth_phase_3_msg">
+        <![CDATA[Si vous habitez la phase 3, vous devez contacter Cooptel avec les renseignements
+        suivants pourqu\'ils puissent vous donner accès à votre consommation :
+        <ul>
+            <li>Votre numéro d’appartement</li>
+            <li>Le numéro de la phase où se situe votre appartement<li>
+            <li>La lettre correspondant à votre chambre<li>
+            <li>L’adresse MAC de votre équipement qui est connecté directement à internet (si vous
+            avez un routeur, c’est celle du routeur) ou l’adresse IP publique que vous avez obtenue
+            et l’heure à laquelle vous l’avez obtenu<li>
+         </ul>]]>
+    </string>
+    <string name="cooptel_phone_number">1 866–532–2252</string>
+    <string name="cooptel_email_address">support@cooptel.ca</string>
 
     <!-- Securite -->
     <string name="secu_title1">Joindre la sécurité</string>
@@ -169,7 +177,7 @@
     <string name="semester_progression">Progression de la session</string>
     <string name="days">jours</string>
     <string name="days_before_session_start">%1$s jours avant le début de la prochaine session</string>
-    
+
     <!-- Horaire -->
     <string name="toast_Calendar_Update_Error">Une erreur est survenue lors de la mise à jour du calendrier.</string>
     <string name="dialog_Updating_Calendar">Mise à jour du calendrier en cours</string>
@@ -324,4 +332,7 @@
     <string name="new_future_message">Appuyer sur l\'image de proile pour acceder à votre profile (lorsque vous êtes connecté)</string>
     <string name="coachmark_hint_profile">Utilisez l\'icône au dessus pour accéder au Profil</string>
     <string name="coachmark_hint_login">Utilisez ce bouton pour la connexion</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

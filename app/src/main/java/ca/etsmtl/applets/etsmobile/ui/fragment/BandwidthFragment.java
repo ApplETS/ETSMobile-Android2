@@ -8,6 +8,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -47,13 +50,14 @@ import lecho.lib.hellocharts.view.PieChartView;
 /**
  * Created by Phil on 17/11/13. Coded by Laurence 26/03/14
  */
-public class BandwithFragment extends BaseFragment {
+public class BandwidthFragment extends BaseFragment {
 
     private static final String PHASE_PREF_KEY = "Phase";
     private static final String APP_PREF_KEY = "App";
     private static final String CHAMBRE_PREF_KEY = "Chambre";
     /** Lettre assignée au champ « chambre » pour les appartements ayant qu'une seule chambre **/
     private static final String UNE_SEULE_CHAMBRE = "a";
+    private static final String PHASE_3_DIALOG_TAG = "TagPhase3";
 
     private PieChartView chart;
     private PieChartData data;
@@ -84,16 +88,16 @@ public class BandwithFragment extends BaseFragment {
         final View v = inflater.inflate(R.layout.fragment_bandwith, container, false);
 
         textInputLayoutApp = v.findViewById(R.id.text_input_layout_app);
-        editTextApp = v.findViewById(R.id.bandwith_editText_app);
+        editTextApp = v.findViewById(R.id.bandwidth_editText_app);
         textInputLayoutPhase = v.findViewById(R.id.text_input_layout_phase);
-        editTextPhase = v.findViewById(R.id.bandwith_editText_phase);
+        editTextPhase = v.findViewById(R.id.bandwidth_editText_phase);
         textInputLayoutChambre = v.findViewById(R.id.text_input_layout_chambre);
-        editTextChambre = v.findViewById(R.id.bandwith_editText_chambre);
+        editTextChambre = v.findViewById(R.id.bandwidth_editText_chambre);
         //grid = v.findViewById(R.id.bandwith_grid);
-        progressBar = v.findViewById(R.id.bandwith_progress);
-        progressBarTv = v.findViewById(R.id.bandwith_progress_tv);
+        progressBar = v.findViewById(R.id.bandwidth_progress);
+        progressBarTv = v.findViewById(R.id.bandwidth_progress_tv);
         loadProgressBar = v.findViewById(R.id.progressBarLoad);
-        progressLayout = v.findViewById(R.id.bandwith_progress_layout);
+        progressLayout = v.findViewById(R.id.bandwidth_progress_layout);
         chart = v.findViewById(R.id.chart);
         chart.setVisibility(View.INVISIBLE);
         progressLayout.setVisibility(View.GONE);
@@ -111,7 +115,7 @@ public class BandwithFragment extends BaseFragment {
         if (phase.length() > 0 && app.length() > 0) {
             editTextApp.setText(app);
             editTextPhase.setText(phase);
-            getBandwith(phase, app, chambre);
+            getBandwidth(phase, app, chambre);
         }
 
         editTextPhase.addTextChangedListener(new TextWatcher() {
@@ -124,7 +128,10 @@ public class BandwithFragment extends BaseFragment {
                     Matcher m = p.matcher(s);
                     if (m.find()) {
                         textInputLayoutPhase.setError(null);
-                        verifyInputsAndGetBandwidth();
+                        if (s.toString().equals("3")) {
+                            displayPhase3Dialog();
+                        } else
+                            verifyInputsAndGetBandwidth();
                     } else {
                         String errorStr = getString(R.string.error_invalid_phase);
                         textInputLayoutPhase.setError(errorStr);
@@ -170,10 +177,10 @@ public class BandwithFragment extends BaseFragment {
                 TextInputLayout textInputLayout = null;
 
                 switch (view.getId()) {
-                    case R.id.bandwith_editText_phase:
+                    case R.id.bandwidth_editText_phase:
                         textInputLayout = textInputLayoutPhase;
                         break;
-                    case R.id.bandwith_editText_app:
+                    case R.id.bandwidth_editText_app:
                         textInputLayout = textInputLayoutApp;
                         break;
                 }
@@ -203,11 +210,11 @@ public class BandwithFragment extends BaseFragment {
             if (app.length() > 0) {
                 if (phase.equals("1") || phase.equals("2") || phase.equals("4")) {
                     if (editTextApp.getText().length() > 2) {
-                        getBandwith(phase, app, chambre);
+                        getBandwidth(phase, app, chambre);
                     }
                 } else if (phase.equals("3")) {
                     if (editTextApp.getText().length() > 3) {
-                        getBandwith(phase, app, chambre);
+                        getBandwidth(phase, app, chambre);
                     }
                 }
             }
@@ -219,7 +226,7 @@ public class BandwithFragment extends BaseFragment {
         return getString(R.string.menu_section_1_bandwith);
     }
 
-    private void getBandwith(String phase, String app, String chambre) {
+    private void getBandwidth(String phase, String app, String chambre) {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         savePhaseAppPreferences(phase, app, chambre);
@@ -295,7 +302,7 @@ public class BandwithFragment extends BaseFragment {
                     progressBar.setProgress((int) total);
                     String gb = getString(R.string.gigaoctetx);
                     double reste = Math.round((quota - total) * 100) / 100.0;
-                    String text = getString(R.string.bandwith_used)
+                    String text = getString(R.string.bandwidth_used)
                             + getString(R.string.deux_points) + String.format("%.2f", total) + "/"
                             + String.format("%.0f", quota) + " " + gb;
                     progressBarTv.setText(text);
@@ -450,5 +457,17 @@ public class BandwithFragment extends BaseFragment {
         data.setHasLabels(true);
         chart.setPieChartData(data);
         progressLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void displayPhase3Dialog() {
+        FragmentTransaction fT = getFragmentManager().beginTransaction();
+        final Fragment fragment = getFragmentManager().findFragmentByTag(PHASE_3_DIALOG_TAG);
+        DialogFragment dialogFragment;
+        if (fragment != null)
+            dialogFragment = (DialogFragment) fragment;
+        else
+            dialogFragment = BandwidthPhase3DialogFragment.newInstance();
+
+        dialogFragment.show(fT, PHASE_3_DIALOG_TAG);
     }
 }

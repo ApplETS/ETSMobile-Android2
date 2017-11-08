@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="?dialogPreferredPadding"
+    android:paddingRight="?dialogPreferredPadding"
+    android:paddingTop="?dialogPreferredPadding"
+    tools:context="ca.etsmtl.applets.etsmobile.ui.fragment.BandwidthPhase3DialogFragment">
+
+    <TextView
+        android:id="@+id/bandwith_phase_3_dialog_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/material_drawer_primary_text"
+        tools:text="@string/bandwidth_phase_3_msg" />
+
+    <RelativeLayout
+        android:id="@+id/bandwidth_phase_3_dialog_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/bandwidth_phase_3_dialog_phone_number_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_telephone" />
+
+        <TextView
+            android:id="@+id/bandwidth_phase_3_dialog_phone_number_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:layout_toRightOf="@+id/bandwidth_phase_3_dialog_phone_number_iv"
+            android:text="@string/cooptel_phone_number" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bandwidth_phase_3_dialog_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/bandwidth_phase_3_dialog_email_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_courriel" />
+
+        <TextView
+            android:id="@+id/bandwidth_phase_3_dialog_email_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:layout_toRightOf="@+id/bandwidth_phase_3_dialog_email_iv"
+            android:text="@string/cooptel_email_address" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/bandwidth_phase_3_dialog_dismiss_btn"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="@android:string/ok" />
+</LinearLayout>
