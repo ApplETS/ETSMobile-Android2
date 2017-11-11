@@ -306,7 +306,7 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
     /**
      * Récepteur recevant un intent lorsque {@link BottinService} a terminé la synchronisation
      */
-    public class BottinFragmentReceiver extends BroadcastReceiver {
+    public final class BottinFragmentReceiver extends BroadcastReceiver {
         public static final String ACTION_SYNC_BOTTIN = "SYNC_BOTTIN";
         public static final String EXCEPTION = "ERREUR_SYNC_BOTTIN";
 

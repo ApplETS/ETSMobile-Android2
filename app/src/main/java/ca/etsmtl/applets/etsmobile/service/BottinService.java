@@ -11,6 +11,7 @@ import com.j256.ormlite.dao.Dao;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -119,30 +120,36 @@ public class BottinService extends IntentService implements RequestListener<Obje
 
     @Override
     public void onRequestSuccess(final Object o) {
-        if (o instanceof HashMap<?, ?>) {
+        if (o instanceof HashMap<?, ?>)
+            new BottinAsyncTask(this, (HashMap<String, List<FicheEmploye>>) o).execute();
+    }
 
-            new AsyncTask<Void, Void, Void>() {
-                @SuppressWarnings("unchecked")
-                HashMap<String, List<FicheEmploye>> listeEmployeByService = (HashMap<String, List<FicheEmploye>>) o;
+    private static class BottinAsyncTask extends AsyncTask<Void, Void, Void> {
 
-                @Override
-                protected Void doInBackground(Void... params) {
-                    updateDb(listeEmployeByService);
+        private final HashMap<String, List<FicheEmploye>> listeEmployeByService;
+        private final WeakReference<BottinService> service;
 
-                    return null;
-                }
+        BottinAsyncTask(BottinService service, HashMap<String, List<FicheEmploye>> listeEmployeByService) {
+            this.listeEmployeByService = listeEmployeByService;
+            this.service = new WeakReference<>(service);
+        }
 
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
+        @Override
+        protected Void doInBackground(Void... params) {
+            service.get().updateDb(listeEmployeByService);
 
-                    syncEnCours = false;
-                    syncReussie = true;
+            return null;
+        }
 
-                    // Envoi d'un intent à BottinFragment
-                    sendBroadcast(broadcastIntent);
-                }
-            }.execute();
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            syncEnCours = false;
+            syncReussie = true;
+
+            // Envoi d'un intent à BottinFragment
+            service.get().sendBroadcast(service.get().broadcastIntent);
         }
     }
 }
