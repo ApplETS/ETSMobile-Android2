@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.NewsSource;
-import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsSourceAdapter;
@@ -149,6 +148,10 @@ public class NewsFragment extends HttpFragment {
                     }.getType());
 
                 }
+
+                if (sources == null)
+                    return null;
+
                 return new ArrayList<>(sources);
             } catch (IOException e) {
                 e.printStackTrace();
