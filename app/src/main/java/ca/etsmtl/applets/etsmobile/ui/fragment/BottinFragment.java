@@ -142,7 +142,7 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
         });
 
         // get the listview
-        expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
+        expListView = v.findViewById(R.id.expandableListView_service_employe);
 
         //Ouverture du détail
         expListView.setOnChildClickListener(new OnChildClickListener() {

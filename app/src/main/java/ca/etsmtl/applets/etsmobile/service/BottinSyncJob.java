@@ -9,8 +9,6 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.j256.ormlite.dao.Dao;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -19,10 +17,12 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
+import ca.etsmtl.applets.etsmobile.http.soap.WebServiceSoap;
+import ca.etsmtl.applets.etsmobile.model.ArrayOfFicheEmploye;
+import ca.etsmtl.applets.etsmobile.model.ArrayOfService;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
+import ca.etsmtl.applets.etsmobile.model.Service;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
 
 /**
@@ -36,7 +36,6 @@ public class BottinSyncJob extends Job {
     public static boolean syncEnCours;
     private static boolean syncReussie;
 
-    private RequestListener<Object> requestListener;
     private CountDownLatch countDownLatch;
     private Intent broadcastIntent;
 
@@ -47,15 +46,13 @@ public class BottinSyncJob extends Job {
 
         if (broadcastIntent == null)
             createBroadcastIntent();
-
-        if (requestListener == null)
-            createRequestListener();
-
+        
         countDownLatch = new CountDownLatch(1);
 
         rechargerBottin();
 
         try {
+            // Attente de la fin du rechargement du bottin
             countDownLatch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -84,7 +81,7 @@ public class BottinSyncJob extends Job {
         Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(TAG);
 
         if (jobRequests.isEmpty()) {
-           jobId = new JobRequest.Builder(TAG)
+            jobId = new JobRequest.Builder(TAG)
                     .setPeriodic(TimeUnit.DAYS.toMillis(1))
                     .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                     .setRequiresBatteryNotLow(true)
@@ -103,50 +100,6 @@ public class BottinSyncJob extends Job {
         return jobId;
     }
 
-    private void createRequestListener() {
-        requestListener = new RequestListener<Object>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                Log.d(TAG, "Échec de la requête");
-
-                Bundle extras = new Bundle();
-                extras.putSerializable(BottinFragment.BottinFragmentReceiver.EXCEPTION, spiceException);
-                broadcastIntent.putExtras(extras);
-
-                syncEnCours = false;
-                syncReussie = false;
-
-                // Envoi d'un intent incluant une exception à BottinFragment
-                getContext().sendBroadcast(broadcastIntent);
-
-                countDownLatch.countDown();
-            }
-
-            @Override
-            public void onRequestSuccess(@NonNull final Object o) {
-                Log.d(TAG, "Succès de la requête");
-
-                if (o instanceof HashMap<?, ?>) {
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            super.run();
-
-                            updateDb((HashMap<String, List<FicheEmploye>>) o);
-
-                            syncEnCours = false;
-                            syncReussie = true;
-
-                            Log.d(TAG, "Fin de la maj de la BD");
-
-                            countDownLatch.countDown();
-                        }
-                    }.start();
-                }
-            }
-        };
-    }
-
     private void createBroadcastIntent() {
         broadcastIntent = new Intent();
         broadcastIntent.setAction(BottinFragment.BottinFragmentReceiver.ACTION_SYNC_BOTTIN);
@@ -155,15 +108,47 @@ public class BottinSyncJob extends Job {
 
     private void rechargerBottin() {
 
-        Log.d(TAG, "Requête");
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
 
-        try {
-            DataManager datamanager = DataManager.getInstance(getContext().getApplicationContext());
-            datamanager.getDataFromSignet(DataManager.SignetMethods.BOTTIN_GET_LIST_SERVICE_AND_EMP,
-                    ApplicationManager.userCredentials, requestListener);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
+                try {
+                    Log.d(TAG, "Requête des données distantes");
+
+                    HashMap<String, List<FicheEmploye>> listeEmployeByService = getListeEmployeByService();
+                    if (listeEmployeByService != null && listeEmployeByService.size() > 0) {
+                        updateDb(listeEmployeByService);
+
+                        syncEnCours = false;
+                        syncReussie = true;
+
+                        Log.d(TAG, "Fin de la maj de la BD");
+
+                        countDownLatch.countDown();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    handleRequestFailure(e);
+                }
+            }
+        }.start();
+    }
+
+    private void handleRequestFailure(Exception exception) {
+        Log.d(TAG, "Échec de la requête");
+
+        Bundle extras = new Bundle();
+        extras.putSerializable(BottinFragment.BottinFragmentReceiver.EXCEPTION, exception);
+        broadcastIntent.putExtras(extras);
+
+        syncEnCours = false;
+        syncReussie = false;
+
+        // Envoi d'un intent incluant une exception à BottinFragment
+        getContext().sendBroadcast(broadcastIntent);
+
+        countDownLatch.countDown();
     }
 
     private void updateDb(final HashMap<String, List<FicheEmploye>> listeEmployeByService) {
@@ -193,5 +178,23 @@ public class BottinSyncJob extends Job {
             Log.e(DatabaseHelper.class.getName(), "SQLException", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private HashMap<String, List<FicheEmploye>> getListeEmployeByService() throws Exception {
+        ArrayOfService arrayOfService = new WebServiceSoap().GetListeDepartement();
+
+        HashMap<String, List<FicheEmploye>> listeEmployeByService = new HashMap<String, List<FicheEmploye>>();
+        ArrayOfFicheEmploye arrayOfFicheEmploye;
+
+        for (int i = 0; i < arrayOfService.size(); i++) {
+
+            Service service = arrayOfService.get(i);
+            arrayOfFicheEmploye = new WebServiceSoap().Recherche(null, null, "" + service.ServiceCode);
+
+            listeEmployeByService.put(service.Nom, arrayOfFicheEmploye);
+
+        }
+
+        return listeEmployeByService;
     }
 }
