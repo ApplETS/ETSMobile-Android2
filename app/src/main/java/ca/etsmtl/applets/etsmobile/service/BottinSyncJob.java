@@ -33,11 +33,15 @@ public class BottinSyncJob extends Job {
 
     public static final String TAG = "bottin_sync_job_tag";
 
-    public static boolean syncEnCours;
+    private static boolean syncEnCours;
     private static boolean syncReussie;
 
     private CountDownLatch countDownLatch;
     private Intent broadcastIntent;
+
+    public static boolean isSyncEnCours() {
+        return syncEnCours;
+    }
 
     @NonNull
     @Override

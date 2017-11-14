@@ -109,7 +109,7 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
     public void onResume() {
         super.onResume();
 
-        mSwipeRefreshLayout.setRefreshing(BottinSyncJob.syncEnCours);
+        mSwipeRefreshLayout.setRefreshing(BottinSyncJob.isSyncEnCours());
 
         IntentFilter filter = new IntentFilter(BottinFragmentReceiver.ACTION_SYNC_BOTTIN);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
