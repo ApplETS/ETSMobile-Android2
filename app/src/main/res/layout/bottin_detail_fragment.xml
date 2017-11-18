@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:id="@+id/rl_detail_bottin">
 
     <RelativeLayout
@@ -17,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="département"
+            tools:text="département"
             android:textSize="16sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -30,7 +31,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/rl_service"
         android:isScrollContainer="true"
         android:overScrollMode="always"
@@ -39,15 +40,15 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp">
 
             <TextView
                 android:id="@+id/tv_nom_prenom_bottin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
                 android:layout_marginTop="25dp"
-                android:text="nom et prénom de la personne"
+                tools:text="nom et prénom de la personne"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -56,9 +57,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_nom_prenom_bottin"
-                android:layout_marginLeft="35dp"
                 android:layout_marginTop="3dp"
-                android:text="fonction à l&apos;ÉTS" />
+                tools:text="fonction à l&apos;ÉTS" />
 
             <RelativeLayout
                 android:id="@+id/rl_emplacement_bottin"
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="11dp"
                     android:layout_toRightOf="@+id/iv_emplacement_bottin"
-                    android:text="coordonnées de son bureau" />
+                    tools:text="coordonnées de son bureau" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="11dp"
                     android:layout_toRightOf="@+id/iv_telephone_bottin"
-                    android:text="numéro de téléphone" />
+                    tools:text="numéro de téléphone" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -122,19 +122,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="11dp"
                     android:layout_toRightOf="@+id/iv_courriel_bottin"
-                    android:text="adresse courriel" />
+                    tools:text="adresse courriel" />
             </RelativeLayout>
-
-            <Button
-                android:id="@+id/btn_ajout_contact_bottin"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/rl_courriel_bottin"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
-                android:text="Ajouter aux contacts" />
         </RelativeLayout>
     </ScrollView>
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/btn_ajout_contact_bottin"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/bottin_add_contact"
+        android:textColor="@color/white" />
+</LinearLayout>

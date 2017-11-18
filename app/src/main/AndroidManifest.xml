@@ -226,10 +226,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name="ca.etsmtl.applets.etsmobile.service.BottinService"
-            android:exported="false" />
-
     </application>
 
 </manifest>
