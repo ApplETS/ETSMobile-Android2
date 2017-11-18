@@ -56,7 +56,8 @@
     <string name="dialog_Loading_Directory">Chargement du bottin en cours</string>
     <string name="menu_bottin_refresh">Recharger le bottin</string>
     <string name="bottin_refresh_text">Le bottin va être supprimé puis téléchargé à nouveau.\nÊtes-vous sûr de votre choix ?</string>
-   <string name="bottin_search_hint">Recherche...</string>
+    <string name="bottin_search_hint">Recherche…</string>
+    <string name="bottin_add_contact">Ajouter aux contacts</string>
 
     <!-- Moodle Page -->
     <string name="activity_moodle_titre">Instructions Moodle</string>

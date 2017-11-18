@@ -56,7 +56,8 @@
     <string name="dialog_Loading_Directory">Loading directory</string>
     <string name="menu_bottin_refresh">Refresh directory</string>
     <string name="bottin_refresh_text">The directory will be refreshed</string>
-    <string name="bottin_search_hint">Search...</string>
+    <string name="bottin_search_hint">Search…</string>
+    <string name="bottin_add_contact">Add to contacts</string>
 
     <!-- Moodle Page -->
     <string name="activity_moodle_titre">Moodle instructions</string>

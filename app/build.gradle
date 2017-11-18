@@ -1,10 +1,13 @@
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
+        google()
+        jcenter()
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'io.fabric.tools:gradle:1.24.4'
     }
 }
 apply plugin: 'com.android.application'
@@ -13,7 +16,7 @@ apply plugin: 'com.android.application'
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     maven { url 'https://github.com/leonardocardoso/mvn-repo/raw/master/maven-deploy' }
-    maven { url 'https://maven.google.com' }
+    google()
 }
 
 android {
@@ -79,8 +82,8 @@ dependencies {
     compile "com.android.support:support-v4:${SUPPORT_LIBRARY_VERSION}"
     compile "com.android.support:recyclerview-v7:${SUPPORT_LIBRARY_VERSION}"
     compile "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
-    compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
-        transitive = true;
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true
     }
     compile "com.google.android.gms:play-services-gcm:${PLAY_SERVICES_LIBRARY_VERSION}"
     compile "com.google.android.gms:play-services-wearable:${PLAY_SERVICES_LIBRARY_VERSION}"
@@ -99,7 +102,7 @@ dependencies {
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.11'
     compile 'joda-time:joda-time:2.3'
     compile 'org.joda:joda-convert:1.7'
-    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile "com.squareup.okhttp3:okhttp:${OK_HTTP_3_VERSION}"
     compile 'io.smooch:core:latest.release'
@@ -119,7 +122,7 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-android:4.43'
     compile 'com.github.markushi:circlebutton:1.1'
     compile 'com.flaviofaria:kenburnsview:1.0.7'
-    compile 'com.evernote:android-job:1.1.11'
+    compile 'com.evernote:android-job:1.2.0'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
     compile "android.arch.lifecycle:runtime:${ARCH_VERSION}"
     compile "android.arch.lifecycle:extensions:${ARCH_VERSION}"
@@ -138,9 +141,9 @@ dependencies {
 
     // Instrumented Unit Tests
     androidTestCompile "com.android.support:support-annotations:${SUPPORT_LIBRARY_VERSION}"
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test:runner:1.0.1'
+    androidTestCompile 'com.android.support.test:rules:1.0.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.1'
     androidTestCompile 'com.google.code.findbugs:jsr305:3.0.1'
 
     // Dagger
