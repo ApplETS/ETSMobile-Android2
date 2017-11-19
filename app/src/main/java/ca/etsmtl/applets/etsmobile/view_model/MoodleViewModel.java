@@ -39,10 +39,17 @@ public class MoodleViewModel extends AndroidViewModel {
      **/
     public static final int SORT_ALPHA = 1;
     private static final String SORT_ASSIGNMENTS_PREF = "SortAssignmentsPref";
+    private static final String SORT_ORDER_ASSIGNMENTS_PREF = "SortOrderAssignmentsPref";
+    /**
+     * From low to high
+     */
+    private static final int SORT_ASC = 1;
+    /**
+     * From high to low
+     */
+    private static final int SORT_DESC = -1;
 
     private MoodleRepository repository;
-    private Comparator<MoodleAssignment> dateComparator;
-    private Comparator<MoodleAssignment> alphaComparator;
     private LiveData<RemoteResource<MoodleProfile>> profile;
     private LiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses;
     private LiveData<RemoteResource<MoodleCourses>> courses;
@@ -181,6 +188,14 @@ public class MoodleViewModel extends AndroidViewModel {
         SharedPreferences settings = getApplication().getSharedPreferences(MOODLE_PREFS,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
+        int currentSortOrder = getAssignmentsSortOrder();
+        if (getAssignmentsSortIndex() == index) {
+            currentSortOrder *= -1;
+            editor.putInt(SORT_ORDER_ASSIGNMENTS_PREF, currentSortOrder);
+        } else {
+            currentSortOrder = SORT_ASC;
+            editor.putInt(SORT_ORDER_ASSIGNMENTS_PREF, currentSortOrder);
+        }
         editor.putInt(SORT_ASSIGNMENTS_PREF, index);
         editor.apply();
     }
@@ -197,6 +212,13 @@ public class MoodleViewModel extends AndroidViewModel {
         return settings.getInt(SORT_ASSIGNMENTS_PREF, SORT_BY_DATE);
     }
 
+    private int getAssignmentsSortOrder() {
+        SharedPreferences settings = getApplication().getSharedPreferences(MOODLE_PREFS,
+                Context.MODE_PRIVATE);
+
+        return settings.getInt(SORT_ORDER_ASSIGNMENTS_PREF, SORT_ASC);
+    }
+
     /**
      * Returns the {@link Comparator} instance that can be used to sort the assignments
      *
@@ -204,33 +226,21 @@ public class MoodleViewModel extends AndroidViewModel {
      */
     public Comparator<MoodleAssignment> getAssignmentsSortComparator() {
         int sort = getAssignmentsSortIndex();
-        Comparator<MoodleAssignment> currentComparator = null;
+        int sortSorder = getAssignmentsSortOrder();
 
-        if (sort == SORT_BY_DATE) {
-            if (dateComparator == null) {
-                dateComparator = new Comparator<MoodleAssignment>() {
-                    @Override
-                    public int compare(MoodleAssignment a1, MoodleAssignment a2) {
-                        return a1.getDueDateObj().compareTo(a2.getDueDateObj());
-                    }
-                };
+        return (a1, a2) -> {
+            if (sort == SORT_BY_DATE) {
+                if (sortSorder == SORT_ASC)
+                    return a1.getDueDateObj().compareTo(a2.getDueDateObj());
+                else
+                    return a2.getDueDateObj().compareTo(a1.getDueDateObj());
+            } else {
+                if (sortSorder == SORT_ASC)
+                    return a1.getName().compareTo(a2.getName());
+                else
+                    return a2.getName().compareTo(a1.getName());
             }
-
-            currentComparator = dateComparator;
-        } else {
-            if (alphaComparator == null) {
-                alphaComparator = new Comparator<MoodleAssignment>() {
-                    @Override
-                    public int compare(MoodleAssignment a1, MoodleAssignment a2) {
-                        return a1.getName().compareTo(a2.getName());
-                    }
-                };
-            }
-
-            currentComparator = alphaComparator;
-        }
-
-        return currentComparator;
+        };
     }
 
     /**

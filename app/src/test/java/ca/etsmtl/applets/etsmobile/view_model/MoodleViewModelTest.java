@@ -48,6 +48,15 @@ public class MoodleViewModelTest {
 
     private static final String DISPLAY_PAST_ASSIGNMENTS_PREF = "DisplayPastAssignmentPref";
     private static final String SORT_ASSIGNMENTS_PREF = "SortAssignmentsPref";
+    private static final String SORT_ORDER_ASSIGNMENTS_PREF = "SortOrderAssignmentsPref";
+    /**
+     * From low to high
+     */
+    private static final int SORT_ASC = 1;
+    /**
+     * From high to low
+     */
+    private static final int SORT_DESC = -1;
 
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
@@ -296,16 +305,14 @@ public class MoodleViewModelTest {
     }
 
     @Test
-    public void setAssignmentsSortIndex() {
+    public void sortByDate() {
         createMockSharedPreferences();
 
         // Prepare assignments
         MoodleAssignment assign1 = new MoodleAssignment();
-        assign1.setName("cca");
         assign1.setDueDate(TimeUnit.SECONDS.toMillis(1505079000));
 
         MoodleAssignment assign2 = new MoodleAssignment();
-        assign2.setName("aab");
         assign2.setDueDate(TimeUnit.SECONDS.toMillis(1507593600));
 
         // Verify that editor putInt method has been called correctly by the view model
@@ -315,15 +322,45 @@ public class MoodleViewModelTest {
         // Test the comparator for sorting by date
         when(prefs.getInt(eq(SORT_ASSIGNMENTS_PREF), anyInt()))
                 .thenReturn(MoodleViewModel.SORT_BY_DATE);
+        when(prefs.getInt(eq(SORT_ORDER_ASSIGNMENTS_PREF), anyInt()))
+                .thenReturn(SORT_ASC);
         assertEquals(viewModel.getAssignmentsSortIndex(), MoodleViewModel.SORT_BY_DATE);
         Comparator<MoodleAssignment> comparator = viewModel.getAssignmentsSortComparator();
         assertTrue(comparator.compare(assign1, assign2) < 0);
+        when(prefs.getInt(eq(SORT_ORDER_ASSIGNMENTS_PREF), anyInt()))
+                .thenReturn(SORT_DESC);
+        comparator = viewModel.getAssignmentsSortComparator();
+        assertTrue(comparator.compare(assign1, assign2) > 0);
+    }
+
+    @Test
+    public void sortAlphabetically() {
+        createMockSharedPreferences();
+
+        // Prepare assignments
+        MoodleAssignment assign1 = new MoodleAssignment();
+        assign1.setName("cca");
+
+        MoodleAssignment assign2 = new MoodleAssignment();
+        assign2.setName("aab");
+
+        // Verify that editor putInt method has been called correctly by the view model
+        viewModel.setAssignmentsSortIndex(MoodleViewModel.SORT_BY_DATE);
+        verify(editor).putInt(SORT_ASSIGNMENTS_PREF, MoodleViewModel.SORT_BY_DATE);
+
 
         // Test the comparator for sorting alphabetically
         when(prefs.getInt(eq(SORT_ASSIGNMENTS_PREF), anyInt()))
                 .thenReturn(MoodleViewModel.SORT_ALPHA);
+        when(prefs.getInt(eq(SORT_ORDER_ASSIGNMENTS_PREF), anyInt()))
+                .thenReturn(SORT_ASC);
+        Comparator<MoodleAssignment> comparator = viewModel.getAssignmentsSortComparator();
         assertEquals(viewModel.getAssignmentsSortIndex(), MoodleViewModel.SORT_ALPHA);
         comparator = viewModel.getAssignmentsSortComparator();
-        assertTrue(comparator.compare(assign2, assign1) < 0);
+        assertTrue(comparator.compare(assign1, assign2) > 0);
+        when(prefs.getInt(eq(SORT_ORDER_ASSIGNMENTS_PREF), anyInt()))
+                .thenReturn(SORT_DESC);
+        comparator = viewModel.getAssignmentsSortComparator();
+        assertTrue(comparator.compare(assign1, assign2) < 0);
     }
 }

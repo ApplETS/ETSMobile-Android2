@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_sort_white_24dp"
         app:showAsAction="ifRoom">
         <menu>
-            <group android:checkableBehavior="single">
+            <group>
                 <item
                     android:id="@+id/menu_item_moodle_sort_assignments_date"
                     android:title="@string/moodle_past_assignments_sort_date"

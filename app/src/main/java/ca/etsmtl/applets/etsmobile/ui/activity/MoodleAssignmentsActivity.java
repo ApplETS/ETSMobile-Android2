@@ -222,28 +222,23 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        boolean needToRefresh = true;
         int itemId = item.getItemId();
 
         if (itemId == R.id.menu_item_moodle_previous_assignments) {
-            moodleViewModel.setDisplayPastAssignments(!item.isChecked());
+            boolean checked = item.isChecked();
+            item.setChecked(!checked);
+            moodleViewModel.setDisplayPastAssignments(!checked);
         } else { // Option de tri sélectionné
-            int currentSortIndex = moodleViewModel.getAssignmentsSortIndex();
-
             if (itemId == R.id.menu_item_moodle_sort_assignments_date) {
                 moodleViewModel.setAssignmentsSortIndex(MoodleViewModel.SORT_BY_DATE);
-                needToRefresh = currentSortIndex != MoodleViewModel.SORT_BY_DATE;
             } else if (itemId == R.id.menu_item_moodle_sort_assignments_alpha) {
                 moodleViewModel.setAssignmentsSortIndex(MoodleViewModel.SORT_ALPHA);
-                needToRefresh = currentSortIndex != MoodleViewModel.SORT_ALPHA;
             } else {
                 return super.onOptionsItemSelected(item);
             }
         }
 
-        item.setChecked(!item.isChecked());
-        if (needToRefresh)
-            refreshUI();
+        refreshUI();
 
         return true;
     }

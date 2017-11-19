@@ -80,7 +80,7 @@ public class MoodleRepository {
         return token;
     }
 
-    public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses(final int[] coursesIds) {
+    private LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses(final int[] coursesIds) {
         RemoteResource<MoodleToken> remoteToken = token.getValue();
 
         if (remoteToken != null && remoteToken.data != null && remoteToken.status != RemoteResource.LOADING) {
