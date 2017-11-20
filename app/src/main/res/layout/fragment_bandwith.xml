@@ -123,7 +123,6 @@
         android:layout_below="@id/bandwidth_progress_layout"
         android:orientation="vertical">
 
-        <!--
         <GridView
             android:id="@+id/bandwidth_grid"
             android:layout_width="match_parent"
@@ -133,7 +132,6 @@
             android:columnWidth="150dp"
             android:gravity="center"
             android:numColumns="auto_fit" />
-            -->
 
         <lecho.lib.hellocharts.view.PieChartView
             android:id="@+id/chart"

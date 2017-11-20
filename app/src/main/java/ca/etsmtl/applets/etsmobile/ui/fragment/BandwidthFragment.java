@@ -55,7 +55,9 @@ public class BandwidthFragment extends BaseFragment {
     private static final String PHASE_PREF_KEY = "Phase";
     private static final String APP_PREF_KEY = "App";
     private static final String CHAMBRE_PREF_KEY = "Chambre";
-    /** Lettre assignée au champ « chambre » pour les appartements ayant qu'une seule chambre **/
+    /**
+     * Lettre assignée au champ « chambre » pour les appartements ayant qu'une seule chambre
+     **/
     private static final String UNE_SEULE_CHAMBRE = "a";
     private static final String PHASE_3_DIALOG_TAG = "TagPhase3";
 
@@ -431,9 +433,13 @@ public class BandwidthFragment extends BaseFragment {
                 updatePieChart(map);
                 setProgressBar(map.get("total"), map.get("limit"));
             } else {
-                Toast t = Toast.makeText(getContext(), getString(R.string.error_JSON_PARSING),
-                        Toast.LENGTH_SHORT);
-                t.show();
+                if (editTextPhase.getText().toString().equals("3"))
+                    displayPhase3Dialog();
+                else {
+                    Toast t = Toast.makeText(getContext(), getString(R.string.error_JSON_PARSING),
+                            Toast.LENGTH_SHORT);
+                    t.show();
+                }
             }
             super.onPostExecute(map);
         }

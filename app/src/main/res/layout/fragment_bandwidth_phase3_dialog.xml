@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingLeft="?dialogPreferredPadding"
-    android:paddingRight="?dialogPreferredPadding"
     android:paddingTop="?dialogPreferredPadding"
     tools:context="ca.etsmtl.applets.etsmobile.ui.fragment.BandwidthPhase3DialogFragment">
 
@@ -12,6 +11,7 @@
         android:id="@+id/bandwith_phase_3_dialog_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingRight="?dialogPreferredPadding"
         android:textColor="@color/material_drawer_primary_text"
         tools:text="@string/bandwidth_phase_3_msg" />
 
