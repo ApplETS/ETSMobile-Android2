@@ -68,7 +68,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         ficheEmploye.Prenom = ficheEmploye.Prenom == null ? "" : ficheEmploye.Prenom;
 
 
-        final String childText = ficheEmploye.Nom + " "+ficheEmploye.Prenom;
+        final String childText = ficheEmploye.Nom + ", " + ficheEmploye.Prenom;
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context

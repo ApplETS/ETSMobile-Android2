@@ -21,6 +21,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Toast;
 
+import com.evernote.android.job.JobRequest;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 
@@ -32,7 +33,7 @@ import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
-import ca.etsmtl.applets.etsmobile.service.BottinService;
+import ca.etsmtl.applets.etsmobile.service.BottinSyncJob;
 import ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
@@ -54,7 +55,7 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
-     * Récepteur attendant un intent de {@link ca.etsmtl.applets.etsmobile.service.BottinService}
+     * Récepteur attendant un intent de {@link BottinSyncJob}
      * signalant la fin de la synchronisation
      */
     private BottinFragmentReceiver receiver;
@@ -100,7 +101,7 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        // Initialisatioin du récepteur
+        // Initialisation du récepteur
         receiver = new BottinFragmentReceiver();
     }
 
@@ -108,7 +109,7 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
     public void onResume() {
         super.onResume();
 
-        mSwipeRefreshLayout.setRefreshing(BottinService.isSyncEnCours());
+        mSwipeRefreshLayout.setRefreshing(BottinSyncJob.isSyncEnCours());
 
         IntentFilter filter = new IntentFilter(BottinFragmentReceiver.ACTION_SYNC_BOTTIN);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
@@ -126,7 +127,7 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_bottin, container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout = v.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.ets_red));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -141,7 +142,7 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
         });
 
         // get the listview
-        expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_service_employe);
+        expListView = v.findViewById(R.id.expandableListView_service_employe);
 
         //Ouverture du détail
         expListView.setOnChildClickListener(new OnChildClickListener() {
@@ -264,16 +265,7 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
         if (Utility.isNetworkAvailable(getActivity())) {
             mSwipeRefreshLayout.setRefreshing(true);
 
-            /*
-            Lancement du service permettant de synchroniser le bottin si celui-ci n'est pas en cours
-            de synchronisation. Si c'est le cas, cela signifie que la job est est en cours
-            d'exécution.
-             */
-            if (!BottinService.isSyncEnCours()) {
-                // Lancement du service permettant de synchroniser le bottin
-                Intent intent = new Intent(getContext(), BottinService.class);
-                getActivity().startService(intent);
-            }
+            int jobId = new JobRequest.Builder(BottinSyncJob.TAG).startNow().build().schedule();
         } else {
             afficherMsgHorsLigne();
         }
@@ -304,9 +296,9 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
     }
 
     /**
-     * Récepteur recevant un intent lorsque {@link BottinService} a terminé la synchronisation
+     * Récepteur recevant un intent lorsque {@link BottinSyncJob} a terminé la synchronisation
      */
-    public class BottinFragmentReceiver extends BroadcastReceiver {
+    public final class BottinFragmentReceiver extends BroadcastReceiver {
         public static final String ACTION_SYNC_BOTTIN = "SYNC_BOTTIN";
         public static final String EXCEPTION = "ERREUR_SYNC_BOTTIN";
 

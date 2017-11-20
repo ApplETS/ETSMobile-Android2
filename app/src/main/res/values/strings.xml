@@ -54,7 +54,8 @@
     <string name="dialog_Loading_Directory">Chargement du bottin en cours</string>
     <string name="menu_bottin_refresh">Recharger le bottin</string>
     <string name="bottin_refresh_text">Le bottin va être supprimé puis téléchargé à nouveau.\nÊtes-vous sûr de votre choix ?</string>
-    <string name="bottin_search_hint">Recherche...</string>
+    <string name="bottin_search_hint">Recherche…</string>
+    <string name="bottin_add_contact">Ajouter aux contacts</string>
 
     <!-- Moodle Page -->
     <string name="activity_moodle_titre">Instructions Moodle</string>
@@ -332,7 +333,4 @@
     <string name="new_future_message">Appuyer sur l\'image de proile pour acceder à votre profile (lorsque vous êtes connecté)</string>
     <string name="coachmark_hint_profile">Utilisez l\'icône au dessus pour accéder au Profil</string>
     <string name="coachmark_hint_login">Utilisez ce bouton pour la connexion</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
