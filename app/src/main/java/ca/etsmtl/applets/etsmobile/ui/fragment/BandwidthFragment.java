@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -19,8 +18,10 @@ import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +35,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ca.etsmtl.applets.etsmobile.model.ConsommationBandePassante;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
@@ -75,6 +74,7 @@ public class BandwidthFragment extends BaseFragment {
     private EditText editTextApp;
     private TextInputLayout textInputLayoutPhase;
     private EditText editTextPhase;
+    private Spinner phaseSpinner;
     private TextInputLayout textInputLayoutChambre;
     private EditText editTextChambre;
     //private GridView grid;
@@ -89,10 +89,11 @@ public class BandwidthFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_bandwith, container, false);
 
-        textInputLayoutApp = v.findViewById(R.id.text_input_layout_app);
-        editTextApp = v.findViewById(R.id.bandwidth_editText_app);
         textInputLayoutPhase = v.findViewById(R.id.text_input_layout_phase);
         editTextPhase = v.findViewById(R.id.bandwidth_editText_phase);
+        phaseSpinner = v.findViewById(R.id.bandwidth_phase_spinner);
+        textInputLayoutApp = v.findViewById(R.id.text_input_layout_app);
+        editTextApp = v.findViewById(R.id.bandwidth_editText_app);
         textInputLayoutChambre = v.findViewById(R.id.text_input_layout_chambre);
         editTextChambre = v.findViewById(R.id.bandwidth_editText_chambre);
         //grid = v.findViewById(R.id.bandwith_grid);
@@ -120,35 +121,29 @@ public class BandwidthFragment extends BaseFragment {
             getBandwidth(phase, app, chambre);
         }
 
-        editTextPhase.addTextChangedListener(new TextWatcher() {
-
+        editTextPhase.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() >= 1) {
-                    reset();
-                    Pattern p = Pattern.compile("[1,2,3,4]");
-                    Matcher m = p.matcher(s);
-                    if (m.find()) {
-                        textInputLayoutPhase.setError(null);
-                        if (s.toString().equals("3")) {
-                            displayPhase3Dialog();
-                        } else
-                            verifyInputsAndGetBandwidth();
-                    } else {
-                        String errorStr = getString(R.string.error_invalid_phase);
-                        textInputLayoutPhase.setError(errorStr);
-                    }
-                } else {
-                    textInputLayoutPhase.setError(getString(R.string.error_field_required));
+            public void onClick(View view) {
+                phaseSpinner.performClick();
+            }
+        });
+
+        phaseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int phase = position + 1;
+                editTextPhase.setText(String.valueOf(phase));
+                if (phase == 3) {
+                    displayPhase3Dialog();
                 }
+
+                verifyInputsAndGetBandwidth();
+
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {
 
-            @Override
-            public void afterTextChanged(Editable s) {
             }
         });
 
@@ -467,13 +462,12 @@ public class BandwidthFragment extends BaseFragment {
 
     private void displayPhase3Dialog() {
         FragmentTransaction fT = getFragmentManager().beginTransaction();
-        final Fragment fragment = getFragmentManager().findFragmentByTag(PHASE_3_DIALOG_TAG);
-        DialogFragment dialogFragment;
-        if (fragment != null)
-            dialogFragment = (DialogFragment) fragment;
-        else
-            dialogFragment = BandwidthPhase3DialogFragment.newInstance();
+        DialogFragment fragment = (DialogFragment) getFragmentManager().findFragmentByTag(PHASE_3_DIALOG_TAG);
 
-        dialogFragment.show(fT, PHASE_3_DIALOG_TAG);
+        if (fragment == null)
+            fragment = BandwidthPhase3DialogFragment.newInstance();
+
+        if (!fragment.isAdded())
+            fragment.show(fT, PHASE_3_DIALOG_TAG);
     }
 }

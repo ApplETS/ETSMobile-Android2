@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:baselineAligned="true"
         android:orientation="horizontal"
         android:paddingTop="20dp">
 
@@ -36,15 +37,22 @@
                 android:id="@+id/bandwidth_editText_phase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:completionHint="@string/bandwidth_phase"
+                android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
                 android:ems="10"
+                android:focusable="false"
                 android:hint="@string/bandwidth_phase"
                 android:inputType="number"
-                android:singleLine="true">
-
-                <requestFocus />
-            </EditText>
+                android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
 
+        <Spinner
+            android:id="@+id/bandwidth_phase_spinner"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:entries="@array/bandwidth_phases"
+            android:prompt="@string/bandwidth_phase"
+            android:spinnerMode="dialog" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_input_layout_app"

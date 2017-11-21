@@ -26,7 +26,6 @@
 
             <Spinner
                 android:id="@+id/bg_color_spinner"
-                style="@android:style/Widget.Holo.Light.Spinner"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
@@ -54,7 +53,6 @@
 
             <Spinner
                 android:id="@+id/bg_text_color_spinner"
-                style="@android:style/Widget.Holo.Light.Spinner"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"

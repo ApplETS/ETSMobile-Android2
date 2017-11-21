@@ -128,6 +128,12 @@
     </string>
     <string name="cooptel_phone_number">1 866–532–2252</string>
     <string name="cooptel_email_address">support@cooptel.ca</string>
+    <string-array name="bandwidth_phases">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 
     <!-- Securite -->
     <string name="secu_title1">Joindre la sécurité</string>
