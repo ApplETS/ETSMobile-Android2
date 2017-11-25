@@ -310,6 +310,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                     binding.setSelectedAssignmentLastAttempt(null);
                     binding.setLoadingSelectedAssignmentSubmission(false);
 
+                    bottomSheet.requestLayout();
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
                     String errorMsg = moodleAssignmentFeedbackRemoteResource == null ? getString(R.string.error_JSON_PARSING) : moodleAssignmentFeedbackRemoteResource.message;
@@ -330,17 +331,17 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                 } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.LOADING) {
                     binding.setLoadingSelectedAssignmentSubmission(true);
                     noLongerNeedtoObserve = false;
+
+                    if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+                        bottomSheet.requestLayout();
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    }
                 }
 
                 if (noLongerNeedtoObserve)
                     submissionLiveData.removeObserver(this);
             }
         });
-
-        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
-            bottomSheet.requestLayout();
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        }
     }
 
     public void openInBrowser(View v) {
