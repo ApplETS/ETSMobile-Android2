@@ -158,12 +158,9 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
     }
 
     private void subscribeUISelectedAssignment() {
-        selectedAssignmentObserver = new Observer<MoodleAssignment>() {
-            @Override
-            public void onChanged(@Nullable MoodleAssignment moodleAssignment) {
-                if (moodleAssignment != null) {
-                    displaySelectedAssignment(moodleAssignment);
-                }
+        selectedAssignmentObserver = moodleAssignment -> {
+            if (moodleAssignment != null) {
+                displaySelectedAssignment(moodleAssignment);
             }
         };
 

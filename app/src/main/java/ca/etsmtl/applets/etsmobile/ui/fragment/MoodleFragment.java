@@ -130,19 +130,16 @@ public class MoodleFragment extends BaseFragment {
 
         super.onCreateOptionsMenu(this.menu, inflater);
 
-        if (menu.findItem(R.id.menu_item_moodle_assignments) != null || !moodleViewModel.isShowCaseHasBeenDisplayed()) {
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        TapTargetView.showFor(getActivity(), TapTarget.forToolbarMenuItem(toolbar,
-                                R.id.menu_item_moodle_assignments,
-                                getString(R.string.moodle_assignments_title),
-                                getString(R.string.moodle_assignments_description)));
-                        moodleViewModel.setShowCaseHasBeenDisplayed(false);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+        if (menu.findItem(R.id.menu_item_moodle_assignments) != null && !moodleViewModel.isShowCaseHasBeenDisplayed()) {
+            new Handler().post(() -> {
+                try {
+                    TapTargetView.showFor(getActivity(), TapTarget.forToolbarMenuItem(toolbar,
+                            R.id.menu_item_moodle_assignments,
+                            getString(R.string.moodle_assignments_title),
+                            getString(R.string.moodle_assignments_description)));
+                    moodleViewModel.setShowCaseHasBeenDisplayed(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
         }
