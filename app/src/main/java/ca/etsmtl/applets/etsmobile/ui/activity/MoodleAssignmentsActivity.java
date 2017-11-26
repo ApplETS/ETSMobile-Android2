@@ -133,25 +133,21 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
     }
 
     public void subscribeUIList() {
-        assignmentsCoursesObserver = new Observer<RemoteResource<List<MoodleAssignmentCourse>>>() {
-
-            @Override
-            public void onChanged(@Nullable RemoteResource<List<MoodleAssignmentCourse>> listRemoteResource) {
-                if (listRemoteResource != null) {
-                    if (listRemoteResource.status == RemoteResource.SUCCESS) {
-                        requestInProgress = false;
-                        refreshUI();
-                    } else if (listRemoteResource.status == RemoteResource.ERROR) {
-                        requestInProgress = false;
-                        loadingView.hideProgessBar();
-                        loadingView.setMessageError(getString(R.string.error_JSON_PARSING)
-                                + "\n" + listRemoteResource.message);
-                    } else if (listRemoteResource.status == RemoteResource.LOADING) {
-                        requestInProgress = true;
-                    }
+        assignmentsCoursesObserver = listRemoteResource -> {
+            if (listRemoteResource != null) {
+                if (listRemoteResource.status == RemoteResource.SUCCESS) {
+                    requestInProgress = false;
+                    refreshUI();
+                } else if (listRemoteResource.status == RemoteResource.ERROR) {
+                    requestInProgress = false;
+                    loadingView.hideProgessBar();
+                    loadingView.setMessageError(getString(R.string.error_JSON_PARSING)
+                            + "\n" + listRemoteResource.message);
+                } else if (listRemoteResource.status == RemoteResource.LOADING) {
+                    requestInProgress = true;
                 }
-
             }
+
         };
 
         // Get the view model factory

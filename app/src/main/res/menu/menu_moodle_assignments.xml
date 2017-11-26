@@ -3,32 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_item_moodle_sort_assignments"
-        android:title="@string/moodle_past_assignments_sort"
         android:icon="@drawable/ic_sort_white_24dp"
+        android:title="@string/moodle_past_assignments_sort"
         app:showAsAction="ifRoom">
         <menu>
             <group>
                 <item
                     android:id="@+id/menu_item_moodle_sort_assignments_date"
-                    android:title="@string/moodle_past_assignments_sort_date"
                     android:icon="@drawable/ic_date_range_black_24dp"
-                    android:orderInCategory="0"/>
+                    android:orderInCategory="0"
+                    android:title="@string/moodle_past_assignments_sort_date" />
                 <item
                     android:id="@+id/menu_item_moodle_sort_assignments_alpha"
-                    android:title="@string/moodle_past_assignments_sort_alpha"
                     android:icon="@drawable/ic_sort_by_alpha_black_24dp"
-                    android:orderInCategory="1"/>
+                    android:orderInCategory="1"
+                    android:title="@string/moodle_past_assignments_sort_alpha" />
             </group>
         </menu>
     </item>
-    <item android:id="@+id/menu_item_moodle_filter"
-        android:title="@string/moodle_past_assignments_filter"
+    <item
+        android:id="@+id/menu_item_moodle_filter"
         android:icon="@drawable/ic_filter_list_white_24dp"
+        android:title="@string/moodle_past_assignments_filter"
         app:showAsAction="ifRoom">
         <menu>
             <item
                 android:id="@+id/menu_item_moodle_previous_assignments"
                 android:checkable="true"
+                android:checked="true"
                 android:icon="@null"
                 android:title="@string/moodle_past_assignments"
                 app:showAsAction="never" />

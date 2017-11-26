@@ -176,7 +176,7 @@ public class MoodleViewModel extends AndroidViewModel {
     public boolean isDisplayPastAssignments() {
         SharedPreferences settings = getApplication().getSharedPreferences(MOODLE_PREFS,
                 Context.MODE_PRIVATE);
-        return settings.getBoolean(DISPLAY_PAST_ASSIGNMENTS_PREF, false);
+        return settings.getBoolean(DISPLAY_PAST_ASSIGNMENTS_PREF, true);
     }
 
     /**
