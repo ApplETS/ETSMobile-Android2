@@ -130,13 +130,15 @@
     <string name="profil_cours_equivalent">Equivalent courses</string>
 
     <!-- wifi bandwith -->
-    <string name="bandwith_phase">Phase</string>
-    <string name="bandwith_app">Apt</string>
+    <string name="bandwidth_phase">Phase</string>
+    <string name="bandwidth_app">Apt</string>
+    <string name="bandwidth_chambre">Room</string>
     <string name="_0">0</string>
     <string name="utilise">Remaining:</string>
     <string name="gigaoctetx">GB</string>
     <string name="error_invalid_app">Error invalid apartment number</string>
     <string name="error_invalid_phase">Error invalid phase</string>
+    <string name="bandwidth_used">Bandwidth used</string>
 
     <!-- Securite -->
     <string name="secu_title1">Reach security</string>

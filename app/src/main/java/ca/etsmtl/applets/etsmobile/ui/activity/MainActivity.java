@@ -56,7 +56,7 @@ import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.service.BottinSyncJob;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.BandwithFragment;
+import ca.etsmtl.applets.etsmobile.ui.fragment.BandwidthFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BaseFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.EventsFragment;
@@ -300,7 +300,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
-        setTitle(((BaseFragment) fragment).getFragmentTitle());
+        if (fragment instanceof BaseFragment)
+            setTitle(((BaseFragment) fragment).getFragmentTitle());
     }
 
     @Override
@@ -469,7 +470,7 @@ public class MainActivity extends AppCompatActivity {
                         Utility.openChromeCustomTabs(MainActivity.this, getString(R.string.url_mon_ets));
                         break;
                     case BANDWIDTH_ITEM:
-                        goToFragment(new BandwithFragment(), BandwithFragment.class.getName());
+                        goToFragment(new BandwidthFragment(), BandwidthFragment.class.getName());
                         break;
                     case NEWS_ITEM:
                         goToFragment(new NewsFragment(), NewsFragment.class.getName());
