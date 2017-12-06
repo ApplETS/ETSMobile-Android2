@@ -47,7 +47,7 @@ public class MoodleRepository {
         boolean tokenReady = token.getValue() != null && token.getValue().status != RemoteResource.ERROR;
 
         if (context != null && !tokenReady) {
-            token.setValue(RemoteResource.<MoodleToken>loading(null));
+            token.setValue(RemoteResource.loading(null));
 
             moodleWebService.getToken(ApplicationManager.userCredentials.getUsername(), ApplicationManager.userCredentials.getPassword()).enqueue(new Callback<MoodleToken>() {
                 @Override
@@ -61,18 +61,18 @@ public class MoodleRepository {
                         ApplicationManager.userCredentials.setMoodleToken(moodleToken.getToken());
 
                         if (moodleToken.getToken().equals("")) {
-                            token.setValue(RemoteResource.<MoodleToken>error(context.getString(R.string.moodle_error_cant_get_token) + "\n" + response.message(), null));
+                            token.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_token) + "\n" + response.message(), null));
                         }
 
                         token.setValue(RemoteResource.success(moodleToken));
                     } else {
-                        token.setValue(RemoteResource.<MoodleToken>error(context.getString(R.string.moodle_error_cant_get_token) + "\n" + response.message(), null));
+                        token.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_token) + "\n" + response.message(), null));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<MoodleToken> call, Throwable t) {
-                    token.setValue(RemoteResource.<MoodleToken>error(context.getString(R.string.moodle_error_connection_failure), null));
+                    token.setValue(RemoteResource.error(context.getString(R.string.moodle_error_connection_failure), null));
                 }
             });
         }
@@ -84,7 +84,7 @@ public class MoodleRepository {
         RemoteResource<MoodleToken> remoteToken = token.getValue();
 
         if (remoteToken != null && remoteToken.data != null && remoteToken.status != RemoteResource.LOADING) {
-            assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>loading(null));
+            assignmentCourses.setValue(RemoteResource.loading(null));
 
             moodleWebService.getAssignmentCourses(ApplicationManager.userCredentials.getMoodleToken(), coursesIds).enqueue(new Callback<MoodleAssignmentCourses>() {
                 @Override
@@ -95,13 +95,13 @@ public class MoodleRepository {
                         List<MoodleAssignmentCourse> courses = moodleAssignmentCourses.getCourses();
                         assignmentCourses.setValue(RemoteResource.success(courses));
                     } else {
-                        assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(response.message(), null));
+                        assignmentCourses.setValue(RemoteResource.error(response.message(), null));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<MoodleAssignmentCourses> call, Throwable t) {
-                    assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(context.getString(R.string.moodle_error_connection_failure), null));
+                    assignmentCourses.setValue(RemoteResource.error(context.getString(R.string.moodle_error_connection_failure), null));
                 }
             });
         } else {
@@ -110,7 +110,7 @@ public class MoodleRepository {
                 public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
                     if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
                         String errorMessage = moodleTokenRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_token) : moodleTokenRemoteResource.message;
-                        assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(errorMessage, null));
+                        assignmentCourses.setValue(RemoteResource.error(errorMessage, null));
                         token.removeObserver(this);
                     } else if (moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
                         getAssignmentCourses(coursesIds);
@@ -126,7 +126,7 @@ public class MoodleRepository {
     public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses() {
 
         if (assignmentCourses.getValue() == null || assignmentCourses.getValue().status != RemoteResource.SUCCESS) {
-            assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>loading(null));
+            assignmentCourses.setValue(RemoteResource.loading(null));
 
             RemoteResource<MoodleCourses> moodleCourses = courses.getValue();
 
@@ -143,7 +143,7 @@ public class MoodleRepository {
                     public void onChanged(@Nullable RemoteResource<MoodleCourses> moodleCoursesRemoteResource) {
                         if (moodleCoursesRemoteResource == null || moodleCoursesRemoteResource.status == RemoteResource.ERROR) {
                             String errorMessage = moodleCoursesRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_courses) : moodleCoursesRemoteResource.message;
-                            assignmentCourses.setValue(RemoteResource.<List<MoodleAssignmentCourse>>error(errorMessage, null));
+                            assignmentCourses.setValue(RemoteResource.error(errorMessage, null));
                             courses.removeObserver(this);
                         } else if (moodleCoursesRemoteResource.status == RemoteResource.SUCCESS) {
                             getAssignmentCourses();
@@ -159,7 +159,7 @@ public class MoodleRepository {
 
     public LiveData<RemoteResource<MoodleProfile>> getProfile() {
         if (profile.getValue() == null || profile.getValue().status != RemoteResource.SUCCESS) {
-            profile.setValue(RemoteResource.<MoodleProfile>loading(null));
+            profile.setValue(RemoteResource.loading(null));
 
             final RemoteResource<MoodleToken> remoteToken = token.getValue();
 
@@ -177,7 +177,7 @@ public class MoodleRepository {
 
                     @Override
                     public void onFailure(Call<MoodleProfile> call, Throwable t) {
-                        profile.setValue(RemoteResource.<MoodleProfile>error(context.getString(R.string.moodle_error_connection_failure), null));
+                        profile.setValue(RemoteResource.error(context.getString(R.string.moodle_error_connection_failure), null));
                     }
                 });
             } else {
@@ -186,7 +186,7 @@ public class MoodleRepository {
                     public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
                         if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
                             String errorMessage = moodleTokenRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_token) : moodleTokenRemoteResource.message;
-                            profile.setValue(RemoteResource.<MoodleProfile>error(errorMessage, null));
+                            profile.setValue(RemoteResource.error(errorMessage, null));
                             token.removeObserver(this);
                         } else if (moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
                             getProfile();
@@ -202,7 +202,7 @@ public class MoodleRepository {
 
     public LiveData<RemoteResource<MoodleCourses>> getCourses() {
         if (courses.getValue() == null || courses.getValue().status != RemoteResource.SUCCESS) {
-            courses.setValue(RemoteResource.<MoodleCourses>loading(null));
+            courses.setValue(RemoteResource.loading(null));
 
             final RemoteResource<MoodleProfile> remoteProfile = profile.getValue();
 
@@ -220,7 +220,7 @@ public class MoodleRepository {
 
                     @Override
                     public void onFailure(Call<MoodleCourses> call, Throwable t) {
-                        courses.setValue(RemoteResource.<MoodleCourses>error(context.getString(R.string.moodle_error_connection_failure), null));
+                        courses.setValue(RemoteResource.error(context.getString(R.string.moodle_error_connection_failure), null));
                     }
                 });
             } else {
@@ -229,7 +229,7 @@ public class MoodleRepository {
                     public void onChanged(@Nullable RemoteResource<MoodleProfile> moodleProfileRemoteResource) {
                         if (moodleProfileRemoteResource == null || moodleProfileRemoteResource.status == RemoteResource.ERROR) {
                             String errorMessage = moodleProfileRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_profile) : moodleProfileRemoteResource.message;
-                            courses.setValue(RemoteResource.<MoodleCourses>error(errorMessage, null));
+                            courses.setValue(RemoteResource.error(errorMessage, null));
                             profile.removeObserver(this);
                         } else if (moodleProfileRemoteResource.status == RemoteResource.SUCCESS) {
                             getCourses();
@@ -245,7 +245,7 @@ public class MoodleRepository {
 
     public LiveData<RemoteResource<MoodleAssignmentSubmission>> getAssignmentSubmission(final int assignId) {
         final MutableLiveData<RemoteResource<MoodleAssignmentSubmission>> submission = new MutableLiveData<>();
-        submission.setValue(RemoteResource.<MoodleAssignmentSubmission>loading(null));
+        submission.setValue(RemoteResource.loading(null));
 
         RemoteResource<MoodleToken> remoteToken = token.getValue();
 
@@ -264,7 +264,7 @@ public class MoodleRepository {
 
                 @Override
                 public void onFailure(Call<MoodleAssignmentSubmission> call, Throwable t) {
-                    submission.setValue(RemoteResource.<MoodleAssignmentSubmission>error(context.getString(R.string.moodle_error_connection_failure), null));
+                    submission.setValue(RemoteResource.error(context.getString(R.string.moodle_error_connection_failure), null));
                 }
             });
         } else {
@@ -273,7 +273,7 @@ public class MoodleRepository {
                 public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
                     if (moodleTokenRemoteResource == null || moodleTokenRemoteResource.status == RemoteResource.ERROR) {
                         String errorMessage = moodleTokenRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_token) : moodleTokenRemoteResource.message;
-                        submission.setValue(RemoteResource.<MoodleAssignmentSubmission>error(errorMessage, null));
+                        submission.setValue(RemoteResource.error(errorMessage, null));
                         token.removeObserver(this);
                     } else if (moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
                         getProfile();

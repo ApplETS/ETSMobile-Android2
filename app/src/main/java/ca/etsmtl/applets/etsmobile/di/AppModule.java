@@ -32,14 +32,14 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public MoodleRepository provideMoodleRepository() {
-        return new MoodleRepository(app, provideMoodleService());
+    public MoodleRepository provideMoodleRepository(Application app, MoodleWebService moodleWebService) {
+        return new MoodleRepository(app, moodleWebService);
     }
 
     @Provides
     @Singleton
-    public MoodleViewModelFactory provideMoodleViewModelFactory() {
-        return new MoodleViewModelFactory(app, provideMoodleRepository());
+    public MoodleViewModelFactory provideMoodleViewModelFactory(Application app, MoodleRepository moodleRepository) {
+        return new MoodleViewModelFactory(app, moodleRepository);
     }
 
     @Provides

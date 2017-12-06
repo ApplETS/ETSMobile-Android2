@@ -2,7 +2,7 @@ package ca.etsmtl.applets.etsmobile.view_model;
 
 import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import javax.inject.Singleton;
 
@@ -20,14 +20,13 @@ public class MoodleViewModelFactory implements ViewModelProvider.Factory {
     private MoodleRepository repository;
 
     public MoodleViewModelFactory(Application application, MoodleRepository repository) {
-        Log.d(TAG, "New instance of MoodleViewModelFactory");
-
         this.application = application;
         this.repository = repository;
     }
 
+    @NonNull
     @Override
-    public MoodleViewModel create(Class modelClass) {
+    public MoodleViewModel create(@NonNull Class modelClass) {
         return new MoodleViewModel(application, repository);
     }
 }
