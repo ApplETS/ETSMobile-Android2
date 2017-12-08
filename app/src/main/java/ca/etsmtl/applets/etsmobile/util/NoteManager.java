@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Observable;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.model.ArrayOfCours;
 import ca.etsmtl.applets.etsmobile.model.Cours;
 import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
@@ -126,7 +125,6 @@ public class NoteManager extends Observable implements RequestListener<Object> {
 
             Where where = builder.where();
             where.eq("listeDesElementsEvaluation_id", listeDesElementsEvaluation);
-            where.and();
 
             elementEvaluationList = builder.query();
 
@@ -232,7 +230,6 @@ public class NoteManager extends Observable implements RequestListener<Object> {
 
                 Where where = deleteBuilder.where();
                 where.eq("listeDesElementsEvaluation_id", listeDesElementsEvaluation);
-                where.and();
 
                 deleteBuilder.delete();
             }
@@ -266,7 +263,6 @@ public class NoteManager extends Observable implements RequestListener<Object> {
 
             Where where = builder.where();
             where.eq("listeDesElementsEvaluation_id", listeDesElementsEvaluation);
-            where.and();
 
             elementEvaluationList = builder.query();
             for (ElementEvaluation element : elementEvaluationList) {
