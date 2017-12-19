@@ -39,7 +39,7 @@ public class NoteManager extends Observable implements RequestListener<Object> {
     private boolean synchListeDesElementsEvaluation = false;
 
     public NoteManager(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
     }
 
     public void updateCours(List<Cours> coursList) {
