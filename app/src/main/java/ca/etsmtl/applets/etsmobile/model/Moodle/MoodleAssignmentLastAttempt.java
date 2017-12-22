@@ -119,7 +119,7 @@ public class MoodleAssignmentLastAttempt {
      * @param isTeamSubmission true if the assignment must be submitted as a team
      * @return true if the assignment has been submitted or team submitted
      */
-    public boolean isSubmittedOrTeamSubitted(boolean isTeamSubmission) {
+    private boolean isSubmittedOrTeamSubmitted(boolean isTeamSubmission) {
         return isTeamSubmission ? isTeamSubmitted() : isSubmitted();
     }
 
@@ -132,19 +132,22 @@ public class MoodleAssignmentLastAttempt {
 
     @DrawableRes
     public int getSubmissionIconRes(boolean isTeamSubmission, Date dueDate) {
-        if (isSubmittedOrTeamSubitted(isTeamSubmission))
+        if (isSubmittedOrTeamSubmitted(isTeamSubmission))
             return R.drawable.ic_assignment_turned_in_black_24dp;
         else {
-            if (dueDate.getTime() > 0 && dueDate.before(new Date()))
+            if (dueDate.getTime() > 0 && dueDate.before(new Date())) {
+                // Si la date de remise a été paramétrée et que celle-ci a été dépassée...
                 return R.drawable.ic_assignment_late_black_24dp;
-            else
+            } else {
+                // Sinon, la date de remise n'a pas encore été dépassée
                 return R.drawable.ic_assignment_black_24dp;
+            }
         }
     }
 
     @ColorRes
     public int getSubmissionColorRes(boolean isTeamSubmission, Date dueDate) {
-        if (isSubmittedOrTeamSubitted(isTeamSubmission))
+        if (isSubmittedOrTeamSubmitted(isTeamSubmission))
             return R.color.success_color;
         else {
             if (dueDate.getTime() > 0 && dueDate.before(new Date())) {
@@ -159,7 +162,7 @@ public class MoodleAssignmentLastAttempt {
 
     @StringRes
     public int getSubmissionStatusRes(boolean isTeamSubmission, Date dueDate) {
-        if (isSubmittedOrTeamSubitted(isTeamSubmission))
+        if (isSubmittedOrTeamSubmitted(isTeamSubmission))
             return R.string.moodle_assignment_status_submitted;
         else {
             if (dueDate.getTime() > 0 && dueDate.before(new Date())) {
