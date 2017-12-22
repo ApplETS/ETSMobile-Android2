@@ -64,7 +64,7 @@
             android:id="@+id/loading_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{loading ? View.VISIBLE : View.GONE}" />
+            app:visibleGone="@{loading}" />
 
         <View
             android:id="@+id/shadow"
@@ -96,8 +96,8 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:indeterminate="true"
-            android:visibility="@{loadingSelectedAssignmentSubmission ? View.VISIBLE : View.GONE}"
-            app:layout_anchor="@id/bottom_sheet" />
+            app:layout_anchor="@id/bottom_sheet"
+            app:visibleGone="@{loadingSelectedAssignmentSubmission}" />
 
         <LinearLayout
             android:id="@+id/bottom_sheet"
@@ -135,7 +135,7 @@
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
                     android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding"
-                    android:visibility="@{selectedAssignment.dueDateSet ? View.VISIBLE : View.GONE}">
+                    app:visibleGone="@{selectedAssignment.dueDateSet}">
 
                     <ImageView
                         android:layout_width="40dp"
@@ -159,25 +159,25 @@
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
                     android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding"
-                    android:visibility="@{selectedAssignment.teamSubmission ? View.VISIBLE : View.GONE}">
+                    app:visibleGone="@{selectedAssignment.teamSubmission}">
 
                     <ca.etsmtl.applets.etsmobile.views.LoadingView
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
-                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.VISIBLE : View.GONE}" />
+                        app:visibleGone="@{loadingSelectedAssignmentSubmission}" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_group_black_24dp"
-                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}" />
+                        app:visibleGone="@{!loadingSelectedAssignmentSubmission}" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
-                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}">
+                        app:visibleGone="@{!loadingSelectedAssignmentSubmission}">
 
                         <TextView
                             android:layout_width="fill_parent"
@@ -209,14 +209,14 @@
                     <ca.etsmtl.applets.etsmobile.views.LoadingView
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
-                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.VISIBLE : View.GONE}" />
+                        app:visibleGone="@{loadingSelectedAssignmentSubmission}" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:src="@{selectedAssignmentLastAttempt.isSubmittedOrTeamSubitted(selectedAssignment.teamSubmission) ? @drawable/ic_assignment_turned_in_black_24dp : @drawable/ic_assignment_black_24dp}"
                         android:tint="@{selectedAssignmentLastAttempt.isSubmittedOrTeamSubitted(selectedAssignment.teamSubmission)? @color/success_color : @color/failure_color}"
-                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}" />
+                        app:visibleGone="@{!loadingSelectedAssignmentSubmission}" />
 
                     <TextView
                         android:layout_width="fill_parent"
@@ -239,21 +239,21 @@
                     <ca.etsmtl.applets.etsmobile.views.LoadingView
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
-                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.VISIBLE : View.GONE}" />
+                        app:visibleGone="@{loadingSelectedAssignmentSubmission}" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_ico_notes"
                         android:tint="@color/black"
-                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}" />
+                        app:visibleGone="@{!loadingSelectedAssignmentSubmission}" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
-                        android:visibility="@{loadingSelectedAssignmentSubmission ? View.GONE : View.VISIBLE}">
+                        app:visibleGone="@{!loadingSelectedAssignmentSubmission}">
 
                         <TextView
                             android:layout_width="fill_parent"
@@ -270,7 +270,7 @@
                             android:text='@{String.format(@string/moodle_assignment_grade, String.format("%.2f", selectedAssignmentFeedback.grade.grade) + " / " + selectedAssignment.grade)}'
                             android:textColor="@color/black"
                             android:textSize="@dimen/two_line_list_item_with_icon_font_size"
-                            android:visibility='@{selectedAssignmentLastAttempt.graded ? View.VISIBLE : View.GONE}' />
+                            app:visibleGone="@{selectedAssignmentLastAttempt.graded}" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
