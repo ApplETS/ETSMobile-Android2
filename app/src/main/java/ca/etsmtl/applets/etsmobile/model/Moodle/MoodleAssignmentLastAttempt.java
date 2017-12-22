@@ -1,6 +1,14 @@
 package ca.etsmtl.applets.etsmobile.model.Moodle;
 
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
+
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
+
+import ca.etsmtl.applets.etsmobile2.R;
 
 /**
  * Last submission attempt of an assignment
@@ -120,6 +128,48 @@ public class MoodleAssignmentLastAttempt {
      */
     public String getGradingStatus() {
         return gradingStatus;
+    }
+
+    @DrawableRes
+    public int getSubmissionIconRes(boolean isTeamSubmission, Date dueDate) {
+        if (isSubmittedOrTeamSubitted(isTeamSubmission))
+            return R.drawable.ic_assignment_turned_in_black_24dp;
+        else {
+            if (dueDate.getTime() > 0 && dueDate.before(new Date()))
+                return R.drawable.ic_assignment_late_black_24dp;
+            else
+                return R.drawable.ic_assignment_black_24dp;
+        }
+    }
+
+    @ColorRes
+    public int getSubmissionColorRes(boolean isTeamSubmission, Date dueDate) {
+        if (isSubmittedOrTeamSubitted(isTeamSubmission))
+            return R.color.success_color;
+        else {
+            if (dueDate.getTime() > 0 && dueDate.before(new Date())) {
+                // Si la date de remise a été paramétrée et que celle-ci a été dépassée...
+                return R.color.failure_color;
+            } else {
+                // Sinon, la date de remise n'a pas encore été dépassée
+                return R.color.black;
+            }
+        }
+    }
+
+    @StringRes
+    public int getSubmissionStatusRes(boolean isTeamSubmission, Date dueDate) {
+        if (isSubmittedOrTeamSubitted(isTeamSubmission))
+            return R.string.moodle_assignment_status_submitted;
+        else {
+            if (dueDate.getTime() > 0 && dueDate.before(new Date())) {
+                // Si la date de remise a été paramétrée et que celle-ci a été dépassée...
+                return R.string.moodle_assignment_status_late;
+            } else {
+                // Sinon, la date de remise n'a pas encore été dépassée
+                return R.string.moodle_assignment_status_not_submitted;
+            }
+        }
     }
 
     /**
