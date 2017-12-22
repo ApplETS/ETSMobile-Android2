@@ -98,13 +98,21 @@ public class MoodleAssignmentLastAttempt {
     }
 
     /**
-     * @return true if the team has submitted the assignment
+     * @return true if the assignment has been submitted by the team
      */
     public boolean isTeamSubmitted() {
         if (teamSubmission != null && teamSubmission.status != null)
             return teamSubmission.status.equals(STATUS_SUBMITTED);
 
         return false;
+    }
+
+    /**
+     * @param isTeamSubmission true if the assignment must be submitted as a team
+     * @return true if the assignment has been submitted or team submitted
+     */
+    public boolean isSubmittedOrTeamSubitted(boolean isTeamSubmission) {
+        return isTeamSubmission ? isTeamSubmitted() : isSubmitted();
     }
 
     /**
