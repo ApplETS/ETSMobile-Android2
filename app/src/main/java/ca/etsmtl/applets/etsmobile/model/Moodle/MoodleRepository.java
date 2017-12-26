@@ -238,10 +238,16 @@ public class MoodleRepository {
                                     });
 
                                     remoteTokenLiveData.removeObserver(this);
+                                } else if (moodleTokenRemoteResource != null && moodleTokenRemoteResource.status == RemoteResource.ERROR) {
+                                    courses.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_token), null));
+                                    remoteTokenLiveData.removeObserver(this);
                                 }
                             }
                         });
 
+                        remoteProfileLiveData.removeObserver(this);
+                    } else if (remoteProfile != null && remoteProfile.status == RemoteResource.ERROR) {
+                        courses.setValue(RemoteResource.error(remoteProfile.message, null));
                         remoteProfileLiveData.removeObserver(this);
                     }
                 }
