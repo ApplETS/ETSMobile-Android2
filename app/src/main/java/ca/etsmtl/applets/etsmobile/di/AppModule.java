@@ -1,9 +1,14 @@
 package ca.etsmtl.applets.etsmobile.di;
 
 import android.app.Application;
+import android.arch.persistence.room.Room;
+
+import java.util.concurrent.Executor;
 
 import javax.inject.Singleton;
 
+import ca.etsmtl.applets.etsmobile.db.MoodleDb;
+import ca.etsmtl.applets.etsmobile.db.MoodleProfileDao;
 import ca.etsmtl.applets.etsmobile.http.MoodleWebService;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleRepository;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModelFactory;
@@ -32,12 +37,6 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public MoodleRepository provideMoodleRepository(Application app, MoodleWebService moodleWebService) {
-        return new MoodleRepository(app, moodleWebService);
-    }
-
-    @Provides
-    @Singleton
     public MoodleViewModelFactory provideMoodleViewModelFactory(Application app, MoodleRepository moodleRepository) {
         return new MoodleViewModelFactory(app, moodleRepository);
     }
@@ -50,5 +49,23 @@ public class AppModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(MoodleWebService.class);
+    }
+
+    @Provides
+    @Singleton
+    MoodleDb provideMoodleDb(Application app) {
+        return Room.databaseBuilder(app, MoodleDb.class,"moodle.db").build();
+    }
+
+    @Provides
+    @Singleton
+    MoodleProfileDao provideMoodleProfileDao(MoodleDb moodleDb) {
+        return moodleDb.moodleProfileDao();
+    }
+
+    @Provides
+    @Singleton
+    Executor provideExecutor() {
+        return runnable -> new Thread(runnable).start();
     }
 }
