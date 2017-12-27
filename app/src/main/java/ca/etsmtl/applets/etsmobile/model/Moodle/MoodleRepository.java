@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.db.MoodleCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleProfileDao;
 import ca.etsmtl.applets.etsmobile.http.MoodleWebService;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
@@ -37,16 +38,15 @@ public class MoodleRepository {
     private Context context;
     private final MoodleWebService moodleWebService;
     private final MoodleProfileDao moodleProfileDao;
-    private MutableLiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses = new MutableLiveData<>();
-    //private MutableLiveData<RemoteResource<MoodleProfile>> profile = new MutableLiveData<>();
-    private MutableLiveData<RemoteResource<MoodleCourses>> courses = new MutableLiveData<>();
+    private final MoodleCourseDao moodleCourseDao;
     private final Executor executor;
 
     @Inject
-    public MoodleRepository(@NonNull Application application, MoodleWebService moodleWebService, MoodleProfileDao moodleProfileDao, Executor executor) {
+    public MoodleRepository(@NonNull Application application, MoodleWebService moodleWebService, MoodleProfileDao moodleProfileDao, MoodleCourseDao moodleCourseDao, Executor executor) {
         this.context = application;
         this.moodleWebService = moodleWebService;
         this.moodleProfileDao = moodleProfileDao;
+        this.moodleCourseDao = moodleCourseDao;
         this.executor = executor;
     }
 
@@ -73,9 +73,9 @@ public class MoodleRepository {
 
                         if (moodleToken.getToken().equals("")) {
                             token.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_token) + "\n" + response.message(), null));
+                        } else {
+                            token.setValue(RemoteResource.success(moodleToken));
                         }
-
-                        token.setValue(RemoteResource.success(moodleToken));
                     } else {
                         token.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_token) + "\n" + response.message(), null));
                     }
@@ -90,7 +90,7 @@ public class MoodleRepository {
         return token;
     }
 
-    private LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses(final int[] coursesIds) {
+    private void getAssignmentCourses(final int[] coursesIds, final MutableLiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses) {
         LiveData<RemoteResource<MoodleToken>> token = getToken();
 
         token.observeForever(new Observer<RemoteResource<MoodleToken>>() {
@@ -125,40 +125,30 @@ public class MoodleRepository {
                 }
             }
         });
-
-        return assignmentCourses;
     }
 
     public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses() {
 
-        if (assignmentCourses.getValue() == null || assignmentCourses.getValue().status != RemoteResource.SUCCESS) {
-            assignmentCourses.setValue(RemoteResource.loading(null));
+        MutableLiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses = new MutableLiveData<>();
+        assignmentCourses.setValue(RemoteResource.loading(null));
 
-            RemoteResource<MoodleCourses> moodleCourses = courses.getValue();
+        LiveData<RemoteResource<MoodleCourses>> remoteCoursesLiveData = getCourses();
+        remoteCoursesLiveData.observeForever(new Observer<RemoteResource<MoodleCourses>>() {
+            @Override
+            public void onChanged(@Nullable RemoteResource<MoodleCourses> remoteMoodleCourses) {
+                if (remoteMoodleCourses != null && remoteMoodleCourses.data != null && remoteMoodleCourses.status == RemoteResource.SUCCESS) {
+                    int[] coursesIds = new int[remoteMoodleCourses.data.size()];
+                    for (int i = 0; i < remoteMoodleCourses.data.size(); i++) {
+                        coursesIds[i] = remoteMoodleCourses.data.get(i).getId();
+                    }
 
-            if (moodleCourses != null && moodleCourses.data != null && moodleCourses.status != RemoteResource.LOADING) {
-                int[] coursesIds = new int[moodleCourses.data.size()];
-                for (int i = 0; i < moodleCourses.data.size(); i++) {
-                    coursesIds[i] = moodleCourses.data.get(i).getId();
+                    getAssignmentCourses(coursesIds, assignmentCourses);
                 }
 
-                return getAssignmentCourses(coursesIds);
-            } else {
-                getCourses().observeForever(new Observer<RemoteResource<MoodleCourses>>() {
-                    @Override
-                    public void onChanged(@Nullable RemoteResource<MoodleCourses> moodleCoursesRemoteResource) {
-                        if (moodleCoursesRemoteResource == null || moodleCoursesRemoteResource.status == RemoteResource.ERROR) {
-                            String errorMessage = moodleCoursesRemoteResource == null ? context.getString(R.string.moodle_error_cant_get_courses) : moodleCoursesRemoteResource.message;
-                            assignmentCourses.setValue(RemoteResource.error(errorMessage, null));
-                            courses.removeObserver(this);
-                        } else if (moodleCoursesRemoteResource.status == RemoteResource.SUCCESS) {
-                            getAssignmentCourses();
-                            courses.removeObserver(this);
-                        }
-                    }
-                });
+                if (remoteMoodleCourses != null && remoteMoodleCourses.status != RemoteResource.LOADING)
+                    remoteCoursesLiveData.removeObserver(this);
             }
-        }
+        });
 
         return assignmentCourses;
     }
@@ -166,9 +156,11 @@ public class MoodleRepository {
     public LiveData<RemoteResource<MoodleProfile>> getProfile() {
         MutableLiveData<RemoteResource<MoodleProfile>> remoteMoodleProfileLiveData = new MutableLiveData<>();
         remoteMoodleProfileLiveData.setValue(RemoteResource.loading(null));
+
         refreshMoodleProfile();
 
         LiveData<MoodleProfile> moodleProfileLiveData = moodleProfileDao.find();
+
         moodleProfileLiveData.observeForever(new Observer<MoodleProfile>() {
             @Override
             public void onChanged(@Nullable MoodleProfile moodleProfile) {
@@ -183,7 +175,7 @@ public class MoodleRepository {
         return remoteMoodleProfileLiveData;
     }
 
-    public void refreshMoodleProfile() {
+    private void refreshMoodleProfile() {
         LiveData<RemoteResource<MoodleToken>> remoteTokenLiveData = getToken();
         remoteTokenLiveData.observeForever(new Observer<RemoteResource<MoodleToken>>() {
             @Override
@@ -200,61 +192,70 @@ public class MoodleRepository {
                     });
                 }
 
-                remoteTokenLiveData.removeObserver(this);
+                if (moodleTokenRemoteResource != null && moodleTokenRemoteResource.status != RemoteResource.LOADING)
+                    remoteTokenLiveData.removeObserver(this);
             }
         });
     }
 
     public LiveData<RemoteResource<MoodleCourses>> getCourses() {
-        if (courses.getValue() == null || courses.getValue().status != RemoteResource.SUCCESS) {
-            courses.setValue(RemoteResource.loading(null));
+        MutableLiveData<RemoteResource<MoodleCourses>> remoteCoursesMutableLiveData = new MutableLiveData<>();
+        remoteCoursesMutableLiveData.setValue(RemoteResource.loading(null));
 
-            LiveData<RemoteResource<MoodleProfile>> remoteProfileLiveData = getProfile();
-            remoteProfileLiveData.observeForever(new Observer<RemoteResource<MoodleProfile>>() {
-                @Override
-                public void onChanged(@Nullable RemoteResource<MoodleProfile> remoteProfile) {
-                    if (remoteProfile != null && remoteProfile.data != null && remoteProfile.status != RemoteResource.LOADING) {
-                        LiveData<RemoteResource<MoodleToken>> remoteTokenLiveData = getToken();
-                        remoteTokenLiveData.observeForever(new Observer<RemoteResource<MoodleToken>>() {
-                            @Override
-                            public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
+        refreshCourses();
 
-                                if (moodleTokenRemoteResource != null && moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
-                                    moodleWebService.getCourses(ApplicationManager.userCredentials.getMoodleToken(), remoteProfile.data.getUserId()).enqueue(new Callback<MoodleCourses>() {
-                                        @Override
-                                        public void onResponse(Call<MoodleCourses> call, Response<MoodleCourses> response) {
-                                            MoodleCourses moodleCourses = response.body();
+        LiveData<List<MoodleCourse>> moodleCoursesLiveData = moodleCourseDao.getAll();
+        moodleCoursesLiveData.observeForever(new Observer<List<MoodleCourse>>() {
+            @Override
+            public void onChanged(@Nullable List<MoodleCourse> moodleCoursesList) {
+                if (moodleCoursesList != null && moodleCoursesList.size() > 0) {
+                    MoodleCourses moodleCoursesObj = new MoodleCourses();
+                    for (int i = moodleCoursesList.size() - 1; i >= 0; i--)
+                        moodleCoursesObj.add(moodleCoursesList.get(i));
 
-                                            if (response.isSuccessful() && moodleCourses != null)
-                                                courses.setValue(RemoteResource.success(moodleCourses));
-                                            else
-                                                courses.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_courses) + "\n" + response.message(), moodleCourses));
-                                        }
+                    remoteCoursesMutableLiveData.setValue(RemoteResource.success(moodleCoursesObj));
 
-                                        @Override
-                                        public void onFailure(Call<MoodleCourses> call, Throwable t) {
-                                            courses.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_courses), null));
-                                        }
-                                    });
-
-                                    remoteTokenLiveData.removeObserver(this);
-                                } else if (moodleTokenRemoteResource != null && moodleTokenRemoteResource.status == RemoteResource.ERROR) {
-                                    courses.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_token), null));
-                                    remoteTokenLiveData.removeObserver(this);
-                                }
-                            }
-                        });
-
-                        remoteProfileLiveData.removeObserver(this);
-                    } else if (remoteProfile != null && remoteProfile.status == RemoteResource.ERROR) {
-                        courses.setValue(RemoteResource.error(remoteProfile.message, null));
-                        remoteProfileLiveData.removeObserver(this);
-                    }
+                    moodleCoursesLiveData.removeObserver(this);
                 }
-            });
-        }
+            }
+        });
 
-        return courses;
+        return remoteCoursesMutableLiveData;
+    }
+
+    private void refreshCourses() {
+        LiveData<RemoteResource<MoodleProfile>> remoteProfileLiveData = getProfile();
+        remoteProfileLiveData.observeForever(new Observer<RemoteResource<MoodleProfile>>() {
+            @Override
+            public void onChanged(@Nullable RemoteResource<MoodleProfile> remoteProfile) {
+                if (remoteProfile != null && remoteProfile.data != null && remoteProfile.status != RemoteResource.LOADING) {
+                    LiveData<RemoteResource<MoodleToken>> remoteTokenLiveData = getToken();
+                    remoteTokenLiveData.observeForever(new Observer<RemoteResource<MoodleToken>>() {
+                        @Override
+                        public void onChanged(@Nullable RemoteResource<MoodleToken> moodleTokenRemoteResource) {
+
+                            if (moodleTokenRemoteResource != null && moodleTokenRemoteResource.status == RemoteResource.SUCCESS) {
+                                executor.execute(() -> {
+                                    try {
+                                        Response response = moodleWebService.getCourses(ApplicationManager.userCredentials.getMoodleToken(), remoteProfile.data.getUserId()).execute();
+
+                                        moodleCourseDao.insertAll((MoodleCourses) response.body());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
+                            }
+
+                            if (moodleTokenRemoteResource != null && moodleTokenRemoteResource.status != RemoteResource.LOADING)
+                                remoteTokenLiveData.removeObserver(this);
+                        }
+                    });
+                }
+
+                if (remoteProfile != null && remoteProfile.status != RemoteResource.LOADING)
+                    remoteProfileLiveData.removeObserver(this);
+            }
+        });
     }
 
     public LiveData<RemoteResource<MoodleAssignmentSubmission>> getAssignmentSubmission(final int assignId) {
