@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -44,9 +43,9 @@ public class Utility {
 
     }
 
-    public static boolean isNetworkAvailable(final Activity activity) {
+    public static boolean isNetworkAvailable(final Context context) {
         ConnectivityManager connectivityManager
-                = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }

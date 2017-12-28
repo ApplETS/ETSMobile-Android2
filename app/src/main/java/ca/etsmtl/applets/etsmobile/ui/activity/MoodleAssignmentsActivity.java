@@ -254,7 +254,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
 
             Comparator<MoodleAssignment> currentComparator = moodleViewModel.getAssignmentsSortComparator();
 
-            for (MoodleAssignmentCourse course : filteredAssignmentsCourses) {
+            for (int i = filteredAssignmentsCourses.size() - 1; i >= 0; i--) {
+                MoodleAssignmentCourse course = filteredAssignmentsCourses.get(i);
                 headers.add(course.getFullName());
 
                 Collections.sort(course.getAssignments(), currentComparator);

@@ -12,6 +12,7 @@ import ca.etsmtl.applets.etsmobile.db.MoodleDb;
 import ca.etsmtl.applets.etsmobile.db.MoodleProfileDao;
 import ca.etsmtl.applets.etsmobile.http.MoodleWebService;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleRepository;
+import ca.etsmtl.applets.etsmobile.util.LiveDataCallAdapterFactory;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModelFactory;
 import ca.etsmtl.applets.etsmobile2.R;
 import dagger.Module;
@@ -48,6 +49,7 @@ public class AppModule {
         return new Retrofit.Builder()
                 .baseUrl(app.getString(R.string.moodle_url))
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .build()
                 .create(MoodleWebService.class);
     }

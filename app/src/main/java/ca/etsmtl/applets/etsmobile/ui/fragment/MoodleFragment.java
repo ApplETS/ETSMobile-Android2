@@ -29,7 +29,6 @@ import javax.inject.Inject;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity;
@@ -57,7 +56,7 @@ public class MoodleFragment extends BaseFragment {
     private List<MoodleCourse> firstSemesterInsertedCourses;
     private Menu menu;
     private LoadingView loadingView;
-    private Observer<RemoteResource<MoodleCourses>> coursesObserver;
+    private Observer<RemoteResource<List<MoodleCourse>>> coursesObserver;
     private MoodleViewModel moodleViewModel;
     @Inject
     MoodleViewModelFactory moodleViewModelFactory;
@@ -95,9 +94,9 @@ public class MoodleFragment extends BaseFragment {
 
         moodleViewModel = ViewModelProviders.of(this, moodleViewModelFactory).get(MoodleViewModel.class);
 
-        coursesObserver = new Observer<RemoteResource<MoodleCourses>>() {
+        coursesObserver = new Observer<RemoteResource<List<MoodleCourse>>>() {
             @Override
-            public void onChanged(@Nullable RemoteResource<MoodleCourses> moodleCoursesRemoteResource) {
+            public void onChanged(@Nullable RemoteResource<List<MoodleCourse>> moodleCoursesRemoteResource) {
                 if (moodleCoursesRemoteResource != null) {
                     if (moodleCoursesRemoteResource.status == RemoteResource.SUCCESS) {
                         loadingView.hideProgessBar();
@@ -110,6 +109,9 @@ public class MoodleFragment extends BaseFragment {
                         }
                     } else if (moodleCoursesRemoteResource.status == RemoteResource.LOADING) {
                         loadingView.showLoadingView();
+                        if (moodleCoursesRemoteResource.data != null) {
+                            updateUI(moodleCoursesRemoteResource.data);
+                        }
                     }
                 }
             }
@@ -158,7 +160,7 @@ public class MoodleFragment extends BaseFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateUI(MoodleCourses moodleCourses) {
+    private void updateUI(List<MoodleCourse> moodleCourses) {
         moodleCoursesAdapter = new MoodleCoursesAdapter(getActivity(), R.layout.row_moodle_course);
         Collections.sort(moodleCourses, new CourseComparator());
         Collections.reverse(moodleCourses); // To get the most current semester first

@@ -3,6 +3,7 @@ package ca.etsmtl.applets.etsmobile.view_model;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,9 +16,10 @@ import java.util.List;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleRepository;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 
 /**
@@ -50,10 +52,11 @@ public class MoodleViewModel extends AndroidViewModel {
     private static final int SORT_DESC = -1;
 
     private MoodleRepository repository;
+    private LiveData<RemoteResource<MoodleToken>> token;
     private LiveData<RemoteResource<MoodleProfile>> profile;
-    private LiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses;
-    private LiveData<RemoteResource<MoodleCourses>> courses;
-    private LiveData<RemoteResource<MoodleAssignmentSubmission>> assignmentSubmission;
+    private MediatorLiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses;
+    private LiveData<RemoteResource<List<MoodleCourse>>> courses;
+    private LiveData<RemoteResource<MoodleAssignmentSubmission>> assignmentSubmission = new MutableLiveData<>();
     private MutableLiveData<List<MoodleAssignmentCourse>> filteredCourses = new MutableLiveData<>();
     private MutableLiveData<MoodleAssignment> selectedAssignment = new MutableLiveData<>();
 
@@ -91,17 +94,18 @@ public class MoodleViewModel extends AndroidViewModel {
         editor.apply();
     }
 
+
     /**
-     * Get the user profile which contains information about the user
+     * Returns the courses
      *
-     * @return profile
+     * @return {@link LiveData} instance which contains the courses
      */
-    public LiveData<RemoteResource<MoodleProfile>> getProfile() {
-        if (profile == null || profile.getValue() == null || profile.getValue().data == null) {
-            this.profile = repository.getProfile();
+    public LiveData<RemoteResource<List<MoodleCourse>>> getCourses() {
+        if (courses == null || courses.getValue() == null || courses.getValue().data == null) {
+            return repository.getCourses();
         }
 
-        return profile;
+        return courses;
     }
 
     /**
@@ -114,22 +118,22 @@ public class MoodleViewModel extends AndroidViewModel {
     public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses() {
         if (assignmentCourses == null || assignmentCourses.getValue() == null
                 || assignmentCourses.getValue().data == null) {
-            this.assignmentCourses = repository.getAssignmentCourses();
+            assignmentCourses = new MediatorLiveData<>();
+            LiveData<RemoteResource<List<MoodleCourse>>> coursesLd = getCourses();
+            assignmentCourses.addSource(coursesLd, courses -> {
+                if (courses != null && courses.status == RemoteResource.SUCCESS && courses.data != null && courses.data.size() > 0) {
+                    int[] coursesIds = new int[courses.data.size()];
+                    for (int i = 0; i < courses.data.size(); i++) {
+                        coursesIds[i] = courses.data.get(i).getId();
+                    }
+
+                    assignmentCourses.removeSource(coursesLd);
+                    assignmentCourses.addSource(repository.getAssignmentCourses(coursesIds), assignmentCourses::setValue);
+                }
+            });
         }
 
         return assignmentCourses;
-    }
-
-    /**
-     * Returns the courses
-     *
-     * @return {@link LiveData} instance which contains the courses
-     */
-    public LiveData<RemoteResource<MoodleCourses>> getCourses() {
-        if (courses == null || courses.getValue() == null || courses.getValue().data == null)
-            this.courses = repository.getCourses();
-
-        return courses;
     }
 
     /**
