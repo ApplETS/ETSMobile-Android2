@@ -25,31 +25,4 @@ public class MoodleAssignmentSubmission {
     public MoodleAssignmentFeedback getFeedback() {
         return feedback;
     }
-
-    /**
-     * Assignment feedback
-     * <p>
-     * Contains an instance of {@link MoodleAssignmentGrade} which gives information about the
-     * grade
-     */
-    public class MoodleAssignmentFeedback {
-        @SerializedName("grade")
-        private MoodleAssignmentGrade grade;
-        /**
-         * the student grade rendered into a format suitable for display
-         */
-        @SerializedName("gradefordisplay")
-        private String gradeForDisplay;
-
-        public MoodleAssignmentGrade getGrade() {
-            return grade;
-        }
-
-        /**
-         * @return the student grade rendered into a format suitable for display
-         */
-        public String getGradeForDisplay() {
-            return gradeForDisplay;
-        }
-    }
 }

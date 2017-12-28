@@ -11,7 +11,7 @@
 
         <variable
             name="selectedAssignmentFeedback"
-            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission.MoodleAssignmentFeedback" />
+            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentFeedback" />
 
         <variable
             name="selectedAssignmentLastAttempt"
