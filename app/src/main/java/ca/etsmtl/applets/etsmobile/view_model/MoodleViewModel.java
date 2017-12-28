@@ -18,7 +18,7 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleRepository;
+import ca.etsmtl.applets.etsmobile.repository.MoodleRepository;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 

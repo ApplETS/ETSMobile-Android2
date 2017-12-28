@@ -11,7 +11,7 @@ import ca.etsmtl.applets.etsmobile.db.MoodleCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleDb;
 import ca.etsmtl.applets.etsmobile.db.MoodleProfileDao;
 import ca.etsmtl.applets.etsmobile.http.MoodleWebService;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleRepository;
+import ca.etsmtl.applets.etsmobile.repository.MoodleRepository;
 import ca.etsmtl.applets.etsmobile.util.LiveDataCallAdapterFactory;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModelFactory;
 import ca.etsmtl.applets.etsmobile2.R;

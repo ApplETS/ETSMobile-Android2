@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 
 import javax.inject.Singleton;
 
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleRepository;
+import ca.etsmtl.applets.etsmobile.repository.MoodleRepository;
 
 /**
  * Created by Sonphil on 07-09-17.

@@ -1,4 +1,4 @@
-package ca.etsmtl.applets.etsmobile.model.Moodle;
+package ca.etsmtl.applets.etsmobile.repository;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
@@ -20,6 +20,12 @@ import ca.etsmtl.applets.etsmobile.db.MoodleCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleProfileDao;
 import ca.etsmtl.applets.etsmobile.http.MoodleWebService;
 import ca.etsmtl.applets.etsmobile.model.ApiResponse;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourses;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
 import ca.etsmtl.applets.etsmobile.model.NetworkBoundResource;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.util.Utility;
