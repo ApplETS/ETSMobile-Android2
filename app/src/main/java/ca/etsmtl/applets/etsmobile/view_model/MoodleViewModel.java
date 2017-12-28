@@ -21,6 +21,7 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.repository.MoodleRepository;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
+import ca.etsmtl.applets.etsmobile2.R;
 
 /**
  * Created by Sonphil on 31-08-17.
@@ -129,6 +130,10 @@ public class MoodleViewModel extends AndroidViewModel {
 
                     assignmentCourses.removeSource(coursesLd);
                     assignmentCourses.addSource(repository.getAssignmentCourses(coursesIds), assignmentCourses::setValue);
+                } else if (courses != null && courses.status == RemoteResource.ERROR) {
+                    boolean displayDefaultMsg = courses.message == null || courses.message.isEmpty();
+                    String errorMsg = displayDefaultMsg ? getApplication().getString(R.string.moodle_error_cant_get_courses) : courses.message;
+                    assignmentCourses.setValue(RemoteResource.error(errorMsg, null));
                 }
             });
         }

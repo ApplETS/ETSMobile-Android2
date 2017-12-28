@@ -321,7 +321,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                     binding.setLoadingSelectedAssignmentSubmission(true);
                     noLongerNeedtoObserve = false;
 
-                    if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+                    if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN
+                            && Utility.isNetworkAvailable(MoodleAssignmentsActivity.this)) {
                         bottomSheet.requestLayout();
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     }
