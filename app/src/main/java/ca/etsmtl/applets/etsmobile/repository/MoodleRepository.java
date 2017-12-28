@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.db.MoodleAssignmentCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleProfileDao;
 import ca.etsmtl.applets.etsmobile.http.MoodleWebService;
@@ -26,10 +27,10 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
-import ca.etsmtl.applets.etsmobile.model.NetworkBoundResource;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
+import retrofit2.Response;
 
 /**
  * Created by Sonphil on 31-08-17.
@@ -39,18 +40,23 @@ public class MoodleRepository {
 
     private static String TAG = "MoodleRepository";
 
-    private Context context;
+    private final Context context;
     private final MoodleWebService moodleWebService;
     private final MoodleProfileDao moodleProfileDao;
     private final MoodleCourseDao moodleCourseDao;
+    private final MoodleAssignmentCourseDao moodleAssignmentCourseDao;
     private final Executor executor;
 
     @Inject
-    public MoodleRepository(@NonNull Application application, MoodleWebService moodleWebService, MoodleProfileDao moodleProfileDao, MoodleCourseDao moodleCourseDao, Executor executor) {
+    public MoodleRepository(@NonNull Application application, MoodleWebService moodleWebService,
+                            MoodleProfileDao moodleProfileDao, MoodleCourseDao moodleCourseDao,
+                            MoodleAssignmentCourseDao moodleAssignmentCourseDao,
+                            Executor executor) {
         this.context = application;
         this.moodleWebService = moodleWebService;
         this.moodleProfileDao = moodleProfileDao;
         this.moodleCourseDao = moodleCourseDao;
+        this.moodleAssignmentCourseDao = moodleAssignmentCourseDao;
         this.executor = executor;
     }
 
@@ -181,25 +187,48 @@ public class MoodleRepository {
     }
 
     public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses(final int[] coursesIds) {
-        MutableLiveData<RemoteResource<List<MoodleAssignmentCourse>>> coursesMutableLiveData = new MutableLiveData<>();
-        coursesMutableLiveData.setValue(RemoteResource.loading(null));
-
-        String tokenStr = ApplicationManager.userCredentials.getMoodleToken();
-        LiveData<ApiResponse<MoodleAssignmentCourses>> assignmentCoursesLiveData = moodleWebService.getAssignmentCourses(tokenStr, coursesIds);
-        assignmentCoursesLiveData.observeForever(new Observer<ApiResponse<MoodleAssignmentCourses>>() {
+        return new NetworkBoundResource<List<MoodleAssignmentCourse>, List<MoodleAssignmentCourse>>() {
             @Override
-            public void onChanged(@Nullable ApiResponse<MoodleAssignmentCourses> response) {
-                if (response != null && response.isSuccessful() && response.body.getCourses() != null && response.body.getCourses().size() > 0) {
-                    coursesMutableLiveData.setValue(RemoteResource.success(response.body.getCourses()));
-                } else {
-                    coursesMutableLiveData.setValue(RemoteResource.error(response.errorMessage, null));
-                }
-
-                assignmentCoursesLiveData.removeObserver(this);
+            protected void saveCallResult(@NonNull List<MoodleAssignmentCourse> item) {
+                moodleAssignmentCourseDao.insertAll(item);
             }
-        });
 
-        return coursesMutableLiveData;
+            @Override
+            protected boolean shouldFetch(@Nullable List<MoodleAssignmentCourse> data) {
+                return Utility.isNetworkAvailable(context);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<MoodleAssignmentCourse>> loadFromDb() {
+                return moodleAssignmentCourseDao.getAll();
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<List<MoodleAssignmentCourse>>> createCall() {
+                MutableLiveData<ApiResponse<List<MoodleAssignmentCourse>>> assignmentCoursesMutableLD = new MutableLiveData<>();
+
+                String tokenStr = ApplicationManager.userCredentials.getMoodleToken();
+                LiveData<ApiResponse<MoodleAssignmentCourses>> assignmentCoursesApiLD = moodleWebService.getAssignmentCourses(tokenStr, coursesIds);
+                assignmentCoursesApiLD.observeForever(new Observer<ApiResponse<MoodleAssignmentCourses>>() {
+                    @Override
+                    public void onChanged(@Nullable ApiResponse<MoodleAssignmentCourses> response) {
+                        if (response != null && response.isSuccessful() && response.body.getCourses() != null && response.body.getCourses().size() > 0) {
+                            Response<List<MoodleAssignmentCourse>> listResponse = Response.success(response.body.getCourses());
+                            assignmentCoursesMutableLD.setValue(new ApiResponse<>(listResponse));
+                        } else {
+                            String errorMsg = response.errorMessage != null ? response.errorMessage : context.getString(R.string.error_JSON_PARSING);
+                            assignmentCoursesMutableLD.setValue(new ApiResponse<>(new Throwable(errorMsg)));
+                        }
+
+                        assignmentCoursesApiLD.removeObserver(this);
+                    }
+                });
+
+                return assignmentCoursesMutableLD;
+            }
+        }.asLiveData();
     }
 
     public LiveData<RemoteResource<MoodleAssignmentSubmission>> getAssignmentSubmission(final int assignId) {

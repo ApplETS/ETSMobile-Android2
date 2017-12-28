@@ -7,6 +7,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Singleton;
 
+import ca.etsmtl.applets.etsmobile.db.MoodleAssignmentCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleDb;
 import ca.etsmtl.applets.etsmobile.db.MoodleProfileDao;
@@ -70,6 +71,12 @@ public class AppModule {
     @Singleton
     MoodleCourseDao provideMoodleCourseDao(MoodleDb moodleDb) {
         return moodleDb.moodleCourseDao();
+    }
+
+    @Provides
+    @Singleton
+    MoodleAssignmentCourseDao provideMoodleAssignmentCourseDao(MoodleDb moodleDb) {
+        return moodleDb.moodleAssignmentCourseDao();
     }
 
     @Provides
