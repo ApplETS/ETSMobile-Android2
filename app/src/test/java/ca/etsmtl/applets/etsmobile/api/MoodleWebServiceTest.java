@@ -27,6 +27,7 @@ import ca.etsmtl.applets.etsmobile.http.MoodleWebService;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourses;
+import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentFeedback;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentGrade;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentLastAttempt;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
@@ -205,7 +206,7 @@ public class MoodleWebServiceTest {
         assertFalse(lastAttempt.isSubmitted());
         assertTrue(lastAttempt.isTeamSubmitted());
 
-        MoodleAssignmentSubmission.MoodleAssignmentFeedback feedback = moodleSubmission.getFeedback();
+        MoodleAssignmentFeedback feedback = moodleSubmission.getFeedback();
         assertThat(feedback, notNullValue());
 
         MoodleAssignmentGrade grade = feedback.getGrade();
