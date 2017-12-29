@@ -58,15 +58,14 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
     private LoadingView loadingView;
     private View bottomSheet;
     private Menu menu;
-    private List<MoodleAssignmentCourse> filteredAssignmentsCourses;
     private boolean requestInProgress;
     private Observer<RemoteResource<List<MoodleAssignmentCourse>>> assignmentsCoursesObserver;
-    private Observer<MoodleAssignment> selectedAssignmentObserver;
     private MoodleViewModel moodleViewModel;
     private BottomSheetBehavior bottomSheetBehavior;
     private float bottomSheetOffset;
     private ActivityMoodleAssignmentsBinding binding;
     private FloatingActionButton openAssignmentFab;
+    private ExpandableListMoodleAssignmentsAdapter adapter;
     @Inject
     MoodleViewModelFactory moodleViewModelFactory;
 
@@ -160,7 +159,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
     }
 
     private void subscribeUISelectedAssignment() {
-        selectedAssignmentObserver = moodleAssignment -> {
+        Observer<MoodleAssignment> selectedAssignmentObserver = moodleAssignment -> {
             if (moodleAssignment != null) {
                 displaySelectedAssignment(moodleAssignment);
             }
@@ -251,35 +250,42 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
         List<String> headers = new ArrayList<>();
         HashMap<String, List<MoodleAssignment>> childs = new HashMap<>();
 
-        filteredAssignmentsCourses = moodleViewModel.filterAssignmentCourses().getValue();
+        List<MoodleAssignmentCourse> filteredAssignmentsCourses = moodleViewModel.filterAssignmentCourses().getValue();
 
-        Comparator<MoodleAssignment> currentComparator = moodleViewModel.getAssignmentsSortComparator();
+        if (filteredAssignmentsCourses != null && filteredAssignmentsCourses.size() > 0) {
+            Comparator<MoodleAssignment> currentComparator = moodleViewModel.getAssignmentsSortComparator();
 
-        for (int i = filteredAssignmentsCourses.size() - 1; i >= 0; i--) {
-            MoodleAssignmentCourse course = filteredAssignmentsCourses.get(i);
-            headers.add(course.getFullName());
+            for (int i = filteredAssignmentsCourses.size() - 1; i >= 0; i--) {
+                MoodleAssignmentCourse course = filteredAssignmentsCourses.get(i);
+                headers.add(course.getFullName());
 
-            Collections.sort(course.getAssignments(), currentComparator);
+                Collections.sort(course.getAssignments(), currentComparator);
 
-            List<MoodleAssignment> assignments = new ArrayList<>();
-            for (MoodleAssignment assignment : course.getAssignments()) {
-                if (!moodleViewModel.isDisplayPastAssignments()) {
-                    Date dueDate = assignment.getDueDateObj();
-                    Date currentDate = new Date();
-                    if (dueDate.after(currentDate))
+                List<MoodleAssignment> assignments = new ArrayList<>();
+                for (MoodleAssignment assignment : course.getAssignments()) {
+                    if (!moodleViewModel.isDisplayPastAssignments()) {
+                        Date dueDate = assignment.getDueDateObj();
+                        Date currentDate = new Date();
+                        if (dueDate.after(currentDate))
+                            assignments.add(assignment);
+                    } else
                         assignments.add(assignment);
-                } else
-                    assignments.add(assignment);
+                }
+
+                childs.put(course.getFullName(), assignments);
             }
 
-            childs.put(course.getFullName(), assignments);
+            if (adapter == null) {
+                adapter = new ExpandableListMoodleAssignmentsAdapter(this, moodleViewModel);
+                assignmentsElv.setAdapter(adapter);
+                adapter.setData(headers, childs);
+                for (int i = 0; i < headers.size(); i++)
+                    assignmentsElv.expandGroup(i);
+            } else {
+                // Only update the data in order to keep about the same scroll position
+                adapter.setData(headers, childs);
+            }
         }
-
-        ExpandableListMoodleAssignmentsAdapter adapter = new ExpandableListMoodleAssignmentsAdapter(this, moodleViewModel);
-        adapter.setData(headers, childs);
-        assignmentsElv.setAdapter(adapter);
-        for (int i = 0; i < headers.size(); i++)
-            assignmentsElv.expandGroup(i);
 
         binding.setLoading(requestInProgress);
     }
