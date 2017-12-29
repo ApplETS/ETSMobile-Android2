@@ -252,7 +252,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
 
         List<MoodleAssignmentCourse> filteredAssignmentsCourses = moodleViewModel.filterAssignmentCourses().getValue();
 
-        if (filteredAssignmentsCourses != null && filteredAssignmentsCourses.size() > 0) {
+        if (filteredAssignmentsCourses != null) {
             Comparator<MoodleAssignment> currentComparator = moodleViewModel.getAssignmentsSortComparator();
 
             for (int i = filteredAssignmentsCourses.size() - 1; i >= 0; i--) {
