@@ -18,9 +18,9 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
-import ca.etsmtl.applets.etsmobile.repository.MoodleRepository;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
+import ca.etsmtl.applets.etsmobile.repository.MoodleRepository;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -122,7 +122,7 @@ public class MoodleViewModel extends AndroidViewModel {
             assignmentCourses = new MediatorLiveData<>();
             LiveData<RemoteResource<List<MoodleCourse>>> coursesLd = getCourses();
             assignmentCourses.addSource(coursesLd, courses -> {
-                if (courses != null && courses.status == RemoteResource.SUCCESS && courses.data != null && courses.data.size() > 0) {
+                if (courses != null && courses.data != null && courses.data.size() > 0 && courses.status != RemoteResource.LOADING) {
                     int[] coursesIds = new int[courses.data.size()];
                     for (int i = 0; i < courses.data.size(); i++) {
                         coursesIds[i] = courses.data.get(i).getId();

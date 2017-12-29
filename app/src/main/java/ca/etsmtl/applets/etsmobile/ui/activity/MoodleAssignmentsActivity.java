@@ -67,7 +67,6 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
     private float bottomSheetOffset;
     private ActivityMoodleAssignmentsBinding binding;
     private FloatingActionButton openAssignmentFab;
-    private View emptyView;
     @Inject
     MoodleViewModelFactory moodleViewModelFactory;
 
@@ -82,7 +81,6 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
         assignmentsElv = findViewById(R.id.assignments_elv);
         loadingView = findViewById(R.id.loading_view);
         openAssignmentFab = findViewById(R.id.open_assignment_fab);
-        emptyView = findViewById(R.id.empty_view);
         ProgressBar progressBar = findViewById(R.id.progress_bar);
         progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.ets_red), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -141,10 +139,14 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                 } else if (listRemoteResource.status == RemoteResource.ERROR) {
                     requestInProgress = false;
                     loadingView.hideProgessBar();
-                    loadingView.setMessageError(getString(R.string.error_JSON_PARSING)
-                            + "\n" + listRemoteResource.message);
+                    Toast t = Toast.makeText(this, getString(R.string.toast_Sync_Fail)
+                            + "\n" + listRemoteResource.message, Toast.LENGTH_LONG);
+                    t.show();
                 } else if (listRemoteResource.status == RemoteResource.LOADING) {
                     requestInProgress = true;
+                    if (listRemoteResource.data != null) {
+                        refreshUI();
+                    }
                 }
             }
 
@@ -246,43 +248,40 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
     }
 
     private void refreshUI() {
-        if (!requestInProgress) {
-            List<String> headers = new ArrayList<>();
-            HashMap<String, List<MoodleAssignment>> childs = new HashMap<>();
+        List<String> headers = new ArrayList<>();
+        HashMap<String, List<MoodleAssignment>> childs = new HashMap<>();
 
-            filteredAssignmentsCourses = moodleViewModel.filterAssignmentCourses().getValue();
+        filteredAssignmentsCourses = moodleViewModel.filterAssignmentCourses().getValue();
 
-            Comparator<MoodleAssignment> currentComparator = moodleViewModel.getAssignmentsSortComparator();
+        Comparator<MoodleAssignment> currentComparator = moodleViewModel.getAssignmentsSortComparator();
 
-            for (int i = filteredAssignmentsCourses.size() - 1; i >= 0; i--) {
-                MoodleAssignmentCourse course = filteredAssignmentsCourses.get(i);
-                headers.add(course.getFullName());
+        for (int i = filteredAssignmentsCourses.size() - 1; i >= 0; i--) {
+            MoodleAssignmentCourse course = filteredAssignmentsCourses.get(i);
+            headers.add(course.getFullName());
 
-                Collections.sort(course.getAssignments(), currentComparator);
+            Collections.sort(course.getAssignments(), currentComparator);
 
-                List<MoodleAssignment> assignments = new ArrayList<>();
-                for (MoodleAssignment assignment : course.getAssignments()) {
-                    if (!moodleViewModel.isDisplayPastAssignments()) {
-                        Date dueDate = assignment.getDueDateObj();
-                        Date currentDate = new Date();
-                        if (dueDate.after(currentDate))
-                            assignments.add(assignment);
-                    } else
+            List<MoodleAssignment> assignments = new ArrayList<>();
+            for (MoodleAssignment assignment : course.getAssignments()) {
+                if (!moodleViewModel.isDisplayPastAssignments()) {
+                    Date dueDate = assignment.getDueDateObj();
+                    Date currentDate = new Date();
+                    if (dueDate.after(currentDate))
                         assignments.add(assignment);
-                }
-
-                childs.put(course.getFullName(), assignments);
+                } else
+                    assignments.add(assignment);
             }
 
-            ExpandableListMoodleAssignmentsAdapter adapter = new ExpandableListMoodleAssignmentsAdapter(this, moodleViewModel);
-            adapter.setData(headers, childs);
-            assignmentsElv.setEmptyView(emptyView);
-            assignmentsElv.setAdapter(adapter);
-            for (int i = 0; i < headers.size(); i++)
-                assignmentsElv.expandGroup(i);
-
-            binding.setLoading(false);
+            childs.put(course.getFullName(), assignments);
         }
+
+        ExpandableListMoodleAssignmentsAdapter adapter = new ExpandableListMoodleAssignmentsAdapter(this, moodleViewModel);
+        adapter.setData(headers, childs);
+        assignmentsElv.setAdapter(adapter);
+        for (int i = 0; i < headers.size(); i++)
+            assignmentsElv.expandGroup(i);
+
+        binding.setLoading(requestInProgress);
     }
 
     private void displaySelectedAssignment(final MoodleAssignment selectedAssignment) {

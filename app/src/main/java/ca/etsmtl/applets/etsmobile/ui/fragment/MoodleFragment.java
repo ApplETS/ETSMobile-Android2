@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
@@ -104,8 +105,10 @@ public class MoodleFragment extends BaseFragment {
                     } else if (moodleCoursesRemoteResource.status == RemoteResource.ERROR) {
                         loadingView.hideProgessBar();
                         if (loadingView.isShown()) {
-                            loadingView.setMessageError(getString(R.string.error_JSON_PARSING)
-                                    + "\n" + moodleCoursesRemoteResource.message);
+                            String errorMsg = getString(R.string.toast_Sync_Fail)
+                                    + "\n" + moodleCoursesRemoteResource.message;
+                            Toast t = Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG);
+                            t.show();;
                         }
                     } else if (moodleCoursesRemoteResource.status == RemoteResource.LOADING) {
                         loadingView.showLoadingView();

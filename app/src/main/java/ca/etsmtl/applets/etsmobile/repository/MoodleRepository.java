@@ -28,7 +28,6 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
-import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -98,7 +97,7 @@ public class MoodleRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable MoodleProfile data) {
-                return data == null || Utility.isNetworkAvailable(context);
+                return true;
             }
 
             @NonNull
@@ -144,7 +143,7 @@ public class MoodleRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<MoodleCourse> data) {
-                return data == null || data.size() == 0 || Utility.isNetworkAvailable(context);
+                return true;
             }
 
             @NonNull
@@ -194,7 +193,7 @@ public class MoodleRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<MoodleAssignmentCourse> data) {
-                return data == null || data.size() == 0 || Utility.isNetworkAvailable(context);
+                return true;
             }
 
             @NonNull
