@@ -250,42 +250,46 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
         List<String> headers = new ArrayList<>();
         HashMap<String, List<MoodleAssignment>> childs = new HashMap<>();
 
-        List<MoodleAssignmentCourse> filteredAssignmentsCourses = moodleViewModel.filterAssignmentCourses().getValue();
+        LiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCoursesLD = moodleViewModel.getAssignmentCourses();
+        RemoteResource<List<MoodleAssignmentCourse>> assignmentCoursesRes = assignmentCoursesLD.getValue();
+        if (assignmentCoursesRes != null) {
+            List<MoodleAssignmentCourse> filteredAssignmentsCourses = assignmentCoursesRes.data;
 
-        if (filteredAssignmentsCourses != null) {
-            Comparator<MoodleAssignment> currentComparator = moodleViewModel.getAssignmentsSortComparator();
+            if (filteredAssignmentsCourses != null) {
+                Comparator<MoodleAssignment> currentComparator = moodleViewModel.getAssignmentsSortComparator();
 
-            for (int i = filteredAssignmentsCourses.size() - 1; i >= 0; i--) {
-                MoodleAssignmentCourse course = filteredAssignmentsCourses.get(i);
-                headers.add(course.getFullName());
+                for (int i = filteredAssignmentsCourses.size() - 1; i >= 0; i--) {
+                    MoodleAssignmentCourse course = filteredAssignmentsCourses.get(i);
+                    headers.add(course.getFullName());
 
-                Collections.sort(course.getAssignments(), currentComparator);
+                    Collections.sort(course.getAssignments(), currentComparator);
 
-                List<MoodleAssignment> assignments = new ArrayList<>();
-                for (MoodleAssignment assignment : course.getAssignments()) {
-                    if (!moodleViewModel.isDisplayPastAssignments()) {
-                        Date dueDate = assignment.getDueDateObj();
-                        Date currentDate = new Date();
-                        if (dueDate.after(currentDate))
+                    List<MoodleAssignment> assignments = new ArrayList<>();
+                    for (MoodleAssignment assignment : course.getAssignments()) {
+                        if (!moodleViewModel.isDisplayPastAssignments()) {
+                            Date dueDate = assignment.getDueDateObj();
+                            Date currentDate = new Date();
+                            if (dueDate.after(currentDate))
+                                assignments.add(assignment);
+                        } else
                             assignments.add(assignment);
-                    } else
-                        assignments.add(assignment);
+                    }
+
+                    childs.put(course.getFullName(), assignments);
                 }
 
-                childs.put(course.getFullName(), assignments);
-            }
+                if (adapter == null) {
+                    adapter = new ExpandableListMoodleAssignmentsAdapter(this, moodleViewModel);
+                    assignmentsElv.setAdapter(adapter);
+                    adapter.setData(headers, childs);
+                } else {
+                    // Only update the data in order to keep about the same scroll position
+                    adapter.setData(headers, childs);
+                }
 
-            if (adapter == null) {
-                adapter = new ExpandableListMoodleAssignmentsAdapter(this, moodleViewModel);
-                assignmentsElv.setAdapter(adapter);
-                adapter.setData(headers, childs);
-            } else {
-                // Only update the data in order to keep about the same scroll position
-                adapter.setData(headers, childs);
+                for (int i = 0; i < headers.size(); i++)
+                    assignmentsElv.expandGroup(i);
             }
-
-            for (int i = 0; i < headers.size(); i++)
-                assignmentsElv.expandGroup(i);
         }
 
         binding.setLoading(requestInProgress);

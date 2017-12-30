@@ -3,9 +3,11 @@ package ca.etsmtl.applets.etsmobile.view_model;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -53,7 +55,8 @@ public class MoodleViewModel extends AndroidViewModel {
     private MoodleRepository repository;
     private LiveData<RemoteResource<MoodleToken>> token;
     private LiveData<RemoteResource<MoodleProfile>> profile;
-    private LiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses;
+    private MutableLiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses = new MutableLiveData<>();
+    private MediatorLiveData<RemoteResource<List<MoodleAssignmentCourse>>> filteredAssignmentCourses;
     private LiveData<RemoteResource<List<MoodleCourse>>> courses;
     private LiveData<RemoteResource<MoodleAssignmentSubmission>> assignmentSubmission = new MutableLiveData<>();
     private MutableLiveData<List<MoodleAssignmentCourse>> filteredCourses = new MutableLiveData<>();
@@ -115,12 +118,67 @@ public class MoodleViewModel extends AndroidViewModel {
      * @return {@link LiveData} instance which contains the assignments courses
      */
     public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses() {
-        if (assignmentCourses == null || assignmentCourses.getValue() == null
-                || assignmentCourses.getValue().data == null) {
-            assignmentCourses = repository.getAssignmentCourses();
+        if (filteredAssignmentCourses == null || filteredAssignmentCourses.getValue() == null
+                || filteredAssignmentCourses.getValue().data == null) {
+            filteredAssignmentCourses = new MediatorLiveData<>();
+            filteredAssignmentCourses.addSource(repository.getAssignmentCourses(), assignmentCoursesRes -> {
+                assignmentCourses.setValue(assignmentCoursesRes);
+                if (assignmentCoursesRes != null && assignmentCoursesRes.data != null) {
+                    setFilteredAssignmentCourses(assignmentCoursesRes);
+                } else {
+                    filteredAssignmentCourses.setValue(assignmentCoursesRes);
+                }
+            });
         }
 
-        return assignmentCourses;
+        return filteredAssignmentCourses;
+    }
+
+    private void setFilteredAssignmentCourses(RemoteResource<List<MoodleAssignmentCourse>> assignmentCoursesRes) {
+        List<MoodleAssignmentCourse> filteredAssignmentCourses = filterAssignmentCourses(assignmentCoursesRes.data);
+        switch (assignmentCoursesRes.status) {
+            case RemoteResource.ERROR:
+                String msg = assignmentCoursesRes.message;
+                this.filteredAssignmentCourses.setValue(RemoteResource.error(msg, filteredAssignmentCourses));
+                break;
+            case RemoteResource.LOADING:
+                this.filteredAssignmentCourses.setValue(RemoteResource.loading(filteredAssignmentCourses));
+                break;
+            case RemoteResource.SUCCESS:
+                this.filteredAssignmentCourses.setValue(RemoteResource.success(filteredAssignmentCourses));
+                break;
+        }
+    }
+
+    @VisibleForTesting
+    List<MoodleAssignmentCourse> filterAssignmentCourses(List<MoodleAssignmentCourse> assignmentCourses) {
+        List<MoodleAssignmentCourse> filteredCourses = new ArrayList<>();
+
+        for (MoodleAssignmentCourse course : assignmentCourses) {
+
+            int nbAssignments = course.getAssignments().size();
+
+            if (nbAssignments != 0) {
+                /*
+                 Si les devoirs antérieurs ne doivent pas être affichés, ceux-ci ne doivent pas être
+                 pris en compte.
+                 */
+                if (!isDisplayPastAssignments()) {
+                    for (MoodleAssignment assignment : course.getAssignments()) {
+                        Date dueDate = assignment.getDueDateObj();
+                        Date currentDate = new Date();
+                        if (dueDate.before(currentDate))
+                            nbAssignments--;
+                    }
+                }
+
+                // Ajout du cours si celui-ci contient des devoirs
+                if (nbAssignments != 0)
+                    filteredCourses.add(course);
+            }
+        }
+
+        return filteredCourses;
     }
 
     /**
@@ -155,6 +213,12 @@ public class MoodleViewModel extends AndroidViewModel {
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(DISPLAY_PAST_ASSIGNMENTS_PREF, display);
         editor.apply();
+
+        if (assignmentCourses != null) {
+            RemoteResource<List<MoodleAssignmentCourse>> remoteResource = assignmentCourses.getValue();
+            if (remoteResource != null)
+                setFilteredAssignmentCourses(remoteResource);
+        }
     }
 
     /**
@@ -232,47 +296,6 @@ public class MoodleViewModel extends AndroidViewModel {
                     return a2.getName().compareTo(a1.getName());
             }
         };
-    }
-
-    /**
-     * Filter courses by removing the courses with no assignment
-     *
-     * @return {@link LiveData} instance which contains the filtered courses
-     */
-    public LiveData<List<MoodleAssignmentCourse>> filterAssignmentCourses() {
-        List<MoodleAssignmentCourse> filteredCourses = new ArrayList<>();
-
-        if (assignmentCourses.getValue() != null && this.assignmentCourses.getValue().data != null) {
-            List<MoodleAssignmentCourse> assignmentsCourses = this.assignmentCourses.getValue().data;
-
-            for (MoodleAssignmentCourse course : assignmentsCourses) {
-
-                int nbAssignments = course.getAssignments().size();
-
-                if (nbAssignments != 0) {
-                /*
-                 Si les devoirs antérieurs ne doivent pas être affichés, ceux-ci ne doivent pas être
-                 pris en compte.
-                 */
-                    if (!isDisplayPastAssignments()) {
-                        for (MoodleAssignment assignment : course.getAssignments()) {
-                            Date dueDate = assignment.getDueDateObj();
-                            Date currentDate = new Date();
-                            if (dueDate.before(currentDate))
-                                nbAssignments--;
-                        }
-                    }
-
-                    // Ajout du cours si celui-ci contient des devoirs
-                    if (nbAssignments != 0)
-                        filteredCourses.add(course);
-                }
-            }
-        }
-
-        this.filteredCourses.setValue(filteredCourses);
-
-        return this.filteredCourses;
     }
 
     /**

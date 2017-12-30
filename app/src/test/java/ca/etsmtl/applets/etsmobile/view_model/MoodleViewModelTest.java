@@ -118,25 +118,16 @@ public class MoodleViewModelTest {
         List<MoodleAssignmentCourse> list = new ArrayList<>();
         remoteRes = RemoteResource.success(list);
         liveData.setValue(remoteRes);
-        verify(observer).onChanged(remoteRes);
+        verify(observer).onChanged(any(RemoteResource.class));
     }
 
     @Test
     public void filterAssignmentCoursesNoAssignments() {
         createMockSharedPreferences();
 
-        // Prepare LiveData which will contain the courses
-        MutableLiveData<RemoteResource<List<MoodleAssignmentCourse>>> liveData = new MutableLiveData<>();
-        when(repository.getAssignmentCourses()).thenReturn(liveData);
-
-        // The view model gets the the live data.
-        viewModel.getAssignmentCourses();
-
         // Set an empty courses list
         List<MoodleAssignmentCourse> courses = new ArrayList<>();
-        liveData.setValue(RemoteResource.success(courses));
-        assertEquals(0, viewModel.getAssignmentCourses().getValue().data.size());
-        assertEquals(0, viewModel.filterAssignmentCourses().getValue().size());
+        assertEquals(0, viewModel.filterAssignmentCourses(courses).size());
 
         // Set up assignments list and an assignment without adding it to the list
         List<MoodleAssignment> assignments = new ArrayList<>();
@@ -147,12 +138,11 @@ public class MoodleViewModelTest {
 
         // Add course to courses list
         courses.add(new MoodleAssignmentCourse(0, "", "", 1510358400, assignments));
-        assertEquals(1, viewModel.getAssignmentCourses().getValue().data.size());
-        assertEquals(0, viewModel.filterAssignmentCourses().getValue().size());
+        assertEquals(0, viewModel.filterAssignmentCourses(courses).size());
 
         // Add assignment to assignments list
         assignments.add(assignment);
-        assertEquals(1, viewModel.filterAssignmentCourses().getValue().size());
+        assertEquals(1, viewModel.filterAssignmentCourses(courses).size());
     }
 
     @Test
@@ -173,30 +163,22 @@ public class MoodleViewModelTest {
 
         // Prepare courses list
         List<MoodleAssignmentCourse> courses = new ArrayList<>();
-        MutableLiveData<RemoteResource<List<MoodleAssignmentCourse>>> liveData = new MutableLiveData<>();
-        when(repository.getAssignmentCourses()).thenReturn(liveData);
-        viewModel.getAssignmentCourses();
-        liveData.setValue(RemoteResource.success(courses));
-        assertEquals(0, viewModel.getAssignmentCourses().getValue().data.size());
-        assertEquals(0, viewModel.filterAssignmentCourses().getValue().size());
+        assertEquals(0, viewModel.filterAssignmentCourses(courses).size());
 
         // Test with only a past assignment
         assignments.add(pastAssignment);
         courses.add(new MoodleAssignmentCourse(0, "", "", 1510358400, assignments));
-        assertEquals(1, viewModel.getAssignmentCourses().getValue().data.size());
-        assertEquals(0, viewModel.filterAssignmentCourses().getValue().size());
+        assertEquals(0, viewModel.filterAssignmentCourses(courses).size());
 
         // Test with a past assignment and a future assignment
         assignments.add(futureAssignment);
-        assertEquals(1, viewModel.getAssignmentCourses().getValue().data.size());
-        assertEquals(1, viewModel.filterAssignmentCourses().getValue().size());
+        assertEquals(1, viewModel.filterAssignmentCourses(courses).size());
 
         // Test with only a future assignment
         assignments.clear();
         assignments.add(futureAssignment);
         courses.add(new MoodleAssignmentCourse(0, "", "", 1510358400, assignments));
-        assertEquals(2, viewModel.getAssignmentCourses().getValue().data.size());
-        assertEquals(2, viewModel.filterAssignmentCourses().getValue().size());
+        assertEquals(2, viewModel.filterAssignmentCourses(courses).size());
     }
 
     @Test
