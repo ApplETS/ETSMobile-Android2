@@ -279,12 +279,13 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                 adapter = new ExpandableListMoodleAssignmentsAdapter(this, moodleViewModel);
                 assignmentsElv.setAdapter(adapter);
                 adapter.setData(headers, childs);
-                for (int i = 0; i < headers.size(); i++)
-                    assignmentsElv.expandGroup(i);
             } else {
                 // Only update the data in order to keep about the same scroll position
                 adapter.setData(headers, childs);
             }
+
+            for (int i = 0; i < headers.size(); i++)
+                assignmentsElv.expandGroup(i);
         }
 
         binding.setLoading(requestInProgress);

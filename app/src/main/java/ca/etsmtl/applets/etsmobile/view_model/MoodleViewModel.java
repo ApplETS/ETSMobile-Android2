@@ -3,7 +3,6 @@ package ca.etsmtl.applets.etsmobile.view_model;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,7 +20,6 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.repository.MoodleRepository;
-import ca.etsmtl.applets.etsmobile2.R;
 
 /**
  * Created by Sonphil on 31-08-17.
@@ -55,7 +53,7 @@ public class MoodleViewModel extends AndroidViewModel {
     private MoodleRepository repository;
     private LiveData<RemoteResource<MoodleToken>> token;
     private LiveData<RemoteResource<MoodleProfile>> profile;
-    private MediatorLiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses;
+    private LiveData<RemoteResource<List<MoodleAssignmentCourse>>> assignmentCourses;
     private LiveData<RemoteResource<List<MoodleCourse>>> courses;
     private LiveData<RemoteResource<MoodleAssignmentSubmission>> assignmentSubmission = new MutableLiveData<>();
     private MutableLiveData<List<MoodleAssignmentCourse>> filteredCourses = new MutableLiveData<>();
@@ -103,7 +101,7 @@ public class MoodleViewModel extends AndroidViewModel {
      */
     public LiveData<RemoteResource<List<MoodleCourse>>> getCourses() {
         if (courses == null || courses.getValue() == null || courses.getValue().data == null) {
-            return repository.getCourses();
+            courses = repository.getCourses();
         }
 
         return courses;
@@ -119,23 +117,7 @@ public class MoodleViewModel extends AndroidViewModel {
     public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses() {
         if (assignmentCourses == null || assignmentCourses.getValue() == null
                 || assignmentCourses.getValue().data == null) {
-            assignmentCourses = new MediatorLiveData<>();
-            LiveData<RemoteResource<List<MoodleCourse>>> coursesLd = getCourses();
-            assignmentCourses.addSource(coursesLd, courses -> {
-                if (courses != null && courses.data != null && courses.data.size() > 0 && courses.status != RemoteResource.LOADING) {
-                    int[] coursesIds = new int[courses.data.size()];
-                    for (int i = 0; i < courses.data.size(); i++) {
-                        coursesIds[i] = courses.data.get(i).getId();
-                    }
-
-                    assignmentCourses.removeSource(coursesLd);
-                    assignmentCourses.addSource(repository.getAssignmentCourses(coursesIds), assignmentCourses::setValue);
-                } else if (courses != null && courses.status == RemoteResource.ERROR) {
-                    boolean displayDefaultMsg = courses.message == null || courses.message.isEmpty();
-                    String errorMsg = displayDefaultMsg ? getApplication().getString(R.string.moodle_error_cant_get_courses) : courses.message;
-                    assignmentCourses.setValue(RemoteResource.error(errorMsg, null));
-                }
-            });
+            assignmentCourses = repository.getAssignmentCourses();
         }
 
         return assignmentCourses;

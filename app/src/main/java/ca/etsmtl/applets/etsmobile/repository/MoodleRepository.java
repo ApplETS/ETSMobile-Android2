@@ -184,11 +184,13 @@ public class MoodleRepository {
         }.asLiveData();
     }
 
-    public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses(final int[] coursesIds) {
+    public LiveData<RemoteResource<List<MoodleAssignmentCourse>>> getAssignmentCourses() {
         return new NetworkBoundResource<List<MoodleAssignmentCourse>, MoodleAssignmentCourses>() {
             @Override
             protected void saveCallResult(@NonNull MoodleAssignmentCourses item) {
-                moodleAssignmentCourseDao.insertAll(item.getCourses());
+                List<MoodleAssignmentCourse> assignmentCourses = item.getCourses();
+                if (assignmentCourses != null)
+                    moodleAssignmentCourseDao.insertAll(item.getCourses());
             }
 
             @Override
@@ -205,9 +207,26 @@ public class MoodleRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<MoodleAssignmentCourses>> createCall() {
-                String tokenStr = ApplicationManager.userCredentials.getMoodleToken();
+                MediatorLiveData<ApiResponse<MoodleAssignmentCourses>> assignmentCourses = new MediatorLiveData<>();
+                LiveData<RemoteResource<List<MoodleCourse>>> coursesLd = getCourses();
+                assignmentCourses.addSource(coursesLd, courses -> {
+                    if (courses != null && courses.data != null && courses.data.size() > 0 && courses.status != RemoteResource.LOADING) {
+                        int[] coursesIds = new int[courses.data.size()];
+                        for (int i = 0; i < courses.data.size(); i++) {
+                            coursesIds[i] = courses.data.get(i).getId();
+                        }
 
-                return moodleWebService.getAssignmentCourses(tokenStr, coursesIds);
+                        assignmentCourses.removeSource(coursesLd);
+                        String tokenStr = ApplicationManager.userCredentials.getMoodleToken();
+                        assignmentCourses.addSource(moodleWebService.getAssignmentCourses(tokenStr, coursesIds), assignmentCourses::setValue);
+                    } else if (courses != null && courses.status == RemoteResource.ERROR) {
+                        boolean displayDefaultMsg = courses.message == null || courses.message.isEmpty();
+                        String errorMsg = displayDefaultMsg ? context.getString(R.string.moodle_error_cant_get_courses) : courses.message;
+                        assignmentCourses.setValue(new ApiResponse<>(new Throwable(errorMsg)));
+                    }
+                });
+
+                return assignmentCourses;
             }
         }.asLiveData();
     }
