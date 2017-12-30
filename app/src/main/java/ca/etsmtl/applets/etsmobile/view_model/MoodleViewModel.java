@@ -134,6 +134,11 @@ public class MoodleViewModel extends AndroidViewModel {
         return filteredAssignmentCourses;
     }
 
+    /**
+     * Filter the assignment courses and set the value to {@link #filteredAssignmentCourses}
+     *
+     * @param assignmentCoursesRes unfiltered assignment courses
+     */
     private void setFilteredAssignmentCourses(RemoteResource<List<MoodleAssignmentCourse>> assignmentCoursesRes) {
         List<MoodleAssignmentCourse> filteredAssignmentCourses = filterAssignmentCourses(assignmentCoursesRes.data);
         switch (assignmentCoursesRes.status) {
@@ -150,6 +155,12 @@ public class MoodleViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Filter courses by removing the courses with no assignment
+     *
+     * @param assignmentCourses
+     * @return filtered courses
+     */
     @VisibleForTesting
     List<MoodleAssignmentCourse> filterAssignmentCourses(List<MoodleAssignmentCourse> assignmentCourses) {
         List<MoodleAssignmentCourse> filteredCourses = new ArrayList<>();
