@@ -1,24 +1,21 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import ca.etsmtl.applets.etsmobile.ui.fragment.NotesDetailsFragment;
-import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
-import me.grantland.widget.AutofitTextView;
 
 /**
  * Created by gnut3ll4 on 12/19/14.
  */
 public class NotesDetailsActivity extends AppCompatActivity {
+
+    private static final String NOTES_DETAILS_FRAGMENT_TAG = "NotesDetailsFragment";
 
     private Toolbar toolbar;
 
@@ -41,14 +38,17 @@ public class NotesDetailsActivity extends AppCompatActivity {
             String groupe = extras.getString("groupe");
             String titreCours = extras.getString("titreCours");
 
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(NOTES_DETAILS_FRAGMENT_TAG);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            if (fragment != null) {
+                fragmentTransaction.remove(fragment);
+            }
 
+            fragment = NotesDetailsFragment.newInstance(sigle, sessionName, abrege, cote, groupe, titreCours);
 
-            Fragment fragment = NotesDetailsFragment.newInstance(sigle, sessionName, abrege, cote, groupe, titreCours);
+            fragmentTransaction.add(R.id.container, fragment, NOTES_DETAILS_FRAGMENT_TAG).commit();
 
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, fragment).commit();
-
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 //            getSupportActionBar().setTitle(titreCours);
@@ -57,9 +57,6 @@ public class NotesDetailsActivity extends AppCompatActivity {
             toolbar.setTitle(String.format(getString(R.string.notes_details_sigle_groupe), sigle, groupe));
 
         }
-
-
-
     }
 
     @Override
