@@ -3,11 +3,8 @@ package ca.etsmtl.applets.etsmobile.util;
 import android.content.Context;
 import android.util.Log;
 
-import java.lang.reflect.Array;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
@@ -22,7 +19,7 @@ public class ProfilManager {
     private Context context;
 
     public ProfilManager(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
     }
 
     public void updateEtudiant(Etudiant etudiant) {

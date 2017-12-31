@@ -59,7 +59,6 @@ public class MoodleViewModel extends AndroidViewModel {
     private MediatorLiveData<RemoteResource<List<MoodleAssignmentCourse>>> filteredAssignmentCourses;
     private LiveData<RemoteResource<List<MoodleCourse>>> courses;
     private LiveData<RemoteResource<MoodleAssignmentSubmission>> assignmentSubmission = new MutableLiveData<>();
-    private MutableLiveData<List<MoodleAssignmentCourse>> filteredCourses = new MutableLiveData<>();
     private MutableLiveData<MoodleAssignment> selectedAssignment = new MutableLiveData<>();
 
     public MoodleViewModel(Application application, MoodleRepository moodleRepository) {

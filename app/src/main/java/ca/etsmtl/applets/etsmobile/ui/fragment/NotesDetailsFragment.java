@@ -1,8 +1,8 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +18,13 @@ import java.util.Observable;
 import java.util.Observer;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
+import ca.etsmtl.applets.etsmobile.http.soap.SignetsMobileSoap;
 import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
 import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MyCourseDetailAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile2.R;
-
-import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 public class NotesDetailsFragment extends HttpFragment implements Observer {
 
@@ -52,6 +50,7 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
     private NoteManager mNoteManager;
 
     private ProgressBar progressBarDetailsNotes;
+    private NotesTask notesTask;
 
     public static NotesDetailsFragment newInstance(String sigle, String session, String sessionAbrege, String cote, String groupe, String titreCours) {
         NotesDetailsFragment fragment = new NotesDetailsFragment();
@@ -96,14 +95,15 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
         progressBarDetailsNotes.setVisibility(ProgressBar.VISIBLE);
         refresh();
 
-		AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
+        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
-		return v;
-	}
+        return v;
+    }
 
     @Override
     public void onStart() {
-        dataManager.getDataFromSignet(SignetMethods.LIST_EVAL, ApplicationManager.userCredentials, this, session, groupe, sigle);
+        notesTask = new NotesTask(this);
+        notesTask.execute(sigle, groupe, session);
 
         super.onStart();
     }
@@ -111,9 +111,14 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
     @Override
     public void onRequestFailure(SpiceException arg0) {
 
-        progressBarDetailsNotes.setVisibility(ProgressBar.GONE);
-        if (getActivity() != null)
-            Toast.makeText(getActivity(), getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT).show();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBarDetailsNotes.setVisibility(ProgressBar.GONE);
+                if (getActivity() != null)
+                    Toast.makeText(getActivity(), getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -167,7 +172,42 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
     }
 
     @Override
+    public void onDetach() {
+        notesTask.cancel(true);
+        notesTask = null;
+
+        super.onDetach();
+    }
+
+    @Override
     public String getFragmentTitle() {
         return "";
+    }
+
+    private static final class NotesTask extends AsyncTask {
+
+        private HttpFragment httpFragment;
+
+        NotesTask(HttpFragment httpFragment) {
+            this.httpFragment = httpFragment;
+        }
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            String username = ApplicationManager.userCredentials.getUsername();
+            String password = ApplicationManager.userCredentials.getPassword();
+            String sigle = (String) params[0];
+            String groupe = (String) params[1];
+            String session = (String) params[2];
+            try {
+                ListeDesElementsEvaluation listeDesElementsEvaluation = new SignetsMobileSoap()
+                        .listeElementsEvaluation(username, password, sigle, groupe, session);
+                httpFragment.onRequestSuccess(listeDesElementsEvaluation);
+            } catch (Exception e) {
+                httpFragment.onRequestFailure(new SpiceException(httpFragment.getString(R.string.toast_Sync_Fail)));
+            }
+
+            return null;
+        }
     }
 }
