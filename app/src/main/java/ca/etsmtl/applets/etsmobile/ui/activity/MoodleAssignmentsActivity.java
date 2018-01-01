@@ -297,6 +297,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
 
     private void displaySelectedAssignment(final MoodleAssignment selectedAssignment) {
         binding.setSelectedAssignment(selectedAssignment);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         final LiveData<RemoteResource<MoodleAssignmentSubmission>> submissionLiveData = moodleViewModel.getAssignmentSubmission(selectedAssignment.getId());
         submissionLiveData.observe(MoodleAssignmentsActivity.this, new Observer<RemoteResource<MoodleAssignmentSubmission>>() {
@@ -314,7 +315,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
 
                     bottomSheet.requestLayout();
 
-                    if (moodleAssignmentSubmission == null || moodleAssignmentSubmission.data == null && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED)
+                    boolean noDataToDsiplay = moodleAssignmentSubmission == null || moodleAssignmentSubmission.data == null;
+                    if (noDataToDsiplay)
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
                     String errorMsg = moodleAssignmentSubmission == null ? getString(R.string.error_JSON_PARSING) : moodleAssignmentSubmission.message;
@@ -336,10 +338,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                     binding.setLoadingSelectedAssignmentSubmission(true);
                     noLongerNeedtoObserve = false;
 
-                    if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
-                        bottomSheet.requestLayout();
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    }
+                    bottomSheet.requestLayout();
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
 
                 if (noLongerNeedtoObserve)
