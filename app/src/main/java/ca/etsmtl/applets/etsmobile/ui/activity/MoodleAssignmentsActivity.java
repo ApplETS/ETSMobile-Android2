@@ -301,22 +301,27 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
         final LiveData<RemoteResource<MoodleAssignmentSubmission>> submissionLiveData = moodleViewModel.getAssignmentSubmission(selectedAssignment.getId());
         submissionLiveData.observe(MoodleAssignmentsActivity.this, new Observer<RemoteResource<MoodleAssignmentSubmission>>() {
             @Override
-            public void onChanged(@Nullable RemoteResource<MoodleAssignmentSubmission> moodleAssignmentFeedbackRemoteResource) {
+            public void onChanged(@Nullable RemoteResource<MoodleAssignmentSubmission> moodleAssignmentSubmission) {
                 boolean noLongerNeedtoObserve = true;
 
-                if (moodleAssignmentFeedbackRemoteResource == null || moodleAssignmentFeedbackRemoteResource.status == RemoteResource.ERROR) {
-                    binding.setSelectedAssignmentFeedback(null);
-                    binding.setSelectedAssignmentLastAttempt(null);
+                if (moodleAssignmentSubmission == null || moodleAssignmentSubmission.status == RemoteResource.ERROR) {
+                    if (moodleAssignmentSubmission != null && moodleAssignmentSubmission.data != null) {
+                        binding.setSelectedAssignmentFeedback(moodleAssignmentSubmission.data.getFeedback());
+                        binding.setSelectedAssignmentLastAttempt(moodleAssignmentSubmission.data.getLastAttempt());
+                    }
+
                     binding.setLoadingSelectedAssignmentSubmission(false);
 
                     bottomSheet.requestLayout();
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
-                    String errorMsg = moodleAssignmentFeedbackRemoteResource == null ? getString(R.string.error_JSON_PARSING) : moodleAssignmentFeedbackRemoteResource.message;
+                    if (moodleAssignmentSubmission == null || moodleAssignmentSubmission.data == null && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED)
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+                    String errorMsg = moodleAssignmentSubmission == null ? getString(R.string.error_JSON_PARSING) : moodleAssignmentSubmission.message;
                     Toast toast = Toast.makeText(MoodleAssignmentsActivity.this, errorMsg, Toast.LENGTH_SHORT);
                     toast.show();
-                } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.SUCCESS) {
-                    MoodleAssignmentSubmission submission = moodleAssignmentFeedbackRemoteResource.data;
+                } else if (moodleAssignmentSubmission.status == RemoteResource.SUCCESS) {
+                    MoodleAssignmentSubmission submission = moodleAssignmentSubmission.data;
 
                     if (submission != null) {
                         binding.setSelectedAssignmentFeedback(submission.getFeedback());
@@ -327,12 +332,11 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                     }
 
                     binding.setLoadingSelectedAssignmentSubmission(false);
-                } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.LOADING) {
+                } else if (moodleAssignmentSubmission.status == RemoteResource.LOADING) {
                     binding.setLoadingSelectedAssignmentSubmission(true);
                     noLongerNeedtoObserve = false;
 
-                    if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN
-                            && Utility.isNetworkAvailable(MoodleAssignmentsActivity.this)) {
+                    if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
                         bottomSheet.requestLayout();
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     }
