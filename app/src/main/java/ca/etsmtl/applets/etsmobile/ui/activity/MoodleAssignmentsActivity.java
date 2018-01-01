@@ -138,9 +138,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                 } else if (listRemoteResource.status == RemoteResource.ERROR) {
                     requestInProgress = false;
                     loadingView.hideProgessBar();
-                    Toast t = Toast.makeText(this, getString(R.string.toast_Sync_Fail)
-                            + "\n" + listRemoteResource.message, Toast.LENGTH_LONG);
-                    t.show();
+                    displayErrorMessage(getString(R.string.toast_Sync_Fail));
                 } else if (listRemoteResource.status == RemoteResource.LOADING) {
                     requestInProgress = true;
                     if (listRemoteResource.data != null) {
@@ -319,9 +317,8 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                     if (noDataToDsiplay)
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
-                    String errorMsg = moodleAssignmentSubmission == null ? getString(R.string.error_JSON_PARSING) : moodleAssignmentSubmission.message;
-                    Toast toast = Toast.makeText(MoodleAssignmentsActivity.this, errorMsg, Toast.LENGTH_SHORT);
-                    toast.show();
+                    String errorMsg = getString(R.string.toast_Sync_Fail);
+                    displayErrorMessage(errorMsg);
                 } else if (moodleAssignmentSubmission.status == RemoteResource.SUCCESS) {
                     MoodleAssignmentSubmission submission = moodleAssignmentSubmission.data;
 
@@ -346,6 +343,11 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                     submissionLiveData.removeObserver(this);
             }
         });
+    }
+
+    private void displayErrorMessage(String errorMsg) {
+        Toast toast = Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     public void openInBrowser(View v) {

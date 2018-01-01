@@ -105,8 +105,7 @@ public class MoodleFragment extends BaseFragment {
                     } else if (moodleCoursesRemoteResource.status == RemoteResource.ERROR) {
                         loadingView.hideProgessBar();
                         if (loadingView.isShown()) {
-                            String errorMsg = getString(R.string.toast_Sync_Fail)
-                                    + "\n" + moodleCoursesRemoteResource.message;
+                            String errorMsg = getString(R.string.toast_Sync_Fail);
                             Toast t = Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG);
                             t.show();;
                         }
