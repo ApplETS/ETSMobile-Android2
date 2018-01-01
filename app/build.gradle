@@ -58,10 +58,15 @@ android {
 
     dexOptions {
         javaMaxHeapSize "4g"
+        preDexLibraries = false
     }
 
     dataBinding {
         enabled = true
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
@@ -100,7 +105,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.3'
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.11'
-    compile 'joda-time:joda-time:2.3'
+    compile 'joda-time:joda-time:2.9.4'
     compile 'org.joda:joda-convert:1.7'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.squareup.okhttp:okhttp:2.7.5'
@@ -111,7 +116,7 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-sns:2.2.5'
     compile 'com.amazonaws:aws-android-sdk-core:2.2.5'
     compile 'net.sf.opencsv:opencsv:2.3'
-    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:multidex:1.0.2'
     compile 'me.grantland:autofittextview:0.2.+'
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
     compile 'com.jakewharton:butterknife:8.8.1'
@@ -124,15 +129,24 @@ dependencies {
     compile 'com.flaviofaria:kenburnsview:1.0.7'
     compile 'com.evernote:android-job:1.2.0'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
-    compile "android.arch.lifecycle:runtime:${ARCH_VERSION}"
-    compile "android.arch.lifecycle:extensions:${ARCH_VERSION}"
     compile 'com.android.support:support-v4:26.1.0'
-    annotationProcessor "android.arch.lifecycle:compiler:${ARCH_VERSION}"
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    // LiveData, and ViewModel
+    implementation "android.arch.lifecycle:extensions:1.0.0"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+
+    // Java8 support for Lifecycles
+    implementation "android.arch.lifecycle:common-java8:1.0.0"
+
+    // Room
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 
     // Local Unit Tests
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.7.19'
-    testCompile ("android.arch.core:core-testing:${ARCH_VERSION}", {
+    testImplementation ("android.arch.core:core-testing:1.0.0", {
         exclude group: 'com.android.support', module: 'support-compat'
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-core-utils'

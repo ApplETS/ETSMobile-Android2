@@ -12,6 +12,8 @@
     <string name="contact_creation_failed">Contact creation failed</string>
     <string name="cannot_open_file">No application can open that file</string>
     <string name="logout_confirmation">You are about to logout. Do you wish to proceed?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <!--MENU DE LANGAGE-->
     <string name="lang_title">Language change</string>
@@ -59,6 +61,7 @@
 
     <!-- Moodle Page -->
     <string name="activity_moodle_titre">Moodle instructions</string>
+    <string name="moodle_assignments_description">Access your assignments using this button</string>
     <string name="activity_moodle_url_text">Website url to use:</string>
     <string name="activity_moodle_nom">Username:</string>
     <string name="activity_moodle_code_universelle">Your universal code</string>
@@ -70,6 +73,29 @@
     <string name="applets_ens_etsmtl_ca">applets@ens.etsmtl.ca</string>
     <string name="etsmobile_android_commentaire">ETSMobile-Android : Comments</string>
     <string name="default_comment"></string>
+    <string name="moodle_assignments_title">Assignments</string>
+    <string name="moodle_past_assignments_filter">Filter</string>
+    <string name="moodle_past_assignments">Previous assignments</string>
+    <string name="moodle_past_assignments_sort">Sort</string>
+    <string name="moodle_past_assignments_sort_date">Sort by date</string>
+    <string name="moodle_past_assignments_sort_alpha">Sort alphabetically</string>
+    <string name="moodle_assignment_due_date">Due date: %s</string>
+    <string name="moodle_assignment_team_submission">Team submission</string>
+    <string name="moodle_prevent_submission_not_in_group">Need to be in a team: %s</string>
+    <string name="moodle_assignment_team_require_all_team_member_submit">All team members must submit: %s</string>
+    <string name="moodle_assignment_grade">Grade: %s</string>
+    <string name="moodle_assignment_status_submitted">Status: Submitted</string>
+    <string name="moodle_assignment_status_not_submitted">Status: Not Submitted</string>
+    <string name="moodle_assignment_status_late">Status: Late</string>
+    <string name="moodle_assignment_grading_status_graded">Grading status: Graded</string>
+    <string name="moodle_assignment_grading_status_not_graded">Grading status: Not Graded</string>
+    <string name="moodle_assignment_grader">Grader : %s</string>
+    <string name="moodle_assignment_comments">Comments : %s</string>
+    <string name="moodle_assignment_none">No assignment</string>
+    <string name="moodle_error_connection_failure">Connection failed</string>
+    <string name="moodle_error_cant_get_token">Failed to get the token</string>
+    <string name="moodle_error_cant_get_profile">Failed to get profile</string>
+    <string name="moodle_error_cant_get_courses">Failed to get courses</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, ÉTS student radio</string>

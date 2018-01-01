@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="assignment"
+            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment" />
+
+        <variable
+            name="viewModel"
+            type="ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:onClick="@{() -> viewModel.selectAssignment(assignment)}"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/assignment_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@{assignment.name}"
+            android:textStyle="bold"
+            tools:text="Nom du cours" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{assignment.dueDateObj.toLocaleString()}"
+            android:visibility="@{assignment.dueDateSet ? View.VISIBLE : View.GONE}"
+            tools:text="Date d'échéance" />
+    </LinearLayout>
+</layout>

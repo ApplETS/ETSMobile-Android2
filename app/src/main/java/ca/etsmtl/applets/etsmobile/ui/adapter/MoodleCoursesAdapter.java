@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.octo.android.robospice.request.listener.RequestListener;
-
 import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -34,7 +32,7 @@ public class MoodleCoursesAdapter extends ArrayAdapter<MoodleCourse> {
     private ArrayList<MoodleCourse> mData = new ArrayList<>();
     private TreeSet<Integer> sectionHeader = new TreeSet<>();
 
-    public MoodleCoursesAdapter(Context context, int rowLayoutResourceId, RequestListener<Object> listener) {
+    public MoodleCoursesAdapter(Context context, int rowLayoutResourceId) {
         super(context, rowLayoutResourceId);
         this.inflater = LayoutInflater.from(context);
     }

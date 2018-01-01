@@ -1,0 +1,1117 @@
+﻿{
+    "sitename": "ÉTS - Environnement numérique d’apprentissage",
+    "username": "am12345",
+    "firstname": "Bruce",
+    "lastname": "Wayne",
+    "fullname": "Bruce Wayne",
+    "lang": "fr_ca",
+    "userid": 12345,
+    "siteurl": "https://ena.etsmtl.ca",
+    "userpictureurl": "https://ena.etsmtl.ca/theme/image.php/boost_ets/core/1234/u/f1",
+    "functions": [
+        {
+            "name": "core_files_get_files",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_user_get_course_user_profiles",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_enrol_get_enrolled_users",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_enrol_get_users_courses",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_get_contents",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_get_courses",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_get_categories",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_send_instant_messages",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_notes_create_notes",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_webservice_get_site_info",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_get_component_strings",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "mod_assign_get_grades",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_get_assignments",
+            "version": "2017051501"
+        },
+        {
+            "name": "core_user_get_users_by_field",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_user_add_user_device",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_enrol_get_course_enrolment_methods",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_create_contacts",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_delete_contacts",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_block_contacts",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_unblock_contacts",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_get_contacts",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_search_contacts",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_notes_delete_notes",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_calendar_delete_calendar_events",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_calendar_get_calendar_events",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_calendar_create_calendar_events",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "mod_assign_get_submissions",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_get_user_flags",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_set_user_flags",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_get_user_mappings",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_revert_submissions_to_draft",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_lock_submissions",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_unlock_submissions",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_save_submission",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_submit_for_grading",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_save_grade",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_save_user_extensions",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_reveal_identities",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_forum_get_forums_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "enrol_self_get_instance_info",
+            "version": "2017051500"
+        },
+        {
+            "name": "core_comment_get_comments",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_group_get_course_user_groups",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_notes_get_course_notes",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_user_remove_user_device",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_user_view_user_list",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_user_view_user_profile",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_view_course",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_get_messages",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_get_blocked_users",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_mark_message_read",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_notes_view_notes",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_completion_update_activity_completion_status_manually",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_completion_get_activities_completion_status",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_completion_get_course_completion_status",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_rating_get_item_ratings",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "mod_assign_save_grades",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_data_get_databases_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_forum_get_forum_discussion_posts",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_forum_get_forum_discussions_paginated",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_forum_view_forum",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_forum_view_forum_discussion",
+            "version": "2017051500"
+        },
+        {
+            "name": "message_airnotifier_is_system_configured",
+            "version": "2017051500"
+        },
+        {
+            "name": "message_airnotifier_are_notification_preferences_configured",
+            "version": "2017051500"
+        },
+        {
+            "name": "gradereport_user_get_grades_table",
+            "version": "2017051500"
+        },
+        {
+            "name": "gradereport_user_view_grade_report",
+            "version": "2017051500"
+        },
+        {
+            "name": "core_user_add_user_private_files",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_badges_get_user_badges",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_calendar_get_action_events_by_timesort",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_calendar_get_action_events_by_course",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_calendar_get_action_events_by_courses",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_completion_mark_course_self_completed",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_get_course_module",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_get_course_module_by_instance",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_search_courses",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_get_activities_overview",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_get_user_navigation_options",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_get_user_administration_options",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_get_courses_by_field",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_check_updates",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_course_get_updates_since",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_group_get_activity_allowed_groups",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_group_get_activity_groupmode",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_delete_conversation",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_delete_message",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_data_for_messagearea_search_messages",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_data_for_messagearea_conversations",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_data_for_messagearea_contacts",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_data_for_messagearea_messages",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_get_unread_conversations_count",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_mark_all_notifications_as_read",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_mark_all_messages_as_read",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_message_processor_config_form",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_get_user_notification_preferences",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_message_get_user_message_preferences",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_question_update_flag",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_rating_add_rating",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_user_update_user_preferences",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_user_get_user_preferences",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_user_update_picture",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_user_agree_site_policy",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_competency_competency_viewed",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_competency_list_course_competencies",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_competency_get_scale_values",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_competency_user_competency_viewed",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_competency_user_competency_viewed_in_plan",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_competency_user_competency_viewed_in_course",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_competency_user_competency_plan_viewed",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_competency_grade_competency_in_course",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_competency_delete_evidence",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "core_block_get_course_blocks",
+            "version": "2017051501.01"
+        },
+        {
+            "name": "mod_assign_view_grading_table",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_view_submission_status",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_get_submission_status",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_list_participants",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_submit_grading_form",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_get_participant",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_assign_view_assign",
+            "version": "2017051501"
+        },
+        {
+            "name": "mod_book_view_book",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_book_get_books_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_chat_login_user",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_chat_get_chat_users",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_chat_send_chat_message",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_chat_get_chat_latest_messages",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_chat_view_chat",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_chat_get_chats_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_choice_get_choice_results",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_choice_get_choice_options",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_choice_submit_choice_response",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_choice_view_choice",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_choice_get_choices_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_choice_delete_choice_responses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_data_view_database",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_data_get_data_access_information",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_data_get_entries",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_data_get_entry",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_data_get_fields",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_data_search_entries",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_data_approve_entry",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_data_delete_entry",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_data_add_entry",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_data_update_entry",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_get_feedbacks_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_get_feedback_access_information",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_view_feedback",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_get_current_completed_tmp",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_get_items",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_launch_feedback",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_get_page_items",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_process_page",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_get_analysis",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_get_unfinished_responses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_get_finished_responses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_get_non_respondents",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_get_responses_analysis",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_feedback_get_last_completed",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_folder_view_folder",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_folder_get_folders_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_forum_add_discussion_post",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_forum_add_discussion",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_forum_can_add_discussion",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_get_glossaries_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_view_glossary",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_view_entry",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_get_entries_by_letter",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_get_entries_by_date",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_get_categories",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_get_entries_by_category",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_get_authors",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_get_entries_by_author",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_get_entries_by_author_id",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_get_entries_by_search",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_get_entries_by_term",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_get_entries_to_approve",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_get_entry_by_id",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_glossary_add_entry",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_imscp_view_imscp",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_imscp_get_imscps_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_label_get_labels_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_lessons_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_lesson_access_information",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_view_lesson",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_questions_attempts",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_user_grade",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_user_attempt_grade",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_content_pages_viewed",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_user_timers",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_pages",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_launch_attempt",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_page_data",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_process_page",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_finish_attempt",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_attempts_overview",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_user_attempt",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_pages_possible_jumps",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lesson_get_lesson",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lti_get_tool_launch_data",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lti_get_ltis_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_lti_view_lti",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_page_view_page",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_page_get_pages_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_get_quizzes_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_view_quiz",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_get_user_attempts",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_get_user_best_grade",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_get_combined_review_options",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_start_attempt",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_get_attempt_data",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_get_attempt_summary",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_save_attempt",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_process_attempt",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_get_attempt_review",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_view_attempt",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_view_attempt_summary",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_view_attempt_review",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_get_quiz_feedback_for_grade",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_get_quiz_access_information",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_get_attempt_access_information",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_quiz_get_quiz_required_qtypes",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_resource_view_resource",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_resource_get_resources_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_scorm_view_scorm",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_scorm_get_scorm_attempt_count",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_scorm_get_scorm_scoes",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_scorm_get_scorm_user_data",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_scorm_insert_scorm_tracks",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_scorm_get_scorm_sco_tracks",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_scorm_get_scorms_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_scorm_launch_sco",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_survey_get_surveys_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_survey_view_survey",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_survey_get_questions",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_survey_submit_answers",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_url_view_url",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_url_get_urls_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_wiki_get_wikis_by_courses",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_wiki_view_wiki",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_wiki_view_page",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_wiki_get_subwikis",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_wiki_get_subwiki_pages",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_wiki_get_subwiki_files",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_wiki_get_page_contents",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_wiki_get_page_for_editing",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_wiki_new_page",
+            "version": "2017051500"
+        },
+        {
+            "name": "mod_wiki_edit_page",
+            "version": "2017051500"
+        },
+        {
+            "name": "enrol_guest_get_instance_info",
+            "version": "2017051500"
+        },
+        {
+            "name": "enrol_self_enrol_user",
+            "version": "2017051500"
+        },
+        {
+            "name": "message_airnotifier_get_user_devices",
+            "version": "2017051500"
+        },
+        {
+            "name": "message_airnotifier_enable_device",
+            "version": "2017051500"
+        },
+        {
+            "name": "message_popup_get_popup_notifications",
+            "version": "2017051500"
+        },
+        {
+            "name": "message_popup_get_unread_popup_notification_count",
+            "version": "2017051500"
+        },
+        {
+            "name": "gradereport_overview_get_course_grades",
+            "version": "2017051500"
+        },
+        {
+            "name": "gradereport_overview_view_grade_report",
+            "version": "2017051500"
+        },
+        {
+            "name": "gradereport_user_get_grade_items",
+            "version": "2017051500"
+        },
+        {
+            "name": "tool_lp_data_for_course_competencies_page",
+            "version": "2017051500"
+        },
+        {
+            "name": "tool_lp_data_for_plans_page",
+            "version": "2017051500"
+        },
+        {
+            "name": "tool_lp_data_for_plan_page",
+            "version": "2017051500"
+        },
+        {
+            "name": "tool_lp_data_for_user_evidence_list_page",
+            "version": "2017051500"
+        },
+        {
+            "name": "tool_lp_data_for_user_evidence_page",
+            "version": "2017051500"
+        },
+        {
+            "name": "tool_lp_data_for_user_competency_summary",
+            "version": "2017051500"
+        },
+        {
+            "name": "tool_lp_data_for_user_competency_summary_in_plan",
+            "version": "2017051500"
+        },
+        {
+            "name": "tool_lp_data_for_user_competency_summary_in_course",
+            "version": "2017051500"
+        },
+        {
+            "name": "tool_mobile_get_plugins_supporting_mobile",
+            "version": "2017051500"
+        },
+        {
+            "name": "tool_mobile_get_public_config",
+            "version": "2017051500"
+        },
+        {
+            "name": "tool_mobile_get_config",
+            "version": "2017051500"
+        },
+        {
+            "name": "tool_mobile_get_autologin_key",
+            "version": "2017051500"
+        }
+    ],
+    "downloadfiles": 1,
+    "uploadfiles": 1,
+    "release": "3.3.1+ (Build: 20170714)",
+    "version": "2017051501.01",
+    "mobilecssurl": "",
+    "advancedfeatures": [
+        {
+            "name": "usecomments",
+            "value": 1
+        },
+        {
+            "name": "usetags",
+            "value": 1
+        },
+        {
+            "name": "enablenotes",
+            "value": 1
+        },
+        {
+            "name": "messaging",
+            "value": 1
+        },
+        {
+            "name": "enableblogs",
+            "value": 1
+        },
+        {
+            "name": "enablecompletion",
+            "value": 1
+        },
+        {
+            "name": "enablebadges",
+            "value": 1
+        },
+        {
+            "name": "mnet_dispatcher_mode",
+            "value": 0
+        }
+    ],
+    "usercanmanageownfiles": true,
+    "userquota": 314572812,
+    "usermaxuploadfilesize": 524288123,
+    "userhomepage": 1,
+    "siteid": 1
+}

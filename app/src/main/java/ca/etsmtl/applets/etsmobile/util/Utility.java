@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -28,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
@@ -36,9 +36,6 @@ import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
 import ca.etsmtl.applets.etsmobile.model.MonETSNotificationList;
 import ca.etsmtl.applets.etsmobile2.R;
 
-import static ca.etsmtl.applets.etsmobile.util.Constants.EXTRA_CUSTOM_TABS_SESSION;
-import static ca.etsmtl.applets.etsmobile.util.Constants.EXTRA_CUSTOM_TABS_TOOLBAR_COLOR;
-
 public class Utility {
 
     public static boolean isTabletDevice(Context context) {
@@ -46,9 +43,9 @@ public class Utility {
 
     }
 
-    public static boolean isNetworkAvailable(final Activity activity) {
+    public static boolean isNetworkAvailable(final Context context) {
         ConnectivityManager connectivityManager
-                = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
@@ -74,6 +71,17 @@ public class Utility {
     public static String getStringForApplETSApiFromDate(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyy");
         return simpleDateFormat.format(date);
+    }
+
+    /**
+     * Conversion d'une heure Unix en objet {@link Date}
+     *
+     * @param unixDate heure Unix (nombre de secondes écoulées depuis le 1er janvier 1970 00:00:00
+     *                 UTC)
+     * @return objet {@link Date} représentant l'heure unix
+     */
+    public static Date getDateTimeFromUnixTime(long unixDate) {
+        return new Date(TimeUnit.SECONDS.toMillis(unixDate));
     }
 
     public static Map<String, String> parseCookies(String cookieHeader) {

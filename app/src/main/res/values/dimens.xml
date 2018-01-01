@@ -4,6 +4,54 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="calendar_circle_stroke">2dp</dimen>
 
+    <!-- Single-line list item specs -->
+    <dimen name="single_line_list_item_left_right_item_padding">16dp</dimen>
+    <dimen name="single_line_list_item_padding_top">8dp</dimen>
+    <dimen name="single_line_list_item_font_size">16sp</dimen>
+    <dimen name="single_line_list_item_height">48dp</dimen>
+
+    <!-- Single-line list item with avatar and icon specs -->
+    <dimen name="single_line_list_item_with_avatar_and_icon_font_size">16sp</dimen>
+    <dimen name="single_line_list_item_with_avatar_height">56dp</dimen>
+    <dimen name="single_line_list_item_with_avatar_left_avatar_padding">16dp</dimen>
+    <dimen name="single_line_list_item_with_avatar_right_icon_padding">16dp</dimen>
+    <dimen name="single_line_list_item_with_avatar_left_text_padding">72dp</dimen>
+    <dimen name="single_line_list_item_with_avatar_top_padding">8dp</dimen>
+
+    <!-- Two-line list item with avatar and icon specs -->
+    <dimen name="two_line_list_item_with_avatar_and_icon_font_size">16sp</dimen>
+    <dimen name="two_line_list_item_with_avatar_height">72dp</dimen>
+    <dimen name="two_line_list_item_with_avatar_left_avatar_padding">16dp</dimen>
+    <dimen name="two_line_list_item_with_avatar_right_icon_padding">16dp</dimen>
+    <dimen name="two_line_list_item_with_avatar_left_text_padding">72dp</dimen>
+    <dimen name="two_line_list_item_with_avatar_top_padding">8dp</dimen>
+
+    <!-- Two-line list with icon specs -->
+    <dimen name="two_line_list_item_with_icon_font_size">16sp</dimen>
+    <dimen name="two_line_list_item_with_icon_height">72dp</dimen>
+    <dimen name="two_line_list_item_with_icon_icon_left_padding">16dp</dimen>
+    <dimen name="two_line_list_item_with_icon_text_left_padding">72dp</dimen>
+    <dimen name="two_line_list_item_with_icon_padding_above_list">8dp</dimen>
+    <dimen name="two_line_list_item_with_icon_text_right_padding">16dp</dimen>
+
+    <!-- Floating action button -->
+    <dimen name="fab_pressed_elevation">12dp</dimen>
+    <dimen name="fab_resting_elevation">6dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="display_4_text_size">112sp</dimen>
+    <dimen name="display_3_text_size">56sp</dimen>
+    <dimen name="display_2_text_size">45sp</dimen>
+    <dimen name="display_1_text_size">34sp</dimen>
+    <dimen name="headline_text_size">24sp</dimen>
+    <dimen name="title_text_size">20sp</dimen>
+    <dimen name="subheading_text_size">16sp</dimen>
+    <dimen name="body_2_text_size">14sp</dimen>
+    <dimen name="body_1_text_size">14sp</dimen>
+    <dimen name="caption_text_size">12sp</dimen>
+    <dimen name="button_text_size">14sp</dimen>
+
     <!--Widget-->
     <dimen name="widget_margin">0dp</dimen>
     <dimen name="widget_border">1dp</dimen>

@@ -1,0 +1,157 @@
+﻿{
+    "lastattempt": {
+        "submission": {
+            "id": 170393,
+            "userid": 12345,
+            "attemptnumber": 0,
+            "timecreated": 1486172577,
+            "timemodified": 1486172577,
+            "status": "draft",
+            "groupid": 0,
+            "assignment": 12345,
+            "latest": 1,
+            "plugins": [
+                {
+                    "type": "onlinetext",
+                    "name": "Texte en ligne",
+                    "fileareas": [
+                        {
+                            "area": "submissions_onlinetext",
+                            "files": []
+                        }
+                    ],
+                    "editorfields": [
+                        {
+                            "name": "onlinetext",
+                            "description": "Remise de textes en ligne",
+                            "text": "",
+                            "format": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "file",
+                    "name": "Remises de fichiers",
+                    "fileareas": [
+                        {
+                            "area": "submission_files",
+                            "files": []
+                        }
+                    ]
+                },
+                {
+                    "type": "comments",
+                    "name": "Commentaires"
+                }
+            ]
+        },
+        "teamsubmission": {
+            "id": 170320,
+            "userid": 0,
+            "attemptnumber": 0,
+            "timecreated": 1486164889,
+            "timemodified": 1486172577,
+            "status": "submitted",
+            "groupid": 12345,
+            "assignment": 12345,
+            "latest": 1,
+            "plugins": [
+                {
+                    "type": "onlinetext",
+                    "name": "Texte en ligne",
+                    "fileareas": [
+                        {
+                            "area": "submissions_onlinetext",
+                            "files": []
+                        }
+                    ],
+                    "editorfields": [
+                        {
+                            "name": "onlinetext",
+                            "description": "Remise de textes en ligne",
+                            "text": "<p># Laboratoire 1 du cours GTI350</p>\r\n<p>Vous allez créer un outil qui permet à un juge d’évaluer les athlètes et de cumuler des statistiques simples en temps réel pour le slalom de snowboard. Cette épreuve consiste à passer au travers de portes prédéterminées sur un parcours. Chaque athlète fait deux descentes et le classement finale est établit à partir du total des temps des deux descentes.</p>\r\n<p>Dans votre interface, vous devez utiliser au minimum une instance des composants suivants : champs de texte, bouton, label et message d’alerte. Votre interface doit aussi comporter une image de démarrage (splash screen) en lien avec le thème de l’application.</p>\r\n<p>##Remise</p>\r\n<p>3 février 2017 (Journée de la démo)</p>\r\n<p>##Informations de contact</p>\r\n<p>Christelle - christelle.delalleau.1@etsmtl.net <br />Benjamin - benjamin.roy.croteau@gmail.com<br />Marc-Antoine - marc-antoine.vezina.2@ens.etsmtl.ca</p>\r\n<p>##Démarrer ce projet</p>\r\n<p>Installer NodeJS : https://nodejs.org/en/</p>\r\n<p>Dans le répertoire du projet (GTI350-Lab-1)</p>\r\n<p>```bash<br />$ npm install<br />$ npm install -g ionic cordova<br />```</p>\r\n<p>Pour lancer le projet en vue web:</p>\r\n<p>```bash<br />$ ionic serve<br />```</p>\r\n<p>##Build pour ios:<br />Nécessite un Mac avec xCode et les droits administrateurs.<br />```bash<br />$ cordova platform add ios<br />$ ionic build ios<br />$ ionic emulate ios<br />```</p>\r\n<p>##Build pour Android:<br />Nécessite un appareil de branché en mode développeur ou un simulateur tel que GenyMotion.<br />```bash<br />$ cordova platform add android<br />$ ionic build android<br />$ ionic run android<br />```</p>",
+                            "format": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "file",
+                    "name": "Remises de fichiers",
+                    "fileareas": [
+                        {
+                            "area": "submission_files",
+                            "files": [
+                                {
+                                    "filename": "gti350-02_Equipe20_Snowboard.zip",
+                                    "filepath": "/",
+                                    "filesize": 98680734,
+                                    "fileurl": "https://ena.etsmtl.ca/webservice/pluginfile.php/396627/assignsubmission_file/submission_files/170320/gti350-02_Equipe20_Snowboard.zip",
+                                    "timemodified": 1486172577,
+                                    "mimetype": "application/zip",
+                                    "isexternalfile": false
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "comments",
+                    "name": "Commentaires"
+                }
+            ]
+        },
+        "submissiongroup": 12345,
+        "submissiongroupmemberswhoneedtosubmit": [],
+        "submissionsenabled": true,
+        "locked": false,
+        "graded": true,
+        "canedit": false,
+        "caneditowner": false,
+        "cansubmit": false,
+        "extensionduedate": null,
+        "blindmarking": false,
+        "gradingstatus": "graded",
+        "usergroups": [
+            12345
+        ]
+    },
+    "feedback": {
+        "grade": {
+            "id": 12345,
+            "assignment": 12345,
+            "userid": 12345,
+            "attemptnumber": 0,
+            "timecreated": 1489552227,
+            "timemodified": 1489552227,
+            "grader": 1234,
+            "grade": "97.72727"
+        },
+        "gradefordisplay": "<h1>Ceci est un test.</h1>",
+        "gradeddate": 1489552227,
+        "plugins": [
+            {
+                "type": "comments",
+                "name": "Feedback par commentaires",
+                "editorfields": [
+                    {
+                        "name": "comments",
+                        "description": "Feedback par commentaires",
+                        "text": "",
+                        "format": 0
+                    }
+                ]
+            },
+            {
+                "type": "editpdf",
+                "name": "Annotation PDF",
+                "fileareas": [
+                    {
+                        "area": "download",
+                        "files": []
+                    }
+                ]
+            }
+        ]
+    },
+    "warnings": []
+}
