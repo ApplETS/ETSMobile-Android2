@@ -138,9 +138,7 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                 } else if (listRemoteResource.status == RemoteResource.ERROR) {
                     requestInProgress = false;
                     loadingView.hideProgessBar();
-                    Toast t = Toast.makeText(this, getString(R.string.toast_Sync_Fail)
-                            + "\n" + listRemoteResource.message, Toast.LENGTH_LONG);
-                    t.show();
+                    displayErrorMessage(getString(R.string.toast_Sync_Fail));
                 } else if (listRemoteResource.status == RemoteResource.LOADING) {
                     requestInProgress = true;
                     if (listRemoteResource.data != null) {
@@ -297,26 +295,32 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
 
     private void displaySelectedAssignment(final MoodleAssignment selectedAssignment) {
         binding.setSelectedAssignment(selectedAssignment);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         final LiveData<RemoteResource<MoodleAssignmentSubmission>> submissionLiveData = moodleViewModel.getAssignmentSubmission(selectedAssignment.getId());
         submissionLiveData.observe(MoodleAssignmentsActivity.this, new Observer<RemoteResource<MoodleAssignmentSubmission>>() {
             @Override
-            public void onChanged(@Nullable RemoteResource<MoodleAssignmentSubmission> moodleAssignmentFeedbackRemoteResource) {
+            public void onChanged(@Nullable RemoteResource<MoodleAssignmentSubmission> moodleAssignmentSubmission) {
                 boolean noLongerNeedtoObserve = true;
 
-                if (moodleAssignmentFeedbackRemoteResource == null || moodleAssignmentFeedbackRemoteResource.status == RemoteResource.ERROR) {
-                    binding.setSelectedAssignmentFeedback(null);
-                    binding.setSelectedAssignmentLastAttempt(null);
+                if (moodleAssignmentSubmission == null || moodleAssignmentSubmission.status == RemoteResource.ERROR) {
+                    if (moodleAssignmentSubmission != null && moodleAssignmentSubmission.data != null) {
+                        binding.setSelectedAssignmentFeedback(moodleAssignmentSubmission.data.getFeedback());
+                        binding.setSelectedAssignmentLastAttempt(moodleAssignmentSubmission.data.getLastAttempt());
+                    }
+
                     binding.setLoadingSelectedAssignmentSubmission(false);
 
                     bottomSheet.requestLayout();
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
-                    String errorMsg = moodleAssignmentFeedbackRemoteResource == null ? getString(R.string.error_JSON_PARSING) : moodleAssignmentFeedbackRemoteResource.message;
-                    Toast toast = Toast.makeText(MoodleAssignmentsActivity.this, errorMsg, Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.SUCCESS) {
-                    MoodleAssignmentSubmission submission = moodleAssignmentFeedbackRemoteResource.data;
+                    boolean noDataToDsiplay = moodleAssignmentSubmission == null || moodleAssignmentSubmission.data == null;
+                    if (noDataToDsiplay)
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+                    String errorMsg = getString(R.string.toast_Sync_Fail);
+                    displayErrorMessage(errorMsg);
+                } else if (moodleAssignmentSubmission.status == RemoteResource.SUCCESS) {
+                    MoodleAssignmentSubmission submission = moodleAssignmentSubmission.data;
 
                     if (submission != null) {
                         binding.setSelectedAssignmentFeedback(submission.getFeedback());
@@ -327,21 +331,23 @@ public class MoodleAssignmentsActivity extends AppCompatActivity {
                     }
 
                     binding.setLoadingSelectedAssignmentSubmission(false);
-                } else if (moodleAssignmentFeedbackRemoteResource.status == RemoteResource.LOADING) {
+                } else if (moodleAssignmentSubmission.status == RemoteResource.LOADING) {
                     binding.setLoadingSelectedAssignmentSubmission(true);
                     noLongerNeedtoObserve = false;
 
-                    if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN
-                            && Utility.isNetworkAvailable(MoodleAssignmentsActivity.this)) {
-                        bottomSheet.requestLayout();
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    }
+                    bottomSheet.requestLayout();
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
 
                 if (noLongerNeedtoObserve)
                     submissionLiveData.removeObserver(this);
             }
         });
+    }
+
+    private void displayErrorMessage(String errorMsg) {
+        Toast toast = Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     public void openInBrowser(View v) {

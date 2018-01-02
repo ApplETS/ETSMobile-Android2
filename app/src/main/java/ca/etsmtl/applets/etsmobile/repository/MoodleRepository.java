@@ -10,13 +10,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.MoodleAssignmentCourseDao;
+import ca.etsmtl.applets.etsmobile.db.MoodleAssignmentSubmissionDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleProfileDao;
 import ca.etsmtl.applets.etsmobile.http.MoodleWebService;
@@ -43,19 +43,19 @@ public class MoodleRepository {
     private final MoodleProfileDao moodleProfileDao;
     private final MoodleCourseDao moodleCourseDao;
     private final MoodleAssignmentCourseDao moodleAssignmentCourseDao;
-    private final Executor executor;
+    private final MoodleAssignmentSubmissionDao moodleAssignmentSubmissionDao;
 
     @Inject
     public MoodleRepository(@NonNull Application application, MoodleWebService moodleWebService,
                             MoodleProfileDao moodleProfileDao, MoodleCourseDao moodleCourseDao,
                             MoodleAssignmentCourseDao moodleAssignmentCourseDao,
-                            Executor executor) {
+                            MoodleAssignmentSubmissionDao moodleAssignmentSubmissionDao) {
         this.context = application;
         this.moodleWebService = moodleWebService;
         this.moodleProfileDao = moodleProfileDao;
         this.moodleCourseDao = moodleCourseDao;
         this.moodleAssignmentCourseDao = moodleAssignmentCourseDao;
-        this.executor = executor;
+        this.moodleAssignmentSubmissionDao = moodleAssignmentSubmissionDao;
     }
 
     private LiveData<RemoteResource<MoodleToken>> getToken() {
@@ -232,31 +232,45 @@ public class MoodleRepository {
     }
 
     public LiveData<RemoteResource<MoodleAssignmentSubmission>> getAssignmentSubmission(final int assignId) {
-        final MediatorLiveData<RemoteResource<MoodleAssignmentSubmission>> submission = new MediatorLiveData<>();
-        submission.setValue(RemoteResource.loading(null));
+        return new NetworkBoundResource<MoodleAssignmentSubmission, MoodleAssignmentSubmission>() {
+            @Override
+            protected void saveCallResult(@NonNull MoodleAssignmentSubmission item) {
+                item.setAssignId(assignId);
+                moodleAssignmentSubmissionDao.insert(item);
+            }
 
-        LiveData<RemoteResource<MoodleToken>> tokenLD = getToken();
-        submission.addSource(tokenLD, token -> {
-            if (token != null && token.status == RemoteResource.SUCCESS) {
-                submission.removeSource(tokenLD);
-                String tokenStr = ApplicationManager.userCredentials.getMoodleToken();
-                LiveData<ApiResponse<MoodleAssignmentSubmission>> submissionApi = moodleWebService.getAssignmentSubmission(tokenStr, assignId);
-                submission.addSource(submissionApi, submissionApiResponse -> {
-                    if (submissionApiResponse != null && submissionApiResponse.isSuccessful() && submissionApiResponse.body != null)
-                        submission.setValue(RemoteResource.success(submissionApiResponse.body));
-                    else {
-                        if (submissionApiResponse != null && submissionApiResponse.errorMessage != null)
-                            submission.setValue(RemoteResource.error(submissionApiResponse.errorMessage, submissionApiResponse.body));
-                        else
-                            submission.setValue(RemoteResource.error("", null));
+            @Override
+            protected boolean shouldFetch(@Nullable MoodleAssignmentSubmission data) {
+                return true;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<MoodleAssignmentSubmission> loadFromDb() {
+                return moodleAssignmentSubmissionDao.getByAssignmentId(assignId);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<MoodleAssignmentSubmission>> createCall() {
+                MediatorLiveData<ApiResponse<MoodleAssignmentSubmission>> submission = new MediatorLiveData<>();
+                LiveData<RemoteResource<MoodleToken>> tokenLD = getToken();
+                submission.addSource(tokenLD, token -> {
+                    if (token != null && token.status == RemoteResource.SUCCESS) {
+                        submission.removeSource(tokenLD);
+                        String tokenStr = ApplicationManager.userCredentials.getMoodleToken();
+                        LiveData<ApiResponse<MoodleAssignmentSubmission>> submissionApi = moodleWebService.getAssignmentSubmission(tokenStr, assignId);
+                        submission.addSource(submissionApi, submission::setValue);
+                    } else if (token != null && token.status == RemoteResource.ERROR) {
+                        submission.removeSource(tokenLD);
+                        boolean displayDefaultMsg = token.message == null || token.message.isEmpty();
+                        String errorMsg = displayDefaultMsg ? context.getString(R.string.moodle_error_cant_get_courses) : token.message;
+                        submission.setValue(new ApiResponse<>(new Throwable(errorMsg)));
                     }
                 });
-            } else if (token != null && token.status == RemoteResource.ERROR) {
-                submission.removeSource(tokenLD);
-                submission.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_token), null));
-            }
-        });
 
-        return submission;
+                return submission;
+            }
+        }.asLiveData();
     }
 }

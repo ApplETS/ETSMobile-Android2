@@ -3,11 +3,10 @@ package ca.etsmtl.applets.etsmobile.di;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
-import java.util.concurrent.Executor;
-
 import javax.inject.Singleton;
 
 import ca.etsmtl.applets.etsmobile.db.MoodleAssignmentCourseDao;
+import ca.etsmtl.applets.etsmobile.db.MoodleAssignmentSubmissionDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleDb;
 import ca.etsmtl.applets.etsmobile.db.MoodleProfileDao;
@@ -81,7 +80,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    Executor provideExecutor() {
-        return runnable -> new Thread(runnable).start();
+    MoodleAssignmentSubmissionDao provideMoodleAssignmentSubmissionDao(MoodleDb moodleDb) {
+        return moodleDb.moodleAssignmentSubmissionDao();
     }
 }
