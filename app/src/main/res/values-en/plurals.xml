@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <plurals name="days_before_session_start">
-        <item quantity="zero">First day of the semester</item>
-        <item quantity="one">%1$d day before the start of the next semester</item>
-        <item quantity="other">%1$d days before the start of the next semester</item>
-    </plurals>
-</resources>

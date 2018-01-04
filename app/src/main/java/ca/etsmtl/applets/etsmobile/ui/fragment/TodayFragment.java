@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.TimeUnit;
@@ -200,27 +199,28 @@ public class TodayFragment extends HttpFragment implements Observer {
     private void setSemesterProgressBarText(Date dateDebut, Date dateFin) {
         Date dateActuelle = new Date();
         long dureeTotaleMs;
-        int nbJoursTotal;
+        long nbJoursTotal;
         long progressionMs;
-        int progressionJour;
+        long progressionJour;
 
         if (dateActuelle.after(dateDebut) && dateActuelle.before(dateFin)) {
             dureeTotaleMs = dateFin.getTime() - dateDebut.getTime();
-            nbJoursTotal = (int) TimeUnit.MILLISECONDS.toDays(dureeTotaleMs);
+            nbJoursTotal = TimeUnit.MILLISECONDS.toDays(dureeTotaleMs);
             progressionMs = dateActuelle.getTime() - dateDebut.getTime();
-            progressionJour = (int) TimeUnit.MILLISECONDS.toDays(progressionMs);
+            progressionJour = TimeUnit.MILLISECONDS.toDays(progressionMs);
 
-            semesterProgressBar.setMax(nbJoursTotal);
-            semesterProgressBar.setProgress(progressionJour);
-            semesterProgressBarText.setText(getString(R.string.semester_progression, progressionJour, nbJoursTotal));
+            semesterProgressBar.setMax((int) nbJoursTotal);
+            semesterProgressBar.setProgress((int) progressionJour);
+            semesterProgressBarText.setText(getString(R.string.semester_progression)
+                    + getString(R.string.deux_points) + String.valueOf(progressionJour) + "/"
+                    + String.valueOf(nbJoursTotal) + " " + getString(R.string.days));
             semesterProgressBarText.setVisibility(View.VISIBLE);
         } else if (dateActuelle.before(dateDebut)) {
             progressionMs = dateDebut.getTime() - dateActuelle.getTime() + TimeUnit.DAYS.toMillis(1);
-            progressionJour = (int) TimeUnit.MILLISECONDS.toDays(progressionMs);
+            progressionJour = TimeUnit.MILLISECONDS.toDays(progressionMs);
 
-            final String joursAvantSession = getContext().getResources().getQuantityString(R.plurals.days_before_session_start,  progressionJour, progressionJour);
             semesterProgressBar.setProgress(0);
-            semesterProgressBarText.setText(joursAvantSession);
+            semesterProgressBarText.setText(String.format(getString(R.string.days_before_session_start), String.valueOf(progressionJour)));
             semesterProgressBarText.setVisibility(View.VISIBLE);
         }
     }
@@ -239,17 +239,15 @@ public class TodayFragment extends HttpFragment implements Observer {
             DateTime.Property pDoM = dateTime.dayOfMonth();
             DateTime.Property pMoY = dateTime.monthOfYear();
 
-            Locale locale = getResources().getConfiguration().locale;
-
-            todaysTv.setText(getActivity().getString(R.string.horaire, pDoW.getAsText(locale), pDoM.getAsText(locale), pMoY.getAsText(locale)));
+            todaysTv.setText(getActivity().getString(R.string.horaire, pDoW.getAsText(getResources().getConfiguration().locale), pDoM.get(), pMoY.getAsText(getResources().getConfiguration().locale)));
             databaseHelper = new DatabaseHelper(getActivity());
             listSeances = new ArrayList<Seances>();
             events = new ArrayList<Event>();
             try {
                 SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
-                listSeances = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dateTime.toDate()) + "%").query();
+                listSeances = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryBuilder().where().like("dateDebut", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
                 Collections.sort(listSeances, new SeanceComparator());
-                events = (ArrayList<Event>) databaseHelper.getDao(Event.class).queryBuilder().where().like("startDate", seancesFormatter.format(dateTime.toDate()) + "%").query();
+                events = (ArrayList<Event>) databaseHelper.getDao(Event.class).queryBuilder().where().like("startDate", seancesFormatter.format(dateTime.toDate()).toString() + "%").query();
 
             } catch (Exception e) {
                 e.printStackTrace();

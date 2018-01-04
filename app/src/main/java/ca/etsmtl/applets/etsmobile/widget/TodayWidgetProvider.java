@@ -273,7 +273,8 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
     public void onRequestFailure(SpiceException spiceException) {
         syncEnCours = false;
 
-        Toast toast = Toast.makeText(context, "ÉTSMobile: " + spiceException.getLocalizedMessage(), Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(context, "ÉTSMobile" + context.getString(R.string.deux_points)
+                + spiceException.getLocalizedMessage(), Toast.LENGTH_SHORT);
         toast.show();
 
         // Mise à jour avec les données locales

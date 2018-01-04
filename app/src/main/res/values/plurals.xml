@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <plurals name="days_before_session_start">
-        <item quantity="zero">Première journée de la session</item>
-        <item quantity="one">%1$d journée avant le début de la prochaine session</item>
-        <item quantity="other">%1$d jours avant le début de la prochaine session</item>
-    </plurals>
-</resources>
