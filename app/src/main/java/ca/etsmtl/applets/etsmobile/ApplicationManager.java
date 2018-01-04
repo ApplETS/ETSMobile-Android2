@@ -15,6 +15,9 @@ import android.text.TextUtils;
 import java.sql.SQLException;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
+import ca.etsmtl.applets.etsmobile.di.AppComponent;
+import ca.etsmtl.applets.etsmobile.di.AppModule;
+import ca.etsmtl.applets.etsmobile.di.DaggerAppComponent;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
@@ -23,13 +26,13 @@ import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
-import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 
 public class ApplicationManager extends Application {
 
     public static UserCredentials userCredentials;
     public static String domaine;
     public static int typeUsagerId;
+    private static AppComponent appComponent;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -68,6 +71,11 @@ public class ApplicationManager extends Application {
             ApplicationManager.domaine = domaine;
         }
 
+        appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
+    }
+
+    public static AppComponent getAppComponent() {
+        return appComponent;
     }
 
     @Override

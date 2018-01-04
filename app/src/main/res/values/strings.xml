@@ -12,6 +12,8 @@
     <string name="contact_creation_failed">Echec de la création du contact</string>
     <string name="cannot_open_file">Aucune application ne peut ouvrir ce fichier</string>
     <string name="logout_confirmation">Êtes-vous sûr de vouloir vous déconnecter?</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
 
     <!--MENU DE LANGAGE-->
     <string name="lang_title">Changement de langue</string>
@@ -70,6 +72,30 @@
     <string name="applets_ens_etsmtl_ca">applets@ens.etsmtl.ca</string>
     <string name="etsmobile_android_commentaire">ETSMobile-Android : Commentaire</string>
     <string name="default_comment"></string>
+    <string name="moodle_assignments_title">Devoirs</string>
+    <string name="moodle_assignments_description">Accédez à vos devoirs à l\'aide de ce bouton</string>
+    <string name="moodle_past_assignments_filter">Filtrer</string>
+    <string name="moodle_past_assignments">Devoirs antérieurs</string>
+    <string name="moodle_past_assignments_sort">Trier</string>
+    <string name="moodle_past_assignments_sort_date">Trier par date</string>
+    <string name="moodle_past_assignments_sort_alpha">Trier par ordre alphabétique</string>
+    <string name="moodle_assignment_due_date">Date d\'échéance : %s</string>
+    <string name="moodle_assignment_team_submission">Remise en équipe</string>
+    <string name="moodle_prevent_submission_not_in_group">Remise en équipe : %s</string>
+    <string name="moodle_assignment_team_require_all_team_member_submit">Remise requise pour chaque membre : %s</string>
+    <string name="moodle_assignment_grade">Note : %s</string>
+    <string name="moodle_assignment_status_submitted">Statut : Remis</string>
+    <string name="moodle_assignment_status_not_submitted">Statut : Non remis</string>
+    <string name="moodle_assignment_status_late">Statut : En retard</string>
+    <string name="moodle_assignment_grading_status_graded">Statut de l\'évaluation : Évalué</string>
+    <string name="moodle_assignment_grading_status_not_graded">Statut de l\'évaluation : Non évalué</string>
+    <string name="moodle_assignment_grader">Évaluateur : %s</string>
+    <string name="moodle_assignment_comments">Commentaires : %s</string>
+    <string name="moodle_assignment_none">Aucun devoir</string>
+    <string name="moodle_error_connection_failure">Échec de la connexion</string>
+    <string name="moodle_error_cant_get_token">Échec de l\'obtention du jeton</string>
+    <string name="moodle_error_cant_get_profile">Échec de l\'obtention du profil</string>
+    <string name="moodle_error_cant_get_courses">Échec de l\'obtention des cours</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, la radio étudiante de l\'ÉTS.</string>

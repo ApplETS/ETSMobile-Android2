@@ -1,36 +1,45 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
-import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
+import ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MoodleCoursesAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.CourseComparator;
-import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
-import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
+import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel;
+import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModelFactory;
+import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -39,16 +48,26 @@ import ca.etsmtl.applets.etsmobile2.R;
  * @author Thibaut
  * 
  */
-public class MoodleFragment extends HttpFragment {
-
+public class MoodleFragment extends BaseFragment {
 
     ListView moodleCoursesListView;
     private MoodleCoursesAdapter moodleCoursesAdapter;
-    private String lastInserted;
+    private String firstSemesterInserted;
+    private String lastSemesterInserted;
+    private List<MoodleCourse> firstSemesterInsertedCourses;
+    private Menu menu;
+    private LoadingView loadingView;
+    private Observer<RemoteResource<List<MoodleCourse>>> coursesObserver;
+    private MoodleViewModel moodleViewModel;
+    @Inject
+    MoodleViewModelFactory moodleViewModelFactory;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+        firstSemesterInsertedCourses = new ArrayList<>();
 	}
 
 	@Override
@@ -60,8 +79,7 @@ public class MoodleFragment extends HttpFragment {
         moodleCoursesListView = (ListView) v.findViewById(R.id.listView_moodle_courses);
         Log.d("MoodleFragment", "Moodle course list fragment is instantiated");
 
-
-        queryMoodleToken();
+        loadingView = v.findViewById(R.id.loading_view);
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
@@ -69,156 +87,133 @@ public class MoodleFragment extends HttpFragment {
 	}
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // Get the view model factory
+        ApplicationManager.getAppComponent().inject(this);
+
+        moodleViewModel = ViewModelProviders.of(this, moodleViewModelFactory).get(MoodleViewModel.class);
+
+        coursesObserver = new Observer<RemoteResource<List<MoodleCourse>>>() {
+            @Override
+            public void onChanged(@Nullable RemoteResource<List<MoodleCourse>> moodleCoursesRemoteResource) {
+                if (moodleCoursesRemoteResource != null) {
+                    if (moodleCoursesRemoteResource.status == RemoteResource.SUCCESS) {
+                        loadingView.hideProgessBar();
+                        updateUI(moodleCoursesRemoteResource.data);
+                    } else if (moodleCoursesRemoteResource.status == RemoteResource.ERROR) {
+                        loadingView.hideProgessBar();
+                        if (loadingView.isShown()) {
+                            String errorMsg = getString(R.string.toast_Sync_Fail);
+                            Toast t = Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG);
+                            t.show();;
+                        }
+                    } else if (moodleCoursesRemoteResource.status == RemoteResource.LOADING) {
+                        loadingView.showLoadingView();
+                        if (moodleCoursesRemoteResource.data != null) {
+                            updateUI(moodleCoursesRemoteResource.data);
+                        }
+                    }
+                }
+            }
+        };
+        moodleViewModel.getCourses().observe(this, coursesObserver);
+    }
+
+    @Override
     public String getFragmentTitle() {
         return getString(R.string.menu_section_2_moodle);
     }
 
     @Override
-    void updateUI() {
-        loadingView.showLoadingView();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        final Toolbar toolbar = ((MainActivity) getActivity()).getToolbar();
+        toolbar.inflateMenu(R.menu.menu_moodle);
+        this.menu = toolbar.getMenu();
+
+        super.onCreateOptionsMenu(this.menu, inflater);
+
+        if (menu.findItem(R.id.menu_item_moodle_assignments) != null && !moodleViewModel.isShowCaseHasBeenDisplayed()) {
+            new Handler().post(() -> {
+                try {
+                    TapTargetView.showFor(getActivity(), TapTarget.forToolbarMenuItem(toolbar,
+                            R.id.menu_item_moodle_assignments,
+                            getString(R.string.moodle_assignments_title),
+                            getString(R.string.moodle_assignments_description)));
+                    moodleViewModel.setShowCaseHasBeenDisplayed(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
     @Override
-    public void onRequestFailure(SpiceException e) {
-        super.onRequestFailure(e);
-    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_moodle_assignments:
+                Intent intent = new Intent(getActivity(), MoodleAssignmentsActivity.class);
+                getActivity().startActivity(intent);
 
-    @Override
-    public void onRequestSuccess(Object o) {
-        try {
-            if (o instanceof MoodleToken) {
-
-                MoodleToken moodleToken = (MoodleToken) o;
-
-                SecurePreferences securePreferences = new SecurePreferences(getActivity());
-                securePreferences.edit().putString(UserCredentials.MOODLE_TOKEN, moodleToken.getToken()).commit();
-
-                ApplicationManager.userCredentials.setMoodleToken(moodleToken.getToken());
-
-                if (moodleToken.getToken().equals("")) {
-                    throw new Exception("Impossible de se connecter");
-                }
-
-                queryMoodleProfile(moodleToken);
-
-            }
-
-            if (o instanceof MoodleProfile) {
-                MoodleProfile moodleProfile = (MoodleProfile) o;
-
-                queryMoodleCourses(moodleProfile);
-            }
-
-            if (o instanceof MoodleCourses) {
-                MoodleCourses moodleCourses = (MoodleCourses) o;
-                moodleCoursesAdapter = new MoodleCoursesAdapter(getActivity(), R.layout.row_moodle_course, this);
-                Collections.sort(moodleCourses, new CourseComparator());
-                Collections.reverse(moodleCourses); // To get the most current semester first
-                String semesterString;
-                List<String> semesterList = new ArrayList<>();
-                for(MoodleCourse moodleCourse : moodleCourses) {
-
-                    if(moodleCourse.getFullname().matches("(.*)([AÉH](\\d){4})(.*)"))
-                        semesterString = moodleCourse.getFullname().replace("(", "{").split("\\{")[1].replace(")", "");
-                    else
-                        semesterString = null;
-                    semesterString = convertSemesterString(semesterString);
-                    if(!semesterList.contains(semesterString)) {
-                        semesterList.add(semesterString);
-                        MoodleCourse courseSemesterSeparator = new MoodleCourse();
-                        courseSemesterSeparator.setCourseSemester(semesterString);
-                        moodleCoursesAdapter.addSectionHeader(courseSemesterSeparator);
-                        moodleCoursesAdapter.addCourse(moodleCourse);
-                    }
-                    else
-                        moodleCoursesAdapter.addCourse(moodleCourse);
-                }
-
-                moodleCoursesListView.setAdapter(moodleCoursesAdapter);
-
-
-                moodleCoursesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        MoodleCourse moodleCourse = (MoodleCourse) parent.getItemAtPosition(position);
-                        if(moodleCourse.getId() != MoodleCourse.IS_SEMESTER) {
-                            Intent i = new Intent(getActivity(), MoodleCourseActivity.class);
-                            i.putExtra("idCours", moodleCourse.getId());
-                            i.putExtra("nameCours", moodleCourse.getShortname());
-                            getActivity().startActivity(i);
-                        }
-
-                    }
-                });
-
-                super.onRequestSuccess(null);
-            }
-        }catch (Exception e) {
-            Log.w("MoodleFragment", "Exception caught in onRequestSuccess: " + e);
-            if(getActivity()!=null)
-                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                return true;
         }
 
-
-
+        return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Query for moodle courses
-     * @param moodleProfile
-     */
-    private void queryMoodleCourses(final MoodleProfile moodleProfile) {
-        SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
+    private void updateUI(List<MoodleCourse> moodleCourses) {
+        moodleCoursesAdapter = new MoodleCoursesAdapter(getActivity(), R.layout.row_moodle_course);
+        Collections.sort(moodleCourses, new CourseComparator());
+        Collections.reverse(moodleCourses); // To get the most current semester first
+        String semesterString;
+        List<String> semesterList = new ArrayList<>();
+        boolean insertingFirstSemester = true;
+        for (int i = 0; i < moodleCourses.size(); i++) {
+            MoodleCourse moodleCourse = moodleCourses.get(i);
 
-            @Override
-            public MoodleCourses loadDataFromNetwork() throws Exception {
-                String url = getActivity().getString(R.string.moodle_api_enrol_get_users_courses, ApplicationManager.userCredentials.getMoodleToken(),moodleProfile.getUserId());
-                Log.d("loadDataFromNetwork", "getting url for moodle server class list");
-                return getRestTemplate().getForObject(url, MoodleCourses.class);
+            if(moodleCourse.getFullname().matches("(.*)([AÉH](\\d){4})(.*)")) {
+                semesterString = moodleCourse.getFullname().replace("(", "{").split("\\{")[1].replace(")", "");
             }
-        };
-
-        dataManager.sendRequest(request, MoodleFragment.this);
-
-
-    }
-
-    /**
-     * Query for Moodle profile
-     * @param moodleToken
-     */
-    private void queryMoodleProfile(final MoodleToken moodleToken) {
-        SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
-
-            @Override
-            public MoodleProfile loadDataFromNetwork() throws Exception {
-                String url = getActivity().getString(R.string.moodle_api_get_siteinfo, moodleToken.getToken());
-
-                return getRestTemplate().getForObject(url, MoodleProfile.class);
+            else
+                semesterString = null;
+            semesterString = convertSemesterString(semesterString);
+            if (i == 0)
+                firstSemesterInserted = semesterString;
+            if (!semesterList.contains(semesterString)) {
+                semesterList.add(semesterString);
+                MoodleCourse courseSemesterSeparator = new MoodleCourse();
+                courseSemesterSeparator.setCourseSemester(semesterString);
+                moodleCoursesAdapter.addSectionHeader(courseSemesterSeparator);
+                moodleCoursesAdapter.addCourse(moodleCourse);
+                        /*if (semesterString.equals(firstSemesterInserted))
+                            firstSemesterInsertedCourses.add(moodleCourse);
+                        else
+                            insertingFirstSemester = false;*/
+                firstSemesterInsertedCourses.add(moodleCourse);
+            } else {
+                moodleCoursesAdapter.addCourse(moodleCourse);
+                if (insertingFirstSemester)
+                    firstSemesterInsertedCourses.add(moodleCourse);
             }
-        };
-
-        dataManager.sendRequest(request, MoodleFragment.this);
-    }
-
-    /**
-     * Query for Moodle token
-     */
-    private void queryMoodleToken() {
-        if(getActivity()!=null) {
-            SpringAndroidSpiceRequest<Object> request = new SpringAndroidSpiceRequest<Object>(null) {
-
-                @Override
-                public MoodleToken loadDataFromNetwork() throws Exception {
-                    String url = getActivity().getString(R.string.moodle_api_get_token, ApplicationManager.userCredentials.getUsername(), ApplicationManager.userCredentials.getPassword());
-
-                    return getRestTemplate().getForObject(url, MoodleToken.class);
-                }
-            };
-
-            dataManager.sendRequest(request, MoodleFragment.this);
         }
 
+        moodleCoursesListView.setAdapter(moodleCoursesAdapter);
+
+
+        moodleCoursesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MoodleCourse moodleCourse = (MoodleCourse) parent.getItemAtPosition(position);
+                if(moodleCourse.getId() != MoodleCourse.IS_SEMESTER) {
+                    Intent i = new Intent(getActivity(), MoodleCourseActivity.class);
+                    i.putExtra("idCours", moodleCourse.getId());
+                    i.putExtra("nameCours", moodleCourse.getShortname());
+                    getActivity().startActivity(i);
+                }
+
+            }
+        });
     }
 
     /**
@@ -242,28 +237,25 @@ public class MoodleFragment extends HttpFragment {
     private String convertSemesterString(String semester) {
 
         if(semester == null)
-            return lastInserted;
+            return lastSemesterInserted;
         else
             switch(semester.charAt(0)) {
                 case 'A':
-                    lastInserted = "Automne " + semester.replace("A", "");
+                    lastSemesterInserted = "Automne " + semester.replace("A", "");
                     return "Automne " + semester.replace("A", "");
 
                 case 'E':
                 case 'É':
-                    lastInserted = "Été " + semester.replace("É", "");
+                    lastSemesterInserted = "Été " + semester.replace("É", "");
                     return "Été " + semester.replace("É", "");
 
                 case 'H':
-                    lastInserted = "Hiver " + semester.replace("H", "");
+                    lastSemesterInserted = "Hiver " + semester.replace("H", "");
                     return "Hiver " + semester.replace("H", "");
 
                 default:
-                    return lastInserted;
+                    return lastSemesterInserted;
 
             }
-
-
     }
-
 }

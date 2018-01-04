@@ -11,7 +11,7 @@
         />
 
     <ca.etsmtl.applets.etsmobile.views.LoadingView
-        android:id="@+id/loadingView"
+        android:id="@+id/loading_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>

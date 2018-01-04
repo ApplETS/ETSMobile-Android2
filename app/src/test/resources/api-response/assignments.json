@@ -1,0 +1,1863 @@
+﻿{
+    "courses": [
+        {
+            "id": 5662,
+            "fullname": "LOG430-02 Architecture logicielle (H2017)",
+            "shortname": "S20171-LOG430-02",
+            "timemodified": 1483804745,
+            "assignments": [
+                {
+                    "id": 11616,
+                    "cmid": 265531,
+                    "course": 5662,
+                    "name": "Devoir 1",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1487998500,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 5,
+                    "timemodified": 1483807037,
+                    "completionsubmit": 0,
+                    "cutoffdate": 0,
+                    "gradingduedate": 0,
+                    "teamsubmission": 0,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 0,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 1,
+                    "preventsubmissionnotingroup": 0,
+                    "submissionstatement": "Ce document est le fruit de mon propre travail, excepté les extraits dûment cités de travaux d'autres personnes.",
+                    "submissionstatementformat": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "5"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "0"
+                        }
+                    ],
+                    "intro": "<p>Attributs de qualité, tactiques architecturales, vues architecturales</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11617,
+                    "cmid": 265532,
+                    "course": 5662,
+                    "name": "Devoir 2",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 1,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1491364500,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 4,
+                    "timemodified": 1489163011,
+                    "completionsubmit": 0,
+                    "cutoffdate": 0,
+                    "gradingduedate": 0,
+                    "teamsubmission": 0,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 0,
+                    "blindmarking": 0,
+                    "revealidentities": 1,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 1,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 1,
+                    "preventsubmissionnotingroup": 0,
+                    "submissionstatement": "Ce document est le fruit de mon propre travail, excepté les extraits dûment cités de travaux d'autres personnes.",
+                    "submissionstatementformat": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "2"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Second devoir</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11619,
+                    "cmid": 265535,
+                    "course": 5662,
+                    "name": "Laboratoire 1 : Tests",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 1,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1485352800,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 100,
+                    "timemodified": 1484097095,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1485352800,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5344,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "manual",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "0"
+                        }
+                    ],
+                    "intro": "<p>Les classes de tests pour les quatres fonctionnalités de base.</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11620,
+                    "cmid": 265537,
+                    "course": 5662,
+                    "name": "Laboratoire 1 : Code source + rapport",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 1,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1486562400,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 100,
+                    "timemodified": 1484098299,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1486562400,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5344,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "manual",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "0"
+                        }
+                    ],
+                    "intro": "<p><span style=\"color:rgb(51,51,51);font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;font-style:normal;font-weight:normal;letter-spacing:normal;text-align:left;text-indent:0px;text-transform:none;white-space:normal;word-spacing:0px;background-color:rgb(255,255,255);float:none;\">Laboratoire 1 portant sur les architectures en couches (\"layers\").</span></p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11621,
+                    "cmid": 265540,
+                    "course": 5662,
+                    "name": "Laboratoire 2 - Tests",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1488376800,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 10,
+                    "timemodified": 1487341659,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1488376800,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5345,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "5"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Laboratoire sur style architectural Invocation Implicite</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11622,
+                    "cmid": 265541,
+                    "course": 5662,
+                    "name": "Laboratoire 2 - Rapport + code source",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1488981600,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 10,
+                    "timemodified": 1487341678,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1488981600,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5345,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "5"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Laboratoire sur style architectural Invocation Implicite</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11623,
+                    "cmid": 265544,
+                    "course": 5662,
+                    "name": "Laboratoire 3 - Rapport",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1489582800,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 10,
+                    "timemodified": 1488979989,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1489582800,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5346,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Laboratoire sur le style architectural Pipe &amp; Filter.</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11624,
+                    "cmid": 265549,
+                    "course": 5662,
+                    "name": "Laboratoire #4 : Correction interactive : Ébauche d'arbre d'utilité",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1490187600,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 10,
+                    "timemodified": 1489703363,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1490187600,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5347,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Ébauche d'arbre d'utilité (au moins trois attributs de qualité différents, au moins cinq scénarios en tout), avec les deux priorités assignées à chacun de vos scénarios.</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11625,
+                    "cmid": 265550,
+                    "course": 5662,
+                    "name": "Laboratoire #4 : Correction interactive : Arbre d'utilité complet",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1490803200,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 10,
+                    "timemodified": 1490786587,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1490803200,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5347,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Arbre d'utilité complet, avec les deux priorités assignées à chacun de vos scénarios. Il doit y avoir au moins quinze (15) scénarios dans votre arbre. Si des attributs que vous jugez importants ne sont pas identifiés dans le document de vision et le SRS, vous êtes invités à les ajouter dans votre analyse en justifiant pourquoi ils vous apparaissent importants.</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11626,
+                    "cmid": 265551,
+                    "course": 5662,
+                    "name": "Laboratoire #4 : Correction interactive - Scénario ATAM",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1491397200,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 10,
+                    "timemodified": 1489703509,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1491397200,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5347,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Au moins un scénario de l’ATAM analysé en détail.</p>\r\n<p></p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11627,
+                    "cmid": 265552,
+                    "course": 5662,
+                    "name": "Laboratoire #4 : Remise du projet",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1492055700,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 10,
+                    "timemodified": 1491397672,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1492055700,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5347,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<ul><li>Page de présentation</li>\r\n<li>Table des matières</li>\r\n<li>Table des tableaux</li>\r\n<li>Table des figures</li>\r\n</ul><ol><li>Introduction</li>\r\n<li>Conception architecturale (Selon ADD ou autre) (Étape 2 d'ATAM)<ol><li>Description sommaire de votre méthode</li>\r\n<li>Pilotes architecturaux<ol><li>Attributs de qualité</li>\r\n<li>Scénarios de qualité</li>\r\n<li>Cas d'utilisation choisis</li>\r\n<li>Contraintes choisis</li>\r\n<li>Parties prenantes</li>\r\n</ol></li>\r\n</ol></li>\r\n<li>Analyse architecturale (Selon ATAM)<ol><li>Présentation de l'architecture (Étapes 3 et 4)<ol><li>Famille module</li>\r\n<li>Famille CnC</li>\r\n<li>Famille allocation</li>\r\n</ol></li>\r\n<li>Arbre d'utilité (Étape 5)<ol><li>Signification des priorités</li>\r\n<li>Attributions des priorités</li>\r\n</ol></li>\r\n<li>Analyse des scénarios (Étape 6)<ol><li>Liste des scénarios choisis</li>\r\n<li>Description des heuristiques des décisions</li>\r\n<li>Analyse des approches architecturales</li>\r\n<li>Tableau de risques</li>\r\n<li>Tableau de non-risques</li>\r\n<li>Tableau des compromis</li>\r\n<li>Tableau des points de sensibilités</li>\r\n</ol></li>\r\n</ol></li>\r\n<li>Conclusion</li>\r\n<li>Référence (https://www.etsmtl.ca/Etudiants-actuels/Cycles-sup/Realisation-etudes/Guides-gabarits) </li>\r\n</ol><p></p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11631,
+                    "cmid": 265556,
+                    "course": 5662,
+                    "name": "Attributs et tactiques GAB: Disponibilité, Modificabilité",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1485406500,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 100,
+                    "timemodified": 1484926798,
+                    "completionsubmit": 0,
+                    "cutoffdate": 0,
+                    "gradingduedate": 0,
+                    "teamsubmission": 0,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 0,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 0,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "0"
+                        }
+                    ],
+                    "intro": "",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11632,
+                    "cmid": 265557,
+                    "course": 5662,
+                    "name": "Attributs et tactiques GAB: Performance, Sécurité",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1486011300,
+                    "allowsubmissionsfromdate": 0,
+                    "grade": 100,
+                    "timemodified": 1485535013,
+                    "completionsubmit": 0,
+                    "cutoffdate": 0,
+                    "gradingduedate": 0,
+                    "teamsubmission": 0,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 0,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 0,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11633,
+                    "cmid": 265558,
+                    "course": 5662,
+                    "name": "Attributs et tactiques GAB: Testabilité, Convivialité",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1486591200,
+                    "allowsubmissionsfromdate": 1454475600,
+                    "grade": 100,
+                    "timemodified": 1486136102,
+                    "completionsubmit": 0,
+                    "cutoffdate": 0,
+                    "gradingduedate": 0,
+                    "teamsubmission": 0,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 0,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 0,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "3"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                }
+            ]
+        },
+        {
+            "id": 5105,
+            "fullname": "LOG320-01-02 Structures de données et algorithmes (H2017)",
+            "shortname": "S20171-LOG320-01-02",
+            "timemodified": 1483561091,
+            "assignments": [
+                {
+                    "id": 11894,
+                    "cmid": 269921,
+                    "course": 5105,
+                    "name": "Remise laboratoire 1",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1486097700,
+                    "allowsubmissionsfromdate": 1485838800,
+                    "grade": 100,
+                    "timemodified": 1485879082,
+                    "completionsubmit": 0,
+                    "cutoffdate": 0,
+                    "gradingduedate": 0,
+                    "teamsubmission": 0,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 0,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 0,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "2"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "commentinline",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Remettre ici le code dans un fichier zip ainsi que le rapport de laboratoire en format PDF.  (dans deux fichiers séparés)</p>\r\n<p>SVP remettre uniquement le code source (pas de binaires).</p>\r\n<p>Inclure un README ou un Makefile.</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 12008,
+                    "cmid": 271885,
+                    "course": 5105,
+                    "name": "Remise laboratoire 2",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1487912100,
+                    "allowsubmissionsfromdate": 1487134800,
+                    "grade": 100,
+                    "timemodified": 1487693253,
+                    "completionsubmit": 0,
+                    "cutoffdate": 0,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5416,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "20"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 12047,
+                    "cmid": 272342,
+                    "course": 5105,
+                    "name": "Remise laboratoire 1 evaluation des équipes",
+                    "nosubmissions": 1,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 0,
+                    "duedate": 1486097700,
+                    "allowsubmissionsfromdate": 1485838800,
+                    "grade": 100,
+                    "timemodified": 1487707376,
+                    "completionsubmit": 0,
+                    "cutoffdate": 0,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5416,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "commentinline",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Remettre ici le code dans un fichier zip ainsi que le rapport de laboratoire en format PDF.  (dans deux fichiers séparés)</p>\r\n<p>SVP remettre uniquement le code source (pas de binaires).</p>\r\n<p>Inclure un README ou un Makefile.</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 12307,
+                    "cmid": 277202,
+                    "course": 5105,
+                    "name": "Remise_Laboratoire3_Groupe1",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1492142100,
+                    "allowsubmissionsfromdate": 1491364800,
+                    "grade": 100,
+                    "timemodified": 1491428673,
+                    "completionsubmit": 0,
+                    "cutoffdate": 0,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5587,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "20"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Remettre ici le code de votre projet ainsi que votre rapport en format PDF</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 12444,
+                    "cmid": 279775,
+                    "course": 5105,
+                    "name": "Remise_Laboratoire3_Groupe2",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1492142100,
+                    "allowsubmissionsfromdate": 1491364800,
+                    "grade": 15,
+                    "timemodified": 1492344033,
+                    "completionsubmit": 0,
+                    "cutoffdate": 0,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5671,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "20"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Remettre ici le code de votre projet ainsi que votre rapport en format PDF</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                }
+            ]
+        },
+        {
+            "id": 5599,
+            "fullname": "GTI350-01-02 Conception et évaluation des interfaces utilisateurs (H2017)",
+            "shortname": "S20171-GTI350-01-02",
+            "timemodified": 1483729744,
+            "assignments": [
+                {
+                    "id": 11356,
+                    "cmid": 262197,
+                    "course": 5599,
+                    "name": "Remise Laboratoire 1 (scoreboard snowboard)",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1486184100,
+                    "allowsubmissionsfromdate": 1485801000,
+                    "grade": 100,
+                    "timemodified": 1489429177,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1486875300,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5181,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "wordlimit",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "wordlimitenabled",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "commentinline",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Veuillez remettre votre projet au complet contenant tout votre code source dans un fichier .zip</p>\r\n<p>Si vous avez des instructions supplémentaires facilitant l'exécution de code, veuillez inclure dans votre .zip un fichier lisezmoi.txt</p>\r\n<p>Vous pouvez aussi écrire un message lors de la remise si vous avez des commentaires pertinents par rapport à votre remise.</p>\r\n<p>Pondération: 6% (dont 1% pour le walkthrough, à faire individuellement)</p>\r\n<p></p>\r\n<p>Remise :  30 janvier 2017, au <strong>début</strong> de la séance de laboratoire (Groupe 1)</p>\r\n<p>                3 février 2017, au <strong>début</strong> de la séance de laboratoire (Groupe 2)</p>\r\n<p></p>\r\n<p></p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11357,
+                    "cmid": 262205,
+                    "course": 5599,
+                    "name": "Remise Laboratoire 2",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1487652900,
+                    "allowsubmissionsfromdate": 1487307600,
+                    "grade": 4,
+                    "timemodified": 1489429261,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1487652900,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5463,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "wordlimit",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "wordlimitenabled",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "commentinline",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Laboratoire 2 à remettre</p>\r\n<p>Pondération: 4%</p>\r\n<p></p>\r\n<p>le 17 février 2017 avant 23h55 pour le groupe 2</p>\r\n<p>le 20 février 2017 avant 23h55 pour le groupe 1</p>\r\n<p>*Vous faites un .zip avec seulement les fichiers sources que vous avez modifiés.</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11358,
+                    "cmid": 262209,
+                    "course": 5599,
+                    "name": "Remise Laboratoire 3",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 1,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1489809300,
+                    "allowsubmissionsfromdate": 1489426200,
+                    "grade": 10,
+                    "timemodified": 1489429307,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1489895700,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5503,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "wordlimit",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "wordlimitenabled",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "2"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "commentinline",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Laboratoire 3 à remettre</p>\r\n<p>le 13 mars 2017 avant 23h55 pour le groupe 1</p>\r\n<p>le 17 mars 2017 avant 23h55 pour le groupe 2</p>\r\n<p>*Vous faites un .pdf avec votre rapport et vous incluez vos annexes à la fin (vous pouvez scanner vos documents manuscrits pour les annexes).</p>\r\n<p style=\"margin:0px 0px 10px;color:#333333;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:20px;text-align:left;text-indent:0px;text-transform:none;white-space:normal;word-spacing:0px;background-color:#ffffff;\">Pondération: 9%</p>\r\n<p style=\"margin:0px 0px 10px;color:#333333;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:20px;text-align:left;text-indent:0px;text-transform:none;white-space:normal;word-spacing:0px;background-color:#ffffff;\"></p>\r\n<p></p>\r\n<p></p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11359,
+                    "cmid": 262215,
+                    "course": 5599,
+                    "name": "Remise Laboratoire 4",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1492746900,
+                    "allowsubmissionsfromdate": 1490068800,
+                    "grade": 14,
+                    "timemodified": 1492382855,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1492899900,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5503,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "wordlimit",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "wordlimitenabled",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "10"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "commentinline",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Remettre un seul fichier PDF contenant votre rapport (et annexes si vous voulez).</p>\r\n<p>Si vous préférez mettre les annexes dans des documents séparés, uploader votre rapport en pdf et les annexes dans un zip.</p>\r\n<p>Veuillez aussi remettre votre code source dans le .zip avec un readme qui specifie comment faire pour faire rouler votre prototype.</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11360,
+                    "cmid": 262223,
+                    "course": 5599,
+                    "name": "Remise Exercice 2",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 1,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1486681200,
+                    "allowsubmissionsfromdate": 1485925200,
+                    "grade": 100,
+                    "timemodified": 1485897070,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1486702500,
+                    "gradingduedate": 0,
+                    "teamsubmission": 1,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 0,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 0,
+                    "configs": [
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Selon le chapitre 10 de Tidwell.</p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                },
+                {
+                    "id": 11879,
+                    "cmid": 269664,
+                    "course": 5599,
+                    "name": "Remise Laboratoire 1 (walkthrough - individuel)",
+                    "nosubmissions": 0,
+                    "submissiondrafts": 0,
+                    "sendnotifications": 0,
+                    "sendlatenotifications": 0,
+                    "sendstudentnotifications": 1,
+                    "duedate": 1486184100,
+                    "allowsubmissionsfromdate": 1485801000,
+                    "grade": 100,
+                    "timemodified": 1489429193,
+                    "completionsubmit": 0,
+                    "cutoffdate": 1486875300,
+                    "gradingduedate": 0,
+                    "teamsubmission": 0,
+                    "requireallteammemberssubmit": 0,
+                    "teamsubmissiongroupingid": 5181,
+                    "blindmarking": 0,
+                    "revealidentities": 0,
+                    "attemptreopenmethod": "none",
+                    "maxattempts": -1,
+                    "markingworkflow": 0,
+                    "markingallocation": 0,
+                    "requiresubmissionstatement": 0,
+                    "preventsubmissionnotingroup": 1,
+                    "configs": [
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "wordlimit",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "onlinetext",
+                            "subtype": "assignsubmission",
+                            "name": "wordlimitenabled",
+                            "value": "0"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxfilesubmissions",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "file",
+                            "subtype": "assignsubmission",
+                            "name": "maxsubmissionsizebytes",
+                            "value": "104857600"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignsubmission",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "comments",
+                            "subtype": "assignfeedback",
+                            "name": "commentinline",
+                            "value": "1"
+                        },
+                        {
+                            "plugin": "editpdf",
+                            "subtype": "assignfeedback",
+                            "name": "enabled",
+                            "value": "1"
+                        }
+                    ],
+                    "intro": "<p>Veuillez remettre votre projet au complet contenant tout votre code source dans un fichier .zip</p>\r\n<p>Si vous avez des instructions supplémentaires facilitant l'exécution de code, veuillez inclure dans votre .zip un fichier lisezmoi.txt</p>\r\n<p>Vous pouvez aussi écrire un message lors de la remise si vous avez des commentaires pertinents par rapport à votre remise.</p>\r\n<p></p>\r\n<p>Pondération: 6% (dont 1% pour le walkthrough, à faire individuellement)</p>\r\n<p></p>\r\n<p>Remise :  30 janvier 2017, au <strong>début</strong> de la séance de laboratoire (Groupe 1)</p>\r\n<p>                3 février 2017, au <strong>début</strong> de la séance de laboratoire (Groupe 2)</p>\r\n<p></p>",
+                    "introformat": 1,
+                    "introfiles": [],
+                    "introattachments": []
+                }
+            ]
+        }
+    ],
+    "warnings": [
+        {
+            "item": "module",
+            "itemid": 265533,
+            "warningcode": "1",
+            "message": "No access rights in module context"
+        },
+        {
+            "item": "module",
+            "itemid": 265553,
+            "warningcode": "1",
+            "message": "No access rights in module context"
+        },
+        {
+            "item": "module",
+            "itemid": 265554,
+            "warningcode": "1",
+            "message": "No access rights in module context"
+        },
+        {
+            "item": "module",
+            "itemid": 265555,
+            "warningcode": "1",
+            "message": "No access rights in module context"
+        }
+    ]
+}

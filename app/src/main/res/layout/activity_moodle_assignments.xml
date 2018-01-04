@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="selectedAssignment"
+            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment" />
+
+        <variable
+            name="selectedAssignmentFeedback"
+            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentFeedback" />
+
+        <variable
+            name="selectedAssignmentLastAttempt"
+            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentLastAttempt" />
+
+        <variable
+            name="loadingSelectedAssignmentSubmission"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="loading"
+            type="java.lang.Boolean" />
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ExpandableListView
+            android:id="@+id/assignments_elv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:groupIndicator="@null"
+            tools:listheader="@layout/list_separator_moodle"
+            tools:listitem="@layout/row_moodle_assignment">
+
+        </ExpandableListView>
+
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/moodle_assignment_none"
+            android:textSize="@dimen/title_text_size"
+            android:visibility="gone" />
+
+        <ca.etsmtl.applets.etsmobile.views.LoadingView
+            android:id="@+id/loading_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:visibleGone="@{loading}" />
+
+        <View
+            android:id="@+id/shadow"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:background="@drawable/shape_gradient_top_shadow"
+            app:layout_anchor="@+id/bottom_sheet" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/open_assignment_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="openInBrowser"
+            android:src="@drawable/ic_link_white_24dp"
+            android:visibility="gone"
+            app:backgroundTint="@color/ets_red"
+            app:elevation="@dimen/fab_resting_elevation"
+            app:fabSize="normal"
+            app:layout_anchor="@id/bottom_sheet"
+            app:layout_anchorGravity="end"
+            app:rippleColor="@color/white"
+            app:useCompatPadding="true"
+            tools:visibility="visible" />
+
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:indeterminate="true"
+            app:layout_anchor="@id/bottom_sheet"
+            app:visibleGone="@{loadingSelectedAssignmentSubmission}" />
+
+        <LinearLayout
+            android:id="@+id/bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/fab_margin"
+            app:behavior_hideable="true"
+            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+            <!-- Titre -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/single_line_list_item_left_right_item_padding"
+                android:paddingRight="@dimen/single_line_list_item_left_right_item_padding"
+                android:paddingTop="@dimen/single_line_list_item_padding_top"
+                android:text="@{selectedAssignment.name}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/title_text_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Date d'échéance -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/single_line_list_item_with_avatar_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
+                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding"
+                    app:visibleGone="@{selectedAssignment.dueDateSet}">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ico_schedule" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
+                        android:text="@{String.format(@string/moodle_assignment_due_date, selectedAssignment.dueDateObj.toLocaleString())}"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/single_line_list_item_font_size" />
+                </LinearLayout>
+
+                <!-- Équipe -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/single_line_list_item_with_avatar_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
+                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding"
+                    app:visibleGone="@{selectedAssignment.teamSubmission}">
+
+                    <ca.etsmtl.applets.etsmobile.views.LoadingView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        app:visibleGone="@{loadingSelectedAssignmentSubmission}" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_group_black_24dp"
+                        app:visibleGone="@{!loadingSelectedAssignmentSubmission}" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        app:visibleGone="@{!loadingSelectedAssignmentSubmission}">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
+                            android:text='@string/moodle_assignment_team_submission'
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/two_line_list_item_with_icon_font_size" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Remise -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/single_line_list_item_with_avatar_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
+                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
+
+                    <ca.etsmtl.applets.etsmobile.views.LoadingView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        app:visibleGone="@{loadingSelectedAssignmentSubmission}" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:src="@{selectedAssignmentLastAttempt.getSubmissionIconRes(selectedAssignment.teamSubmission, selectedAssignment.dueDateObj)}"
+                        android:tint="@{selectedAssignmentLastAttempt.getSubmissionColorRes(selectedAssignment.teamSubmission, selectedAssignment.dueDateObj)}"
+                        app:visibleGone="@{!loadingSelectedAssignmentSubmission}" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
+                        android:text='@{selectedAssignmentLastAttempt.getSubmissionStatusRes(selectedAssignment.teamSubmission, selectedAssignment.dueDateObj)}'
+                        android:textColor="@{selectedAssignmentLastAttempt.getSubmissionColorRes(selectedAssignment.teamSubmission, selectedAssignment.dueDateObj)}"
+                        android:textSize="@dimen/single_line_list_item_font_size" />
+                </LinearLayout>
+
+                <!-- Évaluation -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/single_line_list_item_with_avatar_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/single_line_list_item_with_avatar_left_avatar_padding"
+                    android:paddingRight="@dimen/single_line_list_item_with_avatar_right_icon_padding">
+
+                    <ca.etsmtl.applets.etsmobile.views.LoadingView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        app:visibleGone="@{loadingSelectedAssignmentSubmission}" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ico_notes"
+                        android:tint="@color/black"
+                        app:visibleGone="@{!loadingSelectedAssignmentSubmission}" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        app:visibleGone="@{!loadingSelectedAssignmentSubmission}">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/two_line_list_item_with_icon_icon_left_padding"
+                            android:text='@{selectedAssignmentLastAttempt.graded ? @string/moodle_assignment_grading_status_graded : @string/moodle_assignment_grading_status_not_graded}'
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/two_line_list_item_with_icon_font_size" />
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/two_line_list_item_with_icon_icon_left_padding"
+                            android:text='@{String.format(@string/moodle_assignment_grade, String.format("%.2f", selectedAssignmentFeedback.grade.grade) + " / " + selectedAssignment.grade)}'
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/two_line_list_item_with_icon_font_size"
+                            app:visibleGone="@{selectedAssignmentLastAttempt.graded}" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>
