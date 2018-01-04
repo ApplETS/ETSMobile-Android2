@@ -139,7 +139,7 @@
     <string name="gigaoctetx">Go</string>
     <string name="error_invalid_app">Erreur appartement invalide</string>
     <string name="error_invalid_phase">Erreur phase invalide</string>
-    <string name="bandwidth_used">Bande passante consommée</string>
+    <string name="bandwidth_used">Bande passante consommée: %1$.2f/%2$.0f %3$s</string>
     <string name="bandwidth_phase_3_msg">
         <![CDATA[Si vous habitez la phase 3, vous devez contacter Cooptel avec les renseignements
         suivants pourqu\'ils puissent vous donner accès à votre consommation :
@@ -206,7 +206,6 @@
     <string name="horaire">Horaire du %1$s %2$s %3$s</string>
     <string name="date_text">%1$s %2$s %3$s</string>
     <string name="export_calendar">Exporter</string>
-    <string name="deux_points">" : "</string>
     <string name="semester_progression">Progression de la session : %1$d/%2$d jours</string>
 
     <!-- Horaire -->

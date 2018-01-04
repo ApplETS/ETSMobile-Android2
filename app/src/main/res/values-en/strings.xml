@@ -139,7 +139,7 @@
     <string name="gigaoctetx">GB</string>
     <string name="error_invalid_app">Error invalid apartment number</string>
     <string name="error_invalid_phase">Error invalid phase</string>
-    <string name="bandwidth_used">Bandwidth used</string>
+    <string name="bandwidth_used">Bandwidth used: %1$.2f/%2$.0f %3$s</string>
 
     <!-- Securite -->
     <string name="secu_title1">Reach security</string>

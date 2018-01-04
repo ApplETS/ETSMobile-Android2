@@ -297,11 +297,7 @@ public class BandwidthFragment extends BaseFragment {
                 public void run() {
                     progressBar.setMax((int) quota);
                     progressBar.setProgress((int) total);
-                    String gb = getString(R.string.gigaoctetx);
-                    double reste = Math.round((quota - total) * 100) / 100.0;
-                    String text = getString(R.string.bandwidth_used)
-                            + getString(R.string.deux_points) + String.format("%.2f", total) + "/"
-                            + String.format("%.0f", quota) + " " + gb;
+                    String text = getString(R.string.bandwidth_used, total, quota, getString(R.string.gigaoctetx));
                     progressBarTv.setText(text);
                 }
             });
