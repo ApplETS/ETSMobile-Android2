@@ -44,8 +44,8 @@ android {
         applicationId "ca.etsmtl.applets.etsmobile"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 26
-        versionName "2.30"
+        versionCode 27
+        versionName "2.31"
         multiDexEnabled true
     }
 
