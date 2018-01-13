@@ -63,28 +63,24 @@ public class MoodleRepository {
         String tokenStr = ApplicationManager.userCredentials.getMoodleToken();
         MutableLiveData<RemoteResource<MoodleToken>> token = new MutableLiveData<>();
 
-        if (tokenStr != null && !tokenStr.isEmpty()) {
-            token.setValue(RemoteResource.success(new MoodleToken(tokenStr)));
-        } else {
-            token.setValue(RemoteResource.loading(null));
+        token.setValue(RemoteResource.loading(new MoodleToken(tokenStr)));
 
-            LiveData<ApiResponse<MoodleToken>> apiResponseLiveData = moodleWebService.getToken(ApplicationManager.userCredentials.getUsername(), ApplicationManager.userCredentials.getPassword());
-            apiResponseLiveData.observeForever(new Observer<ApiResponse<MoodleToken>>() {
-                @Override
-                public void onChanged(@Nullable ApiResponse<MoodleToken> moodleTokenApiResponse) {
-                    if (moodleTokenApiResponse != null) {
-                        MoodleToken moodleToken = moodleTokenApiResponse.body;
-                        if (moodleTokenApiResponse.isSuccessful() && moodleToken != null && moodleToken.getToken() != null && !moodleToken.getToken().isEmpty()) {
-                            ApplicationManager.userCredentials.setMoodleToken(moodleToken.getToken());
-                            token.setValue(RemoteResource.success(moodleToken));
-                        } else
-                            token.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_token), moodleTokenApiResponse.body));
+        LiveData<ApiResponse<MoodleToken>> apiResponseLiveData = moodleWebService.getToken(ApplicationManager.userCredentials.getUsername(), ApplicationManager.userCredentials.getPassword());
+        apiResponseLiveData.observeForever(new Observer<ApiResponse<MoodleToken>>() {
+            @Override
+            public void onChanged(@Nullable ApiResponse<MoodleToken> moodleTokenApiResponse) {
+                if (moodleTokenApiResponse != null) {
+                    MoodleToken moodleToken = moodleTokenApiResponse.body;
+                    if (moodleTokenApiResponse.isSuccessful() && moodleToken != null && moodleToken.getToken() != null && !moodleToken.getToken().isEmpty()) {
+                        ApplicationManager.userCredentials.setMoodleToken(moodleToken.getToken());
+                        token.setValue(RemoteResource.success(moodleToken));
+                    } else
+                        token.setValue(RemoteResource.error(context.getString(R.string.moodle_error_cant_get_token), moodleTokenApiResponse.body));
 
-                        apiResponseLiveData.removeObserver(this);
-                    }
+                    apiResponseLiveData.removeObserver(this);
                 }
-            });
-        }
+            }
+        });
         return token;
     }
 
