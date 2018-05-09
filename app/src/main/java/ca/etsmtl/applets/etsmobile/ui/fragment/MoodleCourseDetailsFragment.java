@@ -199,6 +199,8 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
             Collections.sort(listDataHeader, (headerText1, headerText2) -> Integer.compare(headerText1.getPosition(), headerText2.getPosition()));
 
+            if (getActivity() == null)
+                return;
 
             expandableListMoodleAdapter = new ExpandableListMoodleSectionAdapter(getActivity(), listDataHeader, listDataSectionName);
             expListView.setAdapter(expandableListMoodleAdapter);
