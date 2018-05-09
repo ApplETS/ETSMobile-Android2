@@ -25,7 +25,6 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,12 +54,6 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     private ExpandableListMoodleSectionAdapter expandableListMoodleAdapter;
 
     private ExpandableListView expListView;
-
-    private HashMap<HeaderText, Object[]> listDataSectionName; // Pour gérer les ressources/liens par section
-    private List<HeaderText> listDataHeader;
-
-    private ArrayList<MoodleCoreModule> listMoodleLinkModules;
-    private ArrayList<MoodleModuleContent> listMoodleResourceContents;
 
     private BroadcastReceiver receiver = null;
 
@@ -114,7 +107,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                             openFile.setDataAndType(Uri.parse(uriString), type);
                             try {
                                 startActivity(openFile);
-                            } catch(ActivityNotFoundException e) {
+                            } catch (ActivityNotFoundException e) {
                                 Toast.makeText(getActivity(), getString(R.string.cannot_open_file), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -123,7 +116,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
             }
         };
         getActivity().registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-        
+
         queryMoodleCoreCourses(moodleCourseId);
 
     }
@@ -132,7 +125,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putString("moodleCourseId", moodleCourseId);
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_moodle_details, container, false);
@@ -158,62 +151,53 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     @Override
     public void onRequestSuccess(Object o) {
 
-        if(o instanceof MoodleCoreCourses) {
+        if (o instanceof MoodleCoreCourses) {
 
             MoodleCoreCourses moodleCoreCourses = (MoodleCoreCourses) o;
 
             // create empty data
-            listDataSectionName = new HashMap<HeaderText, Object[]>();
-            listDataHeader = new ArrayList<HeaderText>();
+            HashMap<HeaderText, Object[]> listDataSectionName = new HashMap<>();
+            List<HeaderText> listDataHeader = new ArrayList<>();
 
             int positionSection = 0;
 
-            for(MoodleCoreCourse coreCourse : moodleCoreCourses) {
+            for (MoodleCoreCourse coreCourse : moodleCoreCourses) {
 
 
-                listMoodleLinkModules = new ArrayList<MoodleCoreModule>();
-                listMoodleResourceContents = new ArrayList<MoodleModuleContent>();
+                ArrayList<MoodleCoreModule> listMoodleLinkModules = new ArrayList<>();
+                ArrayList<MoodleModuleContent> listMoodleResourceContents = new ArrayList<>();
 
-                for(MoodleCoreModule coreModule : coreCourse.getModules()) {
+                for (MoodleCoreModule coreModule : coreCourse.getModules()) {
 
-                    if(coreModule.getModname().equals("folder")) {
-                        if(coreModule.getContents() != null)
-                            listMoodleResourceContents.addAll(coreModule.getContents());
-                    } else if (coreModule.getModname().equals("url") || coreModule.getModname().equals("forum")) {
-                        listMoodleLinkModules.add(coreModule);
-                    } else if (coreModule.getModname().equals("resource")) {
-                        listMoodleResourceContents.addAll(coreModule.getContents());
+                    ArrayList<MoodleModuleContent> contents = coreModule.getContents();
+
+                    switch (coreModule.getModname()) {
+                        case "folder":
+                            if (contents != null)
+                                listMoodleResourceContents.addAll(contents);
+                            break;
+                        case "url":
+                        case "forum":
+                            listMoodleLinkModules.add(coreModule);
+                            break;
+                        case "resource":
+                            if (contents != null)
+                                listMoodleResourceContents.addAll(contents);
+                            break;
                     }
                 }
 
-                if (listMoodleLinkModules == null || listMoodleResourceContents == null)
-                    return;
-
                 Object[] finalArray = ArrayUtils.addAll(listMoodleLinkModules.toArray(), listMoodleResourceContents.toArray());
-                if(finalArray.length != 0)
+                if (finalArray.length != 0)
                     listDataSectionName.put(new HeaderText(coreCourse.getName(), positionSection), finalArray);
 
                 positionSection++;
             }
 
 
-
             listDataHeader.addAll(listDataSectionName.keySet());
 
-            Collections.sort(listDataHeader, new Comparator<HeaderText>() {
-                @Override
-                public int compare(HeaderText headerText1, HeaderText headerText2) {
-
-                    if(headerText1.getPosition() < headerText2.getPosition()) {
-                        return -1;
-                    } else if (headerText1.getPosition() == headerText2.getPosition()) {
-                        return 0;
-                    } else {
-                        return 1;
-                    }
-
-                }
-            });
+            Collections.sort(listDataHeader, (headerText1, headerText2) -> Integer.compare(headerText1.getPosition(), headerText2.getPosition()));
 
 
             expandableListMoodleAdapter = new ExpandableListMoodleSectionAdapter(getActivity(), listDataHeader, listDataSectionName);
@@ -284,6 +268,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
     /**
      * Query all resources for a Moodle course
+     *
      * @param idCourse
      */
     private void queryMoodleCoreCourses(final String idCourse) {
@@ -300,10 +285,9 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     }
 
 
-
     @Override
     void updateUI() {
-       loadingView.showLoadingView();
+        loadingView.showLoadingView();
     }
 
     /**
