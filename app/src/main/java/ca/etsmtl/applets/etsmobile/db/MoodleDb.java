@@ -12,7 +12,7 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
  * Created by Sonphil on 26-12-17.
  */
 @Database(entities = {MoodleProfile.class, MoodleCourse.class, MoodleAssignmentCourse.class,
-        MoodleAssignmentSubmission.class}, version = 1)
+        MoodleAssignmentSubmission.class}, version = 1, exportSchema = false)
 public abstract class MoodleDb extends RoomDatabase {
 
     public abstract MoodleProfileDao moodleProfileDao();
