@@ -32,10 +32,6 @@
         android:name="ca.etsmtl.applets.etsmobile.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true" />
-
     <application
         android:name="ca.etsmtl.applets.etsmobile.ApplicationManager"
         android:allowBackup="true"
