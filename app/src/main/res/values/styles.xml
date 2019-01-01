@@ -62,6 +62,7 @@
         <item name="material_drawer_selected">@color/black_gray</item>
         <item name="material_drawer_selected_text">@color/white</item>
         <item name="material_drawer_header_selection_text">@color/white</item>
+        <item name="material_drawer_header_selection_subtext">@color/white</item>
     </style>
 
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
