@@ -18,11 +18,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignment;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourse;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentSubmission;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourse;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourses;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.repository.MoodleRepository;
 

@@ -6,11 +6,11 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.ApiResponse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourses;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourses;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentSubmission;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourse;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleProfile;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleToken;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 

@@ -21,12 +21,12 @@ import ca.etsmtl.applets.etsmobile.db.MoodleCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleProfileDao;
 import ca.etsmtl.applets.etsmobile.http.MoodleWebService;
 import ca.etsmtl.applets.etsmobile.model.ApiResponse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourses;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleToken;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourse;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourses;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentSubmission;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourse;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleProfile;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleToken;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile2.R;
 

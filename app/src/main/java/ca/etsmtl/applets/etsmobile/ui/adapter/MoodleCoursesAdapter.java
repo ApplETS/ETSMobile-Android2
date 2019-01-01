@@ -13,7 +13,7 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile2.R;
 
 

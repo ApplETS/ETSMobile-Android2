@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel;
 import ca.etsmtl.applets.etsmobile2.R;
 import ca.etsmtl.applets.etsmobile2.databinding.RowMoodleAssignmentBinding;
