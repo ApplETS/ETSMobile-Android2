@@ -2,7 +2,7 @@ package ca.etsmtl.applets.etsmobile.util;
 
 import java.util.Comparator;
 
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourse;
 
 /**
  * Created by Steven on 2016-01-14.

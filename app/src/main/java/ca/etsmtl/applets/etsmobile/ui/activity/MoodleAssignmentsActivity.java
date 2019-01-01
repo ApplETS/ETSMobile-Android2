@@ -32,9 +32,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentSubmission;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignment;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourse;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentSubmission;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleAssignmentsAdapter;
 import ca.etsmtl.applets.etsmobile.util.Utility;

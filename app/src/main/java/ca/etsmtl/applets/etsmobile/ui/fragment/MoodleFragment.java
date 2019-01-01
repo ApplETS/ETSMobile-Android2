@@ -29,7 +29,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity;

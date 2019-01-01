@@ -8,7 +8,7 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentCourse;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourse;
 
 /**
  * Created by Sonphil on 28-12-17.

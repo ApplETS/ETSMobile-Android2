@@ -7,23 +7,23 @@
 
         <variable
             name="selectedAssignment"
-            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignment" />
+            type="ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignment" />
 
         <variable
             name="selectedAssignmentFeedback"
-            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentFeedback" />
+            type="ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentFeedback" />
 
         <variable
             name="selectedAssignmentLastAttempt"
-            type="ca.etsmtl.applets.etsmobile.model.Moodle.MoodleAssignmentLastAttempt" />
+            type="ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentLastAttempt" />
 
         <variable
             name="loadingSelectedAssignmentSubmission"
-            type="java.lang.Boolean" />
+            type="boolean" />
 
         <variable
             name="loading"
-            type="java.lang.Boolean" />
+            type="boolean" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"

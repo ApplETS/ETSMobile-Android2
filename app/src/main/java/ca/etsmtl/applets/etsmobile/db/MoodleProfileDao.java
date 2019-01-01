@@ -6,7 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleProfile;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleProfile;
 
 /**
  * Created by Sonphil on 26-12-17.

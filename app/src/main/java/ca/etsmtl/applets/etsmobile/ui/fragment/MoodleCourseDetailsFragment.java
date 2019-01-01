@@ -29,10 +29,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourse;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourses;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreModule;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleModuleContent;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCoreCourse;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCoreCourses;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCoreModule;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleModuleContent;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleSectionAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;

@@ -11,8 +11,8 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.List;
 
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreModule;
-import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleModuleContent;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCoreModule;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleModuleContent;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleCourseDetailsFragment;
 import ca.etsmtl.applets.etsmobile2.R;
 

@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ca.etsmtl.applets.etsmobile2"
-    android:versionCode="2"
-    android:versionName="2.0">
-
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="19" />
+    package="ca.etsmtl.applets.etsmobile2">
 
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
