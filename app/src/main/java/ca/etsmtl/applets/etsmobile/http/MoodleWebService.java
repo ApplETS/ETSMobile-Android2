@@ -1,7 +1,7 @@
 package ca.etsmtl.applets.etsmobile.http;
 
-import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 

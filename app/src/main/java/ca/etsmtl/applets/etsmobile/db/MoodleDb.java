@@ -1,7 +1,7 @@
 package ca.etsmtl.applets.etsmobile.db;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
 
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentSubmission;
