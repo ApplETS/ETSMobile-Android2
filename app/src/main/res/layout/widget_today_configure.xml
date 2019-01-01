@@ -87,7 +87,7 @@
                 android:text="@string/config_bg_opacity"
                 android:textColor="@color/black" />
 
-            <android.support.v7.widget.AppCompatSeekBar
+            <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/opacity_seekbar"
                 style="@android:style/Widget.Holo.Light.SeekBar"
                 android:layout_width="fill_parent"

@@ -1,8 +1,8 @@
 package ca.etsmtl.applets.etsmobile.model.moodle;
 
-import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
 
 import com.google.gson.annotations.SerializedName;
 

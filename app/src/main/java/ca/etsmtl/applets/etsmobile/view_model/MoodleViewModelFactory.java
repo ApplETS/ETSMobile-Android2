@@ -1,8 +1,8 @@
 package ca.etsmtl.applets.etsmobile.view_model;
 
 import android.app.Application;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.annotation.NonNull;
 
 import javax.inject.Singleton;
 
