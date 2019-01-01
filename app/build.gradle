@@ -98,9 +98,10 @@ dependencies {
     implementation "com.google.firebase:firebase-core:${PLAY_SERVICES_LIBRARY_VERSION}"
     implementation "com.google.firebase:firebase-messaging:${PLAY_SERVICES_LIBRARY_VERSION}"
 
-    implementation('com.mikepenz:materialdrawer:6.0.9@aar') {
-        transitive = true
-    }
+    // MaterialDrawer
+    implementation "com.mikepenz:materialdrawer:6.1.2"
+    implementation 'androidx.annotation:annotation:1.0.1'
+    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
 
     // Lifecycles, LiveData, and ViewModel
     implementation 'commons-io:commons-io:2.4'
@@ -155,7 +156,6 @@ dependencies {
     testImplementation "com.squareup.okhttp3:mockwebserver:${OK_HTTP_3_VERSION}"
 
     // Instrumented Unit Tests
-    androidTestImplementation 'androidx.annotation:annotation:1.0.1'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test:rules:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
