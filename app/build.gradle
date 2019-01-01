@@ -112,8 +112,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'com.squareup.okhttp:okhttp:2.7.5'
     implementation "com.squareup.okhttp3:okhttp:${OK_HTTP_3_VERSION}"
-    implementation 'io.smooch:core:5.11.0'
-    implementation 'io.smooch:ui:5.11.0'
+    implementation 'io.smooch:core:5.16.0'
+    implementation 'io.smooch:ui:5.16.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.amazonaws:aws-android-sdk-sns:2.2.5'
     implementation 'com.amazonaws:aws-android-sdk-core:2.2.5'
