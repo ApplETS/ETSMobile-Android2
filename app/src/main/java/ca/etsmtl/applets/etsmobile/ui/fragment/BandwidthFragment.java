@@ -117,7 +117,7 @@ public class BandwidthFragment extends BaseFragment {
 
         if (phase.length() > 0 && app.length() > 0) {
             editTextApp.setText(app);
-            editTextPhase.setText(phase);
+            phaseSpinner.setSelection(Integer.parseInt(phase) - 1);
             getBandwidth(phase, app, chambre);
         }
 
