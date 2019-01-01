@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_moodle).withIdentifier(MOODLE_ITEM).withIcon(R.drawable.ic_moodle_icon_small).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_monETS).withIdentifier(MONETS_ITEM).withSelectable(false).withIcon(R.drawable.ic_monets).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_bandwith).withIdentifier(BANDWIDTH_ITEM).withIcon(R.drawable.ic_ico_internet)
-                        ).withIsExpanded(true),
+                        ),
                         new ExpandableDrawerItem().withName(R.string.menu_section_2_ets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_ITEM).withIcon(R.drawable.ic_ico_news),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_events).withIdentifier(EVENTS_ITEM).withIcon(R.drawable.ic_event_available),
@@ -269,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
         drawerBuilder.withOnDrawerItemClickListener(drawerItemClickListener);
 
         activityDrawer = drawerBuilder.build();
+        activityDrawer.getExpandableExtension().expand(1);
 
     }
 
