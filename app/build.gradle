@@ -96,7 +96,6 @@ dependencies {
     implementation "com.google.android.gms:play-services-base:${PLAY_SERVICES_LIBRARY_VERSION}"
     implementation "com.google.android.gms:play-services-location:${PLAY_SERVICES_LIBRARY_VERSION}"
     implementation "com.google.firebase:firebase-core:${PLAY_SERVICES_LIBRARY_VERSION}"
-    implementation "com.google.firebase:firebase-messaging:${PLAY_SERVICES_LIBRARY_VERSION}"
 
     // MaterialDrawer
     implementation "com.mikepenz:materialdrawer:6.1.2"
