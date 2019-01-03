@@ -75,8 +75,6 @@ import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
-import io.smooch.core.User;
-import io.smooch.ui.ConversationActivity;
 
 /**
  * Main Activity for ÉTSMobile, handles the login and the Navigation Drawer (menu)
@@ -94,14 +92,13 @@ public class MainActivity extends AppCompatActivity {
     public static final int SECURITY_ITEM = 9;
     public static final int ACHIEVEMENTS_ITEM = 10;
     public static final int ABOUT_ITEM = 11;
-    public static final int COMMENTS_ITEM = 12;
-    public static final int FAQ_ITEM = 13;
-    public static final int SPONSOR_ITEM = 14;
-    public static final int TODAY_ITEM = 15;
-    public static final int EVENTS_ITEM = 16;
-    public static final int LOGIN = 17;
-    public static final int LOGOUT = 18;
-    public static final int PROFILE_ITEM = 19;
+    public static final int FAQ_ITEM = 12;
+    public static final int SPONSOR_ITEM = 13;
+    public static final int TODAY_ITEM = 14;
+    public static final int EVENTS_ITEM = 15;
+    public static final int LOGIN = 16;
+    public static final int LOGOUT = 17;
+    public static final int PROFILE_ITEM = 18;
 
     private String TAG = "MainActivity";
     private AccountManager accountManager;
@@ -254,7 +251,6 @@ public class MainActivity extends AppCompatActivity {
                         new ExpandableDrawerItem().withName(R.string.menu_section_3_applets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_apps).withIdentifier(ACHIEVEMENTS_ITEM).withIcon(R.drawable.ic_star_60x60),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_about).withIdentifier(ABOUT_ITEM).withIcon(R.drawable.ic_logo_icon_final),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_3_comms).withIdentifier(COMMENTS_ITEM).withIcon(R.drawable.ic_ico_comment),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_sponsors).withIdentifier(SPONSOR_ITEM).withIcon(R.drawable.ic_ico_partners),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_faq).withIdentifier(FAQ_ITEM).withIcon(R.drawable.ic_ico_faq)
                         )
@@ -357,21 +353,6 @@ public class MainActivity extends AppCompatActivity {
         TodayWidgetProvider.updateAllWidgets(this);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-//
-        if (requestCode == Constants.REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
-            String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-
-            User user = User.getCurrentUser();
-            user.setEmail(accountName);
-
-            ConversationActivity.show(this);
-
-        }
-    }
-
     public Toolbar getToolbar() {
         return toolbar;
     }
@@ -427,17 +408,6 @@ public class MainActivity extends AppCompatActivity {
         conf.locale = locale;
         res.updateConfiguration(conf, dm);
 
-    }
-
-    /**
-     * Asks the user to pick a Google account so that we can have his email in slack support with
-     * SupportKit
-     */
-    private void selectAccount() {
-        Intent intent = AccountPicker.newChooseAccountIntent(null, null,
-                new String[]{"com.google"}, false, null, null, null, null);//TODO get the actual GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE ASAP!!!
-
-        startActivityForResult(intent, Constants.REQUEST_CODE_EMAIL);
     }
 
     @Override
@@ -500,9 +470,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case SPONSOR_ITEM:
                         goToFragment(new SponsorsFragment(), SponsorsFragment.class.getName());
-                        break;
-                    case COMMENTS_ITEM:
-                        selectAccount();
                         break;
                     case LOGIN:
                         prefs.edit().putBoolean(Constants.FIRST_LOGIN, false).apply();
