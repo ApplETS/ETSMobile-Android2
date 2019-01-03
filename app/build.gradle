@@ -96,7 +96,6 @@ dependencies {
     implementation "com.google.android.gms:play-services-base:${PLAY_SERVICES_LIBRARY_VERSION}"
     implementation "com.google.android.gms:play-services-location:${PLAY_SERVICES_LIBRARY_VERSION}"
     implementation "com.google.firebase:firebase-core:${PLAY_SERVICES_LIBRARY_VERSION}"
-    implementation "com.google.firebase:firebase-messaging:${PLAY_SERVICES_LIBRARY_VERSION}"
 
     // MaterialDrawer
     implementation "com.mikepenz:materialdrawer:6.1.2"
@@ -113,8 +112,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.squareup.okhttp:okhttp:2.7.5'
     implementation "com.squareup.okhttp3:okhttp:${OK_HTTP_3_VERSION}"
-    implementation 'io.smooch:core:5.16.0'
-    implementation 'io.smooch:ui:5.16.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.amazonaws:aws-android-sdk-sns:2.9.1'
     implementation 'com.amazonaws:aws-android-sdk-core:2.9.1'
