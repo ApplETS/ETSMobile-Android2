@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         //In case of : retry registering to GCM
-        if (!isFCMTokenSent && ApplicationManager.domaine != null) {
+        if (!isFCMTokenSent && ApplicationManager.domaine != null && ApplicationManager.userCredentials != null) {
             // Start IntentService to register this application with FCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);

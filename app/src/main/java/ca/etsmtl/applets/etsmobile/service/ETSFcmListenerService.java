@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -57,6 +58,7 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
          * that a message was received.
          */
         sendNotification(data);
+        Log.i(TAG, data.toString());
     }
 
     @Override

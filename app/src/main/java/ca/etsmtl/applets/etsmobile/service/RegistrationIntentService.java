@@ -58,17 +58,19 @@ public class RegistrationIntentService extends IntentService {
         instanceId.addOnSuccessListener(task -> {
             String token = task.getToken();
             Log.i(TAG, "FCM Registration Token: " + token);
-            sendRegistrationToServer(token);
+            if (ApplicationManager.domaine != null && ApplicationManager.userCredentials != null) {
+                sendRegistrationToServer(token);
 
-            // Subscribe to topic channels
-            subscribeTopics();
-            // [END get_token]
+                // Subscribe to topic channels
+                subscribeTopics();
+                // [END get_token]
 
-            // You should store a boolean that indicates whether the generated token has been
-            // sent to your server. If the boolean is false, send the token to your server,
-            // otherwise your server should have already received the token.
-            sharedPreferences.edit().putBoolean(Constants.IS_FCM_TOKEN_SENT_TO_SERVER, true).apply();
-            // [END register_for_fcm]
+                // You should store a boolean that indicates whether the generated token has been
+                // sent to your server. If the boolean is false, send the token to your server,
+                // otherwise your server should have already received the token.
+                sharedPreferences.edit().putBoolean(Constants.IS_FCM_TOKEN_SENT_TO_SERVER, true).apply();
+                // [END register_for_fcm]
+            }
         });
 
         instanceId.addOnFailureListener(task -> {
