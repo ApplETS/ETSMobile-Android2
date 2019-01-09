@@ -54,7 +54,6 @@ import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.service.BottinSyncJob;
-import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwidthFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BaseFragment;

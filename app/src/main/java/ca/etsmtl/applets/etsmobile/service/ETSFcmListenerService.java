@@ -63,7 +63,7 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
         super.onNewToken(token);
-        RegistrationIntentService.enqueueWork(this, new Intent());
+        FcmRegistrationIntentService.enqueueWork(this, new Intent());
     }
 
     /**

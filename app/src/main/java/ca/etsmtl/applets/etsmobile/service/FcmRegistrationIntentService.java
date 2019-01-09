@@ -16,7 +16,6 @@ package ca.etsmtl.applets.etsmobile.service;
  * limitations under the License.
  */
 
-import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,14 +37,21 @@ import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile2.R;
 
-public class RegistrationIntentService extends JobIntentService {
+public class FcmRegistrationIntentService extends JobIntentService {
 
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
     public static final int REG_JOB_ID = 1;
 
+    /**
+     * Adds a service to be either started directly (Pre-Android 8.0) or to be enqueued as a job
+     * (Android 8.0 and later)
+     *
+     * @param context the context required to start the service
+     * @param intent the intent in which the service is based on
+     */
     public static void enqueueWork(Context context, Intent intent) {
-        enqueueWork(context, RegistrationIntentService.class, REG_JOB_ID, intent);
+        enqueueWork(context, FcmRegistrationIntentService.class, REG_JOB_ID, intent);
     }
 
     @Override

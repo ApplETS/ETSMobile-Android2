@@ -18,17 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.HttpCookie;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile.util.Utility;

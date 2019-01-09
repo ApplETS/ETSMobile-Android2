@@ -7,9 +7,7 @@ import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -26,7 +24,6 @@ import java.io.IOException;
 import java.util.Date;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
