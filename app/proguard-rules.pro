@@ -17,7 +17,7 @@
 #}
 
 
-
 -dontwarn android.**
 -dontwarn org.**
 -dontwarn com.**
+-keep class androidx.core.app.CoreComponentFactory { *; }
