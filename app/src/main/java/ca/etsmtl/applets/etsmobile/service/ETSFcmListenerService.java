@@ -17,6 +17,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import androidx.core.app.NotificationCompat;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
@@ -59,10 +61,35 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
         sendNotification(data);
     }
 
+    @Override
+    public void onNewToken(String token) {
+        sendRegistrationToServer(token);
+    }
+
+    /**
+     * Persist registration to third-party servers.
+     * <p/>
+     * Modify this method to associate the user's FCM registration token with any server-side account
+     * maintained by your application.
+     *
+     * @param token The new token.
+     */
+    private void sendRegistrationToServer(String token) {
+        // Add custom implementation, as needed.
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        CreateEndpointJob worker = new CreateEndpointJob(getApplicationContext());
+
+        worker.setThreadProperties(token,
+                ApplicationManager.domaine+"\\"+ApplicationManager.userCredentials.getUsername(),
+                getString(R.string.aws_application_arn));
+        worker.run();
+        executor.execute(worker);
+    }
+
     /**
      * Create and show a simple notification containing the received GCM message.
      *
-     * @param data GCM message received.
+     * @param data FCM message received.
      */
     private void sendNotification(Map<String, String> data) {
         SecurePreferences securePreferences = new SecurePreferences(this);
