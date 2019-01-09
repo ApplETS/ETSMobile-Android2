@@ -120,7 +120,7 @@
 
         <!-- [START gcm_listener] -->
         <service
-            android:name="ca.etsmtl.applets.etsmobile.service.ETSGcmListenerService"
+            android:name="ca.etsmtl.applets.etsmobile.service.ETSFcmListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -129,10 +129,9 @@
         <!-- [END gcm_listener] -->
         <!-- [START instanceId_listener] -->
         <service
-            android:name="ca.etsmtl.applets.etsmobile.service.ETSInstanceIDListenerService"
-            android:exported="false">
+            android:name="ca.etsmtl.applets.etsmobile.service.ETSInstanceIDListenerService">
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!-- [END instanceId_listener] -->

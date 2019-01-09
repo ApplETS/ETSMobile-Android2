@@ -6,19 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import androidx.core.app.NotificationCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
-import com.google.android.gms.gcm.GcmListenerService;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Map;
 
+import androidx.core.app.NotificationCompat;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
 import ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity;
@@ -29,7 +29,7 @@ import ca.etsmtl.applets.etsmobile2.R;
 /**
  * Created by gnut3ll4 on 16/10/15.
  */
-public class ETSGcmListenerService extends GcmListenerService {
+public class ETSFcmListenerService extends FirebaseMessagingService {
 
     private static final String TAG = "MyGcmListenerService";
     private static final int NUMBER_OF_NOTIF_TO_DISPLAY = 5;
@@ -37,32 +37,26 @@ public class ETSGcmListenerService extends GcmListenerService {
     /**
      * Called when message is received.
      *
-     * @param from SenderID of the sender.
-     * @param data Data bundle containing message data as key/value pairs.
-     *             For Set of keys use data.keySet().
+     * @param message containing the data from the sender and from the message itself
+     *                (Bundle containing message data as key/value pairs.
      */
     @Override
-    public void onMessageReceived(String from, Bundle data) {
+    public void onMessageReceived(RemoteMessage message) {
 
-        // Calls SupportKit GCM Listener
-        if (TextUtils.equals(data.getString("origin"), "SupportKit")) {
-            super.onMessageReceived(from, data);
-        } else {
+        Map<String, String> data = message.getData();
 
+        /**
+         * Production applications would usually process the message here.
+         * Eg: - Syncing with server.
+         *     - Store message in local database.
+         *     - Update UI.
+         */
 
-            /**
-             * Production applications would usually process the message here.
-             * Eg: - Syncing with server.
-             *     - Store message in local database.
-             *     - Update UI.
-             */
-
-            /**
-             * In some cases it may be useful to show a notification indicating to the user
-             * that a message was received.
-             */
-            sendNotification(data);
-        }
+        /**
+         * In some cases it may be useful to show a notification indicating to the user
+         * that a message was received.
+         */
+        sendNotification(data);
     }
 
     /**
@@ -70,7 +64,7 @@ public class ETSGcmListenerService extends GcmListenerService {
      *
      * @param data GCM message received.
      */
-    private void sendNotification(Bundle data) {
+    private void sendNotification(Map<String, String> data) {
         SecurePreferences securePreferences = new SecurePreferences(this);
         Gson gson = new Gson();
 
@@ -85,7 +79,7 @@ public class ETSGcmListenerService extends GcmListenerService {
             receivedNotif = new ArrayList<>();
         }
 
-        MonETSNotification nouvelleNotification = getMonETSNotificationFromBundle(data);
+        MonETSNotification nouvelleNotification = getMonETSNotificationFromMap(data);
 
         receivedNotif.add(nouvelleNotification);
 
@@ -95,7 +89,7 @@ public class ETSGcmListenerService extends GcmListenerService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_ets);
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.school_48)
                 .setColor(getResources().getColor(R.color.red))
                 .setContentTitle(getString(R.string.ets))
@@ -148,13 +142,13 @@ public class ETSGcmListenerService extends GcmListenerService {
         mNotificationManager.notify(1, mBuilder.build());
     }
 
-    public MonETSNotification getMonETSNotificationFromBundle(Bundle data) {
-        int id = Integer.valueOf(data.getString("Id"));
-        String notificationTexte = data.getString("NotificationTexte");
+    public MonETSNotification getMonETSNotificationFromMap(Map<String, String> data) {
+        int id = Integer.valueOf(data.get("Id"));
+        String notificationTexte = data.get("NotificationTexte");
 
-        String notificationApplicationNom = data.getString("NotificationApplicationNom");
+        String notificationApplicationNom = data.get("NotificationApplicationNom");
         //String notificationSigleCours = data.getString("NotificationSigleCours");
-        String url = data.getString("Url");
+        String url = data.get("Url");
 
         return new MonETSNotification(
                 id,
