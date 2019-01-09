@@ -126,19 +126,10 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
                     accountManager.setAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, authtoken);
 
                     Utility.saveCookieExpirationDate(authtoken, securePreferences);
-
-                    Intent gcmRegistrationIntent = new Intent(launchingActivity, RegistrationIntentService.class);
-                    launchingActivity.startService(gcmRegistrationIntent);
                 }
             }
-
-
             launchingActivity.finish();
-
-
         }
 
     }
-
-
 }

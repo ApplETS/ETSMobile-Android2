@@ -17,6 +17,7 @@ package ca.etsmtl.applets.etsmobile.service;
  */
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -30,22 +31,25 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.JobIntentService;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile2.R;
 
-public class RegistrationIntentService extends IntentService {
+public class RegistrationIntentService extends JobIntentService {
 
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
+    public static final int REG_JOB_ID = 1;
 
-    public RegistrationIntentService() {
-        super(TAG);
+    public static void enqueueWork(Context context, Intent intent) {
+        enqueueWork(context, RegistrationIntentService.class, REG_JOB_ID, intent);
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public void onHandleWork(@NonNull Intent intent) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // In the (unlikely) event that multiple refresh operations occur simultaneously,

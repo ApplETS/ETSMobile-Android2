@@ -29,6 +29,7 @@ import ca.etsmtl.applets.etsmobile.http.AuthentificationPortailTask;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.widget.TodayWidgetProvider;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -242,6 +243,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 String accountPassword = userCredentials.getPassword();
 
                 createETSMobileAccount(accountName, accountPassword);
+                RegistrationIntentService.enqueueWork(this, new Intent());
 
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
 

@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -58,15 +57,13 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
          * that a message was received.
          */
         sendNotification(data);
-        Log.i(TAG, data.toString());
     }
 
     @Override
     public void onNewToken(String token) {
         // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
         super.onNewToken(token);
-        Intent intent = new Intent(this, RegistrationIntentService.class);
-        startService(intent);
+        RegistrationIntentService.enqueueWork(this, new Intent());
     }
 
     /**

@@ -130,6 +130,7 @@
         <!-- [END instanceId_listener] -->
         <service
             android:name="ca.etsmtl.applets.etsmobile.service.RegistrationIntentService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="false" />
 
         <meta-data

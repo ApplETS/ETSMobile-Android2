@@ -116,13 +116,6 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
                         securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
                         ApplicationManager.domaine = domaine;
                         ApplicationManager.typeUsagerId = typeUsagerId;
-
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-                        boolean isTokenSent = sharedPreferences.getBoolean(Constants.IS_FCM_TOKEN_SENT_TO_SERVER, false);
-                        if (!isTokenSent) {
-                            Intent intent = new Intent(mContext, RegistrationIntentService.class);
-                            mContext.startService(intent);
-                        }
                     } else {
                         Log.e("Erreur Portail", httpResponse.toString());
                     }
