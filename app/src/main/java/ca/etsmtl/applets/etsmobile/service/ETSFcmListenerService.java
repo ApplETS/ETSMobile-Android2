@@ -17,8 +17,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import androidx.core.app.NotificationCompat;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
@@ -33,7 +31,7 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class ETSFcmListenerService extends FirebaseMessagingService {
 
-    private static final String TAG = "MyGcmListenerService";
+    private static final String TAG = "MyFcmListenerService";
     private static final int NUMBER_OF_NOTIF_TO_DISPLAY = 5;
 
     /**
@@ -63,27 +61,10 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(String token) {
-        sendRegistrationToServer(token);
-    }
-
-    /**
-     * Persist registration to third-party servers.
-     * <p/>
-     * Modify this method to associate the user's FCM registration token with any server-side account
-     * maintained by your application.
-     *
-     * @param token The new token.
-     */
-    private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-        CreateEndpointJob worker = new CreateEndpointJob(getApplicationContext());
-
-        worker.setThreadProperties(token,
-                ApplicationManager.domaine+"\\"+ApplicationManager.userCredentials.getUsername(),
-                getString(R.string.aws_application_arn));
-        worker.run();
-        executor.execute(worker);
+        // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
+        super.onNewToken(token);
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
     }
 
     /**

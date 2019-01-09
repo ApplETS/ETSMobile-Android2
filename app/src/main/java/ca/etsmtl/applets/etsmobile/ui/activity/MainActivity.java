@@ -29,7 +29,6 @@ import com.evernote.android.job.JobCreator;
 import com.evernote.android.job.JobManager;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -104,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     private AccountManager accountManager;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private Drawer activityDrawer;
-    private boolean isGCMTokenSent;
+    private boolean isFCMTokenSent;
     public SharedPreferences prefs;
 
     private AccountHeader headerResult = null;
@@ -136,12 +135,12 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
 
-        isGCMTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
+        isFCMTokenSent = sharedPreferences.getBoolean(Constants.IS_FCM_TOKEN_SENT_TO_SERVER, false);
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                isGCMTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
+                isFCMTokenSent = sharedPreferences.getBoolean(Constants.IS_FCM_TOKEN_SENT_TO_SERVER, false);
             }
         };
 
@@ -307,8 +306,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         //In case of : retry registering to GCM
-        if (!isGCMTokenSent && ApplicationManager.domaine != null) {
-            // Start IntentService to register this application with GCM.
+        if (!isFCMTokenSent && ApplicationManager.domaine != null) {
+            // Start IntentService to register this application with FCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }

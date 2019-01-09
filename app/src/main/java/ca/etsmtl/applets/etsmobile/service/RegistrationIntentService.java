@@ -20,17 +20,17 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GcmPubSub;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -48,45 +48,41 @@ public class RegistrationIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        try {
-            // In the (unlikely) event that multiple refresh operations occur simultaneously,
-            // ensure that they are processed sequentially.x
-            synchronized (TAG) {
-                // [START register_for_gcm]
-                // Initially this call goes out to the network to retrieve the token, subsequent calls
-                // are local.
-                // [START get_token]
-                InstanceID instanceID = InstanceID.getInstance(this);
+        // In the (unlikely) event that multiple refresh operations occur simultaneously,
+        // ensure that they are processed sequentially.x
+        // [START register_for_gcm]
+        // Initially this call goes out to the network to retrieve the token, subsequent calls
+        // are local.
+        // [START get_token]
+        Task<InstanceIdResult> instanceId = FirebaseInstanceId.getInstance().getInstanceId();
+        instanceId.addOnSuccessListener(task -> {
+            String token = task.getToken();
+            Log.i(TAG, "FCM Registration Token: " + token);
+            sendRegistrationToServer(token);
 
-                //TODO put authorized entity in a property file
-                String token = instanceID.getToken(
-                        getString(R.string.google_authorized_entity),
-                        GoogleCloudMessaging.INSTANCE_ID_SCOPE,
-                        null);
+            // Subscribe to topic channels
+            subscribeTopics();
+            // [END get_token]
 
-                // [END get_token]
-                Log.i(TAG, "GCM Registration Token: " + token);
+            // You should store a boolean that indicates whether the generated token has been
+            // sent to your server. If the boolean is false, send the token to your server,
+            // otherwise your server should have already received the token.
+            sharedPreferences.edit().putBoolean(Constants.IS_FCM_TOKEN_SENT_TO_SERVER, true).apply();
+            // [END register_for_fcm]
+        });
 
-                sendRegistrationToServer(token);
-
-                // Subscribe to topic channels
-                subscribeTopics(token);
-
-                // You should store a boolean that indicates whether the generated token has been
-                // sent to your server. If the boolean is false, send the token to your server,
-                // otherwise your server should have already received the token.
-                sharedPreferences.edit().putBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, true).apply();
-                // [END register_for_gcm]
-            }
-        } catch (Exception e) {
-            Log.d(TAG, "Failed to complete token refresh", e);
+        instanceId.addOnFailureListener(task -> {
+            Log.d(TAG, "Failed to complete token refresh");
             // If an exception happens while fetching the new token or updating our registration data
             // on a third-party server, this ensures that we'll attempt the update at a later time.
-            sharedPreferences.edit().putBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false).apply();
-        }
-        // Notify UI that registration has completed, so the progress indicator can be hidden.
-        Intent registrationComplete = new Intent(Constants.REGISTRATION_COMPLETE);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+            sharedPreferences.edit().putBoolean(Constants.IS_FCM_TOKEN_SENT_TO_SERVER, false).apply();
+        });
+
+        instanceId.addOnCompleteListener(task -> {
+            // Notify UI that registration has completed, so the progress indicator can be hidden.
+            Intent registrationComplete = new Intent(Constants.REGISTRATION_COMPLETE);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+        });
     }
 
     /**
@@ -111,16 +107,12 @@ public class RegistrationIntentService extends IntentService {
     }
 
     /**
-     * Subscribe to any GCM topics of interest, as defined by the TOPICS constant.
-     *
-     * @param token GCM token
-     * @throws IOException if unable to reach the GCM PubSub service
+     * Subscribe to any FCM topics of interest, as defined by the TOPICS constant.
      */
     // [START subscribe_topics]
-    private void subscribeTopics(String token) throws IOException {
+    private void subscribeTopics() {
         for (String topic : TOPICS) {
-            GcmPubSub pubSub = GcmPubSub.getInstance(this);
-            pubSub.subscribe(token, "/topics/" + topic, null);
+            FirebaseMessaging.getInstance().subscribeToTopic(topic);
         }
     }
     // [END subscribe_topics]

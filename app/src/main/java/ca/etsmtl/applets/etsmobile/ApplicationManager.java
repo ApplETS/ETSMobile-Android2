@@ -12,6 +12,8 @@ import android.preference.PreferenceManager;
 import androidx.multidex.MultiDex;
 import android.text.TextUtils;
 
+import com.google.firebase.FirebaseApp;
+
 import java.sql.SQLException;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
@@ -48,6 +50,7 @@ public class ApplicationManager extends Application {
 
 //        SupportKit.init(this, getString(R.string.credentials_supportkit));
 //        Fabric.with(this, new Crashlytics());
+        FirebaseApp.initializeApp(this);
 
         AccountManager accountManager = AccountManager.get(this);
         Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);

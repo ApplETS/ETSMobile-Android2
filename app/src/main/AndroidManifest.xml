@@ -118,22 +118,15 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-        <!-- [START gcm_listener] -->
+        <!-- [START fcm_listener] -->
         <service
-            android:name="ca.etsmtl.applets.etsmobile.service.ETSFcmListenerService"
-            android:exported="false">
+            android:name="ca.etsmtl.applets.etsmobile.service.ETSFcmListenerService">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!-- [END gcm_listener] -->
+        <!-- [END fcm_listener] -->
         <!-- [START instanceId_listener] -->
-        <service
-            android:name="ca.etsmtl.applets.etsmobile.service.ETSInstanceIDListenerService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
         <!-- [END instanceId_listener] -->
         <service
             android:name="ca.etsmtl.applets.etsmobile.service.RegistrationIntentService"

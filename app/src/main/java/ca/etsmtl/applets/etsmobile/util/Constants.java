@@ -12,7 +12,7 @@ public class Constants {
     public static final String PARAM_USER_PASS = "USER_PASS";
     public static final String AUTH_TOKEN_TYPE = "BASIC";
     public static final String ACCOUNT_TYPE = "ca.etsmtl.applets.etsmobile";
-    public static final String IS_GCM_TOKEN_SENT_TO_SERVER = "sentTokenToServer";
+    public static final String IS_FCM_TOKEN_SENT_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
     public static final String TYPE_USAGER_ID = "TypeUsagerId";
     public static final String DOMAINE = "Domaine";
