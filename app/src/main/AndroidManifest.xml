@@ -138,6 +138,7 @@
             android:value="" />
 
         <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+        <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="${enableCrashReporting}" />
 
         <service android:name="ca.etsmtl.applets.etsmobile.service.WearService">
             <intent-filter>
