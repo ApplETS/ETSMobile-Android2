@@ -100,9 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String TAG = "MainActivity";
     private AccountManager accountManager;
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
     private Drawer activityDrawer;
-    private boolean isFCMTokenSent;
     public SharedPreferences prefs;
 
     private AccountHeader headerResult = null;
@@ -133,15 +131,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
-
-        isFCMTokenSent = sharedPreferences.getBoolean(Constants.IS_FCM_TOKEN_SENT_TO_SERVER, false);
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                isFCMTokenSent = sharedPreferences.getBoolean(Constants.IS_FCM_TOKEN_SENT_TO_SERVER, false);
-            }
-        };
 
         boolean firstLogin = prefs.getBoolean(Constants.FIRST_LOGIN, true);
         if (firstLogin) {
@@ -304,19 +293,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(Constants.REGISTRATION_COMPLETE));
-
         if (ApplicationManager.userCredentials == null) {
             goToFragment(new AboutFragment(), AboutFragment.class.getName());
         }
 
-    }
-
-    @Override
-    protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
-        super.onPause();
     }
 
     /**
