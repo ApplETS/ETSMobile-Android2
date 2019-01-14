@@ -109,7 +109,7 @@
             android:orientation="vertical"
             android:paddingTop="@dimen/fab_margin"
             app:behavior_hideable="true"
-            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
             <!-- Titre -->
             <TextView
