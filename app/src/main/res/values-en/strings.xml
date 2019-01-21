@@ -96,6 +96,7 @@
     <string name="moodle_error_cant_get_token">Failed to get the token</string>
     <string name="moodle_error_cant_get_profile">Failed to get profile</string>
     <string name="moodle_error_cant_get_courses">Failed to get courses</string>
+    <string name="moodle_allow_storage_permissions">Please allow storage permissions to download this file.</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, ÉTS student radio</string>

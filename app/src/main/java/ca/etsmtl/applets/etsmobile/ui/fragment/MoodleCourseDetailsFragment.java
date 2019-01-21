@@ -1,5 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.Manifest;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -10,6 +11,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,8 @@ import android.webkit.MimeTypeMap;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.github.florent37.runtimepermission.RuntimePermission;
+import com.google.android.material.snackbar.Snackbar;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
@@ -28,6 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.core.content.ContextCompat;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCoreCourse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCoreCourses;
@@ -211,24 +216,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                     Object object = expandableListMoodleAdapter.getChild(groupPosition, childPosition);
 
                     if (object instanceof MoodleModuleContent) {
-                        MoodleModuleContent item = (MoodleModuleContent) object;
-
-                        String url = item.getFileurl() + "&token=" + ApplicationManager.userCredentials.getMoodleToken();
-                        Uri uri = Uri.parse(url);
-                        DownloadManager.Request request = new DownloadManager.Request(uri);
-
-                        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, item.getFilename());
-
-//                      r.allowScanningByMediaScanner();
-
-                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                        MimeTypeMap mimetype = MimeTypeMap.getSingleton();
-                        String extension = FilenameUtils.getExtension(item.getFilename());
-
-                        request.setMimeType(mimetype.getMimeTypeFromExtension(extension));
-
-                        dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-                        enqueue = dm.enqueue(request);
+                        checkStoragePermissions((MoodleModuleContent) object);
 
                         AnalyticsHelper.getInstance(getActivity())
                                 .sendActionEvent(getClass().getSimpleName(), TELECHARGE_FICHIER_MOODLE);
@@ -258,6 +246,24 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
             });
             super.onRequestSuccess(null);
         }
+    }
+
+    private void downloadMoodleObject(MoodleModuleContent item) {
+
+        String url = item.getFileurl() + "&token=" + ApplicationManager.userCredentials.getMoodleToken();
+        Uri uri = Uri.parse(url);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, item.getFilename());
+
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        MimeTypeMap mimetype = MimeTypeMap.getSingleton();
+        String extension = FilenameUtils.getExtension(item.getFilename());
+
+        request.setMimeType(mimetype.getMimeTypeFromExtension(extension));
+
+        dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+        enqueue = dm.enqueue(request);
     }
 
     @Override
@@ -290,6 +296,29 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     @Override
     void updateUI() {
         loadingView.showLoadingView();
+    }
+
+    private void checkStoragePermissions(MoodleModuleContent item) {
+
+        RuntimePermission.askPermission(getActivity())
+                .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .onAccepted((callback) -> downloadMoodleObject(item))
+                .onDenied((callback) -> showPermissionsSnackbar())
+                .onForeverDenied((callback) -> showPermissionsSnackbar())
+                .ask();
+    }
+
+    private void showPermissionsSnackbar() {
+        Snackbar snackbar = Snackbar.make(getView(), R.string.moodle_allow_storage_permissions, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.action_settings, (listener) -> {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                    intent.setData(uri);
+                    startActivity(intent);
+                })
+                .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.ets_red));
+        snackbar.show();
     }
 
     /**

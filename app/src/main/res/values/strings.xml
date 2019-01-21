@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">ÉTSMobile</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Paramètres</string>
     <string name="action_logout">Déconnexion</string>
     <string name="action_login">Se connecter</string>
     <string name="action_language">Langue</string>
@@ -96,6 +96,7 @@
     <string name="moodle_error_cant_get_token">Échec de l\'obtention du jeton</string>
     <string name="moodle_error_cant_get_profile">Échec de l\'obtention du profil</string>
     <string name="moodle_error_cant_get_courses">Échec de l\'obtention des cours</string>
+    <string name="moodle_allow_storage_permissions">Veuillez accorder l\'utilisation du disque pour le téléchargement de ce fichier.</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, la radio étudiante de l\'ÉTS.</string>
