@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
@@ -27,12 +28,14 @@ import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceReques
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCoreCourse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCoreCourses;
@@ -104,12 +107,20 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                             MimeTypeMap map = MimeTypeMap.getSingleton();
                             String ext = MimeTypeMap.getFileExtensionFromUrl(uriString);
                             String type = map.getMimeTypeFromExtension(ext);
+                            Uri uri = Uri.parse(uriString);
 
                             if (type == null)
                                 type = "*/*";
 
                             Intent openFile = new Intent(Intent.ACTION_VIEW);
-                            openFile.setDataAndType(Uri.parse(uriString), type);
+                            openFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                File file = new File(uri.getPath());
+                                Uri fileProviderUri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
+                                openFile.setDataAndType(fileProviderUri, type);
+                            } else {
+                                openFile.setDataAndType(uri, type);
+                            }
                             try {
                                 startActivity(openFile);
                             } catch (ActivityNotFoundException e) {
