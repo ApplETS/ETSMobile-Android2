@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.0'
         classpath 'io.fabric.tools:gradle:1.26.1'
     }
 }
@@ -76,6 +76,7 @@ def PLAY_SERVICES_ANALYTICS_VERSION = '16.0.6'
 def DAGGER_VERSION = '2.20'
 def RETROFIT_VERSION = '2.5.0'
 def OK_HTTP_3_VERSION = '3.12.0'
+def PERMISSIONS_DISPATCHER_VERSION = '4.3.0'
 
 dependencies {
     wearApp project(':wear')
@@ -118,8 +119,8 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'me.grantland:autofittextview:0.2.1'
     implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
-    implementation 'com.jakewharton:butterknife:9.0.0-rc3'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc3'
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
     implementation 'com.prolificinteractive:material-calendarview:1.4.0'
     implementation 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
     implementation 'com.j256.ormlite:ormlite-core:4.48'
@@ -167,6 +168,10 @@ dependencies {
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:${RETROFIT_VERSION}"
     implementation "com.squareup.retrofit2:converter-gson:${RETROFIT_VERSION}"
+
+    // Runtime permissions
+    implementation "org.permissionsdispatcher:permissionsdispatcher:${PERMISSIONS_DISPATCHER_VERSION}"
+    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:${PERMISSIONS_DISPATCHER_VERSION}"
 }
 
 gradle.projectsEvaluated {

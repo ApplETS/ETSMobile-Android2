@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
+
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.URLUtil;
@@ -236,6 +238,14 @@ public class Utility {
             }
         }
         intent.putExtras(extras);
+        context.startActivity(intent);
+    }
+
+    public static void goToAppSettings(Context context) {
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+        intent.setData(uri);
         context.startActivity(intent);
     }
 
