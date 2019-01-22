@@ -9,11 +9,11 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
-import androidx.multidex.MultiDex;
 import android.text.TextUtils;
 
 import java.sql.SQLException;
 
+import androidx.multidex.MultiDex;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.di.AppComponent;
 import ca.etsmtl.applets.etsmobile.di.AppModule;

@@ -16,14 +16,14 @@
 
 package ca.etsmtl.applets.etsmobile.repository;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import android.os.AsyncTask;
+
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
-
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import ca.etsmtl.applets.etsmobile.model.ApiResponse;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 

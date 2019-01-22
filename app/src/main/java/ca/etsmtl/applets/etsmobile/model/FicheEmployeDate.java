@@ -9,14 +9,14 @@ package ca.etsmtl.applets.etsmobile.model;
 //
 //---------------------------------------------------
 
-import java.util.Hashtable;
-
 import org.joda.time.DateTime;
 import org.ksoap2.serialization.AttributeContainer;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
+
+import java.util.Hashtable;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 import ca.etsmtl.applets.etsmobile.http.soap.Helper;

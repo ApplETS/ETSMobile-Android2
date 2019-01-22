@@ -10,21 +10,19 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 
-import java.util.Hashtable;
+import com.google.android.gms.wearable.DataMap;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
-import org.joda.time.DateTime;
 import org.ksoap2.serialization.AttributeContainer;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
-import com.google.android.gms.wearable.DataMap;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import java.util.Hashtable;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
-import ca.etsmtl.applets.etsmobile.http.soap.Helper;
 
 @DatabaseTable(tableName = "seances")
 public class Seances extends AttributeContainer implements KvmSerializable, IHoraireRows

@@ -11,7 +11,6 @@ import com.squareup.okhttp.Response;
 import ca.etsmtl.applets.etsmobile.model.applets_events.EvenementCommunaute;
 import ca.etsmtl.applets.etsmobile.model.applets_events.EvenementCommunauteList;
 import ca.etsmtl.applets.etsmobile.model.applets_events.SourceEvenement;
-import ca.etsmtl.applets.etsmobile.model.applets_events.SourceEvenementList;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class AppletsApiEvenementsRequest extends SpringAndroidSpiceRequest<EvenementCommunauteList> {

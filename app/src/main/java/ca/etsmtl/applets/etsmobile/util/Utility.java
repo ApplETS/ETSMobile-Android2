@@ -9,8 +9,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
-
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,6 +29,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import androidx.core.content.ContextCompat;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.MonETSNotificationsRequest;

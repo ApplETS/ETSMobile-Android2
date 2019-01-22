@@ -1,11 +1,11 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinDetailsFragment;
 import ca.etsmtl.applets.etsmobile2.R;
 

@@ -1,19 +1,19 @@
 package ca.etsmtl.applets.etsmobile.repository;
 
 import android.app.Application;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.MoodleAssignmentCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleAssignmentSubmissionDao;
@@ -21,13 +21,13 @@ import ca.etsmtl.applets.etsmobile.db.MoodleCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleProfileDao;
 import ca.etsmtl.applets.etsmobile.http.MoodleWebService;
 import ca.etsmtl.applets.etsmobile.model.ApiResponse;
+import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourses;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentSubmission;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleToken;
-import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**

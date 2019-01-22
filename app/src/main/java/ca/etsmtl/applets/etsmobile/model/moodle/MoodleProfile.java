@@ -1,9 +1,9 @@
 package ca.etsmtl.applets.etsmobile.model.moodle;
 
+import com.google.gson.annotations.SerializedName;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by gnut3ll4 on 10/13/14.

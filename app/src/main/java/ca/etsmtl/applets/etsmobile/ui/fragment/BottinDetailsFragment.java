@@ -1,9 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.widget.Toolbar;
 import android.text.util.Linkify;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -15,6 +12,8 @@ import android.widget.TextView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class BottinDetailsFragment extends HttpFragment {

@@ -4,7 +4,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
 
 import ca.etsmtl.applets.etsmobile.model.Trimestre;

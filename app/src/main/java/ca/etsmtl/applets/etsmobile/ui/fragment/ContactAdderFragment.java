@@ -1,15 +1,9 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import com.octo.android.robospice.persistence.exception.SpiceException;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorDescription;
 import android.accounts.OnAccountsUpdateListener;
-import android.app.Activity;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -21,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,8 +23,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
-import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
+
+import com.octo.android.robospice.persistence.exception.SpiceException;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class ContactAdderFragment extends HttpFragment implements

@@ -16,12 +16,11 @@
 
 package ca.etsmtl.applets.etsmobile.util;
 
-import androidx.lifecycle.LiveData;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import androidx.lifecycle.LiveData;
 import ca.etsmtl.applets.etsmobile.model.ApiResponse;
 import retrofit2.CallAdapter;
 import retrofit2.Retrofit;

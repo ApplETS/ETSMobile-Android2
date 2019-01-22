@@ -10,14 +10,13 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 
-
-import java.util.Hashtable;
-import java.util.Vector;
-
 import org.ksoap2.serialization.AttributeContainer;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
+
+import java.util.Hashtable;
+import java.util.Vector;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 

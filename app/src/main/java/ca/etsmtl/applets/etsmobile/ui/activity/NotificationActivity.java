@@ -1,9 +1,7 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;

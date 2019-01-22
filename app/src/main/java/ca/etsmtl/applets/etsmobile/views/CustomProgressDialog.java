@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.views;
 
-import ca.etsmtl.applets.etsmobile2.R;
 import android.app.ActionBar.LayoutParams;
 import android.app.Dialog;
 import android.content.Context;
@@ -10,6 +9,8 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import ca.etsmtl.applets.etsmobile2.R;
 
 public class CustomProgressDialog extends Dialog {
 

@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
-import androidx.core.graphics.ColorUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -26,6 +25,7 @@ import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
+import androidx.core.graphics.ColorUtils;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;

@@ -9,7 +9,7 @@ package ca.etsmtl.applets.etsmobile.http.soap;
 //
 //---------------------------------------------------
 
-import java.util.List;
+import android.os.AsyncTask;
 
 import org.ksoap2.HeaderProperty;
 import org.ksoap2.serialization.PropertyInfo;
@@ -17,7 +17,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.transport.HttpTransportSE;
 
-import android.os.AsyncTask;
+import java.util.List;
+
 import ca.etsmtl.applets.etsmobile.model.ArrayOfFicheEmploye;
 import ca.etsmtl.applets.etsmobile.model.ArrayOfFicheEmployeDate;
 import ca.etsmtl.applets.etsmobile.model.ArrayOfService;

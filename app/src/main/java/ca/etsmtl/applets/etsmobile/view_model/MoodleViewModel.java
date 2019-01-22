@@ -1,26 +1,26 @@
 package ca.etsmtl.applets.etsmobile.view_model;
 
 import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.annotation.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
+import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentSubmission;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleToken;
-import ca.etsmtl.applets.etsmobile.model.RemoteResource;
 import ca.etsmtl.applets.etsmobile.repository.MoodleRepository;
 
 /**

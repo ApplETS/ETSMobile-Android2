@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.widget.ImageButton;
 import android.widget.SearchView;
+
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class MapActivity extends Activity {

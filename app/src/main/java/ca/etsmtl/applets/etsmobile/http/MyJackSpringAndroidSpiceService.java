@@ -2,11 +2,9 @@ package ca.etsmtl.applets.etsmobile.http;
 
 import android.app.Application;
 
-
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.persistence.CacheManager;
 import com.octo.android.robospice.persistence.exception.CacheCreationException;
-import com.octo.android.robospice.persistence.springandroid.json.jackson.JacksonObjectPersisterFactory;
 import com.octo.android.robospice.persistence.springandroid.json.jackson2.Jackson2ObjectPersisterFactory;
 
 import org.springframework.http.converter.HttpMessageConverter;

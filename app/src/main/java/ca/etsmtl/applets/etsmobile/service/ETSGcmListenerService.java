@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import androidx.core.app.NotificationCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -19,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
+import androidx.core.app.NotificationCompat;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
 import ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity;

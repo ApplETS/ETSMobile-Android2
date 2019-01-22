@@ -1,11 +1,11 @@
 package ca.etsmtl.applets.etsmobile.view_model;
 
 import android.app.Application;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.annotation.NonNull;
 
 import javax.inject.Singleton;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import ca.etsmtl.applets.etsmobile.repository.MoodleRepository;
 
 /**

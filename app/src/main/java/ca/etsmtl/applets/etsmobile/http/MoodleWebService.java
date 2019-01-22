@@ -1,10 +1,9 @@
 package ca.etsmtl.applets.etsmobile.http;
 
-import androidx.lifecycle.LiveData;
-import androidx.annotation.NonNull;
-
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import ca.etsmtl.applets.etsmobile.model.ApiResponse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourses;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentSubmission;

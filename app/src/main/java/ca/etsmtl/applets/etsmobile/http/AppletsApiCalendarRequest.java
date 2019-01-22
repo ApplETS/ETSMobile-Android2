@@ -2,30 +2,12 @@ package ca.etsmtl.applets.etsmobile.http;
 
 import android.content.Context;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
-import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.kobjects.base64.Base64;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.EventList;
 import ca.etsmtl.applets.etsmobile2.R;
 

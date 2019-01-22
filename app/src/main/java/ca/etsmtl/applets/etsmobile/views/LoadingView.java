@@ -2,7 +2,6 @@ package ca.etsmtl.applets.etsmobile.views;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
-import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class LoadingView extends RelativeLayout {

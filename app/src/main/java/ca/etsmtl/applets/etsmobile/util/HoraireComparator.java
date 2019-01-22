@@ -9,7 +9,6 @@ import java.util.Comparator;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.IHoraireRows;
 import ca.etsmtl.applets.etsmobile.model.Seances;
-import ca.etsmtl.applets.etsmobile.model.TodaysCourses;
 
 /**
  * Created by Simon on 3/13/2016.

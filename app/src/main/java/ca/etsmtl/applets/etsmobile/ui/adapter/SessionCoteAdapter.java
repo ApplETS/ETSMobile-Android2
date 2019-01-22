@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class SessionCoteAdapter extends BaseAdapter {

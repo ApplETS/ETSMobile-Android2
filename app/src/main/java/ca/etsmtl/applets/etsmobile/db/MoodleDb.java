@@ -2,7 +2,6 @@ package ca.etsmtl.applets.etsmobile.db;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
-
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentSubmission;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourse;

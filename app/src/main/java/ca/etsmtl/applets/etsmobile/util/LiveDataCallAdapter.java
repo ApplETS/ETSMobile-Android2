@@ -17,11 +17,10 @@
 package ca.etsmtl.applets.etsmobile.util;
 
 
-import androidx.lifecycle.LiveData;
-
 import java.lang.reflect.Type;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import androidx.lifecycle.LiveData;
 import ca.etsmtl.applets.etsmobile.model.ApiResponse;
 import retrofit2.Call;
 import retrofit2.CallAdapter;

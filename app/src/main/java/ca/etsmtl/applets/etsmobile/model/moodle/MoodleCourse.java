@@ -1,11 +1,11 @@
 package ca.etsmtl.applets.etsmobile.model.moodle;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 /**
  * Created by gnut3ll4 on 10/13/14.

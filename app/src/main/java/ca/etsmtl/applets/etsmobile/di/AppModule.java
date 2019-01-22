@@ -1,10 +1,10 @@
 package ca.etsmtl.applets.etsmobile.di;
 
 import android.app.Application;
-import androidx.room.Room;
 
 import javax.inject.Singleton;
 
+import androidx.room.Room;
 import ca.etsmtl.applets.etsmobile.db.MoodleAssignmentCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleAssignmentSubmissionDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleCourseDao;

@@ -1,7 +1,5 @@
 package ca.etsmtl.applets.etsmobile.model.applets_events;
 
-import java.util.ArrayList;
-
 public class EvenementCommunaute {
 
     private SourceEvenement sourceEvenement;
