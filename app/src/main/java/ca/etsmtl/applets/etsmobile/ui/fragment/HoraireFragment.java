@@ -1,5 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
@@ -8,6 +9,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -58,9 +62,15 @@ import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.TodayDecorator;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.TrimestreComparator;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
 import ca.etsmtl.applets.etsmobile2.R;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.RuntimePermissions;
 
+@RuntimePermissions
 public class HoraireFragment extends HttpFragment implements Observer, OnDateSelectedListener {
 
     public static final String TAG = "HoraireFragment";
@@ -379,7 +389,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         builder.setPositiveButton(R.string.export_calendar_dialog_positive_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                new AsyncUpdateCalendar(eventsSelection[0], eventsSelection[1], eventsSelection[2]).execute();
+                HoraireFragmentPermissionsDispatcher.writeToCalendarWithPermissionCheck(HoraireFragment.this, eventsSelection[0], eventsSelection[1], eventsSelection[2]);
             }
         });
 
@@ -398,6 +408,26 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         super.onDetach();
 
         horaireManager.deleteObserver(this);
+    }
+
+    @NeedsPermission(Manifest.permission.WRITE_CALENDAR)
+    void writeToCalendar(boolean tempJoursRemplacesEvent, boolean tempSeancesEvent, boolean tempCalPublicEvent) {
+        new AsyncUpdateCalendar(tempJoursRemplacesEvent, tempSeancesEvent, tempCalPublicEvent).execute();
+    }
+
+    @OnPermissionDenied(Manifest.permission.WRITE_CALENDAR)
+    @OnNeverAskAgain(Manifest.permission.WRITE_CALENDAR)
+    void showPermissionsSnackBar() {
+        Snackbar.make(getView(), R.string.export_calendar_allow_write_permission, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.action_settings, (listener) -> Utility.goToAppSettings(listener.getContext()))
+                .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.ets_red))
+                .show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        HoraireFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     private class AsyncUpdateCalendar extends AsyncTask<Object, Void, Object> {

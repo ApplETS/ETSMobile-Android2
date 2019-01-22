@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +42,7 @@ import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCoreModule;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleModuleContent;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleSectionAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -326,13 +326,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showPermissionsSnackbar() {
         Snackbar snackbar = Snackbar.make(getView(), R.string.moodle_allow_storage_permissions, Snackbar.LENGTH_SHORT)
-                .setAction(R.string.action_settings, (listener) -> {
-                    Intent intent = new Intent();
-                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-                    intent.setData(uri);
-                    startActivity(intent);
-                })
+                .setAction(R.string.action_settings, (listener) -> Utility.goToAppSettings(listener.getContext()))
                 .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.ets_red));
         snackbar.show();
     }

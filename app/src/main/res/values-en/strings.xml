@@ -199,6 +199,7 @@
     <string name="export_calendar_dialog_title">Choose your calendar</string>
     <string name="export_public_events_calendar">ETS public calendar</string>
     <string name="export_replaced_days_calendar">Replaced days</string>
+    <string name="export_calendar_allow_write_permission">Please allow calendar permissions to export your schedule.</string>
     <string name="legend">Legend</string>
     <string name="legend_cours">Classes</string>
     <string name="legend_final_exam">Final exam</string>

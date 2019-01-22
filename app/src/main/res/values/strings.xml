@@ -219,6 +219,7 @@
     <string name="export_calendar_dialog_title">Choisissez votre calendrier</string>
     <string name="export_public_events_calendar">Calendrier public ÉTS</string>
     <string name="export_replaced_days_calendar">Jours remplacés</string>
+    <string name="export_calendar_allow_write_permission">S.V.P. Allouez les permissions de calendrier afin de pouvoir exporter votre horaire.</string>
     <string name="legend">Légende</string>
     <string name="legend_cours">Cours</string>
     <string name="legend_final_exam">Examen final</string>
