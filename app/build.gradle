@@ -121,7 +121,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
     implementation 'com.prolificinteractive:material-calendarview:1.4.0'
-    implementation 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
+    implementation 'com.google.code.ksoap2-android:ksoap2-android:3.6.3'
     implementation 'com.j256.ormlite:ormlite-core:4.48'
     implementation 'com.j256.ormlite:ormlite-android:4.48'
     implementation 'com.github.markushi:circlebutton:1.1'
