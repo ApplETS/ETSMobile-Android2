@@ -29,6 +29,9 @@ import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
 import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.listeSeances;
+import ca.etsmtl.applets.etsmobile2.R;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class DataManager {
@@ -37,12 +40,18 @@ public class DataManager {
 	private static DataManager instance;
 	private SpiceManager spiceManager;
 	private DatabaseHelper dbHelper;
+	private MoodleWebService moodleService;
 	private static Context c;
 	private List<AsyncTask<Object, Void, Object>> tasks = new ArrayList<>();
 
 	private DataManager() {
 		spiceManager = new SpiceManager(MyJackSpringAndroidSpiceService.class);
 		dbHelper = new DatabaseHelper(c);
+		moodleService = new Retrofit.Builder()
+				.baseUrl(c.getString(R.string.moodle_url))
+				.addConverterFactory(GsonConverterFactory.create())
+				.build()
+				.create(MoodleWebService.class);
 	}
 
 	public static DataManager getInstance(Context c) {
@@ -414,6 +423,10 @@ public class DataManager {
 
 	public void sendRequest(SpringAndroidSpiceRequest request, RequestListener<Object> listener) {
 		spiceManager.execute(request, listener);
+	}
+
+	public MoodleWebService getMoodleService() {
+		return moodleService;
 	}
 
 }
