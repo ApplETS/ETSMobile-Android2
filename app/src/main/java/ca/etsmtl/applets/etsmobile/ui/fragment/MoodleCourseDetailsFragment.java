@@ -153,6 +153,7 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_moodle_details, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
+        expListView = v.findViewById(R.id.expandableListView_moodle_courses_details);
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
         return v;
     }
