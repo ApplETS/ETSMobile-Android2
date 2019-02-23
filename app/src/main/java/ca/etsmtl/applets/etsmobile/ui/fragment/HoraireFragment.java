@@ -200,32 +200,6 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
     @Override
     public void onRequestSuccess(final Object o) {
-
-        if (o instanceof ListeDeSessions && !((ListeDeSessions) o).liste.isEmpty()) {
-
-            ListeDeSessions listeDeSessions = (ListeDeSessions) o;
-
-            Trimestre derniereSession = Collections.max(listeDeSessions.liste, new TrimestreComparator());
-
-            DateTime dateDebut = new DateTime(derniereSession.dateDebut);
-
-            if(DateTime.now().isBefore(dateDebut)) {
-                dateDebut = DateTime.now();
-            }
-
-            DateTime dateEnd = new DateTime(derniereSession.dateFin);
-
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String dateDebutFormatted = formatter.format(dateDebut.toDate());
-            String dateFinFormatted = formatter.format(dateEnd.toDate());
-            dataManager.sendRequest(
-                    new AppletsApiCalendarRequest(getActivity(),
-                            dateDebutFormatted,
-                            dateFinFormatted
-                    ),
-                    this);
-        }
-
         horaireManager.onRequestSuccess(o);
     }
 

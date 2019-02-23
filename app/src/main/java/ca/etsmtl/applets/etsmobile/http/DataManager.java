@@ -3,10 +3,10 @@ package ca.etsmtl.applets.etsmobile.http;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.octo.android.robospice.SpiceManager;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import org.joda.time.DateTime;
 
@@ -29,20 +29,37 @@ import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
 import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.listeSeances;
+import ca.etsmtl.applets.etsmobile2.R;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class DataManager {
 
 	private static final String TAG = "DataManager::";
 	private static DataManager instance;
-	private SpiceManager spiceManager;
 	private DatabaseHelper dbHelper;
+	private MoodleWebService moodleService;
+	private MonETSWebService monETSService;
 	private static Context c;
 	private List<AsyncTask<Object, Void, Object>> tasks = new ArrayList<>();
 
 	private DataManager() {
-		spiceManager = new SpiceManager(MyJackSpringAndroidSpiceService.class);
 		dbHelper = new DatabaseHelper(c);
+		moodleService = new Retrofit.Builder()
+				.baseUrl(c.getString(R.string.moodle_url))
+				.addConverterFactory(GsonConverterFactory.create())
+				.build()
+				.create(MoodleWebService.class);
+		// Notifications dates layout are different for MonÉTS
+		Gson monETSGson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+				.create();
+		monETSService = new Retrofit.Builder()
+				.baseUrl(c.getString(R.string.url_mon_ets))
+				.addConverterFactory(GsonConverterFactory.create(monETSGson))
+				.build()
+				.create(MonETSWebService.class);
 	}
 
 	public static DataManager getInstance(Context c) {
@@ -385,20 +402,6 @@ public class DataManager {
 		getDataFromSignet(SignetMethods.INFO_ETUDIANT, userCredentials, listener);
 	}
 
-	public void start() {
-		if (!spiceManager.isStarted())
-			spiceManager.start(c);
-	}
-
-	public void stop() {
-		if (!spiceManager.isStarted())
-			spiceManager.shouldStop();
-
-		for (AsyncTask<Object, Void, Object> task : tasks) {
-			task.cancel(true);
-		}
-	}
-
 	/**
 	 * @return the first registered {@link Etudiant} or null if none is
 	 *         registered
@@ -412,8 +415,11 @@ public class DataManager {
 		return null;
 	}
 
-	public void sendRequest(SpringAndroidSpiceRequest request, RequestListener<Object> listener) {
-		spiceManager.execute(request, listener);
+	public MoodleWebService getMoodleService() {
+		return moodleService;
 	}
 
+	public MonETSWebService getMonETSService() {
+		return monETSService;
+	}
 }
