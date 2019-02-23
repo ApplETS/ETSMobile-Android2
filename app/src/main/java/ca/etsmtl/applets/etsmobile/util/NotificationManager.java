@@ -30,8 +30,6 @@ public class NotificationManager {
     private Context context;
     private MonETSWebService service;
     private RequestListener<Object> listener;
-    private SecurePreferences securePreferences;
-    private boolean allNotifsLoaded;
 
     /**
      * Default constructor for a manager
@@ -44,8 +42,6 @@ public class NotificationManager {
         context = managerContext;
         service = managerService;
         listener = managerListener;
-        securePreferences = new SecurePreferences(context);
-        allNotifsLoaded = securePreferences.getBoolean(Constants.ALL_NOTIFS_LOADED, false);
     }
 
     /**
@@ -54,16 +50,10 @@ public class NotificationManager {
     public void updateNotifications() {
         AccountManager accountManager = AccountManager.get(context);
         Account[] accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
-        Call<List<MonETSNotification>> notificationCall;
-        String authToken;
 
         if (accounts.length > 0) {
-            authToken = accountManager.peekAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE);
-            if (allNotifsLoaded) {
-                notificationCall = service.getUnreadNotifications(authToken);
-            } else {
-                notificationCall = service.getAllNotifications(authToken);
-            }
+            String authToken = accountManager.peekAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE);
+            Call<List<MonETSNotification>> notificationCall = service.getAllNotifications(authToken);
             notificationCall.enqueue(createCallback());
         }
     }
@@ -102,9 +92,7 @@ public class NotificationManager {
             for (MonETSNotification monETSNotification : notifications) {
                 dao.createOrUpdate(monETSNotification);
             }
-            if (!allNotifsLoaded) {
-                securePreferences.edit().putBoolean(Constants.ALL_NOTIFS_LOADED, true).apply();
-            }
+
             listener.onRequestSuccess(notifications);
         } catch (SQLException e) {
             e.printStackTrace();

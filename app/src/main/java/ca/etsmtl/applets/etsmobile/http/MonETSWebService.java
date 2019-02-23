@@ -22,12 +22,4 @@ public interface MonETSWebService {
     @GET("/api/notification")
     Call<List<MonETSNotification>> getAllNotifications(@Header("Cookie") String authToken);
 
-    /**
-     * Retourne uniquement les notifications non lues provenant de MonÉTS pour un utilisateur
-     *
-     * @param authToken Le jeton d'authentification d'un utilisateur
-     * @return la liste de notifications pour un utilisateur
-     */
-    @GET("/api/notification/1")
-    Call<List<MonETSNotification>> getUnreadNotifications(@Header("Cookie") String authToken);
 }
