@@ -85,6 +85,11 @@ public class NotificationManager {
         };
     }
 
+    /**
+     * Updates the database with a given list of notifications
+     *
+     * @param notifications the list of notifications that have been fetched from MonÉTS's API
+     */
     private void updateDatabase(List<MonETSNotification> notifications) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         try {
@@ -99,6 +104,12 @@ public class NotificationManager {
         }
     }
 
+    /**
+     * Async class used to retrieve a new token for MonÉTS if it's not valid anymore.
+     *
+     * The class itself is static to avoid leaks since it has a context attached to it. Though, a
+     * {@link WeakReference} is used so the GC can collect it as needed.
+     */
     private static class AsyncUpdateMonETSToken extends AsyncTask<Void, Void, String> {
 
         private WeakReference<Context> asyncContext;
