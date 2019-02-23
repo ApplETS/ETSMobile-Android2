@@ -3,6 +3,8 @@ package ca.etsmtl.applets.etsmobile.http;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -41,6 +43,7 @@ public class DataManager {
 	private SpiceManager spiceManager;
 	private DatabaseHelper dbHelper;
 	private MoodleWebService moodleService;
+	private MonETSWebService monETSService;
 	private static Context c;
 	private List<AsyncTask<Object, Void, Object>> tasks = new ArrayList<>();
 
@@ -52,6 +55,15 @@ public class DataManager {
 				.addConverterFactory(GsonConverterFactory.create())
 				.build()
 				.create(MoodleWebService.class);
+		// Notifications dates layout are different for MonÉTS
+		Gson monETSGson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+				.create();
+		monETSService = new Retrofit.Builder()
+				.baseUrl(c.getString(R.string.url_mon_ets))
+				.addConverterFactory(GsonConverterFactory.create(monETSGson))
+				.build()
+				.create(MonETSWebService.class);
 	}
 
 	public static DataManager getInstance(Context c) {
@@ -429,4 +441,7 @@ public class DataManager {
 		return moodleService;
 	}
 
+	public MonETSWebService getMonETSService() {
+		return monETSService;
+	}
 }

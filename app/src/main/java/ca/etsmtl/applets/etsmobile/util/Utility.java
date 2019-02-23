@@ -14,11 +14,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.URLUtil;
 
-import com.j256.ormlite.dao.Dao;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
-
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,11 +25,6 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import androidx.core.content.ContextCompat;
-import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.http.MonETSNotificationsRequest;
-import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
-import ca.etsmtl.applets.etsmobile.model.MonETSNotificationList;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class Utility {
@@ -131,56 +121,6 @@ public class Utility {
             e.printStackTrace();
         }
 
-    }
-
-    /**
-     * Gets MonÉTS notifications and update DB
-     * @param context
-     * @param requestListener
-     */
-    public static void loadNotifications(Context context, final RequestListener<Object> requestListener) {
-        final SecurePreferences securePreferences = new SecurePreferences(context);
-        final boolean allNotifsLoaded = securePreferences.getBoolean(Constants.ALL_NOTIFS_LOADED, false);
-        MonETSNotificationsRequest monETSNotificationsRequest;
-        if (!allNotifsLoaded) {
-            monETSNotificationsRequest = new MonETSNotificationsRequest(context, false);
-        } else {
-            monETSNotificationsRequest = new MonETSNotificationsRequest(context, true);
-        }
-
-        final DataManager dataManager = DataManager.getInstance(context);
-        dataManager.start();
-        final DatabaseHelper databaseHelper = new DatabaseHelper(context);
-
-        dataManager.sendRequest(monETSNotificationsRequest, new RequestListener<Object>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                requestListener.onRequestFailure(spiceException);
-                dataManager.stop();
-            }
-
-            @Override
-            public void onRequestSuccess(Object o) {
-                if (o instanceof MonETSNotificationList) {
-                    try {
-                        Dao<MonETSNotification, ?> dao = databaseHelper.getDao(MonETSNotification.class);
-                        MonETSNotificationList list = (MonETSNotificationList) o;
-                        for (MonETSNotification monETSNotification : list) {
-                            dao.createOrUpdate(monETSNotification);
-                        }
-                        if (!allNotifsLoaded) {
-                            securePreferences.edit().putBoolean(Constants.ALL_NOTIFS_LOADED, true).commit();
-                        }
-                        requestListener.onRequestSuccess(list);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-
-                    }
-                }
-                dataManager.stop();
-
-            }
-        });
     }
 
     /**

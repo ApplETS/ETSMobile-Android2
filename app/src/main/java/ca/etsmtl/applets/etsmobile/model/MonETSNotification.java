@@ -1,7 +1,6 @@
 package ca.etsmtl.applets.etsmobile.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -11,31 +10,30 @@ import java.util.Date;
  * Created by gnut3ll4 on 15/12/15.
  */
 @DatabaseTable(tableName = "monets_notification")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class MonETSNotification implements Comparable<MonETSNotification> {
 
     @DatabaseField(id = true)
-    @JsonProperty("Id")
+    @SerializedName("Id")
     int id;
 
     @DatabaseField
-    @JsonProperty("DossierId")
+    @SerializedName("DossierId")
     int dossierId;
 
     @DatabaseField
-    @JsonProperty("NotificationTexte")
+    @SerializedName("NotificationTexte")
     String notificationTexte;
 
     @DatabaseField
-    @JsonProperty("NotificationDateDebutAffichage")
+    @SerializedName("NotificationDateDebutAffichage")
     Date notificationDateDebutAffichage;
 
     @DatabaseField
-    @JsonProperty("NotificationApplicationNom")
+    @SerializedName("NotificationApplicationNom")
     String notificationApplicationNom;
 
     @DatabaseField
-    @JsonProperty("Url")
+    @SerializedName("Url")
     String url;
 
     public MonETSNotification() {
