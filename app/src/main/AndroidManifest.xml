@@ -112,9 +112,6 @@
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
 
-        <service
-            android:name="ca.etsmtl.applets.etsmobile.http.MyJackSpringAndroidSpiceService"
-            android:exported="false" />
         <service android:name="ca.etsmtl.applets.etsmobile.util.ETSAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
