@@ -17,7 +17,7 @@ import org.ksoap2.serialization.AttributeContainer;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
-import org.ksoap2.transport.HttpTransportSE;
+import org.ksoap2.transport.OkHttpTransportSE;
 
 import java.util.List;
 
@@ -33,14 +33,25 @@ import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
 import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
 import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.listeSeances;
+import okhttp3.CertificatePinner;
+import okhttp3.OkHttpClient;
 
 public class SignetsMobileSoap {
 	public List<HeaderProperty> httpHeaders;
 	String url = "https://signets-ens.etsmtl.ca/Secure/WebServices/SignetsMobile.asmx";
 	int timeOut = 60000;
 	IServiceEvents callback;
+	private static final String SIGNETS_HOST_NAME = "etsmtl.ca";
+	private OkHttpClient okHttpClient;
 
+	// Note: The certificate pin must be updated when the certificate from ÉTS gets changed
 	public SignetsMobileSoap() {
+		CertificatePinner certificatePinner = new CertificatePinner.Builder()
+				.add(SIGNETS_HOST_NAME, "sha256/FTcPi+8WTG2g88pno6CwW6N/RzBnDgsGmFRUiECRsnU=")
+				.build();
+		okHttpClient = new OkHttpClient.Builder()
+				.certificatePinner(certificatePinner)
+				.build();
 	}
 
 	public SignetsMobileSoap(IServiceEvents callback) {
@@ -59,7 +70,7 @@ public class SignetsMobileSoap {
 	}
 
 	protected org.ksoap2.transport.Transport createTransport() {
-		return new HttpTransportSE(url, timeOut);
+		return new OkHttpTransportSE(okHttpClient, null, url, timeOut, 0);
 	}
 
 	protected ExtendedSoapSerializationEnvelope createEnvelope() {
