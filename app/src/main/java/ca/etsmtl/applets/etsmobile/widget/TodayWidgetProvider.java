@@ -292,7 +292,6 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
     private void sync() {
         // Requêtes des données distantes
-        dataManager.start();
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
         dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
@@ -326,43 +325,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
      */
     @Override
     public void onRequestSuccess(Object o) {
-        if (o instanceof ListeDeSessions) {
-            if (((ListeDeSessions) o).liste.size() > 0)
-                requestEventList((ListeDeSessions) o);
-            else {
-                onRequestFailure(new SpiceException("La liste de sessions est vide."));
-            }
-        } else {
-            // Mise à jour de la BD contenant les données locales
-            horaireManager.onRequestSuccess(o);
-        }
-    }
-
-    /**
-     * Procédure déclenchant une requête additionnelle pour permettre la synchronisation de la liste
-     * d'événements et satisfaire la condition syncEventListEnded dans
-     * {@link ca.etsmtl.applets.etsmobile.util.HoraireManager#onRequestSuccess(Object)}
-     *
-     * @param listeDeSessions
-     */
-    private void requestEventList(ListeDeSessions listeDeSessions) {
-        Trimestre derniereSession = Collections.max(listeDeSessions.liste,
-                new TrimestreComparator());
-
-        DateTime dateDebut = new DateTime(derniereSession.dateDebut);
-
-        if (DateTime.now().isBefore(dateDebut)) {
-            dateDebut = DateTime.now();
-        }
-
-        DateTime dateEnd = new DateTime(derniereSession.dateFin);
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String dateDebutFormatted = formatter.format(dateDebut.toDate());
-        String dateFinFormatted = formatter.format(dateEnd.toDate());
-        dataManager.start();
-        dataManager.sendRequest(new AppletsApiCalendarRequest(context, dateDebutFormatted,
-                dateFinFormatted), this);
+        horaireManager.onRequestSuccess(o);
     }
 
     /**

@@ -67,7 +67,6 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.OtherAppsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.ProfilFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
@@ -92,12 +91,11 @@ public class MainActivity extends AppCompatActivity {
     public static final int ACHIEVEMENTS_ITEM = 10;
     public static final int ABOUT_ITEM = 11;
     public static final int FAQ_ITEM = 12;
-    public static final int SPONSOR_ITEM = 13;
-    public static final int TODAY_ITEM = 14;
-    public static final int EVENTS_ITEM = 15;
-    public static final int LOGIN = 16;
-    public static final int LOGOUT = 17;
-    public static final int PROFILE_ITEM = 18;
+    public static final int TODAY_ITEM = 13;
+    public static final int EVENTS_ITEM = 14;
+    public static final int LOGIN = 15;
+    public static final int LOGOUT = 16;
+    public static final int PROFILE_ITEM = 17;
 
     private String TAG = "MainActivity";
     private AccountManager accountManager;
@@ -250,7 +248,6 @@ public class MainActivity extends AppCompatActivity {
                         new ExpandableDrawerItem().withName(R.string.menu_section_3_applets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_apps).withIdentifier(ACHIEVEMENTS_ITEM).withIcon(R.drawable.ic_star_60x60),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_about).withIdentifier(ABOUT_ITEM).withIcon(R.drawable.ic_logo_icon_final),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_3_sponsors).withIdentifier(SPONSOR_ITEM).withIcon(R.drawable.ic_ico_partners),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_faq).withIdentifier(FAQ_ITEM).withIcon(R.drawable.ic_ico_faq)
                         )
 
@@ -280,18 +277,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onPrepareOptionsMenu(menu);
         return true;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        DataManager.getInstance(this).start();
-    }
-
-    @Override
-    protected void onStop() {
-        DataManager.getInstance(this).stop();
-        super.onStop();
     }
 
     @Override
@@ -466,9 +451,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case ABOUT_ITEM:
                         goToFragment(new AboutFragment(), AboutFragment.class.getName());
-                        break;
-                    case SPONSOR_ITEM:
-                        goToFragment(new SponsorsFragment(), SponsorsFragment.class.getName());
                         break;
                     case LOGIN:
                         prefs.edit().putBoolean(Constants.FIRST_LOGIN, false).apply();
