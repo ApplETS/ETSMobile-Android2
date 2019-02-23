@@ -260,18 +260,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        dataManager.start();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        dataManager.stop();
-    }
-
     private void createETSMobileAccount(String accountName, String accountPassword) {
         final Account account = new Account(accountName, Constants.ACCOUNT_TYPE);
 

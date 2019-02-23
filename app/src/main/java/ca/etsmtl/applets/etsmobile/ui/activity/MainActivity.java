@@ -280,18 +280,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        DataManager.getInstance(this).start();
-    }
-
-    @Override
-    protected void onStop() {
-        DataManager.getInstance(this).stop();
-        super.onStop();
-    }
-
-    @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
         if (fragment instanceof BaseFragment)

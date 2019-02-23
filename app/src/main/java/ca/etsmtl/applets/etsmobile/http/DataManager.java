@@ -5,10 +5,8 @@ import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import org.joda.time.DateTime;
 
@@ -40,7 +38,6 @@ public class DataManager {
 
 	private static final String TAG = "DataManager::";
 	private static DataManager instance;
-	private SpiceManager spiceManager;
 	private DatabaseHelper dbHelper;
 	private MoodleWebService moodleService;
 	private MonETSWebService monETSService;
@@ -48,7 +45,6 @@ public class DataManager {
 	private List<AsyncTask<Object, Void, Object>> tasks = new ArrayList<>();
 
 	private DataManager() {
-		spiceManager = new SpiceManager(MyJackSpringAndroidSpiceService.class);
 		dbHelper = new DatabaseHelper(c);
 		moodleService = new Retrofit.Builder()
 				.baseUrl(c.getString(R.string.moodle_url))
@@ -406,20 +402,6 @@ public class DataManager {
 		getDataFromSignet(SignetMethods.INFO_ETUDIANT, userCredentials, listener);
 	}
 
-	public void start() {
-		if (!spiceManager.isStarted())
-			spiceManager.start(c);
-	}
-
-	public void stop() {
-		if (!spiceManager.isStarted())
-			spiceManager.shouldStop();
-
-		for (AsyncTask<Object, Void, Object> task : tasks) {
-			task.cancel(true);
-		}
-	}
-
 	/**
 	 * @return the first registered {@link Etudiant} or null if none is
 	 *         registered
@@ -431,10 +413,6 @@ public class DataManager {
 		if (queryForAll.size() > 0)
 			return queryForAll.get(0);
 		return null;
-	}
-
-	public void sendRequest(SpringAndroidSpiceRequest request, RequestListener<Object> listener) {
-		spiceManager.execute(request, listener);
 	}
 
 	public MoodleWebService getMoodleService() {
