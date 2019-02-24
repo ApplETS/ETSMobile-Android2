@@ -447,13 +447,13 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case LOGIN:
                         prefs.edit().putBoolean(Constants.FIRST_LOGIN, false).apply();
-                        final AccountManagerFuture<Bundle> future =
-                                accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
-                                    @Override
-                                    public void run(AccountManagerFuture<Bundle> future) {
-                                        //Login successful
-                                    }
-                                }, null);
+                        accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, future -> {
+                            // Login successful
+                            // Recreate the activity to see the changes. using recreate() directly causes some bugs so let's redo it the old way.
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
+                        }, null);
                         break;
                     case LOGOUT:
                         openLogoutDialogAlert();
@@ -489,7 +489,7 @@ public class MainActivity extends AppCompatActivity {
     public void goToFragment(Fragment fragment, String tag) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
-                .commit();
+                .commitAllowingStateLoss();
 
         this.invalidateOptionsMenu();
     }

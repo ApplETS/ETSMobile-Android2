@@ -243,8 +243,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
 
                 createETSMobileAccount(accountName, accountPassword);
 
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-
                 //Run authentication to monETS in another thread not to slow app
                 new AuthentificationPortailTask(this).execute(
                         getString(R.string.portail_api_authentification_url),
