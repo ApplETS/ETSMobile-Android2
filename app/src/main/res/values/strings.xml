@@ -67,8 +67,8 @@
     <string name="activity_moodle_pwd">Mot de passe</string>
     <string name="activity_moodle_pwd_instruc">Votre mot de passe universitaire</string>
     <string name="activity_moodle_app">Moodle App</string>
-    <string name="applets_about">ÉTSMobile a été réalisée par le club scientifique ApplETS de l\'École de technologie supérieure.\n\nApplETS se veut, avant tout, un regroupement d’étudiants qui partagent un intérêt commun pour le domaine des télécommunications et des applications mobiles.
-        La mission d\'ApplETS est de former les étudiants au développement mobile et de promouvoir la production d\'applications mobiles au sein de la communauté étudiante.\n\nPour en savoir plus, n\'hésitez pas à consulter notre site web : \n\nhttp://clubapplets.ca\n\nLes contributions à l\'application sont ouvertes, venez faire un tour sur le dépôt github :\nhttp://github.com/ApplETS/ETSMobile-Android2</string>
+    <string name="applets_about">ÉTSMobile a été réalisée par le club scientifique App|ETS de l\'École de technologie supérieure.\n\nApp|ETS se veut, avant tout, un regroupement d’étudiants qui partagent un intérêt commun pour le domaine des télécommunications et des applications mobiles.
+        La mission d\'App|ETS est de former les étudiants au développement mobile et de promouvoir la production d\'applications mobiles au sein de la communauté étudiante.\n\nPour en savoir plus, n\'hésitez pas à consulter notre site web : \n\nhttp://clubapplets.ca\n\nLes contributions à l\'application sont ouvertes, venez faire un tour sur le dépôt github :\nhttp://github.com/ApplETS/ETSMobile-Android2</string>
     <string name="applets_ens_etsmtl_ca">applets@ens.etsmtl.ca</string>
     <string name="etsmobile_android_commentaire">ETSMobile-Android : Commentaire</string>
     <string name="default_comment"></string>
