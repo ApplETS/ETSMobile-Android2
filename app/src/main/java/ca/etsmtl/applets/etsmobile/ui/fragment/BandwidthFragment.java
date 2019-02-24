@@ -23,8 +23,6 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 

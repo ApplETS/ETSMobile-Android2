@@ -8,8 +8,6 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
-
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

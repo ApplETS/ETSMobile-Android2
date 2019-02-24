@@ -20,7 +20,6 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;

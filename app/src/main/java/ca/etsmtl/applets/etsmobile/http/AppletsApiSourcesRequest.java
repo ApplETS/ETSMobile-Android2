@@ -5,7 +5,6 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
-
 import ca.etsmtl.applets.etsmobile.model.applets_events.SourceEvenementList;
 import ca.etsmtl.applets.etsmobile2.R;
 import okhttp3.OkHttpClient;
