@@ -22,8 +22,8 @@ import org.ksoap2.transport.OkHttpTransportSE;
 import java.io.InputStream;
 import java.util.List;
 
-import ca.etsmtl.applets.etsmobile.http.SSLUtilities;
-import ca.etsmtl.applets.etsmobile.http.SignetsSSLTrust;
+import ca.etsmtl.applets.etsmobile.http.TLSUtilities;
+import ca.etsmtl.applets.etsmobile.http.ETSTLSTrust;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
@@ -46,7 +46,7 @@ public class SignetsMobileSoap {
 	private OkHttpClient okHttpClient;
 
 	public SignetsMobileSoap(InputStream certificateStream) {
-		SignetsSSLTrust trust = SSLUtilities.createSignetsCertificateTrust(certificateStream);
+		ETSTLSTrust trust = TLSUtilities.createSignetsCertificateTrust(certificateStream);
 		okHttpClient = new OkHttpClient.Builder()
 				.sslSocketFactory(trust.getContext().getSocketFactory(), trust.getManager())
 				.build();

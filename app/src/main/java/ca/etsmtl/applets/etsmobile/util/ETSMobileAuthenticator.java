@@ -17,9 +17,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.http.ETSTLSTrust;
+import ca.etsmtl.applets.etsmobile.http.TLSUtilities;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile2.R;
 import okhttp3.MediaType;
@@ -86,7 +89,11 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
 
             if (password != null) {
 
-                OkHttpClient client = new OkHttpClient();
+                InputStream certificate = mContext.getResources().openRawResource(R.raw.ets_pub_cert);
+                ETSTLSTrust trust = TLSUtilities.createSignetsCertificateTrust(certificate);
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .sslSocketFactory(trust.getContext().getSocketFactory(), trust.getManager())
+                        .build();
 
                 MediaType mediaType = MediaType.parse("application/json");
                 RequestBody body = RequestBody.create(mediaType, "{\n  \"Username\": \"" + username + "\",\n  \"Password\": \"" + password + "\"\n}");
@@ -149,7 +156,6 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
             result.putString(AccountManager.KEY_AUTHTOKEN, null);
             return result;
         }
-
 
         // If we get here, then we couldn't access the user's password - so we
         // need to re-prompt them for their credentials. We do that by creating

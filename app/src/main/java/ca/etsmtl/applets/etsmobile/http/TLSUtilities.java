@@ -11,19 +11,19 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * Utility class handling SSL related matters
+ * Utility class handling TLS/SSL related matters
  *
  * @author zaclimon
  */
-public class SSLUtilities {
+public class TLSUtilities {
 
     /**
      * Takes a given certificate and stores it inside the device's keystore.
      *
      * @param certificateStream the {@link InputStream} pointing to the certificate
-     * @return a {@link SignetsSSLTrust} containing the {@link X509TrustManager} as well as the {@link SSLContext} required for further usage.
+     * @return a {@link ETSTLSTrust} containing the {@link X509TrustManager} as well as the {@link SSLContext} required for further usage.
      */
-    public static SignetsSSLTrust createSignetsCertificateTrust(InputStream certificateStream) {
+    public static ETSTLSTrust createSignetsCertificateTrust(InputStream certificateStream) {
 
         try (InputStream caInput = new BufferedInputStream(certificateStream)) {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
@@ -50,7 +50,7 @@ public class SSLUtilities {
             context.init(null, tmf.getTrustManagers(), null);
 
             X509TrustManager trustManager =  (X509TrustManager) tmf.getTrustManagers()[0];
-            SignetsSSLTrust sslTrust = new SignetsSSLTrust(trustManager, context);
+            ETSTLSTrust sslTrust = new ETSTLSTrust(trustManager, context);
 
             return sslTrust;
         } catch (Exception e) {
