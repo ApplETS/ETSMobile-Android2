@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
-import java.io.InputStream;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;

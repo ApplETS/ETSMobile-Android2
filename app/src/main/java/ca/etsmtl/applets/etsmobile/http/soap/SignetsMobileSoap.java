@@ -19,11 +19,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.transport.OkHttpTransportSE;
 
-import java.io.InputStream;
 import java.util.List;
 
-import ca.etsmtl.applets.etsmobile.http.TLSUtilities;
-import ca.etsmtl.applets.etsmobile.http.ETSTLSTrust;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;

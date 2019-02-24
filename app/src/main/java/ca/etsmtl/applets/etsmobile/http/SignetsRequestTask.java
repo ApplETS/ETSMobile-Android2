@@ -8,7 +8,6 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.joda.time.DateTime;
 
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +27,6 @@ import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
 import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.listeSeances;
 import ca.etsmtl.applets.etsmobile.util.SignetsMethods;
-import ca.etsmtl.applets.etsmobile2.R;
 
 public class SignetsRequestTask extends AsyncTask<Object, Void, Object> {
     private UserCredentials credentials;

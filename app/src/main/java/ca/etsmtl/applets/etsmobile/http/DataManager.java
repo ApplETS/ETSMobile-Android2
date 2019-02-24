@@ -1,14 +1,12 @@
 package ca.etsmtl.applets.etsmobile.http;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
