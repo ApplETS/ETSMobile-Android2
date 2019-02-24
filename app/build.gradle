@@ -41,7 +41,7 @@ android {
 
     defaultConfig {
         applicationId "ca.etsmtl.applets.etsmobile"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 30
         versionName "2.34"
