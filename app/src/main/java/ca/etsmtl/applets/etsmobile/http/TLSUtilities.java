@@ -1,5 +1,7 @@
 package ca.etsmtl.applets.etsmobile.http;
 
+import android.content.Context;
+
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.security.KeyStore;
@@ -9,6 +11,9 @@ import java.security.cert.CertificateFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+
+import ca.etsmtl.applets.etsmobile2.R;
+import okhttp3.OkHttpClient;
 
 /**
  * Utility class handling TLS/SSL related matters
@@ -57,6 +62,21 @@ public class TLSUtilities {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Creates a custom OkHttpClient for ETS's custom certificates
+     *
+     * @param context the context required in order to search the certificate
+     * @return an {@link OkHttpClient} which can do requests using the school's certificate
+     */
+    public static OkHttpClient createETSOkHttpClient(Context context) {
+        InputStream certificate = context.getResources().openRawResource(R.raw.ets_pub_cert);
+        ETSTLSTrust trust = createSignetsCertificateTrust(certificate);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .sslSocketFactory(trust.getContext().getSocketFactory(), trust.getManager())
+                .build();
+        return client;
     }
 
 }

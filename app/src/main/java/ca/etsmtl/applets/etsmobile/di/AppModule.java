@@ -11,6 +11,7 @@ import ca.etsmtl.applets.etsmobile.db.MoodleCourseDao;
 import ca.etsmtl.applets.etsmobile.db.MoodleDb;
 import ca.etsmtl.applets.etsmobile.db.MoodleProfileDao;
 import ca.etsmtl.applets.etsmobile.http.MoodleWebService;
+import ca.etsmtl.applets.etsmobile.http.TLSUtilities;
 import ca.etsmtl.applets.etsmobile.repository.MoodleRepository;
 import ca.etsmtl.applets.etsmobile.util.LiveDataCallAdapterFactory;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModelFactory;
@@ -48,6 +49,7 @@ public class AppModule {
     public MoodleWebService provideMoodleService() {
         return new Retrofit.Builder()
                 .baseUrl(app.getString(R.string.moodle_url))
+                .client(TLSUtilities.createETSOkHttpClient(app))
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .build()

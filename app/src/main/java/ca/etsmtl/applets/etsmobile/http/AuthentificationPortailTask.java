@@ -40,14 +40,8 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
     }
 
     protected Intent doInBackground(String... params) {
-        InputStream certificate = launchingActivity.getResources().openRawResource(R.raw.ets_pub_cert);
-        ETSTLSTrust trust = TLSUtilities.createSignetsCertificateTrust(certificate);
-        OkHttpClient client = new OkHttpClient.Builder()
-                .sslSocketFactory(trust.getContext().getSocketFactory(), trust.getManager())
-                .build();
-
+        OkHttpClient client = TLSUtilities.createETSOkHttpClient(launchingActivity);
         String url = params[0], username = params[1], password = params[2];
-
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, "{\n  \"Username\": \"" + username + "\",\n  \"Password\": \"" + password + "\"\n}");
         Request request = new Request.Builder()

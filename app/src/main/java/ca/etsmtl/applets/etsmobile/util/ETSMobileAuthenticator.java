@@ -88,12 +88,7 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
             final String username = account.name;
 
             if (password != null) {
-
-                InputStream certificate = mContext.getResources().openRawResource(R.raw.ets_pub_cert);
-                ETSTLSTrust trust = TLSUtilities.createSignetsCertificateTrust(certificate);
-                OkHttpClient client = new OkHttpClient.Builder()
-                        .sslSocketFactory(trust.getContext().getSocketFactory(), trust.getManager())
-                        .build();
+                OkHttpClient client = TLSUtilities.createETSOkHttpClient(mContext);
 
                 MediaType mediaType = MediaType.parse("application/json");
                 RequestBody body = RequestBody.create(mediaType, "{\n  \"Username\": \"" + username + "\",\n  \"Password\": \"" + password + "\"\n}");

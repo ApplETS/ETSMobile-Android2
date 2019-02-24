@@ -53,8 +53,7 @@ public class SignetsRequestTask extends AsyncTask<Object, Void, Object> {
             String[] reqParams = (String[]) params[1];
 
             Context c = taskContext.get();
-            InputStream certificate = c.getResources().openRawResource(R.raw.ets_pub_cert);
-            final SignetsMobileSoap signetsMobileSoap = new SignetsMobileSoap(certificate);
+            final SignetsMobileSoap signetsMobileSoap = new SignetsMobileSoap(TLSUtilities.createETSOkHttpClient(c));
 
             String username = "";
             String password = "";

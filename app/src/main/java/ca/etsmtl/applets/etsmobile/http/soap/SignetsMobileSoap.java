@@ -45,11 +45,8 @@ public class SignetsMobileSoap {
 	IServiceEvents callback;
 	private OkHttpClient okHttpClient;
 
-	public SignetsMobileSoap(InputStream certificateStream) {
-		ETSTLSTrust trust = TLSUtilities.createSignetsCertificateTrust(certificateStream);
-		okHttpClient = new OkHttpClient.Builder()
-				.sslSocketFactory(trust.getContext().getSocketFactory(), trust.getManager())
-				.build();
+	public SignetsMobileSoap(OkHttpClient client) {
+		okHttpClient = client;
 	}
 
 	public SignetsMobileSoap(IServiceEvents callback) {

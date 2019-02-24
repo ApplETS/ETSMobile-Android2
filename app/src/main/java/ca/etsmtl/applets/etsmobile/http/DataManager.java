@@ -28,12 +28,12 @@ public class DataManager {
 	private MoodleWebService moodleService;
 	private MonETSWebService monETSService;
 	private static Context c;
-	private List<AsyncTask<Object, Void, Object>> tasks = new ArrayList<>();
 
 	private DataManager() {
 		dbHelper = new DatabaseHelper(c);
 		moodleService = new Retrofit.Builder()
 				.baseUrl(c.getString(R.string.moodle_url))
+				.client(TLSUtilities.createETSOkHttpClient(c))
 				.addConverterFactory(GsonConverterFactory.create())
 				.build()
 				.create(MoodleWebService.class);
@@ -43,6 +43,7 @@ public class DataManager {
 				.create();
 		monETSService = new Retrofit.Builder()
 				.baseUrl(c.getString(R.string.url_mon_ets))
+				.client(TLSUtilities.createETSOkHttpClient(c))
 				.addConverterFactory(GsonConverterFactory.create(monETSGson))
 				.build()
 				.create(MonETSWebService.class);
