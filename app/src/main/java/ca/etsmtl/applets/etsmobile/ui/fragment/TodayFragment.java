@@ -30,7 +30,6 @@ import java.util.concurrent.TimeUnit;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
@@ -41,6 +40,7 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
+import ca.etsmtl.applets.etsmobile.util.SignetsMethods;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -88,9 +88,9 @@ public class TodayFragment extends HttpFragment implements Observer {
         horaireManager = new HoraireManager(this, getActivity());
         horaireManager.addObserver(this);
 
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 

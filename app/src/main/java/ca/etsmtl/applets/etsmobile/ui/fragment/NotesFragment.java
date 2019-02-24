@@ -15,7 +15,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NoteAdapter;
@@ -24,6 +23,7 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteItem;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
+import ca.etsmtl.applets.etsmobile.util.SignetsMethods;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -71,8 +71,8 @@ public class NotesFragment extends HttpFragment implements Observer {
 
         refreshList();
 
-        dataManager.getDataFromSignet(SignetMethods.LIST_COURS, ApplicationManager.userCredentials, this, "");
-        dataManager.getDataFromSignet(SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this, "");
+        dataManager.getDataFromSignet(SignetsMethods.LIST_COURS, ApplicationManager.userCredentials, this, "");
+        dataManager.getDataFromSignet(SignetsMethods.LIST_SESSION, ApplicationManager.userCredentials, this, "");
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 

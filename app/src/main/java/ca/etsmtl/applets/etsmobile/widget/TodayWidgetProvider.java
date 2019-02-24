@@ -19,23 +19,18 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.joda.time.DateTime;
 
-import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
 import androidx.core.graphics.ColorUtils;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
-import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
-import ca.etsmtl.applets.etsmobile.util.TrimestreComparator;
+import ca.etsmtl.applets.etsmobile.util.SignetsMethods;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
@@ -292,9 +287,9 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
     private void sync() {
         // Requêtes des données distantes
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
     }
 
     /**

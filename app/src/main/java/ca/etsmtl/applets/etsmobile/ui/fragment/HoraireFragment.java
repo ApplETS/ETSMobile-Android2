@@ -33,7 +33,6 @@ import java.sql.SQLException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Observable;
@@ -45,13 +44,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Event;
-import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
-import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseTodayDecorator;
@@ -60,7 +54,7 @@ import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.FinalExamDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.TodayDecorator;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
-import ca.etsmtl.applets.etsmobile.util.TrimestreComparator;
+import ca.etsmtl.applets.etsmobile.util.SignetsMethods;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -171,9 +165,9 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 //        customProgressDialog = new CustomProgressDialog(getActivity(), R.drawable.loading_spinner, "Synchronisation en cours");
 //        customProgressDialog.show();
 
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
         // @TODO Eventually, we might want to make the call for ETS Events here instead of in the onRequestSuccess.
         // The problem right now is getting the endDate without using the ListeDeSessions
         /*String dateStart = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
