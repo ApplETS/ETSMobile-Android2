@@ -136,12 +136,10 @@ public class SignetsRequestTask extends AsyncTask<Object, Void, Object> {
                     ArrayOfFicheEmploye arrayOfFicheEmploye;
 
                     for (int i = 0; i < arrayOfService.size(); i++) {
-
                         Service service = arrayOfService.get(i);
                         arrayOfFicheEmploye = new WebServiceSoap().Recherche(null, null, "" + service.ServiceCode);
 
                         listeEmployeByService.put(service.Nom, arrayOfFicheEmploye);
-
                     }
                     result = listeEmployeByService;
                     break;
@@ -163,7 +161,6 @@ public class SignetsRequestTask extends AsyncTask<Object, Void, Object> {
                     DateTime dt = new DateTime();
 
                     for (Trimestre trimestre : listeDeSessions.liste) {
-
                         DateTime dtEnd = new DateTime(trimestre.dateFin);
 
                         if (dt.isBefore(dtEnd.plusDays(1))) {
@@ -192,13 +189,10 @@ public class SignetsRequestTask extends AsyncTask<Object, Void, Object> {
                     DateTime dt3 = new DateTime();
 
                     for (Trimestre trimestre : listeDeSessions3.liste) {
-
                         DateTime dtEnd3 = new DateTime(trimestre.dateFin);
 
                         if (dt3.isBefore(dtEnd3.plusDays(1))) {
-
                             listeJoursRemplaces.listeJours.addAll(signetsMobileSoap.lireJoursRemplaces(trimestre.abrege).listeJours);
-
                         }
                     }
                     result = listeJoursRemplaces;
