@@ -17,10 +17,13 @@ import org.ksoap2.serialization.AttributeContainer;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
-import org.ksoap2.transport.HttpTransportSE;
+import org.ksoap2.transport.OkHttpTransportSE;
 
+import java.io.InputStream;
 import java.util.List;
 
+import ca.etsmtl.applets.etsmobile.http.SSLUtilities;
+import ca.etsmtl.applets.etsmobile.http.SignetsSSLTrust;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
@@ -33,14 +36,20 @@ import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
 import ca.etsmtl.applets.etsmobile.model.listeHoraireExamensFinaux;
 import ca.etsmtl.applets.etsmobile.model.listeJoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.listeSeances;
+import okhttp3.OkHttpClient;
 
 public class SignetsMobileSoap {
 	public List<HeaderProperty> httpHeaders;
 	String url = "https://signets-ens.etsmtl.ca/Secure/WebServices/SignetsMobile.asmx";
 	int timeOut = 60000;
 	IServiceEvents callback;
+	private OkHttpClient okHttpClient;
 
-	public SignetsMobileSoap() {
+	public SignetsMobileSoap(InputStream certificateStream) {
+		SignetsSSLTrust trust = SSLUtilities.createSignetsCertificateTrust(certificateStream);
+		okHttpClient = new OkHttpClient.Builder()
+				.sslSocketFactory(trust.getContext().getSocketFactory(), trust.getManager())
+				.build();
 	}
 
 	public SignetsMobileSoap(IServiceEvents callback) {
@@ -59,7 +68,7 @@ public class SignetsMobileSoap {
 	}
 
 	protected org.ksoap2.transport.Transport createTransport() {
-		return new HttpTransportSE(url, timeOut);
+		return new OkHttpTransportSE(okHttpClient, null, url, timeOut, 0);
 	}
 
 	protected ExtendedSoapSerializationEnvelope createEnvelope() {

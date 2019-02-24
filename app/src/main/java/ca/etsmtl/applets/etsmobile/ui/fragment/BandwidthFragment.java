@@ -22,9 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,6 +44,9 @@ import ca.etsmtl.applets.etsmobile2.R;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Phil on 17/11/13. Coded by Laurence 26/03/14
@@ -364,7 +366,7 @@ public class BandwidthFragment extends BaseFragment {
             HashMap<String, Double> map = new HashMap<>();
             try {
                 double uploadTot, downloadTot;
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new okhttp3.OkHttpClient();
                 Request request = new Request.Builder()
                         .url(param[0])
                         .get()

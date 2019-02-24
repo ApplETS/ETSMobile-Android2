@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -200,7 +201,8 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
             String groupe = (String) params[1];
             String session = (String) params[2];
             try {
-                ListeDesElementsEvaluation listeDesElementsEvaluation = new SignetsMobileSoap()
+                InputStream certificate = httpFragment.getResources().openRawResource(R.raw.ets_pub_cert);
+                ListeDesElementsEvaluation listeDesElementsEvaluation = new SignetsMobileSoap(certificate)
                         .listeElementsEvaluation(username, password, sigle, groupe, session);
                 httpFragment.onRequestSuccess(listeDesElementsEvaluation);
             } catch (Exception e) {

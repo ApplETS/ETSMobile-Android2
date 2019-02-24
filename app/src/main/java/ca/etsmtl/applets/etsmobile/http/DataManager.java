@@ -10,6 +10,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.joda.time.DateTime;
 
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,9 +115,9 @@ public class DataManager {
 
 					final int methodID = (Integer) params[0];
 					String[] reqParams = (String[]) params[1];
-					
 
-					final SignetsMobileSoap signetsMobileSoap = new SignetsMobileSoap();
+					InputStream certificate = c.getResources().openRawResource(R.raw.ets_pub_cert);
+					final SignetsMobileSoap signetsMobileSoap = new SignetsMobileSoap(certificate);
 
 					String username = "";
 					String password = "";
