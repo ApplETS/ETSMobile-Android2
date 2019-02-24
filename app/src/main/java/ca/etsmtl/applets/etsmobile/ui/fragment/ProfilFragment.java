@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.Programme;
 import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
@@ -20,6 +19,7 @@ import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ProfileAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
+import ca.etsmtl.applets.etsmobile.util.SignetsMethods;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -46,8 +46,8 @@ public class ProfilFragment extends HttpFragment {
 
         loadingView.showLoadingView();
 
-        dataManager.getDataFromSignet(SignetMethods.INFO_ETUDIANT, ApplicationManager.userCredentials, this, "");
-        dataManager.getDataFromSignet(SignetMethods.LIST_PROGRAM, ApplicationManager.userCredentials, this, "");
+        dataManager.getDataFromSignet(SignetsMethods.INFO_ETUDIANT, ApplicationManager.userCredentials, this, "");
+        dataManager.getDataFromSignet(SignetsMethods.LIST_PROGRAM, ApplicationManager.userCredentials, this, "");
 
         listViewProfile = (ListView) v.findViewById(R.id.listview_profile);
         listViewProfile.setAdapter(profileAdapter);

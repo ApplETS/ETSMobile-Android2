@@ -16,9 +16,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +29,9 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.NewsSourceAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.NewsSourceComparator;
 import ca.etsmtl.applets.etsmobile2.R;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class NewsFragment extends HttpFragment {

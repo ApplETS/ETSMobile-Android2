@@ -1,8 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -51,7 +49,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.service.BottinSyncJob;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
@@ -59,7 +56,6 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.AboutFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BandwidthFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BaseFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.EventsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.HoraireFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.NewsFragment;
@@ -67,7 +63,6 @@ import ca.etsmtl.applets.etsmobile.ui.fragment.NotesFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.OtherAppsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.ProfilFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.SecuriteFragment;
-import ca.etsmtl.applets.etsmobile.ui.fragment.SponsorsFragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.TodayFragment;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
@@ -92,12 +87,10 @@ public class MainActivity extends AppCompatActivity {
     public static final int ACHIEVEMENTS_ITEM = 10;
     public static final int ABOUT_ITEM = 11;
     public static final int FAQ_ITEM = 12;
-    public static final int SPONSOR_ITEM = 13;
-    public static final int TODAY_ITEM = 14;
-    public static final int EVENTS_ITEM = 15;
-    public static final int LOGIN = 16;
-    public static final int LOGOUT = 17;
-    public static final int PROFILE_ITEM = 18;
+    public static final int TODAY_ITEM = 13;
+    public static final int LOGIN = 14;
+    public static final int LOGOUT = 15;
+    public static final int PROFILE_ITEM = 16;
 
     private String TAG = "MainActivity";
     private AccountManager accountManager;
@@ -242,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
                         ),
                         new ExpandableDrawerItem().withName(R.string.menu_section_2_ets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_ITEM).withIcon(R.drawable.ic_ico_news),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_2_events).withIdentifier(EVENTS_ITEM).withIcon(R.drawable.ic_event_available),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_bottin).withIdentifier(DIRECTORY_ITEM).withIcon(R.drawable.ic_ico_bottin),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_biblio).withIdentifier(LIBRARY_ITEM).withSelectable(false).withIcon(R.drawable.ic_ico_library),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_securite).withIdentifier(SECURITY_ITEM).withIcon(R.drawable.ic_ico_security)
@@ -250,7 +242,6 @@ public class MainActivity extends AppCompatActivity {
                         new ExpandableDrawerItem().withName(R.string.menu_section_3_applets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_apps).withIdentifier(ACHIEVEMENTS_ITEM).withIcon(R.drawable.ic_star_60x60),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_about).withIdentifier(ABOUT_ITEM).withIcon(R.drawable.ic_logo_icon_final),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_3_sponsors).withIdentifier(SPONSOR_ITEM).withIcon(R.drawable.ic_ico_partners),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_faq).withIdentifier(FAQ_ITEM).withIcon(R.drawable.ic_ico_faq)
                         )
 
@@ -280,18 +271,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onPrepareOptionsMenu(menu);
         return true;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        DataManager.getInstance(this).start();
-    }
-
-    @Override
-    protected void onStop() {
-        DataManager.getInstance(this).stop();
-        super.onStop();
     }
 
     @Override
@@ -446,9 +425,6 @@ public class MainActivity extends AppCompatActivity {
                     case NEWS_ITEM:
                         goToFragment(new NewsFragment(), NewsFragment.class.getName());
                         break;
-                    case EVENTS_ITEM:
-                        goToFragment(new EventsFragment(), EventsFragment.class.getName());
-                        break;
                     case LIBRARY_ITEM:
                         Utility.openChromeCustomTabs(MainActivity.this, getString(R.string.url_biblio));
                         break;
@@ -467,18 +443,15 @@ public class MainActivity extends AppCompatActivity {
                     case ABOUT_ITEM:
                         goToFragment(new AboutFragment(), AboutFragment.class.getName());
                         break;
-                    case SPONSOR_ITEM:
-                        goToFragment(new SponsorsFragment(), SponsorsFragment.class.getName());
-                        break;
                     case LOGIN:
                         prefs.edit().putBoolean(Constants.FIRST_LOGIN, false).apply();
-                        final AccountManagerFuture<Bundle> future =
-                                accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
-                                    @Override
-                                    public void run(AccountManagerFuture<Bundle> future) {
-                                        //Login successful
-                                    }
-                                }, null);
+                        accountManager.addAccount(Constants.ACCOUNT_TYPE, Constants.AUTH_TOKEN_TYPE, null, null, MainActivity.this, future -> {
+                            // Login successful
+                            // Recreate the activity to see the changes. using recreate() directly causes some bugs so let's redo it the old way.
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
+                        }, null);
                         break;
                     case LOGOUT:
                         openLogoutDialogAlert();
@@ -514,7 +487,7 @@ public class MainActivity extends AppCompatActivity {
     public void goToFragment(Fragment fragment, String tag) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
-                .commit();
+                .commitAllowingStateLoss();
 
         this.invalidateOptionsMenu();
     }

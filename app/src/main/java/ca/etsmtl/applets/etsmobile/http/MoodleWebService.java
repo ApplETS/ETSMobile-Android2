@@ -7,9 +7,11 @@ import androidx.lifecycle.LiveData;
 import ca.etsmtl.applets.etsmobile.model.ApiResponse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentCourses;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignmentSubmission;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCoreCourse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleProfile;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleToken;
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -77,4 +79,15 @@ public interface MoodleWebService {
      */
     @GET("webservice/rest/server.php?moodlewsrestformat=json&wsfunction=mod_assign_get_submission_status")
     LiveData<ApiResponse<MoodleAssignmentSubmission>> getAssignmentSubmission(@Query("wstoken") @NonNull String token, @Query("assignid") int assignId);
+
+    /**
+     * Retour d'un {@link LiveData} permettant d'obtenir les détails concernant le cours d'un
+     * utilisateur donné.
+     *
+     * @param token     jeton
+     * @param courseId id du cours
+     * @return {@link LiveData} permettant d'obtenir le contenu du cours.
+     */
+    @GET("webservice/rest/server.php?moodlewsrestformat=json&wsfunction=core_course_get_contents")
+    Call<List<MoodleCoreCourse>> getCoreCourses(@Query("wstoken") @NonNull String token, @Query("courseid") int courseId);
 }

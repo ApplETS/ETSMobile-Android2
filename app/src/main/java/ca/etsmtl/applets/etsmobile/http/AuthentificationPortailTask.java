@@ -8,12 +8,6 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +18,11 @@ import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile.util.Utility;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by gnut3ll4 on 04/11/15.
@@ -38,12 +37,9 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
         accountManager = AccountManager.get(launchingActivity);
     }
 
-
     protected Intent doInBackground(String... params) {
-        OkHttpClient client = new OkHttpClient();
-
+        OkHttpClient client = TLSUtilities.createETSOkHttpClient(launchingActivity);
         String url = params[0], username = params[1], password = params[2];
-
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, "{\n  \"Username\": \"" + username + "\",\n  \"Password\": \"" + password + "\"\n}");
         Request request = new Request.Builder()
@@ -131,6 +127,4 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
         }
 
     }
-
-
 }

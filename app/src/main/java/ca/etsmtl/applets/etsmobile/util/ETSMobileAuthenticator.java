@@ -13,12 +13,6 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,8 +20,14 @@ import java.io.IOException;
 import java.util.Date;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.http.TLSUtilities;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile2.R;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
 
@@ -86,8 +86,7 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
             final String username = account.name;
 
             if (password != null) {
-
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = TLSUtilities.createETSOkHttpClient(mContext);
 
                 MediaType mediaType = MediaType.parse("application/json");
                 RequestBody body = RequestBody.create(mediaType, "{\n  \"Username\": \"" + username + "\",\n  \"Password\": \"" + password + "\"\n}");
@@ -150,7 +149,6 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
             result.putString(AccountManager.KEY_AUTHTOKEN, null);
             return result;
         }
-
 
         // If we get here, then we couldn't access the user's password - so we
         // need to re-prompt them for their credentials. We do that by creating

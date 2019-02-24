@@ -4,12 +4,12 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import ca.etsmtl.applets.etsmobile.model.SponsorList;
 import ca.etsmtl.applets.etsmobile2.R;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorList> {
 

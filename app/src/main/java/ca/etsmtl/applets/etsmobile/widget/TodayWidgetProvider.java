@@ -19,23 +19,18 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.joda.time.DateTime;
 
-import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
 import androidx.core.graphics.ColorUtils;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
-import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.ui.activity.LoginActivity;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
-import ca.etsmtl.applets.etsmobile.util.TrimestreComparator;
+import ca.etsmtl.applets.etsmobile.util.SignetsMethods;
 import ca.etsmtl.applets.etsmobile2.R;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
@@ -292,10 +287,9 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
 
     private void sync() {
         // Requêtes des données distantes
-        dataManager.start();
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
     }
 
     /**
@@ -326,43 +320,7 @@ public class TodayWidgetProvider extends AppWidgetProvider implements RequestLis
      */
     @Override
     public void onRequestSuccess(Object o) {
-        if (o instanceof ListeDeSessions) {
-            if (((ListeDeSessions) o).liste.size() > 0)
-                requestEventList((ListeDeSessions) o);
-            else {
-                onRequestFailure(new SpiceException("La liste de sessions est vide."));
-            }
-        } else {
-            // Mise à jour de la BD contenant les données locales
-            horaireManager.onRequestSuccess(o);
-        }
-    }
-
-    /**
-     * Procédure déclenchant une requête additionnelle pour permettre la synchronisation de la liste
-     * d'événements et satisfaire la condition syncEventListEnded dans
-     * {@link ca.etsmtl.applets.etsmobile.util.HoraireManager#onRequestSuccess(Object)}
-     *
-     * @param listeDeSessions
-     */
-    private void requestEventList(ListeDeSessions listeDeSessions) {
-        Trimestre derniereSession = Collections.max(listeDeSessions.liste,
-                new TrimestreComparator());
-
-        DateTime dateDebut = new DateTime(derniereSession.dateDebut);
-
-        if (DateTime.now().isBefore(dateDebut)) {
-            dateDebut = DateTime.now();
-        }
-
-        DateTime dateEnd = new DateTime(derniereSession.dateFin);
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String dateDebutFormatted = formatter.format(dateDebut.toDate());
-        String dateFinFormatted = formatter.format(dateEnd.toDate());
-        dataManager.start();
-        dataManager.sendRequest(new AppletsApiCalendarRequest(context, dateDebutFormatted,
-                dateFinFormatted), this);
+        horaireManager.onRequestSuccess(o);
     }
 
     /**
