@@ -204,27 +204,29 @@ public class TodayFragment extends HttpFragment implements Observer {
         long progressionMs;
         int progressionJour;
 
-        if (dateActuelle.after(dateDebut) && dateActuelle.before(dateFin)) {
-            dureeTotaleMs = dateFin.getTime() - dateDebut.getTime();
-            nbJoursTotal = (int) TimeUnit.MILLISECONDS.toDays(dureeTotaleMs);
-            progressionMs = dateActuelle.getTime() - dateDebut.getTime();
-            progressionJour = (int) TimeUnit.MILLISECONDS.toDays(progressionMs);
+        if (isAdded()) {
+            if (dateActuelle.after(dateDebut) && dateActuelle.before(dateFin)) {
+                dureeTotaleMs = dateFin.getTime() - dateDebut.getTime();
+                nbJoursTotal = (int) TimeUnit.MILLISECONDS.toDays(dureeTotaleMs);
+                progressionMs = dateActuelle.getTime() - dateDebut.getTime();
+                progressionJour = (int) TimeUnit.MILLISECONDS.toDays(progressionMs);
 
-            if (getActivity() == null || !isAdded())
-                return;
+                if (getActivity() == null || !isAdded())
+                    return;
 
-            semesterProgressBar.setMax(nbJoursTotal);
-            semesterProgressBar.setProgress(progressionJour);
-            semesterProgressBarText.setText(getString(R.string.semester_progression, progressionJour, nbJoursTotal));
-            semesterProgressBarText.setVisibility(View.VISIBLE);
-        } else if (dateActuelle.before(dateDebut)) {
-            progressionMs = dateDebut.getTime() - dateActuelle.getTime() + TimeUnit.DAYS.toMillis(1);
-            progressionJour = (int) TimeUnit.MILLISECONDS.toDays(progressionMs);
+                semesterProgressBar.setMax(nbJoursTotal);
+                semesterProgressBar.setProgress(progressionJour);
+                semesterProgressBarText.setText(getString(R.string.semester_progression, progressionJour, nbJoursTotal));
+                semesterProgressBarText.setVisibility(View.VISIBLE);
+            } else if (dateActuelle.before(dateDebut)) {
+                progressionMs = dateDebut.getTime() - dateActuelle.getTime() + TimeUnit.DAYS.toMillis(1);
+                progressionJour = (int) TimeUnit.MILLISECONDS.toDays(progressionMs);
 
-            final String joursAvantSession = getContext().getResources().getQuantityString(R.plurals.days_before_session_start,  progressionJour, progressionJour);
-            semesterProgressBar.setProgress(0);
-            semesterProgressBarText.setText(joursAvantSession);
-            semesterProgressBarText.setVisibility(View.VISIBLE);
+                final String joursAvantSession = getContext().getResources().getQuantityString(R.plurals.days_before_session_start,  progressionJour, progressionJour);
+                semesterProgressBar.setProgress(0);
+                semesterProgressBarText.setText(joursAvantSession);
+                semesterProgressBarText.setVisibility(View.VISIBLE);
+            }
         }
     }
 
