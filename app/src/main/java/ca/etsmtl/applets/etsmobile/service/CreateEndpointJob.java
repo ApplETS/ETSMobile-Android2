@@ -17,8 +17,6 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -48,8 +46,6 @@ public class CreateEndpointJob implements Runnable {
                     add("us-gov-west-1");
                 }
             });
-
-    private static Lock lock = new ReentrantLock();
 
     private AmazonSNS client;
 
