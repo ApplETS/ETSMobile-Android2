@@ -9,8 +9,8 @@ package ca.etsmtl.applets.etsmobile.model;
 //
 //---------------------------------------------------
 
-import java.io.Serializable;
-import java.util.Hashtable;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import org.joda.time.DateTime;
 import org.ksoap2.serialization.AttributeContainer;
@@ -19,11 +19,11 @@ import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import java.io.Serializable;
+import java.util.Hashtable;
+
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 import ca.etsmtl.applets.etsmobile.http.soap.Helper;
-
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "fiche_employee")
 public class FicheEmploye extends AttributeContainer implements KvmSerializable,Serializable {

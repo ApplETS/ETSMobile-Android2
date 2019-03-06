@@ -1,9 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +8,9 @@ import android.view.MenuItem;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleCourseDetailsFragment;
 import ca.etsmtl.applets.etsmobile2.R;
 

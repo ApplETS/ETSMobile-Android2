@@ -2,7 +2,6 @@ package ca.etsmtl.applets.etsmobile.ui.calendar_decorator;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import androidx.core.content.ContextCompat;
 import android.text.style.StyleSpan;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -12,6 +11,7 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import androidx.core.content.ContextCompat;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**

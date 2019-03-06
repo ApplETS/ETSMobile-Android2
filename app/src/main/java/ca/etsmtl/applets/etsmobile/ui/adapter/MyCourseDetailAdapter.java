@@ -3,6 +3,14 @@
  ***/
 package ca.etsmtl.applets.etsmobile.ui.adapter;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -12,14 +20,6 @@ import java.util.Locale;
 import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
 import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
 import ca.etsmtl.applets.etsmobile2.R;
-
-import android.content.Context;
-import android.graphics.Color;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 
 public class MyCourseDetailAdapter extends BaseAdapter {

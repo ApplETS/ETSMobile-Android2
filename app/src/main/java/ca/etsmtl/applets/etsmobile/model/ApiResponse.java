@@ -16,10 +16,9 @@
 
 package ca.etsmtl.applets.etsmobile.model;
 
-import androidx.annotation.Nullable;
-
 import java.io.IOException;
 
+import androidx.annotation.Nullable;
 import retrofit2.Response;
 
 /**

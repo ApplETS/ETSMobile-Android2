@@ -9,9 +9,6 @@ package ca.etsmtl.applets.etsmobile.http.soap;
 //
 //---------------------------------------------------
 
-import java.util.Hashtable;
-import java.util.UUID;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.chrono.ISOChronology;
@@ -28,6 +25,9 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
+
+import java.util.Hashtable;
+import java.util.UUID;
 
 public class Helper {
 	public static <T, E> T getKeyByValue(java.util.Map<T, E> map, E value) {

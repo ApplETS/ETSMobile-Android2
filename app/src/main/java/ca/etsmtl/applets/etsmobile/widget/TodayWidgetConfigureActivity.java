@@ -8,10 +8,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.ColorUtils;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -24,6 +20,10 @@ import org.joda.time.DateTime;
 
 import java.util.Locale;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ColorSpinnerAdapter;
 import ca.etsmtl.applets.etsmobile2.R;
 

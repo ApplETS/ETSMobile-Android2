@@ -9,7 +9,8 @@ package ca.etsmtl.applets.etsmobile.model;
 //
 //---------------------------------------------------
 
-import java.util.Hashtable;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import org.ksoap2.serialization.AttributeContainer;
 import org.ksoap2.serialization.KvmSerializable;
@@ -17,10 +18,9 @@ import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
-import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
+import java.util.Hashtable;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 
 @DatabaseTable(tableName = "jours_remplaces")
 public class JoursRemplaces extends AttributeContainer implements KvmSerializable {

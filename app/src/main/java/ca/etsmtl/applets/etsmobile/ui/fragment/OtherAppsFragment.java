@@ -1,18 +1,13 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageView;
-
-import org.springframework.core.io.Resource;
 
 import java.util.ArrayList;
 

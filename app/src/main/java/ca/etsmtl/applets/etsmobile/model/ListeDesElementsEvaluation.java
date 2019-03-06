@@ -10,16 +10,15 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
-
-import java.util.Hashtable;
 
 import org.ksoap2.serialization.AttributeContainer;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
+
+import java.util.Hashtable;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 

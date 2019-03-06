@@ -1,13 +1,11 @@
 package ca.etsmtl.applets.etsmobile.util;
 
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Comparator;
 
-import ca.etsmtl.applets.etsmobile.model.NewsSource;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 
 /**

@@ -1,14 +1,11 @@
 package ca.etsmtl.applets.etsmobile.ui.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.URLUtil;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -20,9 +17,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
+import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotificationsAdapter;
 import ca.etsmtl.applets.etsmobile.util.Constants;
+import ca.etsmtl.applets.etsmobile.util.NotificationManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -53,23 +52,21 @@ public class NotificationActivity extends Activity implements RequestListener<Ob
 
         progressBar.setVisibility(View.VISIBLE);
 
-        notificationsAdapter = new NotificationsAdapter(this, R.layout.row_notification, new ArrayList<MonETSNotification>());
+        notificationsAdapter = new NotificationsAdapter(this, R.layout.row_notification, new ArrayList<>());
         listView.setAdapter(notificationsAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MonETSNotification item = notificationsAdapter.getItem(position);
-                String url = item.getUrl();
-                if (URLUtil.isValidUrl(url)) {
-                    Utility.openChromeCustomTabs(NotificationActivity.this, url);
-                }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            MonETSNotification item = notificationsAdapter.getItem(position);
+            String url = item.getUrl();
+            if (URLUtil.isValidUrl(url)) {
+                Utility.openChromeCustomTabs(NotificationActivity.this, url);
             }
         });
 
         syncAdapterWithDB();
 
-        Utility.loadNotifications(this, this);
-
+        DataManager datamanager = DataManager.getInstance(this);
+        NotificationManager manager = new NotificationManager(this, datamanager.getMonETSService(), this);
+        manager.updateNotifications();
     }
 
     @Override
@@ -96,9 +93,8 @@ public class NotificationActivity extends Activity implements RequestListener<Ob
     @Override
     public void onRequestSuccess(Object o) {
         progressBar.setVisibility(View.GONE);
-        securePreferences.edit().remove(Constants.RECEIVED_NOTIF).commit();
+        securePreferences.edit().remove(Constants.RECEIVED_NOTIF).apply();
         syncAdapterWithDB();
-
     }
 
     private void syncAdapterWithDB() {

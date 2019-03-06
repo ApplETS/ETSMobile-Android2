@@ -1,9 +1,7 @@
 package ca.etsmtl.applets.etsmobile.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.octo.android.robospice.persistence.exception.SpiceException;

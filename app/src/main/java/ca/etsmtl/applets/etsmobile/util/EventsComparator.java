@@ -6,7 +6,6 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Comparator;
 
-import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.applets_events.EvenementCommunaute;
 
 /**

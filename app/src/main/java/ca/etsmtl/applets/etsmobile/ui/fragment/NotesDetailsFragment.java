@@ -18,6 +18,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.http.TLSUtilities;
 import ca.etsmtl.applets.etsmobile.http.soap.SignetsMobileSoap;
 import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
 import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
@@ -200,7 +201,7 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
             String groupe = (String) params[1];
             String session = (String) params[2];
             try {
-                ListeDesElementsEvaluation listeDesElementsEvaluation = new SignetsMobileSoap()
+                ListeDesElementsEvaluation listeDesElementsEvaluation = new SignetsMobileSoap(TLSUtilities.createETSOkHttpClient(httpFragment.getActivity()))
                         .listeElementsEvaluation(username, password, sigle, groupe, session);
                 httpFragment.onRequestSuccess(listeDesElementsEvaluation);
             } catch (Exception e) {

@@ -9,13 +9,13 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
-import androidx.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.google.firebase.FirebaseApp;
 
 import java.sql.SQLException;
 
+import androidx.multidex.MultiDex;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.di.AppComponent;
 import ca.etsmtl.applets.etsmobile.di.AppModule;
@@ -48,7 +48,6 @@ public class ApplicationManager extends Application {
         AnalyticsHelper.getInstance(this);
         createDatabaseTables();
 
-//        SupportKit.init(this, getString(R.string.credentials_supportkit));
 //        Fabric.with(this, new Crashlytics());
         FirebaseApp.initializeApp(this);
 

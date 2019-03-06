@@ -1,30 +1,15 @@
 package ca.etsmtl.applets.etsmobile.http;
 
 import android.content.Context;
-import android.text.TextUtils;
-import android.util.Log;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.kobjects.base64.Base64;
-
-import java.util.Iterator;
-
-import ca.etsmtl.applets.etsmobile.model.Sponsor;
 import ca.etsmtl.applets.etsmobile.model.SponsorList;
 import ca.etsmtl.applets.etsmobile2.R;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorList> {
 

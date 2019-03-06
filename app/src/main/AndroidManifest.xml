@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ca.etsmtl.applets.etsmobile2">
 
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
@@ -105,9 +106,6 @@
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
 
-        <service
-            android:name="ca.etsmtl.applets.etsmobile.http.MyJackSpringAndroidSpiceService"
-            android:exported="false" />
         <service android:name="ca.etsmtl.applets.etsmobile.util.ETSAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
@@ -183,6 +181,20 @@
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
+        <service
+            android:name="com.evernote.android.job.gcm.PlatformGcmService"
+            android:enabled="true"
+            tools:replace="android:enabled"/>
     </application>
 
 </manifest>

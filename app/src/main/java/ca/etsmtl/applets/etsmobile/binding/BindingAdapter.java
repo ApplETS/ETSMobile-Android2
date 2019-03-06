@@ -1,12 +1,13 @@
 package ca.etsmtl.applets.etsmobile.binding;
 
 import android.content.Context;
-import androidx.annotation.ColorRes;
-import androidx.annotation.StringRes;
-import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.ColorRes;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by Sonphil on 22-12-17.

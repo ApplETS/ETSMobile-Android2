@@ -1,7 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.adapter;
 
 import android.content.Context;
-import androidx.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.databinding.DataBindingUtil;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleAssignment;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel;
 import ca.etsmtl.applets.etsmobile2.R;

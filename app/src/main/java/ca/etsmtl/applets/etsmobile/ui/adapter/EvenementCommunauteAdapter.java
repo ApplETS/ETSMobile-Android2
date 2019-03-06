@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobile.ui.adapter;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,7 +11,6 @@ import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -26,7 +24,6 @@ import java.util.Locale;
 
 import at.markushi.ui.CircleButton;
 import ca.etsmtl.applets.etsmobile.model.applets_events.EvenementCommunaute;
-import ca.etsmtl.applets.etsmobile.util.AndroidCalendarManager;
 import ca.etsmtl.applets.etsmobile.util.EventsComparator;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.AnimatedExpandableListView;

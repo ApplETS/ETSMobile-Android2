@@ -68,8 +68,8 @@
     <string name="activity_moodle_pwd">Password</string>
     <string name="activity_moodle_pwd_instruc">University password</string>
     <string name="activity_moodle_app">Moodle App</string>
-    <string name="applets_about">ÉTSMobile was conceived by the ApplETS scientific club from the École de technologie supérieure.\n\nApplets is, most importantly, a gathering of students who share a typical enthusiasm for the field of telecommunications and mobile applications.
-        The mission of ApplETS is to train students in mobile development and promote the production of mobile applications within the student community.\n\nFor more information, please consult our website : \n\nhttp://clubapplets.ca\n\nWant to contribute? Check the Github repo :\nhttp://github.com/ApplETS/ETSMobile-Android2 </string>
+    <string name="applets_about">ÉTSMobile was conceived by the App|ETS scientific club from the École de technologie supérieure.\n\nApp|ETS is, most importantly, a gathering of students who share a typical enthusiasm for the field of telecommunications and mobile applications.
+        The mission of App|ETS is to train students in mobile development and promote the production of mobile applications within the student community.\n\nFor more information, please consult our website : \n\nhttp://clubapplets.ca\n\nWant to contribute? Check the Github repo :\nhttp://github.com/ApplETS/ETSMobile-Android2 </string>
     <string name="applets_ens_etsmtl_ca">applets@ens.etsmtl.ca</string>
     <string name="etsmobile_android_commentaire">ETSMobile-Android : Comments</string>
     <string name="default_comment"></string>
@@ -96,6 +96,7 @@
     <string name="moodle_error_cant_get_token">Failed to get the token</string>
     <string name="moodle_error_cant_get_profile">Failed to get profile</string>
     <string name="moodle_error_cant_get_courses">Failed to get courses</string>
+    <string name="moodle_allow_storage_permissions">Please allow storage permissions to download this file.</string>
 
     <!-- Radio Page -->
     <string name="desc_radio">Radio Piranha, ÉTS student radio</string>
@@ -198,6 +199,7 @@
     <string name="export_calendar_dialog_title">Choose your calendar</string>
     <string name="export_public_events_calendar">ETS public calendar</string>
     <string name="export_replaced_days_calendar">Replaced days</string>
+    <string name="export_calendar_allow_write_permission">Please allow calendar permissions to export your schedule.</string>
     <string name="legend">Legend</string>
     <string name="legend_cours">Classes</string>
     <string name="legend_final_exam">Final exam</string>

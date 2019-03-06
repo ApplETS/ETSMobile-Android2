@@ -245,8 +245,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 createETSMobileAccount(accountName, accountPassword);
                 FcmRegistrationIntentService.enqueueWork(this, new Intent());
 
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-
                 //Run authentication to monETS in another thread not to slow app
                 new AuthentificationPortailTask(this).execute(
                         getString(R.string.portail_api_authentification_url),
@@ -260,18 +258,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
             mPasswordView.setError(getString(R.string.error_invalid_email));
             mPasswordView.requestFocus();
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        dataManager.start();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        dataManager.stop();
     }
 
     private void createETSMobileAccount(String accountName, String accountPassword) {

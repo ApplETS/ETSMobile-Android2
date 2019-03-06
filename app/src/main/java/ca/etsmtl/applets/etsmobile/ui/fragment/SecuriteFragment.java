@@ -3,7 +3,6 @@ package ca.etsmtl.applets.etsmobile.ui.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,12 +13,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-//import com.google.android.gms.maps.GoogleMap;
-//import com.google.android.gms.maps.MapView;
-
+import androidx.appcompat.app.AppCompatActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
+
+//import com.google.android.gms.maps.GoogleMap;
+//import com.google.android.gms.maps.MapView;
 
 public class SecuriteFragment extends BaseFragment {
 

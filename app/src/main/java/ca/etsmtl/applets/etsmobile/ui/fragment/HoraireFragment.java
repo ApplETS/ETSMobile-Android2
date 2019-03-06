@@ -1,5 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
@@ -8,7 +9,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
-import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -32,23 +33,19 @@ import java.sql.SQLException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
-import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Event;
-import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
-import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseTodayDecorator;
@@ -57,10 +54,16 @@ import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.FinalExamDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.TodayDecorator;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
-import ca.etsmtl.applets.etsmobile.util.TrimestreComparator;
+import ca.etsmtl.applets.etsmobile.util.SignetsMethods;
+import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
 import ca.etsmtl.applets.etsmobile2.R;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.RuntimePermissions;
 
+@RuntimePermissions
 public class HoraireFragment extends HttpFragment implements Observer, OnDateSelectedListener {
 
     public static final String TAG = "HoraireFragment";
@@ -162,9 +165,9 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 //        customProgressDialog = new CustomProgressDialog(getActivity(), R.drawable.loading_spinner, "Synchronisation en cours");
 //        customProgressDialog.show();
 
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
+        dataManager.getDataFromSignet(SignetsMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
         // @TODO Eventually, we might want to make the call for ETS Events here instead of in the onRequestSuccess.
         // The problem right now is getting the endDate without using the ListeDeSessions
         /*String dateStart = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -191,32 +194,6 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
 
     @Override
     public void onRequestSuccess(final Object o) {
-
-        if (o instanceof ListeDeSessions && !((ListeDeSessions) o).liste.isEmpty()) {
-
-            ListeDeSessions listeDeSessions = (ListeDeSessions) o;
-
-            Trimestre derniereSession = Collections.max(listeDeSessions.liste, new TrimestreComparator());
-
-            DateTime dateDebut = new DateTime(derniereSession.dateDebut);
-
-            if(DateTime.now().isBefore(dateDebut)) {
-                dateDebut = DateTime.now();
-            }
-
-            DateTime dateEnd = new DateTime(derniereSession.dateFin);
-
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String dateDebutFormatted = formatter.format(dateDebut.toDate());
-            String dateFinFormatted = formatter.format(dateEnd.toDate());
-            dataManager.sendRequest(
-                    new AppletsApiCalendarRequest(getActivity(),
-                            dateDebutFormatted,
-                            dateFinFormatted
-                    ),
-                    this);
-        }
-
         horaireManager.onRequestSuccess(o);
     }
 
@@ -379,7 +356,7 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         builder.setPositiveButton(R.string.export_calendar_dialog_positive_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                new AsyncUpdateCalendar(eventsSelection[0], eventsSelection[1], eventsSelection[2]).execute();
+                HoraireFragmentPermissionsDispatcher.writeToCalendarWithPermissionCheck(HoraireFragment.this, eventsSelection[0], eventsSelection[1], eventsSelection[2]);
             }
         });
 
@@ -398,6 +375,26 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         super.onDetach();
 
         horaireManager.deleteObserver(this);
+    }
+
+    @NeedsPermission(Manifest.permission.WRITE_CALENDAR)
+    void writeToCalendar(boolean tempJoursRemplacesEvent, boolean tempSeancesEvent, boolean tempCalPublicEvent) {
+        new AsyncUpdateCalendar(tempJoursRemplacesEvent, tempSeancesEvent, tempCalPublicEvent).execute();
+    }
+
+    @OnPermissionDenied(Manifest.permission.WRITE_CALENDAR)
+    @OnNeverAskAgain(Manifest.permission.WRITE_CALENDAR)
+    void showPermissionsSnackBar() {
+        Snackbar.make(getView(), R.string.export_calendar_allow_write_permission, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.action_settings, (listener) -> Utility.goToAppSettings(listener.getContext()))
+                .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.ets_red))
+                .show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        HoraireFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     private class AsyncUpdateCalendar extends AsyncTask<Object, Void, Object> {

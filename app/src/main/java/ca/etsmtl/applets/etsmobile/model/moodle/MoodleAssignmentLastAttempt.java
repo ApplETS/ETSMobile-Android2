@@ -1,13 +1,12 @@
 package ca.etsmtl.applets.etsmobile.model.moodle;
 
-import androidx.annotation.ColorRes;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.StringRes;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**

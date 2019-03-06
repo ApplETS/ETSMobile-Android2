@@ -1,13 +1,9 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,9 +24,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.RemoteResource;
+import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity;
