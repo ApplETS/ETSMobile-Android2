@@ -18,17 +18,15 @@ package ca.etsmtl.applets.etsmobile.service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutionException;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
@@ -56,7 +54,6 @@ public class FcmRegistrationIntentService extends JobIntentService {
 
     @Override
     public void onHandleWork(@NonNull Intent intent) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // In the (unlikely) event that multiple refresh operations occur simultaneously,
         // ensure that they are processed sequentially.x
@@ -64,37 +61,26 @@ public class FcmRegistrationIntentService extends JobIntentService {
         // Initially this call goes out to the network to retrieve the token, subsequent calls
         // are local.
         // [START get_token]
-        Task<InstanceIdResult> instanceId = FirebaseInstanceId.getInstance().getInstanceId();
-        instanceId.addOnSuccessListener(task -> {
-            String token = task.getToken();
-            Log.i(TAG, "FCM Registration Token: " + token);
+        try {
+            Task<InstanceIdResult> instanceId = FirebaseInstanceId.getInstance().getInstanceId();
+            InstanceIdResult result = Tasks.await(instanceId);
+            Log.i(TAG, "FCM Registration Token: " + result.getToken());
             if (ApplicationManager.domaine != null && ApplicationManager.userCredentials != null) {
-                sendRegistrationToServer(token);
+                sendRegistrationToServer(result.getToken());
 
                 // Subscribe to topic channels
                 subscribeTopics();
                 // [END get_token]
 
-                // You should store a boolean that indicates whether the generated token has been
-                // sent to your server. If the boolean is false, send the token to your server,
-                // otherwise your server should have already received the token.
-                sharedPreferences.edit().putBoolean(Constants.IS_FCM_TOKEN_SENT_TO_SERVER, true).apply();
+                // Notify UI that registration has completed, so the progress indicator can be hidden.
+                Intent registrationComplete = new Intent(Constants.REGISTRATION_COMPLETE);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+
                 // [END register_for_fcm]
             }
-        });
-
-        instanceId.addOnFailureListener(task -> {
-            Log.d(TAG, "Failed to complete token refresh");
-            // If an exception happens while fetching the new token or updating our registration data
-            // on a third-party server, this ensures that we'll attempt the update at a later time.
-            sharedPreferences.edit().putBoolean(Constants.IS_FCM_TOKEN_SENT_TO_SERVER, false).apply();
-        });
-
-        instanceId.addOnCompleteListener(task -> {
-            // Notify UI that registration has completed, so the progress indicator can be hidden.
-            Intent registrationComplete = new Intent(Constants.REGISTRATION_COMPLETE);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
-        });
+        } catch (ExecutionException | InterruptedException ei) {
+            ei.printStackTrace();
+        }
     }
 
     /**
@@ -107,7 +93,6 @@ public class FcmRegistrationIntentService extends JobIntentService {
      */
     private void sendRegistrationToServer(String token) {
         // Add custom implementation, as needed.
-        ExecutorService executor = Executors.newFixedThreadPool(1);
         CreateEndpointJob worker = new CreateEndpointJob(getApplicationContext());
 
         //TODO put application ARN in a property file
@@ -115,7 +100,6 @@ public class FcmRegistrationIntentService extends JobIntentService {
                 ApplicationManager.domaine+"\\"+ApplicationManager.userCredentials.getUsername(),
                 getString(R.string.aws_application_arn));
         worker.run();
-        executor.execute(worker);
     }
 
     /**
