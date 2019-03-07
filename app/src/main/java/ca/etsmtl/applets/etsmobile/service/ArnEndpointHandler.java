@@ -1,6 +1,7 @@
 package ca.etsmtl.applets.etsmobile.service;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.amazonaws.AmazonClientException;
@@ -9,6 +10,8 @@ import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.CreatePlatformEndpointRequest;
 import com.amazonaws.services.sns.model.CreatePlatformEndpointResult;
+import com.amazonaws.services.sns.model.DeleteEndpointRequest;
+import com.amazonaws.services.sns.model.DeletePlatformApplicationRequest;
 import com.amazonaws.services.sns.model.GetEndpointAttributesRequest;
 import com.amazonaws.services.sns.model.GetEndpointAttributesResult;
 import com.amazonaws.services.sns.model.GetPlatformApplicationAttributesRequest;
@@ -16,6 +19,7 @@ import com.amazonaws.services.sns.model.GetPlatformApplicationAttributesResult;
 import com.amazonaws.services.sns.model.NotFoundException;
 import com.amazonaws.services.sns.model.SetEndpointAttributesRequest;
 
+import java.lang.ref.WeakReference;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -132,6 +136,12 @@ public class ArnEndpointHandler {
         }
     }
 
+    public void deleteEndpoint() {
+        if (isEndpointExists()) {
+            new AsyncDeleteEndpoint(securePreferences.getString(Constants.SNS_ARN_ENDPOINT, ""), client).execute();
+        }
+    }
+
     private boolean isEndpointExists() {
         return !securePreferences.getString(Constants.SNS_ARN_ENDPOINT, "").isEmpty();
     }
@@ -149,6 +159,24 @@ public class ArnEndpointHandler {
             editor.putString(Constants.SNS_ARN_ENDPOINT, createResult.getEndpointArn()).apply();
         } catch (AmazonClientException ace) {
             ace.printStackTrace();
+        }
+    }
+
+    private static class AsyncDeleteEndpoint extends AsyncTask<Void, Void, Void> {
+
+        private String endpointArn;
+        private AmazonSNS client;
+
+        AsyncDeleteEndpoint(String arn, AmazonSNS snsClient) {
+            endpointArn = arn;
+            client = snsClient;
+        }
+
+        @Override
+        public Void doInBackground(Void... params) {
+            DeleteEndpointRequest request = new DeleteEndpointRequest().withEndpointArn(endpointArn);
+            client.deleteEndpoint(request);
+            return null;
         }
     }
 }

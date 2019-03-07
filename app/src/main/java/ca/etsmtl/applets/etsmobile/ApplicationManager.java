@@ -22,6 +22,7 @@ import ca.etsmtl.applets.etsmobile.di.AppModule;
 import ca.etsmtl.applets.etsmobile.di.DaggerAppComponent;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.service.ArnEndpointHandler;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Constants;
@@ -87,10 +88,10 @@ public class ApplicationManager extends Application {
 
     public static void deconnexion(final Activity activity) {
 
-
-        final Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
+        Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
+        Editor secureEditor = new SecurePreferences(activity).edit();
         editor.clear();
-        editor.commit();
+        secureEditor.clear();
 
         // Enlever le profil de la DB SQLite
         new ProfilManager(activity).removeProfil();
@@ -102,6 +103,12 @@ public class ApplicationManager extends Application {
         for (int index = 0; index < accounts.length; index++) {
             accountManager.removeAccount(accounts[index], null, null);
         }
+
+        ArnEndpointHandler handler = new ArnEndpointHandler(activity, "", "", "");
+        handler.deleteEndpoint();
+
+        editor.apply();
+        secureEditor.apply();
 
         ApplicationManager.userCredentials = null;
         Intent intent = new Intent(activity, MainActivity.class);
