@@ -33,4 +33,5 @@ public class Constants {
     public static final String EXTRA_CUSTOM_TABS_TITLE_VISIBILITY_STATE = "android.support.customtabs.extra.TITLE_VISIBILITY";
     public static final int EXTRA_CUSTOM_TABS_SHOW_TITLE = 1;
     public static final String NOTIFICATION_CHANNEL_ID = "ETSMobile-1";
+    public static final String SNS_ARN_ENDPOINT = "SNS_ARN_ENDPOINT";
 }

@@ -93,13 +93,9 @@ public class FcmRegistrationIntentService extends JobIntentService {
      */
     private void sendRegistrationToServer(String token) {
         // Add custom implementation, as needed.
-        CreateEndpointJob worker = new CreateEndpointJob(getApplicationContext());
-
-        //TODO put application ARN in a property file
-        worker.setThreadProperties(token,
-                ApplicationManager.domaine+"\\"+ApplicationManager.userCredentials.getUsername(),
-                getString(R.string.aws_application_arn));
-        worker.run();
+        String userData = ApplicationManager.domaine + "\\" + ApplicationManager.userCredentials.getUsername();
+        ArnEndpointHandler handler = new ArnEndpointHandler(getApplicationContext(), token, userData, getString(R.string.aws_application_arn));
+        handler.createOrUpdateEndpoint();
     }
 
     /**

@@ -243,7 +243,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 String accountPassword = userCredentials.getPassword();
 
                 createETSMobileAccount(accountName, accountPassword);
-                FcmRegistrationIntentService.enqueueWork(this, new Intent());
 
                 //Run authentication to monETS in another thread not to slow app
                 new AuthentificationPortailTask(this).execute(

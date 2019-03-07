@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.service.FcmRegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile.util.Utility;
@@ -113,6 +114,7 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
                     accountManager.setAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, authtoken);
 
                     Utility.saveCookieExpirationDate(authtoken, securePreferences);
+                    FcmRegistrationIntentService.enqueueWork(launchingActivity, new Intent());
                 }
             }
             launchingActivity.finish();
