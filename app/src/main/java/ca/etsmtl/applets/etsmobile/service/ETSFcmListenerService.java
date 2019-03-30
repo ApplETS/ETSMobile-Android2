@@ -69,7 +69,7 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
     }
 
     /**
-     * Create and show a simple notification containing the received GCM message.
+     * Create and show a simple notification containing the received FCM message.
      *
      * @param data FCM message received.
      */
