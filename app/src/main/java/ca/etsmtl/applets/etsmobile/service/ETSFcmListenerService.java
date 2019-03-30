@@ -1,11 +1,13 @@
 package ca.etsmtl.applets.etsmobile.service;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
@@ -96,7 +98,19 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_ets);
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID)
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = mNotificationManager.getNotificationChannel(Constants.DEFAULT_NOTIFICATION_CHANNEL_ID);
+            if (channel == null) {
+                // We could create multiple channels based on the notification but let's just create one for maintenance purposes.
+                String channelName = getString(R.string.fcm_fallback_notification_channel_label);
+                channel = new NotificationChannel(Constants.DEFAULT_NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
+                mNotificationManager.createNotificationChannel(channel);
+            }
+        }
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.school_48)
                 .setColor(getResources().getColor(R.color.red))
                 .setContentTitle(getString(R.string.ets))
@@ -144,8 +158,6 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
         }
 
         mBuilder.setStyle(inBoxStyle);
-
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(1, mBuilder.build());
     }
 
