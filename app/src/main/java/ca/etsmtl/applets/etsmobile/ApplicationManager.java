@@ -24,7 +24,6 @@ import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
 import ca.etsmtl.applets.etsmobile.service.ArnEndpointHandler;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
-import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
@@ -46,7 +45,6 @@ public class ApplicationManager extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        AnalyticsHelper.getInstance(this);
         createDatabaseTables();
 
 //        Fabric.with(this, new Crashlytics());

@@ -52,7 +52,6 @@ import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseTodayDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.EventDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.FinalExamDecorator;
 import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.TodayDecorator;
-import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.SignetsMethods;
 import ca.etsmtl.applets.etsmobile.util.Utility;
@@ -173,7 +172,6 @@ public class HoraireFragment extends HttpFragment implements Observer, OnDateSel
         /*String dateStart = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateStart, "2016-04-30"), this);*/
 
-        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
 

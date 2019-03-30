@@ -76,7 +76,6 @@ android {
 
 def PLAY_SERVICES_LIBRARY_VERSION = '16.0.0'
 def PLAY_SERVICES_WEAR_VERSION = '16.0.1'
-def PLAY_SERVICES_ANALYTICS_VERSION = '16.0.6'
 def DAGGER_VERSION = '2.20'
 def RETROFIT_VERSION = '2.5.0'
 def OK_HTTP_3_VERSION = '3.12.1'
@@ -98,7 +97,6 @@ dependencies {
         transitive = true
     }
     implementation "com.google.android.gms:play-services-wearable:${PLAY_SERVICES_WEAR_VERSION}"
-    implementation "com.google.android.gms:play-services-analytics:${PLAY_SERVICES_ANALYTICS_VERSION}"
     implementation "com.google.android.gms:play-services-base:${PLAY_SERVICES_LIBRARY_VERSION}"
     implementation "com.google.android.gms:play-services-location:${PLAY_SERVICES_LIBRARY_VERSION}"
 

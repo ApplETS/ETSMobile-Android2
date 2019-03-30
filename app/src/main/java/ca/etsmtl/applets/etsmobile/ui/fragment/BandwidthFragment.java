@@ -34,7 +34,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 import ca.etsmtl.applets.etsmobile.model.ConsommationBandePassante;
-import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar;
 import ca.etsmtl.applets.etsmobile.views.ProgressItem;
@@ -193,7 +192,6 @@ public class BandwidthFragment extends BaseFragment {
         editTextPhase.setOnFocusChangeListener(editTextFocusChangeListener);
         editTextApp.setOnFocusChangeListener(editTextFocusChangeListener);
 
-        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
     }

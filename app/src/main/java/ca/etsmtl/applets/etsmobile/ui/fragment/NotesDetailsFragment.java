@@ -23,7 +23,6 @@ import ca.etsmtl.applets.etsmobile.http.soap.SignetsMobileSoap;
 import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
 import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MyCourseDetailAdapter;
-import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -95,8 +94,6 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
         progressBarDetailsNotes = (ProgressBar) v.findViewById(R.id.progressBar_notes_details);
         progressBarDetailsNotes.setVisibility(ProgressBar.VISIBLE);
         refresh();
-
-        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
     }

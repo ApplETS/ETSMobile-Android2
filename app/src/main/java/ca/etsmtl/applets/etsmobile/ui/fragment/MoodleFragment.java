@@ -35,7 +35,6 @@ import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleAssignmentsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MoodleCoursesAdapter;
-import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.CourseComparator;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModel;
 import ca.etsmtl.applets.etsmobile.view_model.MoodleViewModelFactory;
@@ -80,8 +79,6 @@ public class MoodleFragment extends BaseFragment {
         Log.d("MoodleFragment", "Moodle course list fragment is instantiated");
 
         loadingView = v.findViewById(R.id.loading_view);
-
-        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
 		return v;
 	}

@@ -26,7 +26,6 @@ import ca.etsmtl.applets.etsmobile.model.NewsSource;
 import ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsSourceAdapter;
-import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.NewsSourceComparator;
 import ca.etsmtl.applets.etsmobile2.R;
 import okhttp3.OkHttpClient;
@@ -72,8 +71,6 @@ public class NewsFragment extends HttpFragment {
 
             }
         });
-
-        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
     }
