@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.TLSUtilities;
@@ -99,7 +100,14 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
                 try {
                     httpResponse = client.newCall(request).execute();
                     if (httpResponse.code() == 200) {
-                        authToken = httpResponse.header("Set-Cookie");
+                        List<String> cookies = httpResponse.headers().values("Set-Cookie");
+
+                        for (String cookie : cookies) {
+                            if (cookie.contains(Constants.MONETS_COOKIE_NAME)) {
+                                authToken = cookie;
+                                break;
+                            }
+                        }
 
                         Utility.saveCookieExpirationDate(authToken, securePreferences);
 
