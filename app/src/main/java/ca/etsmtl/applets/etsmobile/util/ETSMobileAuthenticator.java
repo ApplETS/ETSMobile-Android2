@@ -7,9 +7,7 @@ import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -21,7 +19,6 @@ import java.util.Date;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.TLSUtilities;
-import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile2.R;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -115,13 +112,6 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
                         securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
                         ApplicationManager.domaine = domaine;
                         ApplicationManager.typeUsagerId = typeUsagerId;
-
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-                        boolean isTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
-                        if (!isTokenSent) {
-                            Intent intent = new Intent(mContext, RegistrationIntentService.class);
-                            mContext.startService(intent);
-                        }
                     } else {
                         Log.e("Erreur Portail", httpResponse.toString());
                     }

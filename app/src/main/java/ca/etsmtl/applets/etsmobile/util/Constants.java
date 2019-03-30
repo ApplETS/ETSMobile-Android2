@@ -12,7 +12,7 @@ public class Constants {
     public static final String PARAM_USER_PASS = "USER_PASS";
     public static final String AUTH_TOKEN_TYPE = "BASIC";
     public static final String ACCOUNT_TYPE = "ca.etsmtl.applets.etsmobile";
-    public static final String IS_GCM_TOKEN_SENT_TO_SERVER = "sentTokenToServer";
+    public static final String IS_FCM_TOKEN_SENT_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
     public static final String TYPE_USAGER_ID = "TypeUsagerId";
     public static final String DOMAINE = "Domaine";
@@ -32,4 +32,6 @@ public class Constants {
     public static final String EXTRA_CUSTOM_TABS_TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR";
     public static final String EXTRA_CUSTOM_TABS_TITLE_VISIBILITY_STATE = "android.support.customtabs.extra.TITLE_VISIBILITY";
     public static final int EXTRA_CUSTOM_TABS_SHOW_TITLE = 1;
+    public static final String DEFAULT_NOTIFICATION_CHANNEL_ID = "fcm_fallback_notification_channel";
+    public static final String SNS_ARN_ENDPOINT = "SNS_ARN_ENDPOINT";
 }
