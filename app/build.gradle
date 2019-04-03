@@ -79,8 +79,8 @@ def PLAY_SERVICES_WEAR_VERSION = '16.0.1'
 def DAGGER_VERSION = '2.20'
 def RETROFIT_VERSION = '2.5.0'
 def OK_HTTP_3_VERSION = '3.12.1'
-def FIREBASE_VERSION = '16.0.6'
-def FCM_VERSION = '17.3.4'
+def FIREBASE_VERSION = '16.0.8'
+def FCM_VERSION = '17.5.0'
 def PERMISSIONS_DISPATCHER_VERSION = '4.3.0'
 
 dependencies {
@@ -93,7 +93,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true
     }
     implementation "com.google.android.gms:play-services-wearable:${PLAY_SERVICES_WEAR_VERSION}"
