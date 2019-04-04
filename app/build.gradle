@@ -54,12 +54,14 @@ android {
             applicationIdSuffix ".debug"
             manifestPlaceholders = [enableCrashReporting: "false"]
             resValue "string", "app_name", "ÉTSMobile debug"
+            resValue "string", "account_type", defaultConfig.applicationId + applicationIdSuffix
         }
         release {
             manifestPlaceholders = [enableCrashReporting: "true"]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "app_name", "ÉTSMobile"
+            resValue "string", "account_type", defaultConfig.applicationId
         }
     }
 

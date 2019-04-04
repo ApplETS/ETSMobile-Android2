@@ -12,7 +12,6 @@ import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -121,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
         setLocale();
         initDrawer();
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
 
         boolean firstLogin = prefs.getBoolean(Constants.FIRST_LOGIN, true);

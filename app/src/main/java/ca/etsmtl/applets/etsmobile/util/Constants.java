@@ -1,5 +1,7 @@
 package ca.etsmtl.applets.etsmobile.util;
 
+import ca.etsmtl.applets.etsmobile2.BuildConfig;
+
 /**
  * Created by gnut3ll4 on 15/10/15.
  */
@@ -11,7 +13,7 @@ public class Constants {
     public static final String KEY_GRANT_TYPE = "KEY_GRANT_TYPE";
     public static final String PARAM_USER_PASS = "USER_PASS";
     public static final String AUTH_TOKEN_TYPE = "BASIC";
-    public static final String ACCOUNT_TYPE = "ca.etsmtl.applets.etsmobile";
+    public static final String ACCOUNT_TYPE = BuildConfig.DEBUG ? "ca.etsmtl.applets.etsmobile.debug" : "ca.etsmtl.applets.etsmobile";
     public static final String IS_FCM_TOKEN_SENT_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
     public static final String TYPE_USAGER_ID = "TypeUsagerId";
