@@ -216,7 +216,8 @@ public class MainActivity extends AppCompatActivity {
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_notes).withIdentifier(COURSE_ITEM).withIcon(R.drawable.ic_ico_notes).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_moodle).withIdentifier(MOODLE_ITEM).withIcon(R.drawable.ic_moodle_icon_small).withEnabled(isUserLoggedIn),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_1_monETS).withIdentifier(MONETS_ITEM).withSelectable(false).withIcon(R.drawable.ic_monets).withEnabled(isUserLoggedIn),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_1_bandwith).withIdentifier(BANDWIDTH_ITEM).withIcon(R.drawable.ic_ico_internet)
+                                new SecondaryDrawerItem().withName(R.string.menu_section_1_bandwith).withIdentifier(BANDWIDTH_ITEM).withIcon(R.drawable.ic_ico_internet),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_beta).withIdentifier(BETA_VERSION_ITEM).withIcon(R.drawable.ic_beta_24dp)
                         ),
                         new ExpandableDrawerItem().withName(R.string.menu_section_2_ets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_2_news).withIdentifier(NEWS_ITEM).withIcon(R.drawable.ic_ico_news),
@@ -227,8 +228,7 @@ public class MainActivity extends AppCompatActivity {
                         new ExpandableDrawerItem().withName(R.string.menu_section_3_applets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_apps).withIdentifier(ACHIEVEMENTS_ITEM).withIcon(R.drawable.ic_star_60x60),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_about).withIdentifier(ABOUT_ITEM).withIcon(R.drawable.ic_logo_icon_final),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_3_faq).withIdentifier(FAQ_ITEM).withIcon(R.drawable.ic_ico_faq),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_3_beta).withIdentifier(BETA_VERSION_ITEM).withIcon(R.drawable.ic_beta_24dp)
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_faq).withIdentifier(FAQ_ITEM).withIcon(R.drawable.ic_ico_faq)
                         )
                 );
         if (isUserLoggedIn)
