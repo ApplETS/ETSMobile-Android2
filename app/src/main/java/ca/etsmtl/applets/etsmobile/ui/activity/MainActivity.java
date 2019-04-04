@@ -6,9 +6,11 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -86,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int LOGIN = 14;
     public static final int LOGOUT = 15;
     public static final int PROFILE_ITEM = 16;
+    public static final int BETA_VERSION_ITEM = 17;
 
     private String TAG = "MainActivity";
     private AccountManager accountManager;
@@ -226,10 +229,9 @@ public class MainActivity extends AppCompatActivity {
                         new ExpandableDrawerItem().withName(R.string.menu_section_3_applets).withSelectable(false).withSubItems(
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_apps).withIdentifier(ACHIEVEMENTS_ITEM).withIcon(R.drawable.ic_star_60x60),
                                 new SecondaryDrawerItem().withName(R.string.menu_section_3_about).withIdentifier(ABOUT_ITEM).withIcon(R.drawable.ic_logo_icon_final),
-                                new SecondaryDrawerItem().withName(R.string.menu_section_3_faq).withIdentifier(FAQ_ITEM).withIcon(R.drawable.ic_ico_faq)
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_faq).withIdentifier(FAQ_ITEM).withIcon(R.drawable.ic_ico_faq),
+                                new SecondaryDrawerItem().withName(R.string.menu_section_3_beta).withIdentifier(BETA_VERSION_ITEM).withIcon(R.drawable.ic_beta_24dp)
                         )
-
-
                 );
         if (isUserLoggedIn)
             drawerBuilder.addStickyDrawerItems(new SecondaryDrawerItem().withName(R.string.action_logout).withIdentifier(LOGOUT).withTextColorRes(R.color.red));
@@ -423,12 +425,27 @@ public class MainActivity extends AppCompatActivity {
                     case LOGOUT:
                         openLogoutDialogAlert();
                         break;
+                    case BETA_VERSION_ITEM:
+                        goToBetaVersion();
+                        break;
                 }
 
             }
             return false;
         }
     };
+
+    private void goToBetaVersion() {
+        final String betaPackageName = "ca.etsmtl.applets.etsmobile.beta";
+        PackageManager manager = getPackageManager();
+        Intent intent = manager.getLaunchIntentForPackage(betaPackageName);
+
+        if (intent == null) {
+            String uri = "market://details?id=" + betaPackageName;
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        }
+        startActivity(intent);
+    }
 
     public void openLogoutDialogAlert() {
 

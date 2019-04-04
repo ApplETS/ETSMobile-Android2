@@ -49,6 +49,7 @@
     <string name="menu_section_3_sponsors">Nos partenaires</string>
     <string name="menu_section_3_apps">Nos réalisations</string>
     <string name="menu_section_3_faq">FAQ</string>
+    <string name="menu_section_3_beta">Version bêta</string>
 
     <!-- Bottin -->
     <string name="toast_Connection_Required">Une connexion internet est requise pour télécharger le bottin</string>

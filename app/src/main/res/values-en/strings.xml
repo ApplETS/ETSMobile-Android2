@@ -49,6 +49,7 @@
     <string name="menu_section_3_sponsors">Our partners</string>
     <string name="menu_section_3_apps">Our achievements</string>
     <string name="menu_section_3_faq">FAQ</string>
+    <string name="menu_section_3_beta">Beta Version</string>
 
     <!-- Bottin -->
     <string name="toast_Connection_Required">An internet connection is required to load the directory</string>
