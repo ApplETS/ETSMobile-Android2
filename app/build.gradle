@@ -51,12 +51,15 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix ".debug"
             manifestPlaceholders = [enableCrashReporting: "false"]
+            resValue "string", "app_name", "ÉTSMobile debug"
         }
         release {
             manifestPlaceholders = [enableCrashReporting: "true"]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "string", "app_name", "ÉTSMobile"
         }
     }
 

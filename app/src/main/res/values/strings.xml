@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ÉTSMobile</string>
     <string name="action_settings">Paramètres</string>
     <string name="action_logout">Déconnexion</string>
     <string name="action_login">Se connecter</string>
