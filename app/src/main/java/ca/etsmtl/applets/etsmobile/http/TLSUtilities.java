@@ -28,7 +28,7 @@ public class TLSUtilities {
      * @param certificateStream the {@link InputStream} pointing to the certificate
      * @return a {@link ETSTLSTrust} containing the {@link X509TrustManager} as well as the {@link SSLContext} required for further usage.
      */
-    public static ETSTLSTrust createSignetsCertificateTrust(InputStream certificateStream) {
+    public static ETSTLSTrust createETSCertificateTrust(InputStream certificateStream) {
 
         try (InputStream caInput = new BufferedInputStream(certificateStream)) {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
@@ -72,7 +72,7 @@ public class TLSUtilities {
      */
     public static OkHttpClient createETSOkHttpClient(Context context) {
         InputStream certificate = context.getResources().openRawResource(R.raw.ets_pub_cert);
-        ETSTLSTrust trust = createSignetsCertificateTrust(certificate);
+        ETSTLSTrust trust = createETSCertificateTrust(certificate);
         OkHttpClient client = new OkHttpClient.Builder()
                 .sslSocketFactory(trust.getContext().getSocketFactory(), trust.getManager())
                 .build();

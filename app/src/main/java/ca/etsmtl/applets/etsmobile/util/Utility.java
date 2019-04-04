@@ -114,9 +114,10 @@ public class Utility {
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         try {
-            expirationDate = df.parse(expires);
-            Utility.putDate(securePreferences, Constants.EXP_DATE_COOKIE, expirationDate);
-
+            if (expires != null) {
+                expirationDate = df.parse(expires);
+                Utility.putDate(securePreferences, Constants.EXP_DATE_COOKIE, expirationDate);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

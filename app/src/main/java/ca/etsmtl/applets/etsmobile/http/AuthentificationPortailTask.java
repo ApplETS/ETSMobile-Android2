@@ -12,9 +12,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
+import ca.etsmtl.applets.etsmobile.service.FcmRegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile.util.Utility;
@@ -60,7 +61,14 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
 
             if (response.code() == 200) {
 
-                authCookie = response.header("Set-Cookie");
+                List<String> cookies = response.headers().values("Set-Cookie");
+
+                for (String cookie : cookies) {
+                    if (cookie.contains(Constants.MONETS_COOKIE_NAME)) {
+                        authCookie = cookie;
+                        break;
+                    }
+                }
 
                 JSONObject jsonResponse = new JSONObject(response.body().string());
 
@@ -114,16 +122,10 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
                     accountManager.setAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, authtoken);
 
                     Utility.saveCookieExpirationDate(authtoken, securePreferences);
-
-                    Intent gcmRegistrationIntent = new Intent(launchingActivity, RegistrationIntentService.class);
-                    launchingActivity.startService(gcmRegistrationIntent);
+                    FcmRegistrationIntentService.enqueueWork(launchingActivity, new Intent());
                 }
             }
-
-
             launchingActivity.finish();
-
-
         }
 
     }

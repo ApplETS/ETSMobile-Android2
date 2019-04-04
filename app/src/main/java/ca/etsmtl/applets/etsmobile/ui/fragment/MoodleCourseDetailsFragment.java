@@ -39,7 +39,6 @@ import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCoreCourse;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleCoreModule;
 import ca.etsmtl.applets.etsmobile.model.moodle.MoodleModuleContent;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleSectionAdapter;
-import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 import permissions.dispatcher.NeedsPermission;
@@ -153,7 +152,6 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_moodle_details, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
         expListView = v.findViewById(R.id.expandableListView_moodle_courses_details);
-        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
         return v;
     }
 
@@ -227,8 +225,6 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                 if (object instanceof MoodleModuleContent) {
                     MoodleCourseDetailsFragmentPermissionsDispatcher.downloadMoodleObjectWithPermissionCheck(MoodleCourseDetailsFragment.this, (MoodleModuleContent) object);
 
-                    AnalyticsHelper.getInstance(getActivity())
-                            .sendActionEvent(getClass().getSimpleName(), TELECHARGE_FICHIER_MOODLE);
                 }
 
                 if (object instanceof MoodleCoreModule) {
@@ -241,9 +237,6 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                         url = item.getUrl();
                     }
 
-
-                    AnalyticsHelper.getInstance(getActivity())
-                            .sendActionEvent(getClass().getSimpleName(), CONSULTE_PAGE_MOODLE);
 
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));

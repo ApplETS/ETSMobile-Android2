@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
@@ -88,8 +87,6 @@ public class PrefsActivity extends PreferenceActivity {
                 case android.R.id.home:
                     // app icon in action bar clicked; goto parent activity.
                     getActivity().onBackPressed();
-                    AnalyticsHelper.getInstance(getActivity())
-                            .sendActionEvent(getClass().getSimpleName(), CHOIX_DES_SOURCES);
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);

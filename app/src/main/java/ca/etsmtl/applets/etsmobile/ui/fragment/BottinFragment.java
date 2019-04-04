@@ -36,7 +36,6 @@ import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
 import ca.etsmtl.applets.etsmobile.service.BottinSyncJob;
 import ca.etsmtl.applets.etsmobile.ui.activity.BottinDetailsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListAdapter;
-import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -181,7 +180,6 @@ public class BottinFragment extends BaseFragment implements SearchView.OnQueryTe
         // setting list adapter
         expListView.setAdapter(listAdapter);
 
-        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         updateUI();
 

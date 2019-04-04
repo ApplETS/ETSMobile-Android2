@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity;
-import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
 
 //import com.google.android.gms.maps.GoogleMap;
@@ -71,15 +70,9 @@ public class SecuriteFragment extends BaseFragment {
                         final Intent intent = new Intent(Intent.ACTION_DIAL);
                         intent.setData(Uri.parse(uri));
 
-                        AnalyticsHelper.getInstance(getActivity())
-                                .sendActionEvent(getClass()
-                                        .getSimpleName(), UrgenceActivity.APPEL_D_URGENCE);
-
                         startActivity(intent);
                     }
                 });
-
-        AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
         return v;
     }

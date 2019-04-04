@@ -10,7 +10,6 @@ import android.webkit.WebView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
 
 
@@ -83,9 +82,6 @@ public class UrgenceActivity extends AppCompatActivity {
                                 + getString(R.string.secu_phone_lbl);
                         final Intent intent = new Intent(Intent.ACTION_DIAL);
                         intent.setData(Uri.parse(uri));
-
-                        AnalyticsHelper.getInstance(getApplication())
-                                .sendActionEvent(getClass().getSimpleName(), APPEL_D_URGENCE);
                         startActivity(intent);
                     }
                 });

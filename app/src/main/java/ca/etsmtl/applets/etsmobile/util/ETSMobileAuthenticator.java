@@ -7,9 +7,7 @@ import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -18,10 +16,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.TLSUtilities;
-import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
 import ca.etsmtl.applets.etsmobile2.R;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -102,7 +100,14 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
                 try {
                     httpResponse = client.newCall(request).execute();
                     if (httpResponse.code() == 200) {
-                        authToken = httpResponse.header("Set-Cookie");
+                        List<String> cookies = httpResponse.headers().values("Set-Cookie");
+
+                        for (String cookie : cookies) {
+                            if (cookie.contains(Constants.MONETS_COOKIE_NAME)) {
+                                authToken = cookie;
+                                break;
+                            }
+                        }
 
                         Utility.saveCookieExpirationDate(authToken, securePreferences);
 
@@ -115,13 +120,6 @@ public class ETSMobileAuthenticator extends AbstractAccountAuthenticator {
                         securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
                         ApplicationManager.domaine = domaine;
                         ApplicationManager.typeUsagerId = typeUsagerId;
-
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-                        boolean isTokenSent = sharedPreferences.getBoolean(Constants.IS_GCM_TOKEN_SENT_TO_SERVER, false);
-                        if (!isTokenSent) {
-                            Intent intent = new Intent(mContext, RegistrationIntentService.class);
-                            mContext.startService(intent);
-                        }
                     } else {
                         Log.e("Erreur Portail", httpResponse.toString());
                     }
