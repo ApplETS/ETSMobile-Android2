@@ -8,14 +8,14 @@ buildscript {
         maven { url 'https://mint.splunk.com/gradle/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:3.4.0'
         classpath 'com.google.gms:google-services:4.2.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
+wrapper {
+    gradleVersion = '5.1.1'
 }
 allprojects {
     repositories {
