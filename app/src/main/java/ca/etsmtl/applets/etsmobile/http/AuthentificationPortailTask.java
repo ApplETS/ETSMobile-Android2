@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
@@ -31,15 +32,19 @@ import okhttp3.Response;
 public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent> {
 
     private final AccountManager accountManager;
-    private Activity launchingActivity;
+    private WeakReference<Activity> launchingActivityWeakRef;
 
     public AuthentificationPortailTask(Activity launchingActivity) {
-        this.launchingActivity = launchingActivity;
+        launchingActivityWeakRef = new WeakReference<>(launchingActivity);
         accountManager = AccountManager.get(launchingActivity);
     }
 
     protected Intent doInBackground(String... params) {
-        OkHttpClient client = TLSUtilities.createETSOkHttpClient(launchingActivity);
+        if (launchingActivityWeakRef.get() == null) {
+            return null;
+        }
+
+        OkHttpClient client = TLSUtilities.createETSOkHttpClient(launchingActivityWeakRef.get());
         String url = params[0], username = params[1], password = params[2];
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, "{\n  \"Username\": \"" + username + "\",\n  \"Password\": \"" + password + "\"\n}");
@@ -95,6 +100,7 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
 
         res.putExtra(Constants.PARAM_USER_PASS, password);
 
+
         return res;
     }
 
@@ -111,22 +117,32 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
                     int typeUsagerId = intent.getIntExtra(Constants.TYPE_USAGER_ID, -1);
                     String domaine = intent.getStringExtra(Constants.DOMAINE);
 
-                    SecurePreferences securePreferences = new SecurePreferences(launchingActivity);
-                    securePreferences.edit().putInt(Constants.TYPE_USAGER_ID, typeUsagerId).commit();
-                    securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
+                    Activity launchingActivity = launchingActivityWeakRef.get();
 
-                    securePreferences.edit().putString(Constants.EXP_DATE_COOKIE, domaine).commit();
-                    ApplicationManager.domaine = domaine;
-                    ApplicationManager.typeUsagerId = typeUsagerId;
-                    accountManager.setAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, authtoken);
+                    if (launchingActivity != null) {
+                        SecurePreferences securePreferences = new SecurePreferences(launchingActivity);
+                        securePreferences.edit().putInt(Constants.TYPE_USAGER_ID, typeUsagerId).commit();
+                        securePreferences.edit().putString(Constants.DOMAINE, domaine).commit();
 
-                    Utility.saveCookieExpirationDate(authtoken, securePreferences);
-                    NotificationsLoginManager.login(launchingActivity.getApplication(),
-                            intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME), domaine);
+                        securePreferences.edit().putString(Constants.EXP_DATE_COOKIE, domaine).commit();
+                        ApplicationManager.domaine = domaine;
+                        ApplicationManager.typeUsagerId = typeUsagerId;
+                        accountManager.setAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, authtoken);
+
+                        Utility.saveCookieExpirationDate(authtoken, securePreferences);
+                        NotificationsLoginManager.login(launchingActivity.getApplication(),
+                                intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME), domaine);
+                    } else {
+                        return;
+                    }
                 }
             }
-            launchingActivity.finish();
-        }
 
+            Activity launchingActivity = launchingActivityWeakRef.get();
+
+            if (launchingActivity != null) {
+                launchingActivity.finish();
+            }
+        }
     }
 }
