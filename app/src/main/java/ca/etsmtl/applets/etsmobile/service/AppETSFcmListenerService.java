@@ -45,7 +45,7 @@ public class AppETSFcmListenerService extends ETSFcmListenerService {
     }
 
     @Override
-    protected PendingIntent notificationClickedIntent() {
+    protected PendingIntent notificationClickedIntent(MonETSNotification monETSNotification) {
         Intent intent = new Intent(this, NotificationActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 

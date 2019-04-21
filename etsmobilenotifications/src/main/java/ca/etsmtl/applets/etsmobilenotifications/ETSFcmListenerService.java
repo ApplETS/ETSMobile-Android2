@@ -1,6 +1,5 @@
 package ca.etsmtl.applets.etsmobilenotifications;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -81,10 +81,9 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
-        Notification summaryNotification = createSummaryNotification(monETSNotifications);
 
         notifyNotifications(notificationManager, monETSNotifications);
-        notificationManager.notify(Constants.NOTIFICATIONS_SUMMARY_ID, summaryNotification);
+        notifySummaryNotification(notificationManager, monETSNotifications);
 
         saveNewNotification(nouvelleMonETSNotification, previousMonETSNotifications);
     }
@@ -94,12 +93,14 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notificationManager != null) {
-            NotificationChannel channel = notificationManager.getNotificationChannel(Constants.DEFAULT_NOTIFICATION_CHANNEL_ID);
+            NotificationChannel channel = notificationManager
+                    .getNotificationChannel(Constants.DEFAULT_NOTIFICATION_CHANNEL_ID);
 
             if (channel == null) {
                 // We could create multiple channels based on the notification but let's just create one for maintenance purposes.
                 String channelName = getString(R.string.fcm_fallback_notification_channel_label);
-                channel = new NotificationChannel(Constants.DEFAULT_NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
+                channel = new NotificationChannel(Constants.DEFAULT_NOTIFICATION_CHANNEL_ID,
+                        channelName, NotificationManager.IMPORTANCE_HIGH);
                 notificationManager.createNotificationChannel(channel);
             }
         }
@@ -108,23 +109,34 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
     private void notifyNotifications(NotificationManagerCompat notificationManager,
                                      List<MonETSNotification> monETSNotifications) {
         for (MonETSNotification monETSNotification : monETSNotifications) {
-            Notification notification = new NotificationCompat.Builder(this, Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
+                    Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_school_white_24dp)
                     .setColor(ContextCompat.getColor(this, R.color.ets_red))
                     .setContentTitle(monETSNotification.getNotificationApplicationNom())
                     .setContentText(monETSNotification.getNotificationTexte())
-                    .setContentIntent(notificationClickedIntent())
                     .setAutoCancel(true)
-                    .setGroup(Constants.NOTIFICATIONS_GROUP_KEY)
-                    .build();
+                    .setGroup(Constants.NOTIFICATIONS_GROUP_KEY);
+            
+            PendingIntent contentIntent = notificationClickedIntent(monETSNotification);
 
-            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            if (contentIntent != null) {
+                notificationBuilder.setContentIntent(contentIntent);
+            }
 
-            notificationManager.notify(monETSNotification.getId(), notification);
+            PendingIntent deleteIntent = notificationDismissedIntent(monETSNotification);
+
+            if (deleteIntent != null) {
+                notificationBuilder.setDeleteIntent(deleteIntent);
+            }
+
+
+            notificationManager.notify(monETSNotification.getId(), notificationBuilder.build());
         }
     }
 
-    private Notification createSummaryNotification(List<MonETSNotification> notifications) {
+    private void notifySummaryNotification(NotificationManagerCompat notificationManager,
+                                           List<MonETSNotification> notifications) {
         int numberOfNotifications = notifications.size();
 
         String bigContentTitle = getString(R.string.notification_content_title,
@@ -133,7 +145,8 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
                 (numberOfNotifications == 1 ? "" : "s"));
 
 
-        return new NotificationCompat.Builder(this, Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
+        Notification summaryNotification = new NotificationCompat.Builder(this,
+                Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_school_white_24dp)
                 .setColor(ContextCompat.getColor(this, R.color.ets_red))
                 .setContentTitle(getString(R.string.ets))
@@ -143,6 +156,8 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
                 .setGroup(Constants.NOTIFICATIONS_GROUP_KEY)
                 .setGroupSummary(true)
                 .build();
+
+        notificationManager.notify(Constants.NOTIFICATIONS_SUMMARY_ID, summaryNotification);
     }
 
     private NotificationCompat.Style summaryNotificationStyle(List<MonETSNotification> notifications) {
@@ -178,15 +193,6 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
     }
 
     /**
-     * Returns the maximum number of notifications displayed at the same time
-     *
-     * @return The maximum number of notifications displayed at the same time
-     */
-    protected int maxNbNotificationsToDisplay() {
-        return 5;
-    }
-
-    /**
      * Get the previous notifications persisted on the device
      *
      * @return The previous notifications persisted on the device
@@ -196,21 +202,36 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
     /**
      * Save new notification on device
      *
-     * @param newNotification New notification to save
+     * @param newNotification       New notification to save
      * @param previousNotifications Previous notifications
      */
     protected abstract void saveNewNotification(MonETSNotification newNotification, List<MonETSNotification> previousNotifications);
 
     /**
-     * Get {@link PendingIntent} for the {@link Activity} that should be launched when the user tap
-     * on a notification
+     * Returns {@link PendingIntent} to execute when the user tap on the notification
      *
+     * @return {@link PendingIntent} to execute when the user tap on a notification
      * @see <a href="https://developer.android.com/training/notify-user/navigation">
-     *     https://developer.android.com/training/notify-user/navigation
-     *     </a>
+     * https://developer.android.com/training/notify-user/navigation
+     * </a>
      *
-     * @return {@link PendingIntent} for the {@link Activity} that should be launched when the user
-     * tap on a notification
+     * @param monETSNotification Tapped notification
      */
-    protected abstract PendingIntent notificationClickedIntent();
+    @Nullable
+    protected PendingIntent notificationClickedIntent(MonETSNotification monETSNotification) {
+        return null;
+    }
+
+    /**
+     * Returns {@link PendingIntent} to execute when the notification is explicitly dismissed by the 
+     * user, either with the "Clear All" button or by swiping it away individually.
+     *
+     * @param monETSNotification Dimissed notification
+     * @return {@link PendingIntent} to execute when the notification is explicitly dismissed by the
+     * user, either with the "Clear All" button or by swiping it away individually.
+     */
+    @Nullable
+    protected PendingIntent notificationDismissedIntent(MonETSNotification monETSNotification) {
+        return null;
+    }
 }
