@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
+import ca.etsmtl.applets.etsmobile.model.AppMonETSNotification;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotificationsAdapter;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.NotificationManager;
@@ -55,7 +55,7 @@ public class NotificationActivity extends Activity implements RequestListener<Ob
         notificationsAdapter = new NotificationsAdapter(this, R.layout.row_notification, new ArrayList<>());
         listView.setAdapter(notificationsAdapter);
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            MonETSNotification item = notificationsAdapter.getItem(position);
+            AppMonETSNotification item = notificationsAdapter.getItem(position);
             String url = item.getUrl();
             if (URLUtil.isValidUrl(url)) {
                 Utility.openChromeCustomTabs(NotificationActivity.this, url);
@@ -99,7 +99,7 @@ public class NotificationActivity extends Activity implements RequestListener<Ob
 
     private void syncAdapterWithDB() {
         try {
-            Dao<MonETSNotification, ?> dao = databaseHelper.getDao(MonETSNotification.class);
+            Dao<AppMonETSNotification, ?> dao = databaseHelper.getDao(AppMonETSNotification.class);
             notificationsAdapter.clear();
             notificationsAdapter.addAll(dao.queryForAll());
             notificationsAdapter.notifyDataSetChanged();

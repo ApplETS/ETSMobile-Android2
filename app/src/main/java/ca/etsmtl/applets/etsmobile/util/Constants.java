@@ -34,7 +34,5 @@ public class Constants {
     public static final String EXTRA_CUSTOM_TABS_TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR";
     public static final String EXTRA_CUSTOM_TABS_TITLE_VISIBILITY_STATE = "android.support.customtabs.extra.TITLE_VISIBILITY";
     public static final int EXTRA_CUSTOM_TABS_SHOW_TITLE = 1;
-    public static final String DEFAULT_NOTIFICATION_CHANNEL_ID = "fcm_fallback_notification_channel";
-    public static final String SNS_ARN_ENDPOINT = "SNS_ARN_ENDPOINT";
     public static final String MONETS_COOKIE_NAME = ".AspNet.ApplicationCookie.Portail";
 }

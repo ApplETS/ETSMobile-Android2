@@ -1,11 +1,11 @@
-package ca.etsmtl.applets.etsmobile.service;
+package ca.etsmtl.applets.etsmobilenotifications;
 
+import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.text.Spannable;
@@ -14,27 +14,21 @@ import android.text.style.StyleSpan;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import androidx.core.app.NotificationCompat;
-import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
-import ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity;
-import ca.etsmtl.applets.etsmobile.util.Constants;
-import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
-import ca.etsmtl.applets.etsmobile2.R;
+import androidx.core.content.ContextCompat;
+import ca.etsmtl.applets.etsmobilenotifications.model.MonETSNotification;
 
 /**
  * Created by gnut3ll4 on 16/10/15.
  */
-public class ETSFcmListenerService extends FirebaseMessagingService {
+public abstract class ETSFcmListenerService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFcmListenerService";
-    private static final int NUMBER_OF_NOTIF_TO_DISPLAY = 5;
 
     /**
      * Called when message is received.
@@ -74,29 +68,15 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
      * @param data FCM message received.
      */
     private void sendNotification(Map<String, String> data) {
-        SecurePreferences securePreferences = new SecurePreferences(this);
-        Gson gson = new Gson();
-
-        String receivedNotifString = securePreferences.getString(Constants.RECEIVED_NOTIF, "");
-
-        ArrayList<MonETSNotification> receivedNotif = gson.fromJson(
-                receivedNotifString,
-                new TypeToken<ArrayList<MonETSNotification>>() {
-                }.getType());
-
-        if (receivedNotif == null) {
-            receivedNotif = new ArrayList<>();
-        }
-
+        List<MonETSNotification> previousNotifications = savedNotifications();
+        ArrayList<MonETSNotification> notifications = new ArrayList<>(previousNotifications);
         MonETSNotification nouvelleNotification = getMonETSNotificationFromMap(data);
 
-        receivedNotif.add(nouvelleNotification);
+        if (nouvelleNotification != null) {
+            notifications.add(nouvelleNotification);
+        }
 
-        int numberOfNotifications = receivedNotif.size();
-        Intent intent = new Intent(this, NotificationActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_ets);
+        int numberOfNotifications = notifications.size();
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -111,12 +91,12 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
         }
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.school_48)
-                .setColor(getResources().getColor(R.color.red))
+                .setSmallIcon(R.drawable.ic_school_white_24dp)
+                .setColor(ContextCompat.getColor(this, R.color.ets_red))
                 .setContentTitle(getString(R.string.ets))
                 .setContentText(getString(R.string.new_notifications))
-                .setContentIntent(pendingIntent)
-                .setLargeIcon(icon)
+                .setContentIntent(notificationClickedIntent())
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
                 .setAutoCancel(true)
                 .setNumber(numberOfNotifications);
 
@@ -124,12 +104,12 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
 
         // Sets a title for the Inbox in expanded layout
         String bigContentTitle = getString(R.string.notification_content_title,
-                numberOfNotifications+"",
+                numberOfNotifications + "",
                 (numberOfNotifications == 1 ? "" : "s"),
                 (numberOfNotifications == 1 ? "" : "s"));
         inBoxStyle.setBigContentTitle(bigContentTitle);
 
-        String username = ApplicationManager.userCredentials.getUsername();
+        String username = NotificationsLoginManager.getUserName(getApplicationContext());
         Spannable sb = new SpannableString(username);
         sb.setSpan(
                 new StyleSpan(android.graphics.Typeface.BOLD),
@@ -140,18 +120,19 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
 
         inBoxStyle.setSummaryText(sb);
 
-        securePreferences.edit().putString(Constants.RECEIVED_NOTIF, gson.toJson(receivedNotif)).commit();
+        saveNewNotification(nouvelleNotification, previousNotifications);
 
-        int minimumIndex = receivedNotif.size() - NUMBER_OF_NOTIF_TO_DISPLAY;
+        int nbNotificationsToDisplay = maxNbNotificationsToDisplay();
+        int minimumIndex = notifications.size() - nbNotificationsToDisplay;
         minimumIndex = minimumIndex < 0 ? 0 : minimumIndex;
-        for (int i = receivedNotif.size() - 1; i >= minimumIndex; i--) {
-            inBoxStyle.addLine(receivedNotif.get(i).getNotificationTexte());
+        for (int i = notifications.size() - 1; i >= minimumIndex; i--) {
+            inBoxStyle.addLine(notifications.get(i).getNotificationTexte());
         }
 
-        if (numberOfNotifications > NUMBER_OF_NOTIF_TO_DISPLAY) {
+        if (numberOfNotifications > nbNotificationsToDisplay) {
 
-            int plusOthers = (numberOfNotifications - NUMBER_OF_NOTIF_TO_DISPLAY);
-            String plusOthersString = getString(R.string.others_notifications, plusOthers+"", (plusOthers == 1 ? "" : "s"));
+            int plusOthers = (numberOfNotifications - nbNotificationsToDisplay);
+            String plusOthersString = getString(R.string.others_notifications, plusOthers + "", (plusOthers == 1 ? "" : "s"));
             Spannable others = new SpannableString(plusOthersString);
             others.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, others.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             inBoxStyle.addLine(others);
@@ -161,12 +142,17 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
         mNotificationManager.notify(1, mBuilder.build());
     }
 
-    public MonETSNotification getMonETSNotificationFromMap(Map<String, String> data) {
-        int id = Integer.valueOf(data.get("Id"));
+    private MonETSNotification getMonETSNotificationFromMap(Map<String, String> data) {
+        String idStr = data.get("Id");
+
+        if (idStr == null) {
+            return null;
+        }
+
+        int id = Integer.valueOf(idStr);
         String notificationTexte = data.get("NotificationTexte");
 
         String notificationApplicationNom = data.get("NotificationApplicationNom");
-        //String notificationSigleCours = data.getString("NotificationSigleCours");
         String url = data.get("Url");
 
         return new MonETSNotification(
@@ -178,4 +164,40 @@ public class ETSFcmListenerService extends FirebaseMessagingService {
                 url);
     }
 
+    /**
+     * Returns the maximum number of notifications displayed at the same time
+     *
+     * @return The maximum number of notifications displayed at the same time
+     */
+    protected int maxNbNotificationsToDisplay() {
+        return 5;
+    }
+
+    /**
+     * Get the previous notifications persisted on the device
+     *
+     * @return The previous notifications persisted on the device
+     */
+    protected abstract List<MonETSNotification> savedNotifications();
+
+    /**
+     * Save new notification on device
+     *
+     * @param newNotification New notification to save
+     * @param previousNotifications Previous notifications
+     */
+    protected abstract void saveNewNotification(MonETSNotification newNotification, List<MonETSNotification> previousNotifications);
+
+    /**
+     * Get {@link PendingIntent} for the {@link Activity} that should be launched when the user tap
+     * on a notification
+     *
+     * @see <a href="https://developer.android.com/training/notify-user/navigation">
+     *     https://developer.android.com/training/notify-user/navigation
+     *     </a>
+     *
+     * @return {@link PendingIntent} for the {@link Activity} that should be launched when the user
+     * tap on a notification
+     */
+    protected abstract PendingIntent notificationClickedIntent();
 }

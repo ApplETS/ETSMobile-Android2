@@ -2,7 +2,7 @@ package ca.etsmtl.applets.etsmobile.http;
 
 import java.util.List;
 
-import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
+import ca.etsmtl.applets.etsmobile.model.AppMonETSNotification;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -20,6 +20,6 @@ public interface MonETSWebService {
      * @return la liste de notifications pour un utilisateur
      */
     @GET("/api/notification")
-    Call<List<MonETSNotification>> getAllNotifications(@Header("Cookie") String authToken);
+    Call<List<AppMonETSNotification>> getAllNotifications(@Header("Cookie") String authToken);
 
 }

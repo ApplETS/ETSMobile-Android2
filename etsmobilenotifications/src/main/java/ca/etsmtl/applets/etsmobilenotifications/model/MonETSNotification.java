@@ -1,43 +1,20 @@
-package ca.etsmtl.applets.etsmobile.model;
-
-import com.google.gson.annotations.SerializedName;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+package ca.etsmtl.applets.etsmobilenotifications.model;
 
 import java.util.Date;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by gnut3ll4 on 15/12/15.
  */
-@DatabaseTable(tableName = "monets_notification")
 public class MonETSNotification implements Comparable<MonETSNotification> {
 
-    @DatabaseField(id = true)
-    @SerializedName("Id")
     int id;
-
-    @DatabaseField
-    @SerializedName("DossierId")
     int dossierId;
-
-    @DatabaseField
-    @SerializedName("NotificationTexte")
     String notificationTexte;
-
-    @DatabaseField
-    @SerializedName("NotificationDateDebutAffichage")
     Date notificationDateDebutAffichage;
-
-    @DatabaseField
-    @SerializedName("NotificationApplicationNom")
     String notificationApplicationNom;
-
-    @DatabaseField
-    @SerializedName("Url")
     String url;
-
-    public MonETSNotification() {
-    }
 
     public MonETSNotification(int id, int dossierId, String notificationTexte, Date notificationDateDebutAffichage, String notificationApplicationNom, String url) {
         this.id = id;
@@ -73,7 +50,7 @@ public class MonETSNotification implements Comparable<MonETSNotification> {
     }
 
     @Override
-    public int compareTo(MonETSNotification another) {
+    public int compareTo(@NonNull MonETSNotification another) {
         if(notificationDateDebutAffichage.after(another.getNotificationDateDebutAffichage())) {
             return -1;
         }

@@ -1,4 +1,4 @@
-package ca.etsmtl.applets.etsmobile.service;
+package ca.etsmtl.applets.etsmobilenotifications;
 
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
@@ -31,9 +31,6 @@ import java.util.concurrent.ExecutionException;
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.util.Constants;
-import ca.etsmtl.applets.etsmobile2.R;
 
 public class FcmRegistrationIntentService extends JobIntentService {
 
@@ -65,7 +62,7 @@ public class FcmRegistrationIntentService extends JobIntentService {
             Task<InstanceIdResult> instanceId = FirebaseInstanceId.getInstance().getInstanceId();
             InstanceIdResult result = Tasks.await(instanceId);
             Log.i(TAG, "FCM Registration Token: " + result.getToken());
-            if (ApplicationManager.domaine != null && ApplicationManager.userCredentials != null) {
+            if (NotificationsLoginManager.isUserLoggedIn(getApplicationContext())) {
                 sendRegistrationToServer(result.getToken());
 
                 // Subscribe to topic channels
@@ -93,8 +90,8 @@ public class FcmRegistrationIntentService extends JobIntentService {
      */
     private void sendRegistrationToServer(String token) {
         // Add custom implementation, as needed.
-        String userData = ApplicationManager.domaine + "\\" + ApplicationManager.userCredentials.getUsername();
-        ArnEndpointHandler handler = new ArnEndpointHandler(getApplicationContext(), token, userData, getString(R.string.aws_application_arn));
+        String userData = NotificationsLoginManager.getMonEtsDomaine(getApplicationContext()) + "\\" + NotificationsLoginManager.getUserName(getApplicationContext());
+        ArnEndpointHandler handler = new ArnEndpointHandler(getApplicationContext(), token, userData);
         handler.createOrUpdateEndpoint();
     }
 
@@ -108,5 +105,4 @@ public class FcmRegistrationIntentService extends JobIntentService {
         }
     }
     // [END subscribe_topics]
-
 }

@@ -15,7 +15,7 @@ import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.MonETSWebService;
-import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
+import ca.etsmtl.applets.etsmobile.model.AppMonETSNotification;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,7 +53,7 @@ public class NotificationManager {
 
         if (accounts.length > 0) {
             String authToken = accountManager.peekAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE);
-            Call<List<MonETSNotification>> notificationCall = service.getAllNotifications(authToken);
+            Call<List<AppMonETSNotification>> notificationCall = service.getAllNotifications(authToken);
             notificationCall.enqueue(createCallback());
         }
     }
@@ -64,11 +64,11 @@ public class NotificationManager {
      *
      * @return the callback for the notification {@link Call}
      */
-    private Callback<List<MonETSNotification>> createCallback() {
-        return new Callback<List<MonETSNotification>>() {
+    private Callback<List<AppMonETSNotification>> createCallback() {
+        return new Callback<List<AppMonETSNotification>>() {
             @Override
             @EverythingIsNonNull
-            public void onResponse(Call<List<MonETSNotification>> call, Response<List<MonETSNotification>> response) {
+            public void onResponse(Call<List<AppMonETSNotification>> call, Response<List<AppMonETSNotification>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     updateDatabase(response.body());
                 } else {
@@ -78,7 +78,7 @@ public class NotificationManager {
 
             @Override
             @EverythingIsNonNull
-            public void onFailure(Call<List<MonETSNotification>> call, Throwable t) {
+            public void onFailure(Call<List<AppMonETSNotification>> call, Throwable t) {
                 t.printStackTrace();
                 new AsyncUpdateMonETSToken(context, NotificationManager.this).execute();
             }
@@ -90,11 +90,11 @@ public class NotificationManager {
      *
      * @param notifications the list of notifications that have been fetched from MonÉTS's API
      */
-    private void updateDatabase(List<MonETSNotification> notifications) {
+    private void updateDatabase(List<AppMonETSNotification> notifications) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         try {
-            Dao<MonETSNotification, ?> dao = databaseHelper.getDao(MonETSNotification.class);
-            for (MonETSNotification monETSNotification : notifications) {
+            Dao<AppMonETSNotification, ?> dao = databaseHelper.getDao(AppMonETSNotification.class);
+            for (AppMonETSNotification monETSNotification : notifications) {
                 dao.createOrUpdate(monETSNotification);
             }
 

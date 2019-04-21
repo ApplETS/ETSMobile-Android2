@@ -10,6 +10,7 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
+import ca.etsmtl.applets.etsmobile.model.AppMonETSNotification;
 import ca.etsmtl.applets.etsmobile.model.Cours;
 import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
 import ca.etsmtl.applets.etsmobile.model.Enseignant;
@@ -20,7 +21,6 @@ import ca.etsmtl.applets.etsmobile.model.HoraireActivite;
 import ca.etsmtl.applets.etsmobile.model.HoraireExamenFinal;
 import ca.etsmtl.applets.etsmobile.model.JoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
-import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
 import ca.etsmtl.applets.etsmobile.model.Personne;
 import ca.etsmtl.applets.etsmobile.model.Programme;
 import ca.etsmtl.applets.etsmobile.model.Seances;
@@ -72,7 +72,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, Seances.class);
 			TableUtils.createTable(connectionSource, FicheEmploye.class);
 			TableUtils.createTable(connectionSource, Sponsor.class);
-			TableUtils.createTable(connectionSource, MonETSNotification.class);
+			TableUtils.createTable(connectionSource, AppMonETSNotification.class);
 		} catch (SQLException e) {
 			Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
 			throw new RuntimeException(e);
@@ -105,7 +105,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, Seances.class, true);
 			TableUtils.dropTable(connectionSource, FicheEmploye.class, true);
 			TableUtils.dropTable(connectionSource, Sponsor.class, true);
-            TableUtils.dropTable(connectionSource, MonETSNotification.class, true);
+            TableUtils.dropTable(connectionSource, AppMonETSNotification.class, true);
 
 			// after we drop the old databases, we create the new ones
 			onCreate(db, connectionSource);

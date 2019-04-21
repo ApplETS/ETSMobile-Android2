@@ -22,12 +22,12 @@ import ca.etsmtl.applets.etsmobile.di.AppModule;
 import ca.etsmtl.applets.etsmobile.di.DaggerAppComponent;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
-import ca.etsmtl.applets.etsmobile.service.ArnEndpointHandler;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
+import ca.etsmtl.applets.etsmobilenotifications.NotificationsLoginManager;
 
 public class ApplicationManager extends Application {
 
@@ -102,8 +102,7 @@ public class ApplicationManager extends Application {
             accountManager.removeAccount(accounts[index], null, null);
         }
 
-        ArnEndpointHandler handler = new ArnEndpointHandler(activity, "", "", "");
-        handler.deleteEndpoint();
+        NotificationsLoginManager.logout(activity);
 
         editor.apply();
         secureEditor.apply();

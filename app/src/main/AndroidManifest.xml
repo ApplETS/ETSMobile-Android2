@@ -116,21 +116,6 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-        <!-- [START fcm_listener] -->
-        <service
-            android:name="ca.etsmtl.applets.etsmobile.service.ETSFcmListenerService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <!-- [END fcm_listener] -->
-        <!-- [START instanceId_listener] -->
-        <!-- [END instanceId_listener] -->
-        <service
-            android:name="ca.etsmtl.applets.etsmobile.service.FcmRegistrationIntentService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false" />
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="" />
@@ -191,6 +176,31 @@
                 android:resource="@xml/provider_paths"/>
         </provider>
 
-    </application>
+        <meta-data
+            android:name="ca.etsmtl.applets.etsmobilenotifications.AWS_ACCESS_KEY"
+            android:value="@string/aws_access_key" />
 
+        <meta-data
+            android:name="ca.etsmtl.applets.etsmobilenotifications.AWS_SECRET_KEY"
+            android:value="@string/aws_secret_key" />
+
+        <meta-data
+            android:name="ca.etsmtl.applets.etsmobilenotifications.SNS_ARN"
+            android:value="@string/aws_application_arn" />
+
+        <!-- [START fcm_listener] -->
+        <service
+            android:name="ca.etsmtl.applets.etsmobile.service.AppETSFcmListenerService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- [END fcm_listener] -->
+        <!-- [START instanceId_listener] -->
+        <!-- [END instanceId_listener] -->
+        <service
+            android:name="ca.etsmtl.applets.etsmobilenotifications.FcmRegistrationIntentService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="false" />
+    </application>
 </manifest>

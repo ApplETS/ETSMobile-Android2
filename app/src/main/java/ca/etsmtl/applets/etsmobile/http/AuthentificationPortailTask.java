@@ -15,10 +15,10 @@ import java.io.IOException;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.service.FcmRegistrationIntentService;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile.util.Utility;
+import ca.etsmtl.applets.etsmobilenotifications.NotificationsLoginManager;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -95,7 +95,6 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
 
         res.putExtra(Constants.PARAM_USER_PASS, password);
 
-
         return res;
     }
 
@@ -122,7 +121,8 @@ public class AuthentificationPortailTask extends AsyncTask<String, Void, Intent>
                     accountManager.setAuthToken(accounts[0], Constants.AUTH_TOKEN_TYPE, authtoken);
 
                     Utility.saveCookieExpirationDate(authtoken, securePreferences);
-                    FcmRegistrationIntentService.enqueueWork(launchingActivity, new Intent());
+                    NotificationsLoginManager.login(launchingActivity.getApplication(),
+                            intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME), domaine);
                 }
             }
             launchingActivity.finish();

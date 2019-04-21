@@ -12,18 +12,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
+import ca.etsmtl.applets.etsmobile.model.AppMonETSNotification;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
 
 /**
  * Created by gnut3ll4 on 12/12/14.
  */
-public class NotificationsAdapter extends ArrayAdapter<MonETSNotification> {
+public class NotificationsAdapter extends ArrayAdapter<AppMonETSNotification> {
 
     private LayoutInflater inflater;
 
-    public NotificationsAdapter(Context context, int rowLayoutResourceId, ArrayList<MonETSNotification> list) {
+    public NotificationsAdapter(Context context, int rowLayoutResourceId, ArrayList<AppMonETSNotification> list) {
         super(context, rowLayoutResourceId, list);
         this.inflater = LayoutInflater.from(context);
     }
@@ -43,7 +43,7 @@ public class NotificationsAdapter extends ArrayAdapter<MonETSNotification> {
             view.setTag(holder);
         }
 
-        MonETSNotification item = getItem(position);
+        AppMonETSNotification item = getItem(position);
 
         String nomApplication = item.getNotificationApplicationNom();
         int colour = Utility.stringToColour(nomApplication, 60);
@@ -56,8 +56,8 @@ public class NotificationsAdapter extends ArrayAdapter<MonETSNotification> {
     }
 
     @Override
-    public void addAll(Collection<? extends MonETSNotification> collection) {
-        ArrayList<MonETSNotification> list = new ArrayList<>(collection);
+    public void addAll(Collection<? extends AppMonETSNotification> collection) {
+        ArrayList<AppMonETSNotification> list = new ArrayList<>(collection);
         Collections.sort(list);
         super.addAll(list);
     }
