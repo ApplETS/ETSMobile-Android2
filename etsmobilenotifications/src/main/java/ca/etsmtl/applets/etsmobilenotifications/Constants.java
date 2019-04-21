@@ -16,4 +16,6 @@ final class Constants {
     static final String USER_NAME_PREF_KEY = "EtsMobileNotificationsUserName";
     static final String MON_ETS_DOMAINE_PREF_KEY = "EtsMobileNotificationsMonEtsDomaine";
     static final String USER_LOGGED_IN_PREF_KEY = "EtsMobileNotificationsUserLoggedIn";
+    static final int NOTIFICATIONS_SUMMARY_ID = 0;
+    static final String NOTIFICATIONS_GROUP_KEY = "ca.etsmtl.applets.etsmobilenotifications.NOTIFICATIONS";
 }

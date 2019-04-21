@@ -6,7 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
 
-import ca.etsmtl.applets.etsmobilenotifications.model.MonETSNotification;
+import ca.etsmtl.applets.etsmobilenotifications.MonETSNotification;
 
 /**
  * Created by gnut3ll4 on 15/12/15.

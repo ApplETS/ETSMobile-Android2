@@ -1,6 +1,7 @@
 package ca.etsmtl.applets.etsmobilenotifications;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,9 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.StyleSpan;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -19,9 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
-import ca.etsmtl.applets.etsmobilenotifications.model.MonETSNotification;
 
 /**
  * Created by gnut3ll4 on 16/10/15.
@@ -68,78 +67,92 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
      * @param data FCM message received.
      */
     private void sendNotification(Map<String, String> data) {
-        List<MonETSNotification> previousNotifications = savedNotifications();
-        ArrayList<MonETSNotification> notifications = new ArrayList<>(previousNotifications);
-        MonETSNotification nouvelleNotification = getMonETSNotificationFromMap(data);
+        List<MonETSNotification> previousMonETSNotifications = savedNotifications();
+        ArrayList<MonETSNotification> monETSNotifications = new ArrayList<>(previousMonETSNotifications);
+        MonETSNotification nouvelleMonETSNotification = getMonETSNotificationFromMap(data);
 
-        if (nouvelleNotification != null) {
-            notifications.add(nouvelleNotification);
+        if (nouvelleMonETSNotification != null) {
+            monETSNotifications.add(nouvelleMonETSNotification);
         }
 
-        int numberOfNotifications = notifications.size();
-
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = mNotificationManager.getNotificationChannel(Constants.DEFAULT_NOTIFICATION_CHANNEL_ID);
+            setupChannel();
+        }
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        Notification summaryNotification = createSummaryNotification(monETSNotifications);
+
+        notifyNotifications(notificationManager, monETSNotifications);
+        notificationManager.notify(Constants.NOTIFICATIONS_SUMMARY_ID, summaryNotification);
+
+        saveNewNotification(nouvelleMonETSNotification, previousMonETSNotifications);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void setupChannel() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (notificationManager != null) {
+            NotificationChannel channel = notificationManager.getNotificationChannel(Constants.DEFAULT_NOTIFICATION_CHANNEL_ID);
+
             if (channel == null) {
                 // We could create multiple channels based on the notification but let's just create one for maintenance purposes.
                 String channelName = getString(R.string.fcm_fallback_notification_channel_label);
                 channel = new NotificationChannel(Constants.DEFAULT_NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
-                mNotificationManager.createNotificationChannel(channel);
+                notificationManager.createNotificationChannel(channel);
             }
         }
+    }
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_school_white_24dp)
-                .setColor(ContextCompat.getColor(this, R.color.ets_red))
-                .setContentTitle(getString(R.string.ets))
-                .setContentText(getString(R.string.new_notifications))
-                .setContentIntent(notificationClickedIntent())
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
-                .setAutoCancel(true)
-                .setNumber(numberOfNotifications);
+    private void notifyNotifications(NotificationManagerCompat notificationManager,
+                                     List<MonETSNotification> monETSNotifications) {
+        for (MonETSNotification monETSNotification : monETSNotifications) {
+            Notification notification = new NotificationCompat.Builder(this, Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_school_white_24dp)
+                    .setColor(ContextCompat.getColor(this, R.color.ets_red))
+                    .setContentTitle(monETSNotification.getNotificationApplicationNom())
+                    .setContentText(monETSNotification.getNotificationTexte())
+                    .setContentIntent(notificationClickedIntent())
+                    .setAutoCancel(true)
+                    .setGroup(Constants.NOTIFICATIONS_GROUP_KEY)
+                    .build();
 
-        NotificationCompat.InboxStyle inBoxStyle = new NotificationCompat.InboxStyle();
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
-        // Sets a title for the Inbox in expanded layout
+            notificationManager.notify(monETSNotification.getId(), notification);
+        }
+    }
+
+    private Notification createSummaryNotification(List<MonETSNotification> notifications) {
+        int numberOfNotifications = notifications.size();
+
         String bigContentTitle = getString(R.string.notification_content_title,
                 numberOfNotifications + "",
                 (numberOfNotifications == 1 ? "" : "s"),
                 (numberOfNotifications == 1 ? "" : "s"));
-        inBoxStyle.setBigContentTitle(bigContentTitle);
 
-        String username = NotificationsLoginManager.getUserName(getApplicationContext());
-        Spannable sb = new SpannableString(username);
-        sb.setSpan(
-                new StyleSpan(android.graphics.Typeface.BOLD),
-                0,
-                username.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        );
 
-        inBoxStyle.setSummaryText(sb);
+        return new NotificationCompat.Builder(this, Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_school_white_24dp)
+                .setColor(ContextCompat.getColor(this, R.color.ets_red))
+                .setContentTitle(getString(R.string.ets))
+                .setContentText(bigContentTitle)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
+                .setStyle(summaryNotificationStyle(notifications))
+                .setGroup(Constants.NOTIFICATIONS_GROUP_KEY)
+                .setGroupSummary(true)
+                .build();
+    }
 
-        saveNewNotification(nouvelleNotification, previousNotifications);
+    private NotificationCompat.Style summaryNotificationStyle(List<MonETSNotification> notifications) {
+        NotificationCompat.InboxStyle inBoxStyle = new NotificationCompat.InboxStyle();
 
-        int nbNotificationsToDisplay = maxNbNotificationsToDisplay();
-        int minimumIndex = notifications.size() - nbNotificationsToDisplay;
-        minimumIndex = minimumIndex < 0 ? 0 : minimumIndex;
-        for (int i = notifications.size() - 1; i >= minimumIndex; i--) {
-            inBoxStyle.addLine(notifications.get(i).getNotificationTexte());
+        for (MonETSNotification monETSNotification : notifications) {
+            inBoxStyle.addLine(monETSNotification.getNotificationTexte());
         }
 
-        if (numberOfNotifications > nbNotificationsToDisplay) {
-
-            int plusOthers = (numberOfNotifications - nbNotificationsToDisplay);
-            String plusOthersString = getString(R.string.others_notifications, plusOthers + "", (plusOthers == 1 ? "" : "s"));
-            Spannable others = new SpannableString(plusOthersString);
-            others.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, others.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            inBoxStyle.addLine(others);
-        }
-
-        mBuilder.setStyle(inBoxStyle);
-        mNotificationManager.notify(1, mBuilder.build());
+        return inBoxStyle;
     }
 
     private MonETSNotification getMonETSNotificationFromMap(Map<String, String> data) {

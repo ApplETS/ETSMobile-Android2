@@ -13,7 +13,7 @@ import ca.etsmtl.applets.etsmobile.ui.activity.NotificationActivity;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobilenotifications.ETSFcmListenerService;
-import ca.etsmtl.applets.etsmobilenotifications.model.MonETSNotification;
+import ca.etsmtl.applets.etsmobilenotifications.MonETSNotification;
 
 /**
  * Created by Sonphil on 20-04-19.

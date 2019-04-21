@@ -1,4 +1,4 @@
-package ca.etsmtl.applets.etsmobilenotifications.model;
+package ca.etsmtl.applets.etsmobilenotifications;
 
 import java.util.Date;
 
@@ -9,12 +9,12 @@ import androidx.annotation.NonNull;
  */
 public class MonETSNotification implements Comparable<MonETSNotification> {
 
-    int id;
-    int dossierId;
-    String notificationTexte;
-    Date notificationDateDebutAffichage;
-    String notificationApplicationNom;
-    String url;
+    private int id;
+    private int dossierId;
+    private String notificationTexte;
+    private Date notificationDateDebutAffichage;
+    private String notificationApplicationNom;
+    private String url;
 
     public MonETSNotification(int id, int dossierId, String notificationTexte, Date notificationDateDebutAffichage, String notificationApplicationNom, String url) {
         this.id = id;
