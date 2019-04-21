@@ -29,6 +29,8 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFcmListenerService";
 
+    private EtsMobileNotificationManager etsMobileNotificationManager;
+
     /**
      * Called when message is received.
      *
@@ -37,7 +39,7 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage message) {
-
+        etsMobileNotificationManager = getEtsMobileNotificationManager();
         Map<String, String> data = message.getData();
 
         /**
@@ -61,13 +63,14 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
         FcmRegistrationIntentService.enqueueWork(this, new Intent());
     }
 
+
     /**
      * Create and show a simple notification containing the received FCM message.
      *
      * @param data FCM message received.
      */
     private void sendNotification(Map<String, String> data) {
-        List<MonETSNotification> previousMonETSNotifications = savedNotifications();
+        List<MonETSNotification> previousMonETSNotifications = etsMobileNotificationManager.getNotifications();
         ArrayList<MonETSNotification> monETSNotifications = new ArrayList<>(previousMonETSNotifications);
         MonETSNotification nouvelleMonETSNotification = getMonETSNotificationFromMap(data);
 
@@ -83,9 +86,9 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
 
 
         notifyNotifications(notificationManager, monETSNotifications);
-        notifySummaryNotification(notificationManager, monETSNotifications);
+        //notifySummaryNotification(notificationManager, monETSNotifications);
 
-        saveNewNotification(nouvelleMonETSNotification, previousMonETSNotifications);
+        etsMobileNotificationManager.saveNewNotification(nouvelleMonETSNotification, previousMonETSNotifications);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -192,20 +195,13 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
                 url);
     }
 
-    /**
-     * Get the previous notifications persisted on the device
-     *
-     * @return The previous notifications persisted on the device
-     */
-    protected abstract List<MonETSNotification> savedNotifications();
 
     /**
-     * Save new notification on device
+     * Returns an instance of {@link EtsMobileNotificationManager} used manage push notifications
      *
-     * @param newNotification       New notification to save
-     * @param previousNotifications Previous notifications
+     * @return An instance of {@link EtsMobileNotificationManager} used manage push notifications
      */
-    protected abstract void saveNewNotification(MonETSNotification newNotification, List<MonETSNotification> previousNotifications);
+    protected abstract EtsMobileNotificationManager getEtsMobileNotificationManager();
 
     /**
      * Returns {@link PendingIntent} to execute when the user tap on the notification
