@@ -27,8 +27,10 @@ public class AppETSFcmListenerService extends ETSFcmListenerService {
         SecurePreferences securePreferences = new SecurePreferences(getApplicationContext());
         String notificationsStr = securePreferences.getString(Constants.RECEIVED_NOTIF, "");
 
-        return gson.fromJson(notificationsStr, new TypeToken<ArrayList<MonETSNotification>>() {}
-                .getType());
+        List<MonETSNotification> notificataions = gson.fromJson(notificationsStr,
+                new TypeToken<ArrayList<MonETSNotification>>() {}.getType());
+
+        return notificataions == null ? new ArrayList<>() : notificataions;
     }
 
     @Override
