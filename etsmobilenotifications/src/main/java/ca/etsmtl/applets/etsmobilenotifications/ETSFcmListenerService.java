@@ -1,12 +1,10 @@
 package ca.etsmtl.applets.etsmobilenotifications;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -84,9 +82,7 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
-
         notifyNotifications(notificationManager, monETSNotifications);
-        //notifySummaryNotification(notificationManager, monETSNotifications);
 
         etsMobileNotificationManager.saveNewNotification(nouvelleMonETSNotification, previousMonETSNotifications);
     }
@@ -118,8 +114,7 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
                     .setColor(ContextCompat.getColor(this, R.color.ets_red))
                     .setContentTitle(monETSNotification.getNotificationApplicationNom())
                     .setContentText(monETSNotification.getNotificationTexte())
-                    .setAutoCancel(true)
-                    .setGroup(Constants.NOTIFICATIONS_GROUP_KEY);
+                    .setAutoCancel(true);
             
             PendingIntent contentIntent = notificationClickedIntent(monETSNotification);
 
@@ -136,41 +131,6 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
 
             notificationManager.notify(monETSNotification.getId(), notificationBuilder.build());
         }
-    }
-
-    private void notifySummaryNotification(NotificationManagerCompat notificationManager,
-                                           List<MonETSNotification> notifications) {
-        int numberOfNotifications = notifications.size();
-
-        String bigContentTitle = getString(R.string.notification_content_title,
-                numberOfNotifications + "",
-                (numberOfNotifications == 1 ? "" : "s"),
-                (numberOfNotifications == 1 ? "" : "s"));
-
-
-        Notification summaryNotification = new NotificationCompat.Builder(this,
-                Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_school_white_24dp)
-                .setColor(ContextCompat.getColor(this, R.color.ets_red))
-                .setContentTitle(getString(R.string.ets))
-                .setContentText(bigContentTitle)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
-                .setStyle(summaryNotificationStyle(notifications))
-                .setGroup(Constants.NOTIFICATIONS_GROUP_KEY)
-                .setGroupSummary(true)
-                .build();
-
-        notificationManager.notify(Constants.NOTIFICATIONS_SUMMARY_ID, summaryNotification);
-    }
-
-    private NotificationCompat.Style summaryNotificationStyle(List<MonETSNotification> notifications) {
-        NotificationCompat.InboxStyle inBoxStyle = new NotificationCompat.InboxStyle();
-
-        for (MonETSNotification monETSNotification : notifications) {
-            inBoxStyle.addLine(monETSNotification.getNotificationTexte());
-        }
-
-        return inBoxStyle;
     }
 
     private MonETSNotification getMonETSNotificationFromMap(Map<String, String> data) {
