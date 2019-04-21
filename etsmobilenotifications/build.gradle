@@ -26,8 +26,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.8'
-    implementation 'com.google.firebase:firebase-messaging:17.6.0'
+    api 'com.google.firebase:firebase-core:16.0.8'
+    api 'com.google.firebase:firebase-messaging:17.6.0'
 
     // AWS
     implementation 'com.amazonaws:aws-android-sdk-sns:2.9.1'
